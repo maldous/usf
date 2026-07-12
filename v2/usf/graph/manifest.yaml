@@ -78,6 +78,32 @@ authoredGraphs:
   - file: execution/validators.trig
     graph: "urn:usf:graph:validators"
     loadOrder: 25
+  - file: assurance/enterprise.trig
+    graph: "urn:usf:graph:enterprise"
+    loadOrder: 26
+  - file: assurance/profiles.trig
+    graph: "urn:usf:graph:assurance-profiles"
+    loadOrder: 27
+  - file: assurance/gates.trig
+    graph: "urn:usf:graph:readiness-gates"
+    loadOrder: 28
+  - file: contracts/ui.trig
+    graph: "urn:usf:graph:ui"
+    loadOrder: 29
+  - file: realisation/renderers.trig
+    graph: "urn:usf:graph:renderers"
+    loadOrder: 30
+  - file: contracts/generation.trig
+    graph: "urn:usf:graph:generation"
+    loadOrder: 31
+  - file: contracts/source-dispositions.trig
+    graph: "urn:usf:graph:sourcedispositionpolicies"
+    loadOrder: 32
+observedGraphs:
+  - file: observed/source-artefacts.trig
+    collector: repositorysourceobserver
+    graph: "urn:usf:graph:observed:sourceartefacts"
+    loadOrder: 33
 shapeGraphs:
   - file: shapes.ttl
     graph: "urn:usf:graph:shapes"
@@ -91,7 +117,18 @@ shapeGraphs:
     graph: "urn:usf:graph:shapes"
   - file: shapes/derivation.ttl
     graph: "urn:usf:graph:shapes"
+  - file: shapes/generation.ttl
+    graph: "urn:usf:graph:shapes"
+  - file: shapes/readiness.ttl
+    graph: "urn:usf:graph:shapes"
+  - file: shapes/experience.ttl
+    graph: "urn:usf:graph:shapes"
+  - file: shapes/source-disposition.ttl
+    graph: "urn:usf:graph:shapes"
 rules:
+  - file: rules/source-dispositions.rq
+    output: "urn:usf:graph:derived:sourcedispositions"
+    kind: derivation
   - file: rules/obligations.rq
     output: "urn:usf:graph:derived:obligations"
     kind: derivation
@@ -110,6 +147,8 @@ rules:
   - file: rules/integrity.rq
     kind: integrity
 derivedGraphs:
+  - file: derived/source-dispositions.trig
+    graph: "urn:usf:graph:derived:sourcedispositions"
   - file: derived/obligations.trig
     graph: "urn:usf:graph:derived:obligations"
   - file: derived/evidence.trig

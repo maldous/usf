@@ -9,12 +9,14 @@ import { readFileSync, statSync, readdirSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import {
   authoredLoadList,
+  observedLoadList,
   shapesGraph,
   managedGraphs,
   derivationRules,
   integrityRule,
   DERIVATION_ORDER,
 } from './manifest.js';
+import { collectObservedEntry } from './source-observer.js';
 
 export class CompilerError extends Error {
   constructor(message, details = {}) {
@@ -71,6 +73,7 @@ export function checkLocal(manifest) {
   const all = [
     ...manifest.definitions,
     ...manifest.authored,
+    ...manifest.observed,
     ...manifest.shapes,
     ...manifest.rules,
     ...manifest.derived,
@@ -78,6 +81,7 @@ export function checkLocal(manifest) {
 
   // Every registered file exists, is a regular file, and is non-empty.
   for (const e of all) {
+    if (e.collector && !e.path) continue;
     let st;
     try {
       st = statSync(e.path);
@@ -90,7 +94,7 @@ export function checkLocal(manifest) {
   }
 
   // No unregistered loadable file exists outside the fixtures directory.
-  const registered = new Set(all.map((e) => e.path));
+  const registered = new Set(all.map((e) => e.path).filter(Boolean));
   const fixturesRoot = manifest.fixtures
     ? join(manifest.root, 'fixtures')
     : null;
@@ -113,9 +117,15 @@ export function checkLocal(manifest) {
   for (const g of authoredGraphs) {
     if (derivedGraphs.includes(g)) fail(`graph IRI used as both authored and derived: ${g}`);
   }
+  const observedGraphs = observedLoadList(manifest).map((e) => e.graph);
+  const duplicateObserved = observedGraphs.filter((g, i) => observedGraphs.indexOf(g) !== i);
+  if (duplicateObserved.length) fail(`duplicate observed graph IRI: ${[...new Set(duplicateObserved)].join(', ')}`);
+  for (const graph of observedGraphs) {
+    if (authoredGraphs.includes(graph) || derivedGraphs.includes(graph)) fail(`observed graph IRI overlaps authored or derived graph: ${graph}`);
+  }
 
   // Load order is deterministic: no repeated order among authored inputs.
-  const orders = authoredLoadList(manifest).map((e) => e.order);
+  const orders = [...authoredLoadList(manifest), ...observedLoadList(manifest)].map((e) => e.order);
   if (orders.some((o, i) => orders.indexOf(o) !== i) || orders.some((o) => typeof o !== 'number')) {
     fail('authored load order is not a unique, total ordering');
   }
@@ -141,6 +151,7 @@ export function checkLocal(manifest) {
   // detectors and legitimately contain the patterns).
   for (const e of all) {
     if (e.role === 'shapes') continue;
+    if (!e.path) continue;
     if (CONTAMINATION_RE.test(readText(e.path))) {
       fail(`forbidden content in graph file: ${e.file}`);
     }
@@ -154,6 +165,7 @@ export function checkLocal(manifest) {
     files: all.length,
     authoredGraphs: authoredGraphs.length,
     derivedGraphs: derivedGraphs.length,
+    observedGraphs: observedGraphs.length,
   };
 }
 
@@ -169,6 +181,8 @@ export function buildPlan(manifest) {
   const sg = shapesGraph(manifest);
   for (const s of manifest.shapes) plan.push({ op: 'loadShapes', graph: sg, file: s.file });
   plan.push({ op: 'validate', state: 'authored' });
+  for (const e of observedLoadList(manifest)) plan.push({ op: 'collectObserved', graph: e.graph, collector: e.collector });
+  plan.push({ op: 'validate', state: 'observed' });
   for (const r of derivationRules(manifest)) plan.push({ op: 'derive', rule: r.file, graph: r.output });
   plan.push({ op: 'validate', state: 'derived' });
   plan.push({ op: 'integrity' });
@@ -194,13 +208,14 @@ const countInTx = async (client, tx, graph) => {
   return rows.length ? Number(rows[0].c.value) : 0;
 };
 
-export async function compile({ manifest, client }) {
+export async function compile({ manifest, client, observedCollector = collectObservedEntry }) {
   checkLocal(manifest);
   await client.connectivity();
 
   const shapes = shapeConstraints(manifest);
   const integrity = integrityRule(manifest);
   const derivedTriples = {};
+  const observed = {};
   let tx;
 
   try {
@@ -219,7 +234,26 @@ export async function compile({ manifest, client }) {
 
     // Validate the authored state before deriving.
     if (!(await client.validateInTx(tx, shapes))) {
-      throw new CompilerError('authored state failed SHACL validation', { phase: 'validate:authored' });
+      const report = await client.reportInTx(tx, shapes);
+      throw new CompilerError('authored state failed SHACL validation', { phase: 'validate:authored', report });
+    }
+
+    // Collect non-authoritative repository observations after authored state
+    // validates, then load and validate them inside the same transaction.
+    for (const entry of observedLoadList(manifest)) {
+      const collection = await observedCollector({ manifest, entry });
+      await client.addData(tx, collection.content, collection.contentType, entry.graph);
+      observed[entry.graph] = {
+        collector: entry.collector,
+        sourceCount: collection.sourceCount,
+        tripleCount: collection.tripleCount,
+        observationSetDigest: collection.observationSetDigest,
+        excludedCarrierPaths: collection.excludedCarrierPaths,
+      };
+    }
+    if (!(await client.validateInTx(tx, shapes))) {
+      const report = await client.reportInTx(tx, shapes);
+      throw new CompilerError('observed state failed SHACL validation', { phase: 'validate:observed', report });
     }
 
     // Execute derivation rules in the required order. Rule text is used
@@ -236,7 +270,8 @@ export async function compile({ manifest, client }) {
 
     // Validate the derived state.
     if (!(await client.validateInTx(tx, shapes))) {
-      throw new CompilerError('derived state failed SHACL validation', { phase: 'validate:derived' });
+      const report = await client.reportInTx(tx, shapes);
+      throw new CompilerError('derived state failed SHACL validation', { phase: 'validate:derived', report });
     }
 
     // Integrity invariants: the authored SELECT must return zero rows.
@@ -284,12 +319,19 @@ export async function compile({ manifest, client }) {
         });
       }
     }
+    for (const entry of observedLoadList(manifest)) {
+      if ((await countInTx(client, tx, entry.graph)) === 0) {
+        throw new CompilerError(`observed graph is empty after collection: ${entry.graph}`, { phase: 'verifyCounts' });
+      }
+    }
 
     await client.commit(tx);
     return {
       ok: true,
       graphsCleared: managedGraphs(manifest).length,
       authoredLoaded: authoredLoadList(manifest).length,
+      observedLoaded: observedLoadList(manifest).length,
+      observed,
       shapesLoaded: manifest.shapes.length,
       derived: derivedTriples,
       contaminationCount: 0,

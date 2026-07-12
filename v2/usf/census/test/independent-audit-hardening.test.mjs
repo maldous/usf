@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  auditCanonicalArtifacts, auditDependencies, auditDeterminism, auditFamilyOwnership, auditLinearStates,
-  auditMappingsCoverage, auditMutationBoundary, auditParserRelationships, auditUniverses, auditWorkPackages,
+  auditArtifactDispositions, auditCanonicalArtifacts, auditDependencies, auditDeterminism, auditFamilyOwnership,
+  auditFindingClassifications, auditMappingsCoverage, auditMutationBoundary, auditParserRelationships, auditUniverses, auditWorkPackages,
+  auditSourceDispositionOwnership,
   canonicalJson, framedDigest
 } from '../audit/index.mjs';
 
@@ -12,6 +13,34 @@ const artifact = { artifactKey: 'repository-output:a.json', universe: 'repositor
 const mapping = { artifactKey: artifact.artifactKey, mappingEvidence: [{}], coverageDecision: 'partial', coverageReason: 'observed', representedGeneration: [], missingSemantics: ['x'] };
 const canonical = { canonicalArtifactKey: 'artifact.a', targetPath: 'a.json', pathRule: null, mutabilityClass: 'generated', acceptanceGates: [{}], productionResponsibilities: ['generator'], replacementGroup: 'group.a' };
 const work = { key: 'work.a', architecturalOutcome: 'Produce one canonical outcome.', canonicalArtifactKeys: ['artifact.a'], acceptanceCriteria: ['a'], complexityEvidence: [{}], equivalenceGates: [{}], dependencies: [] };
+const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+const auditTriple = (graph, subject, predicate, object) => ({ kind: 'semantic-triple', attributes: { graph, subject, predicate, object } });
+function auditDispositionFixture({ state = 'urn:usf:dispositiondecisionstate:accepted', digestValue = digest, kind = 'urn:usf:dispositionkind:retainedasset', includePlan = false, graph = 'urn:usf:graph:source-dispositions' } = {}) {
+  const declarations = [
+    auditTriple(null, 'urn:usf:namedgraph:source-dispositions', RDF_TYPE, 'urn:usf:ontology:NamedGraph'),
+    auditTriple(null, 'urn:usf:namedgraph:source-dispositions', 'urn:usf:ontology:graphIri', '"urn:usf:graph:source-dispositions"^^http://www.w3.org/2001/XMLSchema#anyURI'),
+    auditTriple(null, 'urn:usf:namedgraph:source-dispositions', 'urn:usf:ontology:graphClass', 'urn:usf:graphclass:authoredgraph'),
+    auditTriple(graph, 'urn:usf:source:a', RDF_TYPE, 'urn:usf:ontology:SourceArtefact'),
+    auditTriple(graph, 'urn:usf:observation:a', RDF_TYPE, 'urn:usf:ontology:SourceArtefactObservation'),
+    auditTriple(graph, 'urn:usf:disposition:a', RDF_TYPE, 'urn:usf:ontology:SourceArtefactDisposition'),
+    auditTriple(graph, kind, RDF_TYPE, 'urn:usf:ontology:DispositionKind'),
+    auditTriple(graph, 'urn:usf:observation:a', 'urn:usf:ontology:observesSourceArtefact', 'urn:usf:source:a'),
+    auditTriple(graph, 'urn:usf:observation:a', 'urn:usf:ontology:observedSourcePath', '"a.json"^^http://www.w3.org/2001/XMLSchema#string'),
+    auditTriple(graph, 'urn:usf:observation:a', 'urn:usf:ontology:observedContentDigest', `"${digestValue}"^^http://www.w3.org/2001/XMLSchema#string`),
+    auditTriple(graph, 'urn:usf:observation:a', 'urn:usf:ontology:observedUniverse', '"repository-output"^^http://www.w3.org/2001/XMLSchema#string'),
+    auditTriple(graph, 'urn:usf:source:a', 'urn:usf:ontology:hasSourceDisposition', 'urn:usf:disposition:a'),
+    auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:dispositionOfSourceArtefact', 'urn:usf:source:a'),
+    auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:hasDispositionKind', kind),
+    auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:hasDispositionDecisionState', state)
+  ];
+  if (includePlan) {
+    declarations.push(auditTriple(graph, 'urn:usf:artefactplan:a', RDF_TYPE, 'urn:usf:ontology:ArtefactPlan'));
+    declarations.push(auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:assignedToArtefactPlan', 'urn:usf:artefactplan:a'));
+  }
+  return [{ path: 'v2/usf/graph/source-dispositions.trig', universe: 'v2-graph-authority', declarations }];
+}
+const sourceArtifact = { ...artifact, contentDigest: digest };
+const dispositionGroup = (status, plan = null) => ({ currentArtifacts: [artifact.artifactKey], dispositionStatus: status, requiredGraphObligation: { sourceIri: 'urn:usf:source:a', observationIri: 'urn:usf:observation:a', dispositionIri: 'urn:usf:disposition:a', assignedPlanIri: plan } });
 
 test('universe audit recomputes partition, ordering, counts, and framed digests', () => {
   const recordsByUniverse = {
@@ -76,20 +105,35 @@ test('mutation boundary rejects any changed file outside the census root', () =>
   assert.equal(auditMutationBoundary(before, new Map([['README.md', 'b'], ['v2/usf/census/output.json', 'b']])).status, 'fail');
 });
 
-test('Linear readiness is read-only state evidence and fails closed on missing or wrong states', () => {
-  const issues = [];
-  for (let number = 1135; number <= 1141; number += 1) issues.push({ identifier: `USF-${number}`, state: { name: 'Done' } });
-  issues.push({ identifier: 'USF-1132', state: { name: 'Backlog' } }, { identifier: 'USF-1134', state: { name: 'In Progress' } }, { identifier: 'USF-1142', state: { name: 'Done' } });
-  assert.equal(auditLinearStates(issues).status, 'pass');
-  issues.find((entry) => entry.identifier === 'USF-1135').state.name = 'Backlog';
-  assert.equal(auditLinearStates(issues).status, 'fail');
-  assert.equal(auditLinearStates(null).status, 'incomplete');
+test('artifact dispositions and finding classifications are independently fail-closed', () => {
+  const source = [{ artifactKey: 'a' }];
+  const unavailable = [{ currentArtifacts: ['a'], canonicalArtifacts: [], requiredGenerationProjections: [], removedDuplication: [], dispositionStatus: 'missing-accepted-source-disposition', requiredGraphObligation: { classIri: 'urn:usf:ontology:SourceArtefactDisposition' }, confidence: { level: 'low' }, reviewStatus: 'machine-reviewed' }];
+  const dispositionAudit = auditArtifactDispositions(source, [], unavailable);
+  assert.equal(dispositionAudit.status, 'fail');
+  assert.equal(dispositionAudit.facts.missingDispositionCount, 1);
+  const classified = [{ findingKey: 'f', source: 'a', findingCategory: 'relationship-resolution', findingClass: 'unresolved-target', severity: 'blocking', resolutionStatus: 'open', ownerClass: 'source-artifact-owner', requiredAction: 'define-target', classificationEvidence: ['physical-universe'] }];
+  assert.equal(auditFindingClassifications(classified).status, 'pass');
+  delete classified[0].ownerClass;
+  assert.equal(auditFindingClassifications(classified).status, 'fail');
+});
+
+test('independent source disposition audit accepts no-output and planned output, and rejects all fail-closed cases', () => {
+  assert.equal(auditSourceDispositionOwnership([sourceArtifact], auditDispositionFixture(), [dispositionGroup('graph-owned-no-output-disposition')]).status, 'pass');
+  assert.equal(auditSourceDispositionOwnership([sourceArtifact], auditDispositionFixture({ kind: 'urn:usf:dispositionkind:generateequivalent', includePlan: true }), [dispositionGroup('graph-owned-output-plan', 'urn:usf:artefactplan:a')]).status, 'pass');
+  for (const fixture of [
+    auditDispositionFixture({ state: 'urn:usf:dispositiondecisionstate:review-required' }),
+    auditDispositionFixture({ state: 'urn:usf:dispositiondecisionstate:rejected' }),
+    auditDispositionFixture({ digestValue: 'b'.repeat(64) }),
+    auditDispositionFixture({ kind: 'urn:usf:dispositionkind:generateequivalent' }),
+    auditDispositionFixture({ graph: 'urn:usf:graph:not-registered' })
+  ]) assert.equal(auditSourceDispositionOwnership([sourceArtifact], fixture, [dispositionGroup('missing-accepted-source-disposition')]).status, 'fail');
 });
 
 test('missing architectural inputs are incomplete rather than hard-coded success', () => {
   for (const value of [
     auditParserRelationships([], null, null), auditFamilyOwnership([], null), auditMappingsCoverage([], null, null),
-    auditCanonicalArtifacts(null, null), auditWorkPackages(null, null), auditDependencies(null, null), auditDeterminism(null), auditMutationBoundary(null, null)
+    auditCanonicalArtifacts(null, null), auditArtifactDispositions(null, null, null), auditSourceDispositionOwnership(null, null, null), auditFindingClassifications(null),
+    auditWorkPackages(null, null), auditDependencies(null, null), auditDeterminism(null), auditMutationBoundary(null, null)
   ]) assert.equal(value.status, 'incomplete');
 });
 

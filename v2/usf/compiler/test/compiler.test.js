@@ -14,6 +14,9 @@ import { loadConfig, describeConfig, ConfigError } from '../src/config.js';
 import { loadManifest, managedGraphs, ManifestError } from '../src/manifest.js';
 import { checkLocal, compile, buildPlan, CompilerError } from '../src/compiler.js';
 import { createClient } from '../src/stardog.js';
+import { loadAuthorityDataset } from '../src/authority-dataset.js';
+import { buildGenerationPlan, requireCompleteGenerationPlan } from '../src/generation-plan.js';
+import { canonicalGraphDigest, compareGraphDigests } from '../src/live-attestation.js';
 
 // --- Fixtures --------------------------------------------------------------
 
@@ -32,6 +35,7 @@ authoredGraphs:
 shapeGraphs:
   - { file: shapes.ttl, graph: "urn:usf:graph:shapes" }
 rules:
+  - { file: rules/source-dispositions.rq, output: "urn:usf:graph:derived:sourcedispositions", kind: derivation }
   - { file: rules/obligations.rq, output: "urn:usf:graph:derived:obligations", kind: derivation }
   - { file: rules/evidence.rq, output: "urn:usf:graph:derived:evidence", kind: derivation }
   - { file: rules/surfaces.rq, output: "urn:usf:graph:derived:surfaces", kind: derivation }
@@ -39,6 +43,7 @@ rules:
   - { file: rules/readiness.rq, output: "urn:usf:graph:derived:readiness", kind: derivation }
   - { file: rules/integrity.rq, kind: integrity }
 derivedGraphs:
+  - { file: derived/source-dispositions.trig, graph: "urn:usf:graph:derived:sourcedispositions" }
   - { file: derived/obligations.trig, graph: "urn:usf:graph:derived:obligations" }
   - { file: derived/evidence.trig, graph: "urn:usf:graph:derived:evidence" }
   - { file: derived/surfaces.trig, graph: "urn:usf:graph:derived:surfaces" }
@@ -53,6 +58,7 @@ fixtures:
     'providers.ttl': '@prefix usf: <urn:usf:> .\nusf:providers:acme a usf:ontology:Thing .\n',
     'shapes.ttl':
       '# SHACL detectors legitimately mention forbidden markers: github.com USF-1 commitSha\n@prefix sh: <http://www.w3.org/ns/shacl#> .\n',
+    'rules/source-dispositions.rq': rule('SourceArtefactDisposition'),
     'rules/obligations.rq': rule('ProofObligation'),
     'rules/evidence.rq': rule('EvidenceRequirement'),
     'rules/surfaces.rq': rule('Surface'),
@@ -60,6 +66,7 @@ fixtures:
     'rules/readiness.rq': rule('Readiness'),
     'rules/integrity.rq':
       'SELECT ?violation ?subject WHERE { ?subject a ?t . BIND("x" AS ?violation) FILTER(false) }\n',
+    'derived/source-dispositions.trig': '# placeholder derived source dispositions\n<urn:usf:x> a <urn:usf:ontology:SourceArtefactDisposition> .\n',
     'derived/obligations.trig': '@prefix usf: <urn:usf:ontology:> .\nGRAPH <urn:usf:graph:derived:obligations> { usf:x a usf:ProofObligation }\n',
     'derived/evidence.trig': '# placeholder derived evidence\n<urn:usf:x> a <urn:usf:ontology:EvidenceRequirement> .\n',
     'derived/surfaces.trig': '# placeholder derived surfaces\n<urn:usf:x> a <urn:usf:ontology:Surface> .\n',
@@ -84,6 +91,24 @@ function writeGraph(spec) {
   }
   return dir;
 }
+
+function observedSpec() {
+  const spec = baseSpec();
+  spec['manifest.yaml'] = spec['manifest.yaml'].replace(
+    'shapeGraphs:',
+    'observedGraphs:\n  - { collector: repositorysourceobserver, graph: "urn:usf:graph:observed:sourceartefacts", loadOrder: 3 }\nshapeGraphs:'
+  );
+  return spec;
+}
+
+const observedCollector = async ({ entry }) => ({
+  graph: entry.graph,
+  contentType: 'text/turtle',
+  content: '<urn:usf:source:s> <urn:usf:ontology:observedSourcePath> "x" .',
+  sourceCount: 1,
+  tripleCount: 1,
+  observationSetDigest: 'a'.repeat(64),
+});
 test.after(() => {
   for (const d of dirs) rmSync(d, { recursive: true, force: true });
 });
@@ -209,6 +234,14 @@ test('checkLocal: the base graph passes', () => {
   assert.equal(checkLocal(m).ok, true);
 });
 
+test('manifest: observed collector is registered separately from authority', () => {
+  const manifest = loadManifest(writeGraph(observedSpec()));
+  assert.equal(manifest.observed.length, 1);
+  assert.equal(manifest.observed[0].collector, 'repositorysourceobserver');
+  assert.equal(manifest.observed[0].path, null);
+  assert.ok(managedGraphs(manifest).includes('urn:usf:graph:observed:sourceartefacts'));
+});
+
 test('checkLocal: a duplicate authored graph IRI fails', () => {
   const spec = baseSpec();
   spec['manifest.yaml'] = spec['manifest.yaml'].replace(
@@ -278,6 +311,40 @@ test('compile: commits after full success', async () => {
   assert.equal(result.ok, true);
   assert.equal(rec.committed, true);
   assert.equal(rec.rolledBack, false);
+});
+
+test('compile: observed state is collected and validated inside the transaction', async () => {
+  const manifest = loadManifest(writeGraph(observedSpec()));
+  const { client, rec } = fakeClient();
+  const result = await compile({ manifest, client, observedCollector });
+  assert.equal(result.observedLoaded, 1);
+  assert.equal(result.observed['urn:usf:graph:observed:sourceartefacts'].sourceCount, 1);
+  assert.ok(rec.cleared.includes('urn:usf:graph:observed:sourceartefacts'));
+  assert.ok(rec.added.some((entry) => entry.graph === 'urn:usf:graph:observed:sourceartefacts'));
+  assert.equal(rec.committed, true);
+});
+
+test('compile: observed collection failure rolls back', async () => {
+  const manifest = loadManifest(writeGraph(observedSpec()));
+  const { client, rec } = fakeClient();
+  await assert.rejects(
+    compile({ manifest, client, observedCollector: async () => { throw new Error('collector failed'); } }),
+    (error) => error instanceof CompilerError && error.phase === 'compile'
+  );
+  assert.equal(rec.rolledBack, true);
+  assert.equal(rec.committed, false);
+});
+
+test('compile: observed validation failure rolls back', async () => {
+  const manifest = loadManifest(writeGraph(observedSpec()));
+  let validations = 0;
+  const { client, rec } = fakeClient({ validateInTx: async () => (++validations) !== 2 });
+  await assert.rejects(
+    compile({ manifest, client, observedCollector }),
+    (error) => error instanceof CompilerError && error.phase === 'validate:observed'
+  );
+  assert.equal(rec.rolledBack, true);
+  assert.equal(rec.committed, false);
 });
 
 test('compile: rolls back after a load failure', async () => {
@@ -365,4 +432,53 @@ test('adapter: createClient exposes no whole-database clear', () => {
   );
   assert.equal(typeof client.clearDatabase, 'undefined');
   assert.equal(typeof client.clearGraph, 'function');
+});
+
+test('generation plan fails closed when graph authority has no artefact plans', () => {
+  const dir = writeGraph(baseSpec());
+  const dataset = loadAuthorityDataset(loadManifest(dir));
+  const plan = buildGenerationPlan(dataset.store);
+  assert.equal(plan.complete, false);
+  assert.ok(plan.obligations.some((item) => item.kind === 'missing-artefact-plans'));
+  assert.throws(() => requireCompleteGenerationPlan(dataset.store), /generation plan is incomplete/);
+});
+
+test('generation plan requires executable ownership and detects path collisions', () => {
+  const spec = baseSpec();
+  spec['providers.ttl'] = `@prefix usf: <urn:usf:ontology:> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+<urn:usf:repository:foundation> a usf:Repository .
+<urn:usf:artefactplan:a> a usf:ArtefactPlan ; usf:ownedByRepository <urn:usf:repository:foundation> ; usf:plansArtefact <urn:usf:artefact:a> .
+<urn:usf:artefactplan:b> a usf:ArtefactPlan ; usf:ownedByRepository <urn:usf:repository:foundation> ; usf:plansArtefact <urn:usf:artefact:b> .
+<urn:usf:artefact:a> a usf:Artefact ; usf:canonicalPath "contracts/index.json" ; usf:artefactKind <urn:usf:artefactkind:contract> ; usf:governedByPathRule <urn:usf:pathrule:a> ; usf:generatedByComponent <urn:usf:generator:a> .
+<urn:usf:artefact:b> a usf:Artefact ; usf:canonicalPath "contracts/index.json" ; usf:artefactKind <urn:usf:artefactkind:contract> ; usf:governedByPathRule <urn:usf:pathrule:b> ; usf:generatedByComponent <urn:usf:generator:a> .
+<urn:usf:pathrule:a> usf:pathPattern "contracts/index.json" .
+<urn:usf:pathrule:b> usf:pathPattern "contracts/index.json" .
+<urn:usf:generator:a> usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:SemanticContract> . }" ; usf:outputSchema <urn:usf:artefact:a> ; usf:outputPathRule <urn:usf:pathrule:a> ; usf:integrityPolicy <urn:usf:policy:integrity> ; usf:normalisationPolicy <urn:usf:policy:normalisation> ; usf:missingSemanticsConstraint <urn:usf:constraint:missing> ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:semantic> .
+`;
+  const plan = buildGenerationPlan(loadAuthorityDataset(loadManifest(writeGraph(spec))).store);
+  assert.equal(plan.complete, false);
+  assert.ok(plan.obligations.some((item) => item.kind === 'path-collision'));
+});
+
+test('live attestation: RDF canonicalization ignores blank-node labels', async () => {
+  const left = '_:left <urn:usf:p> "value" .\n';
+  const right = '_:unrelated <urn:usf:p> "value" .\n';
+  assert.deepEqual(await canonicalGraphDigest(left), await canonicalGraphDigest(right));
+});
+
+test('live attestation: graph comparison reports missing, unexpected and mismatched graphs', () => {
+  const source = [
+    { graph: 'urn:g:a', sha256: 'a', triples: 1 },
+    { graph: 'urn:g:b', sha256: 'b', triples: 2 },
+  ];
+  const database = [
+    { graph: 'urn:g:a', sha256: 'changed', triples: 1 },
+    { graph: 'urn:g:c', sha256: 'c', triples: 3 },
+  ];
+  assert.deepEqual(compareGraphDigests(source, database), {
+    missingGraphs: ['urn:g:b'],
+    unexpectedGraphs: ['urn:g:c'],
+    mismatchedGraphs: ['urn:g:a'],
+  });
 });

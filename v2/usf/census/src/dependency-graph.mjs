@@ -22,8 +22,8 @@ function addCandidate(candidates, source, prerequisite, dependencyType, evidence
     reasonCode: dependencyType,
     semanticEvidence: [], artifactEvidence: [], repositoryRelationshipEvidence: [],
     proofEquivalenceEvidence: [], migrationEvidence: [],
-    confidence: { level: 'high', score: 0.92, reasons: ['direct-architectural-evidence'] },
-    reviewStatus: 'architect-reviewed'
+    confidence: { level: 'medium', score: 0.7, reasons: ['machine-observed-direct-evidence'] },
+    reviewStatus: 'machine-reviewed'
   };
   if (candidate.status === 'coordination' && status === 'blocking') candidate.status = 'blocking';
   if (evidence.semantic) candidate.semanticEvidence.push(evidence.semantic);
@@ -32,6 +32,21 @@ function addCandidate(candidates, source, prerequisite, dependencyType, evidence
   if (evidence.proof) candidate.proofEquivalenceEvidence.push(evidence.proof);
   if (evidence.migration) candidate.migrationEvidence.push(evidence.migration);
   candidates.set(key, candidate);
+}
+
+function relationshipDependencyStatus(relation) {
+  const keyPath = relation.attributes?.keyPath ?? '';
+  // Aggregation selectors and path aliases declare compilation scope or name
+  // resolution. They coordinate the configuration with the selected artefact;
+  // they do not make the selected implementation a prerequisite for authoring
+  // the configuration. Inheritance (`extends`) and executable imports remain
+  // blocking. This classification comes from the structural JSON pointer and
+  // is therefore not cycle-driven dependency softening.
+  if (relation.extractionMethod === 'json-pointer' &&
+      /^(?:include|exclude)(?:\.|$)|^compilerOptions[.]paths(?:\.|$)/.test(keyPath)) {
+    return 'coordination';
+  }
+  return 'blocking';
 }
 
 function reachable(edges, start, goal, excluded) {
@@ -63,6 +78,43 @@ function hasCycle(edges) {
     return false;
   }
   return nodes.some(visit);
+}
+
+function cycleComponents(edges) {
+  const nodes = sortUnique(edges.flatMap((edge) => [edge.source, edge.prerequisite]));
+  const adjacency = new Map(nodes.map((node) => [node, []]));
+  for (const edge of edges) adjacency.get(edge.source).push(edge.prerequisite);
+  let index = 0;
+  const indexes = new Map();
+  const lowlinks = new Map();
+  const stack = [];
+  const onStack = new Set();
+  const components = [];
+  const visit = (node) => {
+    indexes.set(node, index);
+    lowlinks.set(node, index);
+    index += 1;
+    stack.push(node);
+    onStack.add(node);
+    for (const next of adjacency.get(node)) {
+      if (!indexes.has(next)) {
+        visit(next);
+        lowlinks.set(node, Math.min(lowlinks.get(node), lowlinks.get(next)));
+      } else if (onStack.has(next)) lowlinks.set(node, Math.min(lowlinks.get(node), indexes.get(next)));
+    }
+    if (lowlinks.get(node) !== indexes.get(node)) return;
+    const component = [];
+    let item;
+    do {
+      item = stack.pop();
+      onStack.delete(item);
+      component.push(item);
+    } while (item !== node);
+    const selfCycle = component.length === 1 && adjacency.get(component[0]).includes(component[0]);
+    if (component.length > 1 || selfCycle) components.push(component.sort());
+  };
+  nodes.forEach((node) => { if (!indexes.has(node)) visit(node); });
+  return components.sort((left, right) => left[0].localeCompare(right[0]));
 }
 
 function transitiveReduction(edges) {
@@ -101,7 +153,7 @@ function graphMetrics(packages, blocking) {
     }
     frontier = next.sort();
   }
-  if (visited !== packages.length) throw new Error('blocking dependency cycle');
+  if (visited !== packages.length) return { criticalPathLength: 0, parallelWaveCount: 0, waves: [] };
   return { criticalPathLength: Math.max(0, ...distance.values()), parallelWaveCount: waves.length, waves };
 }
 
@@ -135,7 +187,7 @@ export function buildDependencyGraph(packages, artifacts, canonicalArtifacts, re
     const targetArtifact = artifactByPath.get(relation.target);
     const source = sourceArtifact && owners.artifacts.get(sourceArtifact.artifactKey);
     const prerequisite = targetArtifact && owners.artifacts.get(targetArtifact.artifactKey);
-    addCandidate(candidates, source, prerequisite, 'canonical-artifact-input', { relationship: sha256(`${relation.source}\0${relation.relationshipType}\0${relation.target}`) }, relation.relationshipType === 'coordination' ? 'coordination' : 'blocking');
+    addCandidate(candidates, source, prerequisite, 'canonical-artifact-input', { relationship: sha256(`${relation.source}\0${relation.relationshipType}\0${relation.target}`) }, relationshipDependencyStatus(relation));
   }
   for (const artifact of canonicalArtifacts) {
     const source = owners.canonical.get(artifact.canonicalArtifactKey);
@@ -158,19 +210,9 @@ export function buildDependencyGraph(packages, artifacts, canonicalArtifacts, re
     migrationEvidence: sortUnique(record.migrationEvidence)
   }));
   for (const record of dependencies) validateDependency(record);
-  let blocking = dependencies.filter((record) => record.status === 'blocking');
-  if (hasCycle(blocking)) {
-    const cycleCandidates = blocking.filter((record) => record.repositoryRelationshipEvidence.length > 0 && record.semanticEvidence.length === 0).sort(compareBy(['source', 'prerequisite']));
-    for (const record of cycleCandidates) {
-      record.status = 'coordination';
-      record.dependencyType = 'soft-coordination';
-      record.reasonCode = 'cycle-softened-by-runtime-reference';
-      blocking = dependencies.filter((candidate) => candidate.status === 'blocking');
-      if (!hasCycle(blocking)) break;
-    }
-  }
-  if (hasCycle(blocking)) throw new Error('unsupported blocking dependency cycle');
-  const reduced = transitiveReduction(blocking);
+  const blocking = dependencies.filter((record) => record.status === 'blocking');
+  const cycles = cycleComponents(blocking);
+  const reduced = cycles.length ? { kept: blocking, removed: [] } : transitiveReduction(blocking);
   const keptKeys = new Set(reduced.kept.map((edge) => `${edge.source}\0${edge.prerequisite}`));
   dependencies = dependencies.filter((edge) => edge.status === 'coordination' || keptKeys.has(`${edge.source}\0${edge.prerequisite}`)).sort(compareBy(['status', 'source', 'prerequisite']));
   const metrics = graphMetrics(packages, dependencies.filter((edge) => edge.status === 'blocking'));
@@ -185,10 +227,11 @@ export function buildDependencyGraph(packages, artifacts, canonicalArtifacts, re
       familyOnlyLinkCount: 0,
       untypedLinkCount: 0,
       unsupportedEvidenceCount: 0,
-      blockingCycleCount: 0,
-      unreviewedParallelismReductionCount: 0
+      blockingCycleCount: cycles.length,
+      blockingCycleComponents: cycles,
+      unreviewedParallelismReductionCount: cycles.length
     }
   };
 }
 
-export const dependencyGraphInternals = { graphMetrics, hasCycle, transitiveReduction };
+export const dependencyGraphInternals = { cycleComponents, graphMetrics, hasCycle, relationshipDependencyStatus, transitiveReduction };

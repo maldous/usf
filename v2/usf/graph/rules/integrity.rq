@@ -38,7 +38,7 @@ SELECT DISTINCT ?violation ?subject WHERE {
     GRAPH ?g {
       ?subject a ?dc .
     }
-    VALUES ?dc { usf:Readiness usf:Coverage usf:Surface usf:ContractSurface
+    VALUES ?dc { usf:Readiness usf:Coverage usf:DerivedSurface usf:ContractSurface
                  usf:ProofObligation usf:TestObligation usf:EvidenceRequirement }
     FILTER(!STRSTARTS(STR(?g), "urn:usf:graph:derived"))
     BIND("directauthoredreadiness" AS ?violation)
@@ -73,5 +73,75 @@ SELECT DISTINCT ?violation ?subject WHERE {
     ?mid usf:dependsOnService+ ?subject .
     FILTER(?subject != ?mid)
     BIND("dependencycycle" AS ?violation)
+  } UNION {
+    GRAPH ?g { ?subject a ?type }
+    VALUES ?type { usf:SourceArtefact usf:SourceArtefactObservation }
+    FILTER(?g != <urn:usf:graph:observed:sourceartefacts>)
+    BIND("sourceobservationgraphplacement" AS ?violation)
+  } UNION {
+    GRAPH ?g { ?subject a usf:SourceArtefactDisposition }
+    FILTER(?g != <urn:usf:graph:derived:sourcedispositions>)
+    BIND("sourcedispositiongraphplacement" AS ?violation)
+  } UNION {
+    GRAPH <urn:usf:graph:observed:sourceartefacts> {
+      ?subject a ?declarationType .
+      VALUES ?declarationType { owl:Class owl:ObjectProperty owl:DatatypeProperty rdf:Property }
+    }
+    BIND("observedgraphtermdeclaration" AS ?violation)
+  } UNION {
+    ?subject a usf:SourceArtefact .
+    FILTER NOT EXISTS { ?subject usf:hasCurrentSourceObservation ?observation }
+    BIND("sourceobservationmissing" AS ?violation)
+  } UNION {
+    ?subject a usf:SourceArtefact ; usf:hasCurrentSourceObservation ?left, ?right .
+    FILTER(?left != ?right)
+    BIND("sourceobservationmultiple" AS ?violation)
+  } UNION {
+    ?subject a usf:SourceArtefact ; usf:hasSourceDisposition ?left, ?right .
+    FILTER(?left != ?right)
+    BIND("sourcedispositionmultiple" AS ?violation)
+  } UNION {
+    ?subject a usf:SourceArtefact .
+    FILTER NOT EXISTS { ?subject usf:hasSourceDisposition ?disposition }
+    BIND("sourcedispositionmissing" AS ?violation)
+  } UNION {
+    ?subject a usf:SourceArtefactDisposition ; usf:dispositionOfSourceArtefact ?source ; usf:decidedAgainstObservation ?observation .
+    FILTER NOT EXISTS { ?source usf:hasCurrentSourceObservation ?observation }
+    BIND("sourcedispositionstaleobservation" AS ?violation)
+  } UNION {
+    ?subject a usf:SourceArtefactDisposition ; usf:observationSetDigest ?left .
+    ?other a usf:SourceArtefactDisposition ; usf:observationSetDigest ?right .
+    FILTER(?left != ?right)
+    BIND("observationsetdigestdivergence" AS ?violation)
+  } UNION {
+    ?subject a usf:SourceArtefactDisposition ; usf:hasDispositionOutputMode <urn:usf:dispositionoutputmode:canonicaloutput> .
+    FILTER NOT EXISTS { ?subject usf:assignedToArtefactPlan ?plan . ?plan a usf:ArtefactPlan }
+    BIND("outputdispositionmissingplan" AS ?violation)
+  } UNION {
+    ?subject a usf:SourceArtefactDisposition ; usf:hasDispositionOutputMode <urn:usf:dispositionoutputmode:nooutput> ; usf:assignedToArtefactPlan ?plan .
+    BIND("nooutputdispositionhasplan" AS ?violation)
+  } UNION {
+    ?subject a usf:SourceArtefactDisposition ; usf:hasDispositionKind <urn:usf:dispositionkind:reviewrequired> ; usf:hasDispositionDecisionState <urn:usf:dispositiondecisionstate:accepted> .
+    BIND("reviewrequiredaccepted" AS ?violation)
+  } UNION {
+    ?source a usf:SourceArtefact ; usf:hasCurrentSourceObservation ?observation .
+    ?left a usf:SourceDispositionPolicy ; usf:isActiveDispositionPolicy true ; usf:isDefaultDispositionPolicy false .
+    ?right a usf:SourceDispositionPolicy ; usf:isActiveDispositionPolicy true ; usf:isDefaultDispositionPolicy false .
+    FILTER(?left != ?right)
+    FILTER NOT EXISTS { ?left usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
+    FILTER NOT EXISTS { ?left usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
+    FILTER NOT EXISTS { ?left usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
+    FILTER NOT EXISTS { ?left usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+    FILTER NOT EXISTS { ?right usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
+    FILTER NOT EXISTS { ?right usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
+    FILTER NOT EXISTS { ?right usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
+    FILTER NOT EXISTS { ?right usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+    BIND("sourcedispositionpolicyoverlap" AS ?violation)
+    BIND(?source AS ?subject)
+  } UNION {
+    ?subject a usf:SourceDispositionPolicy ; usf:isDefaultDispositionPolicy true .
+    ?other a usf:SourceDispositionPolicy ; usf:isDefaultDispositionPolicy true .
+    FILTER(?subject != ?other)
+    BIND("multipledefaultdispositionpolicies" AS ?violation)
   }
 }

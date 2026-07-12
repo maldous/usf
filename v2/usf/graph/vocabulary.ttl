@@ -27,6 +27,18 @@
 @prefix ten:   <urn:usf:tenancystrategy:> .
 @prefix cbasis:<urn:usf:consentbasis:> .
 @prefix gcl:   <urn:usf:graphclass:> .
+@prefix reason: <urn:usf:controlmappingreason:> .
+@prefix cstatus: <urn:usf:controlstatus:> .
+@prefix applicability: <urn:usf:applicabilitystatus:> .
+@prefix treatment: <urn:usf:treatmentstatus:> .
+@prefix outcome: <urn:usf:assessmentoutcome:> .
+@prefix finding: <urn:usf:findingstatus:> .
+@prefix action: <urn:usf:actionstatus:> .
+@prefix oe: <urn:usf:obligationeffect:> .
+@prefix rs: <urn:usf:resultstate:> .
+@prefix es: <urn:usf:evidencestage:> .
+@prefix gk: <urn:usf:readinessgatekind:> .
+@prefix rr: <urn:usf:readinessreason:> .
 
 ########################################################################
 # CapabilityDomain (closed, 14)
@@ -215,7 +227,6 @@ covs:uncovered a usf:CoverageState ; usf:canonicalName "uncovered" .
 # ReadinessState (closed, 3)
 ########################################################################
 rds:ready          a usf:ReadinessState ; usf:canonicalName "ready" .
-rds:partiallyready a usf:ReadinessState ; usf:canonicalName "partiallyready" .
 rds:notready       a usf:ReadinessState ; usf:canonicalName "notready" .
 
 ########################################################################
@@ -275,3 +286,324 @@ gcl:shapegraph      a usf:GraphClass ; usf:canonicalName "shapegraph" .
 gcl:rulegraph       a usf:GraphClass ; usf:canonicalName "rulegraph" .
 gcl:derivedgraph    a usf:GraphClass ; usf:canonicalName "derivedgraph" .
 gcl:fixturegraph    a usf:GraphClass ; usf:canonicalName "fixturegraph" .
+gcl:observedgraph   a usf:GraphClass ; usf:canonicalName "observedgraph" .
+
+@prefix usf: <urn:usf:ontology:> .
+
+# Merge target: urn:usf:graph:vocabulary.
+# Every member has exactly one controlled-value class and one canonical name.
+# No aliases are proposed.
+
+# Artefact kinds.
+<urn:usf:artefactkind:source> a usf:ArtefactKind ; usf:canonicalName "source" .
+<urn:usf:artefactkind:contract> a usf:ArtefactKind ; usf:canonicalName "contract" .
+<urn:usf:artefactkind:schema> a usf:ArtefactKind ; usf:canonicalName "schema" .
+<urn:usf:artefactkind:manifest> a usf:ArtefactKind ; usf:canonicalName "manifest" .
+<urn:usf:artefactkind:configuration> a usf:ArtefactKind ; usf:canonicalName "configuration" .
+<urn:usf:artefactkind:executable> a usf:ArtefactKind ; usf:canonicalName "executable" .
+<urn:usf:artefactkind:template> a usf:ArtefactKind ; usf:canonicalName "template" .
+<urn:usf:artefactkind:fixture> a usf:ArtefactKind ; usf:canonicalName "fixture" .
+<urn:usf:artefactkind:test> a usf:ArtefactKind ; usf:canonicalName "test" .
+<urn:usf:artefactkind:proof> a usf:ArtefactKind ; usf:canonicalName "proof" .
+<urn:usf:artefactkind:evidence> a usf:ArtefactKind ; usf:canonicalName "evidence" .
+<urn:usf:artefactkind:report> a usf:ArtefactKind ; usf:canonicalName "report" .
+<urn:usf:artefactkind:dependencylock> a usf:ArtefactKind ; usf:canonicalName "dependencylock" .
+<urn:usf:artefactkind:softwarebillofmaterials> a usf:ArtefactKind ; usf:canonicalName "softwarebillofmaterials" .
+<urn:usf:artefactkind:provenancerecord> a usf:ArtefactKind ; usf:canonicalName "provenancerecord" .
+<urn:usf:artefactkind:signature> a usf:ArtefactKind ; usf:canonicalName "signature" .
+<urn:usf:artefactkind:checksum> a usf:ArtefactKind ; usf:canonicalName "checksum" .
+<urn:usf:artefactkind:bundle> a usf:ArtefactKind ; usf:canonicalName "bundle" .
+
+# Inputs admitted to generation. These values encode the authority boundary;
+# the role never upgrades an input to semantic authority.
+<urn:usf:generationinputrole:semanticauthority> a usf:GenerationInputRole ; usf:canonicalName "semanticauthority" .
+<urn:usf:generationinputrole:donorimplementation> a usf:GenerationInputRole ; usf:canonicalName "donorimplementation" .
+<urn:usf:generationinputrole:retainedasset> a usf:GenerationInputRole ; usf:canonicalName "retainedasset" .
+<urn:usf:generationinputrole:template> a usf:GenerationInputRole ; usf:canonicalName "template" .
+<urn:usf:generationinputrole:fixture> a usf:GenerationInputRole ; usf:canonicalName "fixture" .
+<urn:usf:generationinputrole:behaviouraloracle> a usf:GenerationInputRole ; usf:canonicalName "behaviouraloracle" .
+<urn:usf:generationinputrole:equivalencesubject> a usf:GenerationInputRole ; usf:canonicalName "equivalencesubject" .
+<urn:usf:generationinputrole:materialisedinput> a usf:GenerationInputRole ; usf:canonicalName "materialisedinput" .
+
+# Ordered compiler-phase kinds.
+<urn:usf:compilerphasekind:discover> a usf:CompilerPhaseKind ; usf:canonicalName "discover" .
+<urn:usf:compilerphasekind:validateauthored> a usf:CompilerPhaseKind ; usf:canonicalName "validateauthored" .
+<urn:usf:compilerphasekind:derive> a usf:CompilerPhaseKind ; usf:canonicalName "derive" .
+<urn:usf:compilerphasekind:validatederived> a usf:CompilerPhaseKind ; usf:canonicalName "validatederived" .
+<urn:usf:compilerphasekind:plan> a usf:CompilerPhaseKind ; usf:canonicalName "plan" .
+<urn:usf:compilerphasekind:generate> a usf:CompilerPhaseKind ; usf:canonicalName "generate" .
+<urn:usf:compilerphasekind:materialise> a usf:CompilerPhaseKind ; usf:canonicalName "materialise" .
+<urn:usf:compilerphasekind:collect> a usf:CompilerPhaseKind ; usf:canonicalName "collect" .
+<urn:usf:compilerphasekind:normalise> a usf:CompilerPhaseKind ; usf:canonicalName "normalise" .
+<urn:usf:compilerphasekind:ingest> a usf:CompilerPhaseKind ; usf:canonicalName "ingest" .
+<urn:usf:compilerphasekind:verifyintegrity> a usf:CompilerPhaseKind ; usf:canonicalName "verifyintegrity" .
+<urn:usf:compilerphasekind:verifyequivalence> a usf:CompilerPhaseKind ; usf:canonicalName "verifyequivalence" .
+<urn:usf:compilerphasekind:bundle> a usf:CompilerPhaseKind ; usf:canonicalName "bundle" .
+<urn:usf:compilerphasekind:attest> a usf:CompilerPhaseKind ; usf:canonicalName "attest" .
+
+# Run mode and observed run state.
+<urn:usf:compilerrunmode:full> a usf:CompilerRunMode ; usf:canonicalName "full" .
+<urn:usf:compilerrunmode:incremental> a usf:CompilerRunMode ; usf:canonicalName "incremental" .
+
+<urn:usf:compilerrunstate:planned> a usf:CompilerRunState ; usf:canonicalName "planned" .
+<urn:usf:compilerrunstate:executing> a usf:CompilerRunState ; usf:canonicalName "executing" .
+<urn:usf:compilerrunstate:succeeded> a usf:CompilerRunState ; usf:canonicalName "succeeded" .
+<urn:usf:compilerrunstate:failed> a usf:CompilerRunState ; usf:canonicalName "failed" .
+<urn:usf:compilerrunstate:rolledback> a usf:CompilerRunState ; usf:canonicalName "rolledback" .
+
+# Compatibility is distinct from readiness and report status.
+<urn:usf:compatibilitystate:compatible> a usf:CompatibilityState ; usf:canonicalName "compatible" .
+<urn:usf:compatibilitystate:incompatible> a usf:CompatibilityState ; usf:canonicalName "incompatible" .
+<urn:usf:compatibilitystate:requiresmigration> a usf:CompatibilityState ; usf:canonicalName "requiresmigration" .
+<urn:usf:compatibilitystate:indeterminate> a usf:CompatibilityState ; usf:canonicalName "indeterminate" .
+
+# Integrity and signature representation. SignatureMethod describes envelope
+# placement; the cryptographic algorithm must be a governed signing profile
+# linked by policy rather than an invented free-text value.
+<urn:usf:checksumalgorithm:sha256> a usf:ChecksumAlgorithm ; usf:canonicalName "sha256" .
+<urn:usf:checksumalgorithm:sha512> a usf:ChecksumAlgorithm ; usf:canonicalName "sha512" .
+
+<urn:usf:signaturemethod:detached> a usf:SignatureMethod ; usf:canonicalName "detached" .
+<urn:usf:signaturemethod:enveloped> a usf:SignatureMethod ; usf:canonicalName "enveloped" .
+
+<urn:usf:attestationkind:sourcetodatabase> a usf:AttestationKind ; usf:canonicalName "sourcetodatabase" .
+<urn:usf:attestationkind:cleanroomgeneration> a usf:AttestationKind ; usf:canonicalName "cleanroomgeneration" .
+<urn:usf:attestationkind:build> a usf:AttestationKind ; usf:canonicalName "build" .
+<urn:usf:attestationkind:release> a usf:AttestationKind ; usf:canonicalName "release" .
+<urn:usf:attestationkind:equivalence> a usf:AttestationKind ; usf:canonicalName "equivalence" .
+
+# Equivalence dimensions and results.
+<urn:usf:equivalencekind:behavioural> a usf:EquivalenceKind ; usf:canonicalName "behavioural" .
+<urn:usf:equivalencekind:evidential> a usf:EquivalenceKind ; usf:canonicalName "evidential" .
+<urn:usf:equivalencekind:structural> a usf:EquivalenceKind ; usf:canonicalName "structural" .
+<urn:usf:equivalencekind:fullincremental> a usf:EquivalenceKind ; usf:canonicalName "fullincremental" .
+
+<urn:usf:equivalenceresult:equivalent> a usf:EquivalenceResult ; usf:canonicalName "equivalent" .
+<urn:usf:equivalenceresult:notequivalent> a usf:EquivalenceResult ; usf:canonicalName "notequivalent" .
+<urn:usf:equivalenceresult:indeterminate> a usf:EquivalenceResult ; usf:canonicalName "indeterminate" .
+
+# Bundle purpose.
+<urn:usf:bundlekind:build> a usf:BundleKind ; usf:canonicalName "build" .
+<urn:usf:bundlekind:release> a usf:BundleKind ; usf:canonicalName "release" .
+<urn:usf:bundlekind:evidence> a usf:BundleKind ; usf:canonicalName "evidence" .
+<urn:usf:bundlekind:enterpriseassurance> a usf:BundleKind ; usf:canonicalName "enterpriseassurance" .
+
+# UI and renderer controlled values. Canonical names match their IRI local
+# segments; punctuation-bearing display aliases are deliberately not admitted.
+
+<urn:usf:uiexposureclass:uiexposed> a usf:UIExposureClass ; usf:canonicalName "uiexposed" .
+<urn:usf:uiexposureclass:apionly> a usf:UIExposureClass ; usf:canonicalName "apionly" .
+<urn:usf:uiexposureclass:internal> a usf:UIExposureClass ; usf:canonicalName "internal" .
+<urn:usf:uiexposureclass:notexposed> a usf:UIExposureClass ; usf:canonicalName "notexposed" .
+
+<urn:usf:surfacekind:webroute> a usf:SurfaceKind ; usf:canonicalName "webroute" .
+<urn:usf:surfacekind:mobilescreen> a usf:SurfaceKind ; usf:canonicalName "mobilescreen" .
+<urn:usf:surfacekind:form> a usf:SurfaceKind ; usf:canonicalName "form" .
+<urn:usf:surfacekind:queryview> a usf:SurfaceKind ; usf:canonicalName "queryview" .
+<urn:usf:surfacekind:notification> a usf:SurfaceKind ; usf:canonicalName "notification" .
+<urn:usf:surfacekind:preview> a usf:SurfaceKind ; usf:canonicalName "preview" .
+<urn:usf:surfacekind:e2ejourney> a usf:SurfaceKind ; usf:canonicalName "e2ejourney" .
+<urn:usf:surfacekind:documentation> a usf:SurfaceKind ; usf:canonicalName "documentation" .
+
+<urn:usf:renderertarget:web> a usf:RendererTarget ; usf:canonicalName "web" .
+<urn:usf:renderertarget:mobile> a usf:RendererTarget ; usf:canonicalName "mobile" .
+<urn:usf:renderertarget:preview> a usf:RendererTarget ; usf:canonicalName "preview" .
+<urn:usf:renderertarget:e2e> a usf:RendererTarget ; usf:canonicalName "e2e" .
+<urn:usf:renderertarget:documentation> a usf:RendererTarget ; usf:canonicalName "documentation" .
+
+<urn:usf:componentkind:layout> a usf:ComponentKind ; usf:canonicalName "layout" .
+<urn:usf:componentkind:navigation> a usf:ComponentKind ; usf:canonicalName "navigation" .
+<urn:usf:componentkind:datadisplay> a usf:ComponentKind ; usf:canonicalName "datadisplay" .
+<urn:usf:componentkind:input> a usf:ComponentKind ; usf:canonicalName "input" .
+<urn:usf:componentkind:feedback> a usf:ComponentKind ; usf:canonicalName "feedback" .
+<urn:usf:componentkind:action> a usf:ComponentKind ; usf:canonicalName "action" .
+
+<urn:usf:formfieldkind:text> a usf:FormFieldKind ; usf:canonicalName "text" .
+<urn:usf:formfieldkind:textarea> a usf:FormFieldKind ; usf:canonicalName "textarea" .
+<urn:usf:formfieldkind:number> a usf:FormFieldKind ; usf:canonicalName "number" .
+<urn:usf:formfieldkind:boolean> a usf:FormFieldKind ; usf:canonicalName "boolean" .
+<urn:usf:formfieldkind:select> a usf:FormFieldKind ; usf:canonicalName "select" .
+<urn:usf:formfieldkind:multiselect> a usf:FormFieldKind ; usf:canonicalName "multiselect" .
+<urn:usf:formfieldkind:date> a usf:FormFieldKind ; usf:canonicalName "date" .
+<urn:usf:formfieldkind:datetime> a usf:FormFieldKind ; usf:canonicalName "datetime" .
+<urn:usf:formfieldkind:file> a usf:FormFieldKind ; usf:canonicalName "file" .
+<urn:usf:formfieldkind:secret> a usf:FormFieldKind ; usf:canonicalName "secret" .
+<urn:usf:formfieldkind:readonly> a usf:FormFieldKind ; usf:canonicalName "readonly" .
+
+<urn:usf:validationtiming:input> a usf:ValidationTiming ; usf:canonicalName "input" .
+<urn:usf:validationtiming:blur> a usf:ValidationTiming ; usf:canonicalName "blur" .
+<urn:usf:validationtiming:submit> a usf:ValidationTiming ; usf:canonicalName "submit" .
+<urn:usf:validationtiming:serverresponse> a usf:ValidationTiming ; usf:canonicalName "serverresponse" .
+
+<urn:usf:errorpresentationkind:inline> a usf:ErrorPresentationKind ; usf:canonicalName "inline" .
+<urn:usf:errorpresentationkind:summary> a usf:ErrorPresentationKind ; usf:canonicalName "summary" .
+<urn:usf:errorpresentationkind:banner> a usf:ErrorPresentationKind ; usf:canonicalName "banner" .
+<urn:usf:errorpresentationkind:toast> a usf:ErrorPresentationKind ; usf:canonicalName "toast" .
+<urn:usf:errorpresentationkind:emptystate> a usf:ErrorPresentationKind ; usf:canonicalName "emptystate" .
+<urn:usf:errorpresentationkind:notfound> a usf:ErrorPresentationKind ; usf:canonicalName "notfound" .
+<urn:usf:errorpresentationkind:forbidden> a usf:ErrorPresentationKind ; usf:canonicalName "forbidden" .
+
+<urn:usf:accessibilityrequirementkind:keyboardoperable> a usf:AccessibilityRequirementKind ; usf:canonicalName "keyboardoperable" .
+<urn:usf:accessibilityrequirementkind:focusorder> a usf:AccessibilityRequirementKind ; usf:canonicalName "focusorder" .
+<urn:usf:accessibilityrequirementkind:focusvisible> a usf:AccessibilityRequirementKind ; usf:canonicalName "focusvisible" .
+<urn:usf:accessibilityrequirementkind:accessiblename> a usf:AccessibilityRequirementKind ; usf:canonicalName "accessiblename" .
+<urn:usf:accessibilityrequirementkind:semanticrole> a usf:AccessibilityRequirementKind ; usf:canonicalName "semanticrole" .
+<urn:usf:accessibilityrequirementkind:erroridentification> a usf:AccessibilityRequirementKind ; usf:canonicalName "erroridentification" .
+<urn:usf:accessibilityrequirementkind:statusannouncement> a usf:AccessibilityRequirementKind ; usf:canonicalName "statusannouncement" .
+<urn:usf:accessibilityrequirementkind:contrast> a usf:AccessibilityRequirementKind ; usf:canonicalName "contrast" .
+<urn:usf:accessibilityrequirementkind:reducedmotion> a usf:AccessibilityRequirementKind ; usf:canonicalName "reducedmotion" .
+<urn:usf:accessibilityrequirementkind:touchtarget> a usf:AccessibilityRequirementKind ; usf:canonicalName "touchtarget" .
+<urn:usf:accessibilityrequirementkind:reflow> a usf:AccessibilityRequirementKind ; usf:canonicalName "reflow" .
+<urn:usf:accessibilityrequirementkind:languagedeclaration> a usf:AccessibilityRequirementKind ; usf:canonicalName "languagedeclaration" .
+
+<urn:usf:localisationrequirementkind:messagekey> a usf:LocalisationRequirementKind ; usf:canonicalName "messagekey" .
+<urn:usf:localisationrequirementkind:localefallback> a usf:LocalisationRequirementKind ; usf:canonicalName "localefallback" .
+<urn:usf:localisationrequirementkind:pluralisation> a usf:LocalisationRequirementKind ; usf:canonicalName "pluralisation" .
+<urn:usf:localisationrequirementkind:datetimeformat> a usf:LocalisationRequirementKind ; usf:canonicalName "datetimeformat" .
+<urn:usf:localisationrequirementkind:numberformat> a usf:LocalisationRequirementKind ; usf:canonicalName "numberformat" .
+<urn:usf:localisationrequirementkind:currencyformat> a usf:LocalisationRequirementKind ; usf:canonicalName "currencyformat" .
+<urn:usf:localisationrequirementkind:bididirection> a usf:LocalisationRequirementKind ; usf:canonicalName "bididirection" .
+<urn:usf:localisationrequirementkind:textexpansion> a usf:LocalisationRequirementKind ; usf:canonicalName "textexpansion" .
+<urn:usf:localisationrequirementkind:localerouting> a usf:LocalisationRequirementKind ; usf:canonicalName "localerouting" .
+
+<urn:usf:routekind:public> a usf:RouteKind ; usf:canonicalName "public" .
+<urn:usf:routekind:authenticated> a usf:RouteKind ; usf:canonicalName "authenticated" .
+<urn:usf:routekind:tenant> a usf:RouteKind ; usf:canonicalName "tenant" .
+<urn:usf:routekind:administrator> a usf:RouteKind ; usf:canonicalName "administrator" .
+<urn:usf:routekind:operator> a usf:RouteKind ; usf:canonicalName "operator" .
+<urn:usf:routekind:developer> a usf:RouteKind ; usf:canonicalName "developer" .
+
+# Proof, test, evidence-pipeline, and readiness values.
+
+fresh:unknown a usf:Freshness ; usf:canonicalName "unknown" .
+
+rds:stale        a usf:ReadinessState ; usf:canonicalName "stale" .
+rds:incompatible a usf:ReadinessState ; usf:canonicalName "incompatible" .
+rds:degraded     a usf:ReadinessState ; usf:canonicalName "degraded" .
+rds:unknown      a usf:ReadinessState ; usf:canonicalName "unknown" .
+
+oe:blocking a usf:ObligationEffect ; usf:canonicalName "blocking" .
+oe:advisory a usf:ObligationEffect ; usf:canonicalName "advisory" .
+
+rs:passed         a usf:ResultState ; usf:canonicalName "passed" .
+rs:failed         a usf:ResultState ; usf:canonicalName "failed" .
+rs:detecteddefect a usf:ResultState ; usf:canonicalName "detecteddefect" .
+rs:notrun         a usf:ResultState ; usf:canonicalName "notrun" .
+rs:unknown        a usf:ResultState ; usf:canonicalName "unknown" .
+
+es:emitted           a usf:EvidenceStage ; usf:canonicalName "emitted" .
+es:collected         a usf:EvidenceStage ; usf:canonicalName "collected" .
+es:normalised        a usf:EvidenceStage ; usf:canonicalName "normalised" .
+es:ingested          a usf:EvidenceStage ; usf:canonicalName "ingested" .
+es:signed            a usf:EvidenceStage ; usf:canonicalName "signed" .
+es:integrityverified a usf:EvidenceStage ; usf:canonicalName "integrityverified" .
+
+gk:release     a usf:ReadinessGateKind ; usf:canonicalName "release" .
+gk:artefact    a usf:ReadinessGateKind ; usf:canonicalName "artefact" .
+gk:enterprise  a usf:ReadinessGateKind ; usf:canonicalName "enterprise" .
+gk:ui          a usf:ReadinessGateKind ; usf:canonicalName "ui" .
+gk:livestardog a usf:ReadinessGateKind ; usf:canonicalName "livestardog" .
+
+rr:satisfied                 a usf:ReadinessReason ; usf:canonicalName "satisfied" .
+rr:missingblockingobligation a usf:ReadinessReason ; usf:canonicalName "missingblockingobligation" .
+rr:staleevidence             a usf:ReadinessReason ; usf:canonicalName "staleevidence" .
+rr:incompatibleprovidermode  a usf:ReadinessReason ; usf:canonicalName "incompatibleprovidermode" .
+rr:incompatibleenvironment   a usf:ReadinessReason ; usf:canonicalName "incompatibleenvironment" .
+rr:degradedadvisory          a usf:ReadinessReason ; usf:canonicalName "degradedadvisory" .
+rr:unknownevaluation         a usf:ReadinessReason ; usf:canonicalName "unknownevaluation" .
+rr:failedtest                a usf:ReadinessReason ; usf:canonicalName "failedtest" .
+rr:unsignedevidence          a usf:ReadinessReason ; usf:canonicalName "unsignedevidence" .
+
+########################################################################
+# Source observation and disposition values
+########################################################################
+
+<urn:usf:sourceuniverse:canonicalrepository> a usf:SourceUniverse ; usf:canonicalName "canonicalrepository" .
+<urn:usf:sourceuniverse:compilerimplementation> a usf:SourceUniverse ; usf:canonicalName "compilerimplementation" .
+<urn:usf:sourceuniverse:graphauthority> a usf:SourceUniverse ; usf:canonicalName "graphauthority" .
+<urn:usf:sourceuniverse:supportprovisioning> a usf:SourceUniverse ; usf:canonicalName "supportprovisioning" .
+
+<urn:usf:sourcecontentrole:automation> a usf:SourceContentRole ; usf:canonicalName "automation" .
+<urn:usf:sourcecontentrole:documentation> a usf:SourceContentRole ; usf:canonicalName "documentation" .
+<urn:usf:sourcecontentrole:implementation> a usf:SourceContentRole ; usf:canonicalName "implementation" .
+<urn:usf:sourcecontentrole:semanticdefinition> a usf:SourceContentRole ; usf:canonicalName "semanticdefinition" .
+<urn:usf:sourcecontentrole:machinesemantics> a usf:SourceContentRole ; usf:canonicalName "machinesemantics" .
+<urn:usf:sourcecontentrole:authoredsemantics> a usf:SourceContentRole ; usf:canonicalName "authoredsemantics" .
+<urn:usf:sourcecontentrole:validatorshape> a usf:SourceContentRole ; usf:canonicalName "validatorshape" .
+<urn:usf:sourcecontentrole:derivationrule> a usf:SourceContentRole ; usf:canonicalName "derivationrule" .
+<urn:usf:sourcecontentrole:derivedprojection> a usf:SourceContentRole ; usf:canonicalName "derivedprojection" .
+<urn:usf:sourcecontentrole:fixture> a usf:SourceContentRole ; usf:canonicalName "fixture" .
+<urn:usf:sourcecontentrole:authoritymanifest> a usf:SourceContentRole ; usf:canonicalName "authoritymanifest" .
+<urn:usf:sourcecontentrole:materialisationdeclaration> a usf:SourceContentRole ; usf:canonicalName "materialisationdeclaration" .
+<urn:usf:sourcecontentrole:placeholder> a usf:SourceContentRole ; usf:canonicalName "placeholder" .
+<urn:usf:sourcecontentrole:proofevidence> a usf:SourceContentRole ; usf:canonicalName "proofevidence" .
+<urn:usf:sourcecontentrole:repositorygovernance> a usf:SourceContentRole ; usf:canonicalName "repositorygovernance" .
+<urn:usf:sourcecontentrole:runtimetopology> a usf:SourceContentRole ; usf:canonicalName "runtimetopology" .
+<urn:usf:sourcecontentrole:verification> a usf:SourceContentRole ; usf:canonicalName "verification" .
+<urn:usf:sourcecontentrole:supportprovisioning> a usf:SourceContentRole ; usf:canonicalName "supportprovisioning" .
+
+<urn:usf:dispositionoutputmode:nooutput> a usf:DispositionOutputMode ; usf:canonicalName "nooutput" .
+<urn:usf:dispositionoutputmode:canonicaloutput> a usf:DispositionOutputMode ; usf:canonicalName "canonicaloutput" .
+
+<urn:usf:dispositionkind:retainsemanticauthority> a usf:DispositionKind ; usf:canonicalName "retainsemanticauthority" ; usf:permitsDispositionOutputMode <urn:usf:dispositionoutputmode:nooutput> .
+<urn:usf:dispositionkind:retainasset> a usf:DispositionKind ; usf:canonicalName "retainasset" ; usf:permitsDispositionOutputMode <urn:usf:dispositionoutputmode:nooutput>, <urn:usf:dispositionoutputmode:canonicaloutput> .
+<urn:usf:dispositionkind:materialisedependency> a usf:DispositionKind ; usf:canonicalName "materialisedependency" ; usf:permitsDispositionOutputMode <urn:usf:dispositionoutputmode:nooutput>, <urn:usf:dispositionoutputmode:canonicaloutput> .
+<urn:usf:dispositionkind:generateequivalent> a usf:DispositionKind ; usf:canonicalName "generateequivalent" ; usf:permitsDispositionOutputMode <urn:usf:dispositionoutputmode:canonicaloutput> .
+<urn:usf:dispositionkind:collectevidence> a usf:DispositionKind ; usf:canonicalName "collectevidence" ; usf:permitsDispositionOutputMode <urn:usf:dispositionoutputmode:nooutput> .
+<urn:usf:dispositionkind:excludenoncanonical> a usf:DispositionKind ; usf:canonicalName "excludenoncanonical" ; usf:permitsDispositionOutputMode <urn:usf:dispositionoutputmode:nooutput> .
+<urn:usf:dispositionkind:retireafterequivalence> a usf:DispositionKind ; usf:canonicalName "retireafterequivalence" ; usf:permitsDispositionOutputMode <urn:usf:dispositionoutputmode:canonicaloutput> .
+<urn:usf:dispositionkind:reviewrequired> a usf:DispositionKind ; usf:canonicalName "reviewrequired" ; usf:permitsDispositionOutputMode <urn:usf:dispositionoutputmode:nooutput> .
+
+<urn:usf:dispositionbasis:explicitplanlink> a usf:DispositionBasis ; usf:canonicalName "explicitplanlink" .
+<urn:usf:dispositionbasis:registeredgraphmembership> a usf:DispositionBasis ; usf:canonicalName "registeredgraphmembership" .
+<urn:usf:dispositionbasis:exactsemanticidentifier> a usf:DispositionBasis ; usf:canonicalName "exactsemanticidentifier" .
+<urn:usf:dispositionbasis:structuralcontentrole> a usf:DispositionBasis ; usf:canonicalName "structuralcontentrole" .
+<urn:usf:dispositionbasis:declaredretainedinput> a usf:DispositionBasis ; usf:canonicalName "declaredretainedinput" .
+<urn:usf:dispositionbasis:declaredmaterialisationcontract> a usf:DispositionBasis ; usf:canonicalName "declaredmaterialisationcontract" .
+<urn:usf:dispositionbasis:acceptedhumandecision> a usf:DispositionBasis ; usf:canonicalName "acceptedhumandecision" .
+<urn:usf:dispositionbasis:independentintegrityobservation> a usf:DispositionBasis ; usf:canonicalName "independentintegrityobservation" .
+
+<urn:usf:dispositiondecisionstate:reviewrequired> a usf:DispositionDecisionState ; usf:canonicalName "reviewrequired" .
+<urn:usf:dispositiondecisionstate:accepted> a usf:DispositionDecisionState ; usf:canonicalName "accepted" .
+<urn:usf:dispositiondecisionstate:rejected> a usf:DispositionDecisionState ; usf:canonicalName "rejected" .
+<urn:usf:dispositiondecisionstate:superseded> a usf:DispositionDecisionState ; usf:canonicalName "superseded" .
+rr:integrityunverified       a usf:ReadinessReason ; usf:canonicalName "integrityunverified" .
+
+# Enterprise assurance and applicability state.
+reason:directcontrolscope a usf:ControlMappingReason ; usf:canonicalName "directcontrolscope" .
+reason:assurancegate a usf:ControlMappingReason ; usf:canonicalName "assurancegate" .
+reason:evidenceproducing a usf:ControlMappingReason ; usf:canonicalName "evidenceproducing" .
+reason:obligationevidence a usf:ControlMappingReason ; usf:canonicalName "obligationevidence" .
+
+cstatus:draft a usf:ControlStatus ; usf:canonicalName "draft" .
+cstatus:proposed a usf:ControlStatus ; usf:canonicalName "proposed" .
+cstatus:implemented a usf:ControlStatus ; usf:canonicalName "implemented" .
+cstatus:operating a usf:ControlStatus ; usf:canonicalName "operating" .
+cstatus:suspended a usf:ControlStatus ; usf:canonicalName "suspended" .
+cstatus:retired a usf:ControlStatus ; usf:canonicalName "retired" .
+cstatus:approved a usf:ControlStatus ; usf:canonicalName "approved" .
+
+applicability:pendingassessment a usf:ApplicabilityStatus ; usf:canonicalName "pendingassessment" .
+applicability:applicable a usf:ApplicabilityStatus ; usf:canonicalName "applicable" .
+applicability:notapplicable a usf:ApplicabilityStatus ; usf:canonicalName "notapplicable" .
+
+treatment:proposed a usf:TreatmentStatus ; usf:canonicalName "proposed" .
+treatment:active a usf:TreatmentStatus ; usf:canonicalName "active" .
+treatment:complete a usf:TreatmentStatus ; usf:canonicalName "complete" .
+treatment:ineffective a usf:TreatmentStatus ; usf:canonicalName "ineffective" .
+treatment:accepted a usf:TreatmentStatus ; usf:canonicalName "accepted" .
+
+outcome:effective a usf:AssessmentOutcome ; usf:canonicalName "effective" .
+outcome:partiallyeffective a usf:AssessmentOutcome ; usf:canonicalName "partiallyeffective" .
+outcome:ineffective a usf:AssessmentOutcome ; usf:canonicalName "ineffective" .
+outcome:notassessed a usf:AssessmentOutcome ; usf:canonicalName "notassessed" .
+
+finding:open a usf:FindingStatus ; usf:canonicalName "open" .
+finding:remediationinprogress a usf:FindingStatus ; usf:canonicalName "remediationinprogress" .
+finding:closed a usf:FindingStatus ; usf:canonicalName "closed" .
+finding:accepted a usf:FindingStatus ; usf:canonicalName "accepted" .
+
+action:open a usf:ActionStatus ; usf:canonicalName "open" .
+action:inprogress a usf:ActionStatus ; usf:canonicalName "inprogress" .
+action:complete a usf:ActionStatus ; usf:canonicalName "complete" .
+action:cancelled a usf:ActionStatus ; usf:canonicalName "cancelled" .

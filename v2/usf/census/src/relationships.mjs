@@ -24,6 +24,19 @@ function relationshipKey(record) {
   return sha256([record.source, record.relationshipType, record.target, record.targetKind, record.extractionMethod].join('\0'));
 }
 
+function classifyFinding(record, overrides = {}) {
+  return {
+    ...record,
+    findingCategory: overrides.findingCategory ?? 'inventory-consistency',
+    findingClass: overrides.findingClass ?? record.detailCode,
+    severity: overrides.severity ?? 'blocking',
+    resolutionStatus: 'open',
+    ownerClass: overrides.ownerClass ?? 'source-artifact-owner',
+    requiredAction: overrides.requiredAction ?? 'define-or-correct-declared-resource',
+    classificationEvidence: overrides.classificationEvidence ?? ['structural-parser-result', 'physical-universe-comparison']
+  };
+}
+
 export function buildRelationships(members, parserResults) {
   const pathSet = new Set(members.map((member) => member.path));
   const relationships = [];
@@ -38,6 +51,7 @@ export function buildRelationships(members, parserResults) {
         relationshipType: raw.relationshipType,
         target: resolvedTarget.target,
         targetKind,
+        attributes: raw.attributes ?? {},
         extractionMethod: raw.extractionMethod,
         evidenceKind: raw.evidenceKind,
         confidence: raw.confidence,
@@ -46,7 +60,7 @@ export function buildRelationships(members, parserResults) {
       };
       validateRelationship(record);
       relationships.push(record);
-      if (!record.resolved) findings.push({
+      if (!record.resolved) findings.push(classifyFinding({
         findingKey: sha256(`missing-target\0${relationshipKey(record)}`),
         source: record.source,
         findingKind: 'missing-target',
@@ -54,7 +68,7 @@ export function buildRelationships(members, parserResults) {
         detailCode: 'relationship-target-not-observed',
         relationshipKey: relationshipKey(record),
         comparisonEvidence: ['normalized-universe-path-set']
-      });
+      }, { findingCategory: 'relationship-resolution', findingClass: 'unresolved-relationship-target', requiredAction: 'define-correct-or-explicitly-externalise-target' }));
     }
   }
   const unique = [...new Map(relationships.map((record) => [relationshipKey(record), record])).values()]
@@ -100,19 +114,21 @@ export function reconcileInventories(members, parserResults, relationships, rela
       }
     }
     const inventoryFindings = [
-      ...missingDeclarations.map((subject) => ({ findingKind: 'missing-declaration', subject, detailCode: 'declared-target-not-observed' })),
-      ...duplicateDeclarations.map((subject) => ({ findingKind: 'duplicate-declaration', subject, detailCode: 'duplicate-within-inventory' })),
-      ...crossInventoryDuplicates.map((subject) => ({ findingKind: 'duplicate-declaration', subject, detailCode: 'declared-by-multiple-inventories' })),
-      ...contradictions.map((subject) => ({ findingKind: 'contradictory-declaration', subject, detailCode: 'declaration-contradicts-universe-state' })),
-      ...extraDeclarations.map((subject) => ({ findingKind: 'extra-declaration', subject, detailCode: 'complete-scope-member-unregistered' }))
+      ...missingDeclarations.map((subject) => ({ findingKind: 'missing-declaration', subject, detailCode: 'declared-target-not-observed', findingClass: 'inventory-target-missing', requiredAction: 'define-correct-or-remove-declared-target' })),
+      ...duplicateDeclarations.map((subject) => ({ findingKind: 'duplicate-declaration', subject, detailCode: 'duplicate-within-inventory', findingClass: 'inventory-local-duplicate', requiredAction: 'deduplicate-inventory-declaration' })),
+      ...crossInventoryDuplicates.map((subject) => ({ findingKind: 'duplicate-declaration', subject, detailCode: 'declared-by-multiple-inventories', findingClass: 'inventory-owner-collision', requiredAction: 'assign-canonical-inventory-owner' })),
+      ...contradictions.map((subject) => ({ findingKind: 'contradictory-declaration', subject, detailCode: 'declaration-contradicts-universe-state', findingClass: 'inventory-state-contradiction', requiredAction: 'reconcile-declaration-with-observed-state' })),
+      ...extraDeclarations.map((subject) => ({ findingKind: 'extra-declaration', subject, detailCode: 'complete-scope-member-unregistered', findingClass: 'inventory-scope-omission', requiredAction: 'register-or-explicitly-exempt-scope-member' }))
     ];
-    for (const finding of inventoryFindings) findings.push({
+    for (const finding of inventoryFindings) findings.push(classifyFinding({
       findingKey: sha256([parsed.path, finding.findingKind, finding.subject, finding.detailCode].join('\0')),
       source: parsed.path,
-      ...finding,
+      findingKind: finding.findingKind,
+      subject: finding.subject,
+      detailCode: finding.detailCode,
       relationshipKey: null,
       comparisonEvidence: ['physical-universe', 'cross-inventory-declarations', 'normalized-relationships']
-    });
+    }, { findingClass: finding.findingClass, requiredAction: finding.requiredAction }));
     const confidence = inventoryFindings.length === 0
       ? { level: 'high', score: 0.95, reasons: ['inventory-cross-check'] }
       : { level: 'medium', score: 0.7, reasons: ['inventory-cross-check', 'semantic-ambiguity'] };

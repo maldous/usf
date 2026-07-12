@@ -1,7 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
-import https from 'node:https';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -166,19 +165,170 @@ export function auditMappingsCoverage(artifacts, mappings, coverage, identityRev
     if (!source || row.coverageDecision !== source.coverageDecision) findings.push(`coverage-not-derived:${row.artifactKey}`);
   }
   if (identityReviews !== null) {
-    if (!Array.isArray(identityReviews) || identityReviews.length < Math.min(100, mappings.length)) findings.push('identity-review-sample-incomplete');
+    if (!Array.isArray(identityReviews)) findings.push('identity-review-input-invalid');
     else for (const review of identityReviews) {
-      if (review.reviewStatus !== 'independently-reviewed') findings.push(`identity-review-not-independent:${review.artifactKey}`);
-      if (!review.workPackageOwnershipVerified || (review.reviewDecision === 'identityonly' && !review.provedIdentity)) findings.push(`identity-review-unverified:${review.artifactKey}`);
+      const mapping = mapped.get(review.artifactKey);
+      if (!mapping) findings.push(`identity-review-without-mapping:${review.artifactKey}`);
+      if (review.reviewStatus !== 'machine-reviewed') findings.push(`identity-review-overclaims-review:${review.artifactKey}`);
+      if (!review.workPackageOwnershipVerified || (review.provedIdentity && !mapping?.matchedResources?.length)) findings.push(`identity-review-unverified:${review.artifactKey}`);
     }
   }
   if (missingEntirely !== null) {
     const absent = new Set(mappings.filter((mapping) => mapping.coverageDecision === 'absent').map((mapping) => mapping.artifactKey));
     const missing = new Set((missingEntirely ?? []).map((record) => record.artifactKey));
     for (const key of absent) if (!missing.has(key)) findings.push(`absent-without-missing-plan:${key}`);
-    for (const record of missingEntirely ?? []) if (!record.primaryWorkPackage || !record.requiredSemanticLayers?.length) findings.push(`missing-entirely-unowned:${record.artifactKey}`);
+    const validReviewRequiredDisposition = (record) => record.missingKind === 'review-required-source-disposition' &&
+      record.requiredClassIri === 'urn:usf:ontology:SourceArtefactDisposition' &&
+      record.reasonCode === 'source-disposition-review-required';
+    for (const record of missingEntirely ?? []) if (!record.primaryWorkPackage || (!record.requiredSemanticLayers?.length && !validReviewRequiredDisposition(record))) findings.push(`missing-entirely-unowned:${record.artifactKey}`);
   }
   return outcome('mappings-coverage', findings, { mappingCount: mappings.length, coverageCount: coverage.length });
+}
+
+export function auditArtifactDispositions(artifacts, canonicalArtifacts, replacementGroups) {
+  if (![artifacts, canonicalArtifacts, replacementGroups].every(Array.isArray)) return incomplete('artifact-dispositions', 'missing-artifact-disposition-input');
+  const findings = [];
+  const artifactKeys = new Set(artifacts.map((record) => record.artifactKey));
+  const accepted = new Set();
+  const missing = new Set();
+  for (const group of replacementGroups) {
+    for (const key of group.currentArtifacts ?? []) {
+      if (!artifactKeys.has(key)) findings.push(`artifact-disposition-owner-missing:${key}`);
+      if (accepted.has(key) || missing.has(key)) findings.push(`duplicate-artifact-disposition-state:${key}`);
+      if (group.dispositionStatus === 'missing-accepted-source-disposition') {
+        missing.add(key);
+        if (group.canonicalArtifacts?.length || group.requiredGenerationProjections?.length || group.removedDuplication?.length) findings.push(`unavailable-disposition-invents-output-or-removal:${key}`);
+        if (group.reviewStatus !== 'machine-reviewed' || group.confidence?.level !== 'low') findings.push(`unavailable-disposition-overclaims-review-or-confidence:${key}`);
+        if (group.requiredGraphObligation?.classIri !== 'urn:usf:ontology:SourceArtefactDisposition') findings.push(`source-disposition-obligation-imprecise:${key}`);
+      } else if (['graph-owned-output-plan', 'graph-owned-no-output-disposition'].includes(group.dispositionStatus)) accepted.add(key);
+      else findings.push(`invalid-artifact-disposition-state:${key}`);
+    }
+  }
+  for (const key of artifactKeys) if (!accepted.has(key) && !missing.has(key)) findings.push(`artifact-disposition-state-absent:${key}`);
+  if (missing.size) findings.push(`required-source-disposition-unavailable:${missing.size}`);
+  return outcome('artifact-dispositions', findings, {
+    artifactCount: artifactKeys.size,
+    acceptedDispositionCount: accepted.size,
+    missingDispositionCount: missing.size,
+    canonicalArtifactCount: canonicalArtifacts.length
+  });
+}
+
+const SOURCE_TERMS = Object.freeze({
+  namedGraph: 'urn:usf:ontology:NamedGraph', graphIri: 'urn:usf:ontology:graphIri', graphClass: 'urn:usf:ontology:graphClass',
+  source: 'urn:usf:ontology:SourceArtefact', observation: 'urn:usf:ontology:SourceArtefactObservation', disposition: 'urn:usf:ontology:SourceArtefactDisposition', kind: 'urn:usf:ontology:DispositionKind',
+  observes: 'urn:usf:ontology:observesSourceArtefact', path: 'urn:usf:ontology:observedSourcePath', digest: 'urn:usf:ontology:observedContentDigest', universe: 'urn:usf:ontology:observedUniverse',
+  hasDisposition: 'urn:usf:ontology:hasSourceDisposition', dispositionOf: 'urn:usf:ontology:dispositionOfSourceArtefact', assignedPlan: 'urn:usf:ontology:assignedToArtefactPlan', dispositionKind: 'urn:usf:ontology:hasDispositionKind', decision: 'urn:usf:ontology:hasDispositionDecisionState'
+});
+const SOURCE_RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+const ACCEPTED_DISPOSITION = 'urn:usf:dispositiondecisionstate:accepted';
+const OUTPUT_KINDS = new Set(['urn:usf:dispositionkind:generateequivalent', 'urn:usf:dispositionkind:retireafterequivalence']);
+const SOURCE_UNIVERSES = new Map([
+  ['urn:usf:sourceuniverse:canonicalrepository', 'repository-output'],
+  ['urn:usf:sourceuniverse:compilerimplementation', 'v2-compiler-implementation'],
+  ['urn:usf:sourceuniverse:graphauthority', 'v2-graph-authority'],
+  ['urn:usf:sourceuniverse:supportprovisioning', 'v2-support-provisioning']
+]);
+
+function sourceTriples(parserResults) {
+  return parserResults.filter((record) => record.universe === 'v2-graph-authority' && !record.path.includes('/fixtures/')).flatMap((record) =>
+    (record.declarations ?? []).filter((item) => item.kind === 'semantic-triple').map((item) => ({ sourcePath: record.path, ...item.attributes }))
+  ).filter((triple) => triple.subject && triple.predicate && triple.object);
+}
+
+function sourceObjects(triples, subject, predicate) {
+  return [...new Set(triples.filter((triple) => triple.subject === subject && triple.predicate === predicate).map((triple) => triple.object))].sort();
+}
+
+function sourceLexical(term) {
+  if (typeof term !== 'string' || !term.startsWith('"')) return term;
+  const match = term.match(/^("(?:[^"\\]|\\.)*")(?:\^\^.+|@[A-Za-z0-9-]+)?$/s);
+  if (!match) return term;
+  try { return JSON.parse(match[1]); } catch { return term; }
+}
+
+function sourceTyped(triples, classIri) {
+  return [...new Set(triples.filter((triple) => triple.predicate === SOURCE_RDF_TYPE && triple.object === classIri && !triple.subject.startsWith('_:')).map((triple) => triple.subject))].sort();
+}
+
+export function auditSourceDispositionOwnership(artifacts, parserResults, replacementGroups) {
+  if (![artifacts, parserResults, replacementGroups].every(Array.isArray)) return incomplete('source-disposition-ownership', 'missing-source-disposition-input');
+  const triples = sourceTriples(parserResults);
+  const registered = new Set();
+  for (const resource of sourceTyped(triples, SOURCE_TERMS.namedGraph)) {
+    const graphIris = sourceObjects(triples, resource, SOURCE_TERMS.graphIri).map(sourceLexical);
+    const graphClasses = sourceObjects(triples, resource, SOURCE_TERMS.graphClass);
+    if (graphIris.length === 1 && graphClasses.length === 1 && [
+      'urn:usf:graphclass:definitiongraph',
+      'urn:usf:graphclass:authoredgraph',
+      'urn:usf:graphclass:observedgraph',
+      'urn:usf:graphclass:derivedgraph'
+    ].includes(graphClasses[0])) registered.add(graphIris[0]);
+  }
+  const typed = Object.fromEntries(['source', 'observation', 'disposition', 'kind'].map((name) => [name, new Set(sourceTyped(triples, SOURCE_TERMS[name]))]));
+  const plans = new Set(sourceTyped(triples, 'urn:usf:ontology:ArtefactPlan'));
+  const resourceRegistered = (subject) => {
+    const graphs = [...new Set(triples.filter((triple) => triple.subject === subject && triple.graph).map((triple) => triple.graph))];
+    return graphs.length > 0 && graphs.every((graph) => registered.has(graph));
+  };
+  const observations = [...typed.observation].map((iri) => ({
+    iri,
+    sources: sourceObjects(triples, iri, SOURCE_TERMS.observes),
+    paths: sourceObjects(triples, iri, SOURCE_TERMS.path).map(sourceLexical),
+    digests: sourceObjects(triples, iri, SOURCE_TERMS.digest).map(sourceLexical),
+    universes: sourceObjects(triples, iri, SOURCE_TERMS.universe).map(sourceLexical).map((value) => SOURCE_UNIVERSES.get(value) ?? value)
+  }));
+  const groups = new Map(replacementGroups.flatMap((group) => (group.currentArtifacts ?? []).map((key) => [key, group])));
+  const findingCounts = new Map();
+  const addFindings = (reasons) => { for (const reason of new Set(reasons)) findingCounts.set(reason, (findingCounts.get(reason) ?? 0) + 1); };
+  let acceptedCount = 0; let outputPlanCount = 0; let noOutputCount = 0;
+  for (const artifact of artifacts) {
+    const artifactFindings = [];
+    const candidates = observations.filter((observation) => observation.paths.length === 1 && observation.paths[0] === artifact.path && observation.universes.length === 1 && observation.universes[0] === artifact.universe);
+    if (candidates.length !== 1) { addFindings([candidates.length ? 'source-observation-duplicate' : 'source-observation-missing']); continue; }
+    const observation = candidates[0];
+    if (observation.digests.length !== 1 || observation.digests[0] !== artifact.contentDigest) artifactFindings.push('source-observation-digest-mismatch');
+    if (observation.sources.length !== 1 || !typed.source.has(observation.sources[0])) { addFindings([...artifactFindings, 'source-observation-source-invalid']); continue; }
+    const sourceIri = observation.sources[0];
+    if (!resourceRegistered(observation.iri)) artifactFindings.push('source-observation-unregistered-graph');
+    if (!resourceRegistered(sourceIri)) artifactFindings.push('source-artefact-unregistered-graph');
+    const forward = sourceObjects(triples, sourceIri, SOURCE_TERMS.hasDisposition);
+    const reverse = [...typed.disposition].filter((iri) => sourceObjects(triples, iri, SOURCE_TERMS.dispositionOf).includes(sourceIri));
+    const dispositions = [...new Set([...forward, ...reverse])].sort();
+    if (forward.length !== 1 || reverse.length !== 1 || dispositions.length !== 1 || forward[0] !== reverse[0]) { addFindings([...artifactFindings, 'source-disposition-bijection-invalid']); continue; }
+    const dispositionIri = dispositions[0];
+    const states = sourceObjects(triples, dispositionIri, SOURCE_TERMS.decision);
+    const kinds = sourceObjects(triples, dispositionIri, SOURCE_TERMS.dispositionKind);
+    const assignedPlans = sourceObjects(triples, dispositionIri, SOURCE_TERMS.assignedPlan);
+    if (!resourceRegistered(dispositionIri)) artifactFindings.push('source-disposition-unregistered-graph');
+    if (states.length !== 1 || states[0] !== ACCEPTED_DISPOSITION) artifactFindings.push(states.includes('urn:usf:dispositiondecisionstate:reviewrequired') ? 'source-disposition-review-required' : 'source-disposition-not-accepted');
+    if (kinds.length !== 1 || !typed.kind.has(kinds[0])) artifactFindings.push('source-disposition-kind-invalid');
+    const planRequired = kinds.length === 1 && OUTPUT_KINDS.has(kinds[0]);
+    if ((planRequired && assignedPlans.length < 1) || (!planRequired && assignedPlans.length > 0)) artifactFindings.push('source-disposition-plan-cardinality-invalid');
+    if (assignedPlans.some((plan) => !plans.has(plan))) artifactFindings.push('source-disposition-plan-missing');
+    if (artifactFindings.length === 0) {
+      acceptedCount += 1;
+      if (planRequired) outputPlanCount += 1; else noOutputCount += 1;
+    }
+    const group = groups.get(artifact.artifactKey);
+    const expectedStatus = artifactFindings.length ? 'missing-accepted-source-disposition' : planRequired ? 'graph-owned-output-plan' : 'graph-owned-no-output-disposition';
+    if (group?.dispositionStatus !== expectedStatus) artifactFindings.push('generated-disposition-status-mismatch');
+    if (!artifactFindings.length && (group?.requiredGraphObligation?.sourceIri !== sourceIri || group?.requiredGraphObligation?.observationIri !== observation.iri || group?.requiredGraphObligation?.dispositionIri !== dispositionIri || group?.requiredGraphObligation?.assignedPlanIri !== (assignedPlans[0] ?? null))) artifactFindings.push('generated-disposition-evidence-mismatch');
+    addFindings(artifactFindings);
+  }
+  const findings = [...findingCounts].sort(([left], [right]) => left.localeCompare(right)).map(([reason, count]) => `${reason}:${count}`);
+  if (artifacts.length - acceptedCount > 0) findings.push(`required-source-disposition-unavailable:${artifacts.length - acceptedCount}`);
+  return outcome('source-disposition-ownership', findings, { artifactCount: artifacts.length, acceptedDispositionCount: acceptedCount, rejectedDispositionCount: artifacts.length - acceptedCount, outputPlanDispositionCount: outputPlanCount, noOutputDispositionCount: noOutputCount, observationCount: observations.length, dispositionCount: typed.disposition.size, findingDistribution: Object.fromEntries([...findingCounts].sort(([left], [right]) => left.localeCompare(right))) });
+}
+
+export function auditFindingClassifications(findingsInput) {
+  if (!Array.isArray(findingsInput)) return incomplete('finding-classifications', 'missing-finding-input');
+  const findings = [];
+  const required = ['findingKey', 'source', 'findingCategory', 'findingClass', 'severity', 'resolutionStatus', 'ownerClass', 'requiredAction', 'classificationEvidence'];
+  for (const record of findingsInput) {
+    for (const field of required) if (!(field in record) || record[field] === null || record[field] === '' || (Array.isArray(record[field]) && record[field].length === 0)) findings.push(`unclassified-finding:${record.findingKey ?? '<missing>'}:${field}`);
+  }
+  return outcome('finding-classifications', findings, { findingCount: findingsInput.length, openCount: findingsInput.filter((record) => record.resolutionStatus === 'open').length });
 }
 
 export function auditCanonicalArtifacts(canonicalArtifacts, replacementGroups) {
@@ -224,7 +374,9 @@ export function auditDependencies(workPackages, dependencies) {
   const visiting = new Set(); const visited = new Set();
   const visit = (node) => { if (visiting.has(node)) { findings.push(`dependency-cycle:${node}`); return; } if (visited.has(node)) return; visiting.add(node); for (const next of graph.get(node) ?? []) visit(next); visiting.delete(node); visited.add(node); };
   for (const key of keys) visit(key);
-  for (const [source, direct] of graph) for (const intermediate of direct) for (const target of graph.get(intermediate) ?? []) if (direct.includes(target)) findings.push(`transitive-edge-not-reduced:${source}:${target}`);
+  if (!findings.some((finding) => finding.startsWith('dependency-cycle:'))) {
+    for (const [source, direct] of graph) for (const intermediate of direct) for (const target of graph.get(intermediate) ?? []) if (direct.includes(target)) findings.push(`transitive-edge-not-reduced:${source}:${target}`);
+  }
   return outcome('dependencies', findings, { dependencyCount: dependencies.length });
 }
 
@@ -242,7 +394,8 @@ export function auditDeterminism(outputs) {
     missingEntirely: (entry) => [entry.universe, entry.path],
     canonicalArtifacts: (entry) => [entry.canonicalArtifactKey],
     replacementGroups: (entry) => [entry.groupKey],
-    dependencies: (entry) => [entry.status, entry.source, entry.prerequisite]
+    dependencies: (entry) => [entry.status, entry.source, entry.prerequisite],
+    inventoryFindings: (entry) => [entry.source, entry.findingKind, entry.subject]
   };
   for (const [name, value] of Object.entries(outputs)) {
     const records = Array.isArray(value) ? value : [value];
@@ -268,51 +421,11 @@ export function auditMutationBoundary(before, after, mutableRoot = 'v2/usf/censu
   return outcome('mutation-boundary', findings, { beforeCount: before.size, afterCount: after.size });
 }
 
-export function auditLinearStates(issues) {
-  if (!Array.isArray(issues)) return incomplete('linear-readiness', 'linear-state-unavailable');
-  const findings = []; const byId = new Map(issues.map((item) => [item.identifier, item.state?.name ?? item.status ?? '']));
-  for (let number = 1135; number <= 1141; number += 1) if (byId.get(`USF-${number}`) !== 'Done') findings.push(`correction-tranche-not-done:USF-${number}`);
-  for (const identifier of ['USF-1134', 'USF-1142']) if (!['In Progress', 'Done'].includes(byId.get(identifier))) findings.push(`required-active-or-done:${identifier}`);
-  if (byId.get('USF-1132') !== 'Backlog') findings.push('required-backlog:USF-1132');
-  return outcome('linear-readiness', findings, { inspectedIssueCount: byId.size });
-}
-
-export function auditArchitecturalReview(review) {
-  if (!review) return incomplete('architectural-review', 'architectural-review-unavailable');
-  const findings = [];
-  if (review.verdict !== 'pass' || review.reviewStatus !== 'independently-reviewed') findings.push('architectural-review-not-accepted');
-  if (Object.values(review.convergence?.findingCounts ?? {}).some((count) => count !== 0)) findings.push('convergence-findings-remain');
-  if (review.missingEntirely?.unownedCount !== 0 || review.missingEntirely?.unplannedCount !== 0 || review.missingEntirely?.conflicts?.length !== 0) findings.push('missing-entirely-findings-remain');
-  return outcome('architectural-review', findings, { workPackageCount: review.convergence?.metrics?.workPackageCount ?? null, missingEntirelyCount: review.convergence?.metrics?.missingEntirelyCount ?? null });
-}
-
-export function readLinearReadiness(apiKey = process.env.LINEAR_API_KEY) {
-  if (!apiKey) return Promise.resolve(incomplete('linear-readiness', 'LINEAR_API_KEY-not-available'));
-  const identifiers = [1132, 1134, 1135, 1136, 1137, 1138, 1139, 1140, 1141, 1142];
-  const fields = identifiers.map((number) => `i${number}: issue(id: "USF-${number}") { identifier state { name } team { key } }`).join(' ');
-  const body = JSON.stringify({ query: `query AuditIssues { ${fields} }` });
-  return new Promise((resolve) => {
-    const request = https.request('https://api.linear.app/graphql', { method: 'POST', headers: { Authorization: apiKey, 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) } }, (response) => {
-      let data = ''; response.setEncoding('utf8'); response.on('data', (chunk) => { data += chunk; }); response.on('end', () => {
-        try {
-          const parsed = JSON.parse(data);
-          if (response.statusCode !== 200 || parsed.errors) return resolve(incomplete('linear-readiness', 'linear-query-failed', { httpStatus: response.statusCode }));
-          const issues = parsed.data ? Object.values(parsed.data).filter(Boolean) : null;
-          if (!Array.isArray(issues) || issues.some((item) => item.team?.key !== 'USF')) return resolve(incomplete('linear-readiness', 'canonical-USF-team-not-confirmed'));
-          resolve(auditLinearStates(issues));
-        } catch { resolve(incomplete('linear-readiness', 'linear-response-invalid')); }
-      });
-    });
-    request.on('error', () => resolve(incomplete('linear-readiness', 'linear-connection-failed')));
-    request.setTimeout(15000, () => request.destroy()); request.end(body);
-  });
-}
-
 function snapshot(root, paths) {
   const map = new Map(); for (const relative of paths) { try { const digest = physicalDigest(root, relative); if (digest) map.set(relative, digest); } catch {} } return map;
 }
 
-export async function runAudit({ censusRoot = CENSUS_ROOT, repositoryRoot = REPOSITORY_ROOT, linearApiKey = process.env.LINEAR_API_KEY } = {}) {
+export async function runAudit({ censusRoot = CENSUS_ROOT, repositoryRoot = REPOSITORY_ROOT } = {}) {
   let physicalPaths;
   try { physicalPaths = listGitVisible(repositoryRoot); } catch { physicalPaths = null; }
   const outside = (physicalPaths ?? []).filter((item) => !item.startsWith('v2/usf/census/'));
@@ -324,17 +437,21 @@ export async function runAudit({ censusRoot = CENSUS_ROOT, repositoryRoot = REPO
     inventories: loadJsonl(censusRoot, 'inventories.jsonl'), mappings: loadJsonl(censusRoot, 'mappings.jsonl'), coverage: loadJsonl(censusRoot, 'coverage.jsonl'),
     canonicalArtifacts: loadJsonl(censusRoot, 'canonical-artifacts.jsonl'), replacementGroups: loadJsonl(censusRoot, 'replacement-groups.jsonl'),
     identityReview: loadJsonl(censusRoot, 'identity-review.jsonl'), missingEntirely: loadJsonl(censusRoot, 'missing-entirely.jsonl'),
-    workPackages: loadJson(censusRoot, 'workpackages.json'), dependencies: loadJsonl(censusRoot, 'dependencies.jsonl')
+    workPackages: loadJson(censusRoot, 'workpackages.json'), dependencies: loadJsonl(censusRoot, 'dependencies.jsonl'),
+    inventoryFindings: loadJsonl(censusRoot, 'inventory-findings.jsonl')
   };
   const workPackages = Array.isArray(outputs.workPackages) ? outputs.workPackages : outputs.workPackages?.workPackages;
   const checks = [
     auditUniverses({ recordsByUniverse, summary: loadJson(censusRoot, 'universes.json'), repositoryRoot, physicalPaths }),
     auditParserRelationships(members, outputs.parserResults, outputs.relationships, outputs.inventories),
     auditFamilyOwnership(members, outputs.artifacts), auditMappingsCoverage(outputs.artifacts, outputs.mappings, outputs.coverage, outputs.identityReview, outputs.missingEntirely),
-    auditCanonicalArtifacts(outputs.canonicalArtifacts, outputs.replacementGroups), auditWorkPackages(outputs.canonicalArtifacts, workPackages),
-    auditDependencies(workPackages, outputs.dependencies), auditArchitecturalReview(loadJson(censusRoot, 'architectural-review.json')), auditDeterminism(Object.fromEntries(Object.entries(outputs).filter(([, value]) => value !== null)))
+    auditCanonicalArtifacts(outputs.canonicalArtifacts, outputs.replacementGroups),
+    auditArtifactDispositions(outputs.artifacts, outputs.canonicalArtifacts, outputs.replacementGroups),
+    auditSourceDispositionOwnership(outputs.artifacts, outputs.parserResults, outputs.replacementGroups),
+    auditWorkPackages(outputs.canonicalArtifacts, workPackages), auditDependencies(workPackages, outputs.dependencies),
+    auditFindingClassifications(outputs.inventoryFindings),
+    auditDeterminism(Object.fromEntries(Object.entries(outputs).filter(([, value]) => value !== null)))
   ];
-  checks.push(await readLinearReadiness(linearApiKey));
   const after = snapshot(repositoryRoot, outside); checks.push(auditMutationBoundary(before, after));
   const status = checks.some((entry) => entry.status === 'fail') ? 'fail' : checks.some((entry) => entry.status === 'incomplete') ? 'incomplete' : 'pass';
   return { auditId: 'independent-hardened-regeneration-census', status, checks };

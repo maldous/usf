@@ -1,4 +1,4 @@
-<urn:usf:graph:derived:surfaces> {
+GRAPH <urn:usf:graph:derived:surfaces> {
     <urn:usf:contractsurface:abacpolicydecisionpoint> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:ContractSurface> .
     <urn:usf:contractsurface:abacpolicydecisionpoint> <urn:usf:ontology:canonicalName> "abacpolicydecisionpoint" .
     <urn:usf:contractsurface:abacpolicydecisionpoint> <urn:usf:ontology:derivedFrom> <urn:usf:semanticcontract:abacpolicydecisionpoint> .

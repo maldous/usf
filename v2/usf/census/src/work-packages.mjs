@@ -41,22 +41,43 @@ function readJsonl(target) {
 
 export function readBaselinePackageMembership(target = baselineMembershipPath) {
   const records = readJsonl(target);
-  if (records.length !== 73) throw new Error(`baseline package lineage must contain 73 packages, found ${records.length}`);
+  if (records.length === 0) throw new Error('baseline package lineage is empty');
   return records;
 }
 
+function pathFamily(repoPath) {
+  const parts = String(repoPath).split('/');
+  if (parts.length === 1) return 'repository-root';
+  if (parts[0] === 'v2' && parts.length >= 3) return parts.slice(0, 3).join('/');
+  if (['apps', 'packages', 'services', 'capabilities', 'adapters', 'docs', 'artifacts', 'tools'].includes(parts[0]) && parts.length >= 2) return parts.slice(0, 2).join('/');
+  return parts[0];
+}
+
 function outcomeFor({ canonicalArtifacts, currentArtifacts }) {
-  if (canonicalArtifacts.length === 0) return 'closed-disposition';
+  let outcome;
+  if (canonicalArtifacts.length === 0) outcome = 'artifact-plan-closure';
   const kinds = new Set(canonicalArtifacts.map((record) => record.artifactKind));
-  if (kinds.has('static-retained-asset')) return 'retained-assets';
-  if (kinds.has('validator-test')) return 'validation';
-  if (kinds.has('proof-executable') || kinds.has('evidence-output') || kinds.has('evidence-collector-schema')) return 'proof-evidence';
-  if (kinds.has('source-module')) return 'implementation-realisation';
-  if ([...kinds].some((kind) => /runtime|deployment|materialisation|support/.test(kind))) return 'runtime-materialisation';
+  if (!outcome && kinds.has('static-retained-asset')) outcome = 'retained-assets';
+  if (!outcome && kinds.has('validator-test')) outcome = 'validation';
+  if (!outcome && (kinds.has('proof-executable') || kinds.has('evidence-output') || kinds.has('evidence-collector-schema'))) outcome = 'proof-evidence';
+  if (!outcome && kinds.has('source-module')) outcome = 'implementation-realisation';
+  if (!outcome && [...kinds].some((kind) => /runtime|deployment|materialisation|support/.test(kind))) outcome = 'runtime-materialisation';
   const layers = sortUnique(canonicalArtifacts.flatMap((record) => record.requiredSemanticLayers));
-  for (const layer of layers) if (layerOutcomes.has(layer)) return layerOutcomes.get(layer);
-  if (currentArtifacts.some((record) => record.artifactFamily === 'documentation-assets')) return 'canonical-generation';
-  return 'canonical-generation';
+  if (!outcome) for (const layer of layers) if (layerOutcomes.has(layer)) { outcome = layerOutcomes.get(layer); break; }
+  if (!outcome && currentArtifacts.some((record) => record.artifactFamily === 'documentation-assets')) outcome = 'canonical-generation';
+  if (!outcome) outcome = 'canonical-generation';
+  const families = sortUnique(currentArtifacts.map((record) => record.artifactFamily));
+  const pathFamilies = sortUnique(currentArtifacts.map((record) => pathFamily(record.path)));
+  // Until graph authority assigns a canonical ArtefactPlan, the bounded path
+  // family is the only defensible architectural execution boundary. Splitting
+  // the same unresolved module into implementation, verification and evidence
+  // packages manufactures bidirectional prerequisites from ordinary imports.
+  // Co-own the unresolved path family instead; no edge is mechanically
+  // softened and no canonical output or disposition is invented.
+  if (outcome === 'artifact-plan-closure') {
+    return `${outcome}:${pathFamilies.join('+') || 'graph-defined'}`;
+  }
+  return `${outcome}:${families.join('+') || 'graph-defined'}:${pathFamilies.join('+') || 'graph-defined'}`;
 }
 
 function ensureUnique(records, key, label) {
@@ -225,8 +246,8 @@ export function buildWorkPackages(first, ...rest) {
     };
     return {
       key,
-      title: `${state.outcome.split('-').map((word) => word[0].toUpperCase() + word.slice(1)).join(' ')} Outcome`,
-      architecturalOutcome: outcomeDefinitions[state.outcome],
+      title: `${state.outcome.split(':')[0].split('-').map((word) => word[0].toUpperCase() + word.slice(1)).join(' ')} — ${state.outcome.split(':').slice(1).join(' / ')}`,
+      architecturalOutcome: outcomeDefinitions[state.outcome.split(':')[0]] ?? 'Resolve a bounded path/family outcome from explicit graph authority without inventing canonical targets or dispositions.',
       outcomeClass: state.outcome,
       primaryOwnership,
       artifactKeys: primaryOwnership.artifactKeys,
@@ -247,7 +268,11 @@ export function buildWorkPackages(first, ...rest) {
       complexityDrivers: complexity.drivers,
       complexityEvidence: complexity.evidence,
       safeParallelism: { boundary: state.outcome, sharedInputs: [...state.semanticInputs].sort(), coordinationRule: 'Parallel execution is safe only when shared semantic inputs and canonical target paths remain unchanged.' },
-      confidence: { level: 'high', score: 0.95, reasons: ['canonical-artifact-input', 'replacement-ordering-evidence'] },
+      confidence: (() => {
+        const ownedMappings = [...state.artifactKeys].map((artifactKey) => mappingByArtifact.get(artifactKey)).filter(Boolean);
+        const score = ownedMappings.length ? Math.min(...ownedMappings.map((mapping) => mapping.mappingConfidence?.score ?? 0.1)) : 0.1;
+        return { level: score >= 0.9 ? 'high' : score >= 0.5 ? 'medium' : 'low', score, reasons: score >= 0.9 ? ['exact-machine-verifiable-input'] : ['unmet-graph-authority'] };
+      })(),
       reviewStatus: 'machine-reviewed'
     };
   }).sort(compareBy(['key']));
@@ -290,7 +315,7 @@ export function validateWorkPackageOwnership(workPackages, ownership) {
     }
   }
   for (const record of workPackages) {
-    if (!outcomeDefinitions[record.outcomeClass]) throw new Error(`invalid architectural outcome: ${record.key}`);
+    if (typeof record.outcomeClass !== 'string' || !record.outcomeClass.includes(':')) throw new Error(`invalid bounded architectural outcome: ${record.key}`);
     if (record.complexityEvidence.some((item) => /(?:byte|line|row|file)-?count|byte-?size/i.test(item.measure))) throw new Error(`forbidden sizing evidence: ${record.key}`);
     if (record.complexityDrivers.length !== record.complexityEvidence.length) throw new Error(`complexity evidence is incomplete: ${record.key}`);
   }

@@ -12,7 +12,7 @@ shp:CapabilityShape a sh:NodeShape ;
 
 shp:SemanticContractShape a sh:NodeShape ;
     usf:canonicalName "semanticcontractshape" ;
-    sh:targetClass usf:SemanticContract ;
+    sh:targetObjectsOf usf:hasContract ;
     sh:property [ sh:path usf:declaresFacet ; sh:minCount 1 ; sh:class usf:ContractFacet ;
         sh:message "contractfacet: contract must declare facets" ] .
 
@@ -47,7 +47,7 @@ shp:InterfaceShape a sh:NodeShape ;
 
 shp:OperationShape a sh:NodeShape ;
     usf:canonicalName "operationshape" ;
-    sh:targetClass usf:Operation ;
+    sh:targetObjectsOf usf:hasOperation ;
     sh:property [ sh:path usf:requiresPermission ; sh:minCount 1 ; sh:class usf:Permission ;
         sh:message "missingpermission: operation must require at least one permission" ] .
 

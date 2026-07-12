@@ -1,0 +1,112 @@
+@prefix usf: <urn:usf:ontology:> .
+@prefix policy: <urn:usf:sourcedispositionpolicy:> .
+
+GRAPH <urn:usf:graph:sourcedispositionpolicies> {
+  policy:reviewrequired a usf:SourceDispositionPolicy ;
+    usf:canonicalName "reviewrequired" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:reviewrequired> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:reviewrequired> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:isDefaultDispositionPolicy true ;
+    usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "No exact non-overlapping authored disposition policy matched the current source observation; semantic review is required." .
+
+  policy:semanticdefinition a usf:SourceDispositionPolicy ;
+    usf:canonicalName "semanticdefinition" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:retainsemanticauthority> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:registeredgraphmembership>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:semanticauthority> ;
+    usf:policyMatchesContentRole <urn:usf:sourcecontentrole:semanticdefinition> ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "The graph manifest registers this exact source as a semantic definition input." .
+
+  policy:authoredsemantics a usf:SourceDispositionPolicy ;
+    usf:canonicalName "authoredsemantics" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:retainsemanticauthority> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:registeredgraphmembership>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:semanticauthority> ;
+    usf:policyMatchesContentRole <urn:usf:sourcecontentrole:authoredsemantics> ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "The graph manifest registers this exact source as authored semantic authority." .
+
+  policy:validatorshape a usf:SourceDispositionPolicy ;
+    usf:canonicalName "validatorshape" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:retainsemanticauthority> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:registeredgraphmembership>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:semanticauthority> ;
+    usf:policyMatchesContentRole <urn:usf:sourcecontentrole:validatorshape> ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "The graph manifest registers this exact SHACL source as validator authority." .
+
+  policy:derivationrule a usf:SourceDispositionPolicy ;
+    usf:canonicalName "derivationrule" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:retainsemanticauthority> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:registeredgraphmembership>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:semanticauthority> ;
+    usf:policyMatchesContentRole <urn:usf:sourcecontentrole:derivationrule> ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "The graph manifest registers this exact source as derivation or integrity rule authority." .
+
+  policy:authoritymanifest a usf:SourceDispositionPolicy ;
+    usf:canonicalName "authoritymanifest" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:retainsemanticauthority> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:registeredgraphmembership>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:semanticauthority> ;
+    usf:policyMatchesContentRole <urn:usf:sourcecontentrole:authoritymanifest> ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "This exact source is the registered graph loading manifest." .
+
+  policy:fixture a usf:SourceDispositionPolicy ;
+    usf:canonicalName "fixture" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:retainasset> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:declaredretainedinput>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:fixture> ;
+    usf:policyMatchesContentRole <urn:usf:sourcecontentrole:fixture> ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "The graph manifest admits this exact source under its non-authoritative fixture roots." .
+
+  policy:compilerimplementation a usf:SourceDispositionPolicy ;
+    usf:canonicalName "compilerimplementation" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:retainasset> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:declaredretainedinput>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:donorimplementation> ;
+    usf:policyMatchesUniverse <urn:usf:sourceuniverse:compilerimplementation> ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "The current compiler implementation is retained as bounded orchestration and donor implementation until self-hosting equivalence is proven." .
+
+  policy:supportprovisioning a usf:SourceDispositionPolicy ;
+    usf:canonicalName "supportprovisioning" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:retainasset> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:declaredretainedinput>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:retainedasset> ;
+    usf:policyMatchesContentRole <urn:usf:sourcecontentrole:supportprovisioning> ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "Tracked foundation support is retained as an integrity-bound input until compiler self-hosting and materialisation ownership are complete." .
+
+  policy:placeholder a usf:SourceDispositionPolicy ;
+    usf:canonicalName "placeholder" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:excludenoncanonical> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:structuralcontentrole>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyMatchesContentRole <urn:usf:sourcecontentrole:placeholder> ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "An empty directory placeholder is non-semantic and is excluded from canonical generated output." .
+}

@@ -3,7 +3,7 @@
   "checks": [
     {
       "facts": {
-        "memberCount": 3192,
+        "memberCount": 3213,
         "universeCount": 4
       },
       "findings": [],
@@ -13,8 +13,8 @@
     {
       "facts": {
         "inventoryCount": 2651,
-        "parserCount": 3192,
-        "relationshipCount": 29464
+        "parserCount": 3213,
+        "relationshipCount": 33561
       },
       "findings": [],
       "id": "parser-relationships",
@@ -22,7 +22,7 @@
     },
     {
       "facts": {
-        "ownerCount": 3192
+        "ownerCount": 3213
       },
       "findings": [],
       "id": "family-ownership",
@@ -30,8 +30,8 @@
     },
     {
       "facts": {
-        "coverageCount": 3192,
-        "mappingCount": 3192
+        "coverageCount": 3213,
+        "mappingCount": 3213
       },
       "findings": [],
       "id": "mappings-coverage",
@@ -39,8 +39,8 @@
     },
     {
       "facts": {
-        "canonicalArtifactCount": 3004,
-        "replacementGroupCount": 3016
+        "canonicalArtifactCount": 0,
+        "replacementGroupCount": 3213
       },
       "findings": [],
       "id": "canonical-replacements",
@@ -48,7 +48,40 @@
     },
     {
       "facts": {
-        "workPackageCount": 10
+        "acceptedDispositionCount": 0,
+        "artifactCount": 3213,
+        "canonicalArtifactCount": 0,
+        "missingDispositionCount": 3213
+      },
+      "findings": [
+        "required-source-disposition-unavailable:3213"
+      ],
+      "id": "artifact-dispositions",
+      "status": "fail"
+    },
+    {
+      "facts": {
+        "acceptedDispositionCount": 0,
+        "artifactCount": 3213,
+        "dispositionCount": 0,
+        "findingDistribution": {
+          "source-observation-missing": 3213
+        },
+        "noOutputDispositionCount": 0,
+        "observationCount": 0,
+        "outputPlanDispositionCount": 0,
+        "rejectedDispositionCount": 3213
+      },
+      "findings": [
+        "required-source-disposition-unavailable:3213",
+        "source-observation-missing:3213"
+      ],
+      "id": "source-disposition-ownership",
+      "status": "fail"
+    },
+    {
+      "facts": {
+        "workPackageCount": 98
       },
       "findings": [],
       "id": "work-packages",
@@ -56,7 +89,7 @@
     },
     {
       "facts": {
-        "dependencyCount": 20
+        "dependencyCount": 51
       },
       "findings": [],
       "id": "dependencies",
@@ -64,17 +97,17 @@
     },
     {
       "facts": {
-        "missingEntirelyCount": 2912,
-        "workPackageCount": 10
+        "findingCount": 134801,
+        "openCount": 134801
       },
       "findings": [],
-      "id": "architectural-review",
+      "id": "finding-classifications",
       "status": "pass"
     },
     {
       "facts": {
-        "canonicalDigest": "964318ddeed1d8e99e50273ca827fd3fa5583168ac037ffe153daa9228f36d4e",
-        "outputCount": 12
+        "canonicalDigest": "700b97ace481ef82c07f8847cfe7d195898a36d0426ae57a8ddd68a44e2f94c5",
+        "outputCount": 13
       },
       "findings": [],
       "id": "determinism",
@@ -82,21 +115,13 @@
     },
     {
       "facts": {
-        "inspectedIssueCount": 10
-      },
-      "findings": [],
-      "id": "linear-readiness",
-      "status": "pass"
-    },
-    {
-      "facts": {
-        "afterCount": 3192,
-        "beforeCount": 3192
+        "afterCount": 3213,
+        "beforeCount": 3213
       },
       "findings": [],
       "id": "mutation-boundary",
       "status": "pass"
     }
   ],
-  "status": "pass"
+  "status": "fail"
 }

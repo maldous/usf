@@ -10,6 +10,7 @@ import stardog from 'stardog';
 const { Connection, db, query } = stardog;
 
 const TURTLE = 'text/turtle';
+const NQUADS = 'application/n-quads';
 const SPARQL_JSON = 'application/sparql-results+json';
 
 export class StardogError extends Error {
@@ -118,6 +119,15 @@ export function createClient(config) {
       const res = await query.execute(conn, database, sparql, SPARQL_JSON);
       ok(res, 'select');
       return bindings(res);
+    },
+
+    // Read-only graph export through SPARQL CONSTRUCT. N-Quads is used by the
+    // external attestation path so RDF Dataset Canonicalization can make blank
+    // node identifiers irrelevant before hashing.
+    async construct(sparql, accept = NQUADS) {
+      const res = await query.execute(conn, database, sparql, accept);
+      ok(res, 'construct');
+      return typeof res.body === 'string' ? res.body : '';
     },
 
     // Read-only SHACL validation against the committed database (used by

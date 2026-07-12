@@ -99,7 +99,7 @@ shp:ProviderModeShape a sh:NodeShape ;
 
 shp:ContractFacetCompletenessShape a sh:NodeShape ;
     usf:canonicalName "contractfacetcompletenessshape" ;
-    sh:targetClass usf:SemanticContract ;
+    sh:targetObjectsOf usf:hasContract ;
     sh:sparql [
         sh:message "missingcontractfacet: semantic contract does not declare all ten mandatory facet kinds" ;
         sh:prefixes usf:prefixes ;

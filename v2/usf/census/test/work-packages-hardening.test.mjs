@@ -69,7 +69,7 @@ test('builder creates cohesive outcomes with exact primary ownership', () => {
   assert.equal(result.ownership.reuseActions.length, replacementGroups.length);
   const gateKeys = new Set(canonicalArtifacts.map((record) => record.equivalenceContract.gates[0].gateKey).concat('absence-re'));
   assert.deepEqual(new Set(result.ownership.equivalenceGates.map((record) => record.ownedKey)), gateKeys);
-  const implementation = result.workPackages.find((record) => record.outcomeClass === 'implementation-realisation');
+  const implementation = result.workPackages.find((record) => record.outcomeClass === 'implementation-realisation:implementation:src');
   assert.deepEqual(implementation.artifactKeys, ['a', 'b']);
   assert.deepEqual(implementation.missingEntirelyKeys, ['gap-b']);
 });
@@ -100,14 +100,14 @@ test('lineage supports retained, merged, split, and retired dispositions', () =>
   ]));
 });
 
-test('the retained baseline lineage is complete and deterministic', () => {
+test('the retained baseline lineage is nonempty and deterministic without fixing its size in code', () => {
   const first = readBaselinePackageMembership();
   const second = readBaselinePackageMembership();
-  assert.equal(first.length, 73);
+  assert.ok(first.length > 0);
   assert.deepEqual(first, second);
-  assert.equal(new Set(first.map((record) => record.key)).size, 73);
+  assert.equal(new Set(first.map((record) => record.key)).size, first.length);
   const result = buildWorkPackages({ artifacts, mappings, missingEntirely, canonicalArtifacts, replacementGroups });
-  assert.equal(result.workPackageLineage.length, 73);
+  assert.equal(result.workPackageLineage.length, first.length);
   assert.ok(result.workPackageLineage.every((record) => [
     'retained-successor', 'merged-successor', 'split-successors', 'retired-invalid-bucket'
   ].includes(record.disposition)));

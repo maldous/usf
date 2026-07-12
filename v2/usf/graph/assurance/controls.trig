@@ -2,8 +2,6 @@
 @prefix ctl: <urn:usf:control:> .
 @prefix cob: <urn:usf:controlobjective:> .
 @prefix rsk: <urn:usf:risk:> .
-@prefix rsev: <urn:usf:riskseverity:> .
-@prefix sc: <urn:usf:semanticcontract:> .
 
 <urn:usf:graph:controls> {
     cob:accessibilitygateevidence a usf:ControlObjective ;
@@ -37,95 +35,57 @@
     ctl:accessibilitygateevidence a usf:Control ;
         usf:achievesObjective cob:accessibilitygateevidence ;
         usf:canonicalName "accessibilitygateevidence" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:risktreatment .
+        usf:mitigates rsk:evidenceintegrityandfreshnessfailure .
     ctl:accessreviewprivilegedoperationposture a usf:Control ;
         usf:achievesObjective cob:accessreviewprivilegedoperationposture ;
         usf:canonicalName "accessreviewprivilegedoperationposture" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:threatmodelabusecaseregister .
+        usf:mitigates rsk:privilegedaccessreviewfailure .
     ctl:backuprestoreresilienceposture a usf:Control ;
         usf:achievesObjective cob:backuprestoreresilienceposture ;
         usf:canonicalName "backuprestoreresilienceposture" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:risktreated .
+        usf:mitigates rsk:recoveryevidencegap .
     ctl:donestategovernance a usf:Control ;
         usf:achievesObjective cob:donestategovernance ;
         usf:canonicalName "donestategovernance" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:repositoryoptimisationriskmanagementgovernance .
+        usf:mitigates rsk:uncontrolledsemanticchange .
     ctl:enterpriseevidencepolicy a usf:Control ;
         usf:achievesObjective cob:enterpriseevidencepolicy ;
         usf:canonicalName "enterpriseevidencepolicy" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:repositoryoptimisationriskmanagementgovernance .
+        usf:mitigates rsk:evidenceintegrityandfreshnessfailure .
     ctl:enterpriseproofdepthmatrices a usf:Control ;
         usf:achievesObjective cob:enterpriseproofdepthmatrices ;
         usf:canonicalName "enterpriseproofdepthmatrices" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:providerriskresiliencedepthmatrix .
+        usf:mitigates rsk:assuranceoverclaim .
     ctl:incidentvulnerabilitymanagementevidence a usf:Control ;
         usf:achievesObjective cob:incidentvulnerabilitymanagementevidence ;
         usf:canonicalName "incidentvulnerabilitymanagementevidence" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:ownerriskownercontrolowner .
+        usf:mitigates rsk:incidentandvulnerabilityblindspot .
     ctl:iso27001alignedauditcontrolmap a usf:Control ;
         usf:achievesObjective cob:iso27001alignedauditcontrolmap ;
         usf:canonicalName "iso27001alignedauditcontrolmap" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:risktreated .
+        usf:mitigates rsk:assuranceoverclaim .
     ctl:observabilityevidencestandard a usf:Control ;
         usf:achievesObjective cob:observabilityevidencestandard ;
         usf:canonicalName "observabilityevidencestandard" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:overclaimriskpattern .
+        usf:mitigates rsk:incidentandvulnerabilityblindspot .
     ctl:privacydataminimisationposture a usf:Control ;
         usf:achievesObjective cob:privacydataminimisationposture ;
         usf:canonicalName "privacydataminimisationposture" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:risktreatment .
+        usf:mitigates rsk:privacyretentionandminimisationfailure .
     ctl:sdkdependencygovernance a usf:Control ;
         usf:achievesObjective cob:sdkdependencygovernance ;
         usf:canonicalName "sdkdependencygovernance" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:providerriskresiliencedepthmatrix .
+        usf:mitigates rsk:softwareandprovidersupplychainfailure .
     ctl:soasupportmappings a usf:Control ;
         usf:achievesObjective cob:soasupportmappings ;
         usf:canonicalName "soasupportmappings" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:threatmodelabusecaseregister .
+        usf:mitigates rsk:assuranceoverclaim .
     ctl:sonarqubezeroissuequalitygateassurance a usf:Control ;
         usf:achievesObjective cob:sonarqubezeroissuequalitygateassurance ;
         usf:canonicalName "sonarqubezeroissuequalitygateassurance" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:ownerriskownercontrolowner .
+        usf:mitigates rsk:softwareandprovidersupplychainfailure .
     ctl:testcoveragegate a usf:Control ;
         usf:achievesObjective cob:testcoveragegate ;
         usf:canonicalName "testcoveragegate" ;
-        usf:controlForContract sc:auditofprivilegedaccess ;
-        usf:mitigates rsk:residualrisk .
-    rsk:overclaimriskpattern a usf:Risk ;
-        usf:canonicalName "overclaimriskpattern" ;
-        usf:riskSeverity rsev:high .
-    rsk:ownerriskownercontrolowner a usf:Risk ;
-        usf:canonicalName "ownerriskownercontrolowner" ;
-        usf:riskSeverity rsev:high .
-    rsk:providerriskresiliencedepthmatrix a usf:Risk ;
-        usf:canonicalName "providerriskresiliencedepthmatrix" ;
-        usf:riskSeverity rsev:high .
-    rsk:repositoryoptimisationriskmanagementgovernance a usf:Risk ;
-        usf:canonicalName "repositoryoptimisationriskmanagementgovernance" ;
-        usf:riskSeverity rsev:high .
-    rsk:residualrisk a usf:Risk ;
-        usf:canonicalName "residualrisk" ;
-        usf:riskSeverity rsev:high .
-    rsk:risktreated a usf:Risk ;
-        usf:canonicalName "risktreated" ;
-        usf:riskSeverity rsev:high .
-    rsk:risktreatment a usf:Risk ;
-        usf:canonicalName "risktreatment" ;
-        usf:riskSeverity rsev:high .
-    rsk:threatmodelabusecaseregister a usf:Risk ;
-        usf:canonicalName "threatmodelabusecaseregister" ;
-        usf:riskSeverity rsev:high .
+        usf:mitigates rsk:assuranceoverclaim .
 }

@@ -37,16 +37,27 @@ ng:implementations a usf:NamedGraph ; usf:canonicalName "implementations" ; usf:
 ng:bindings       a usf:NamedGraph ; usf:canonicalName "bindings"       ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:bindings"^^xsd:anyURI       ; usf:loadOrder 23 ; usf:graphValidationOrder 27 .
 ng:agents         a usf:NamedGraph ; usf:canonicalName "agents"         ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:agents"^^xsd:anyURI         ; usf:loadOrder 24 ; usf:graphValidationOrder 28 .
 ng:validators     a usf:NamedGraph ; usf:canonicalName "validators"     ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:validators"^^xsd:anyURI     ; usf:loadOrder 25 ; usf:graphValidationOrder 29 .
+ng:enterprise     a usf:NamedGraph ; usf:canonicalName "enterprise"     ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:enterprise"^^xsd:anyURI     ; usf:loadOrder 26 ; usf:graphValidationOrder 30 .
+ng:assuranceprofiles a usf:NamedGraph ; usf:canonicalName "assuranceprofiles" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:assurance-profiles"^^xsd:anyURI ; usf:loadOrder 27 ; usf:graphValidationOrder 31 .
+ng:readinessgates a usf:NamedGraph ; usf:canonicalName "readinessgates" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:readiness-gates"^^xsd:anyURI ; usf:loadOrder 28 ; usf:graphValidationOrder 32 .
+ng:ui a usf:NamedGraph ; usf:canonicalName "ui" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:ui"^^xsd:anyURI ; usf:loadOrder 29 ; usf:graphValidationOrder 33 .
+ng:renderers a usf:NamedGraph ; usf:canonicalName "renderers" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:renderers"^^xsd:anyURI ; usf:loadOrder 30 ; usf:graphValidationOrder 34 .
+ng:generation a usf:NamedGraph ; usf:canonicalName "generation" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:generation"^^xsd:anyURI ; usf:loadOrder 31 ; usf:graphValidationOrder 35 .
+ng:sourcedispositionpolicies a usf:NamedGraph ; usf:canonicalName "sourcedispositionpolicies" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:sourcedispositionpolicies"^^xsd:anyURI ; usf:loadOrder 32 ; usf:graphValidationOrder 36 .
+
+# ---- Observed graphs (non-authoritative external/repository evidence) ----
+ng:sourceobservations a usf:NamedGraph ; usf:canonicalName "sourceobservations" ; usf:graphClass gcl:observedgraph ; usf:graphIri "urn:usf:graph:observed:sourceartefacts"^^xsd:anyURI ; usf:loadOrder 33 ; usf:graphValidationOrder 37 .
 
 # ---- Shape graph ----
-ng:shapes a usf:NamedGraph ; usf:canonicalName "shapes" ; usf:graphClass gcl:shapegraph ; usf:graphIri "urn:usf:graph:shapes"^^xsd:anyURI ; usf:loadOrder 26 ; usf:graphValidationOrder 6 .
+ng:shapes a usf:NamedGraph ; usf:canonicalName "shapes" ; usf:graphClass gcl:shapegraph ; usf:graphIri "urn:usf:graph:shapes"^^xsd:anyURI ; usf:loadOrder 34 ; usf:graphValidationOrder 6 .
 
 # ---- Derived graphs ----
-ng:derivedobligations a usf:NamedGraph ; usf:canonicalName "derivedobligations" ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:obligations"^^xsd:anyURI ; usf:loadOrder 30 ; usf:graphValidationOrder 40 .
-ng:derivedevidence    a usf:NamedGraph ; usf:canonicalName "derivedevidence"    ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:evidence"^^xsd:anyURI    ; usf:loadOrder 31 ; usf:graphValidationOrder 41 .
-ng:derivedsurfaces    a usf:NamedGraph ; usf:canonicalName "derivedsurfaces"    ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:surfaces"^^xsd:anyURI    ; usf:loadOrder 32 ; usf:graphValidationOrder 42 .
-ng:derivedcoverage    a usf:NamedGraph ; usf:canonicalName "derivedcoverage"    ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:coverage"^^xsd:anyURI    ; usf:loadOrder 33 ; usf:graphValidationOrder 43 .
-ng:derivedreadiness   a usf:NamedGraph ; usf:canonicalName "derivedreadiness"   ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:readiness"^^xsd:anyURI   ; usf:loadOrder 34 ; usf:graphValidationOrder 44 .
+ng:derivedobligations a usf:NamedGraph ; usf:canonicalName "derivedobligations" ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:obligations"^^xsd:anyURI ; usf:loadOrder 40 ; usf:graphValidationOrder 40 .
+ng:derivedevidence    a usf:NamedGraph ; usf:canonicalName "derivedevidence"    ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:evidence"^^xsd:anyURI    ; usf:loadOrder 41 ; usf:graphValidationOrder 41 .
+ng:derivedsurfaces    a usf:NamedGraph ; usf:canonicalName "derivedsurfaces"    ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:surfaces"^^xsd:anyURI    ; usf:loadOrder 42 ; usf:graphValidationOrder 42 .
+ng:derivedcoverage    a usf:NamedGraph ; usf:canonicalName "derivedcoverage"    ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:coverage"^^xsd:anyURI    ; usf:loadOrder 43 ; usf:graphValidationOrder 43 .
+ng:derivedreadiness   a usf:NamedGraph ; usf:canonicalName "derivedreadiness"   ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:readiness"^^xsd:anyURI   ; usf:loadOrder 44 ; usf:graphValidationOrder 44 .
+ng:derivedsourcedispositions a usf:NamedGraph ; usf:canonicalName "derivedsourcedispositions" ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:sourcedispositions"^^xsd:anyURI ; usf:loadOrder 45 ; usf:graphValidationOrder 45 .
 
 # ---- Derivation rule modules (produce the derived graphs) ----
 rl:obligations a usf:DerivationRule ; usf:canonicalName "obligations" ; usf:inNamedGraph ng:derivedobligations .
@@ -54,6 +65,7 @@ rl:evidence    a usf:DerivationRule ; usf:canonicalName "evidence"    ; usf:inNa
 rl:surfaces    a usf:DerivationRule ; usf:canonicalName "surfaces"    ; usf:inNamedGraph ng:derivedsurfaces .
 rl:coverage    a usf:DerivationRule ; usf:canonicalName "coverage"    ; usf:inNamedGraph ng:derivedcoverage .
 rl:readiness   a usf:DerivationRule ; usf:canonicalName "readiness"   ; usf:inNamedGraph ng:derivedreadiness .
+rl:sourcedispositions a usf:DerivationRule ; usf:canonicalName "sourcedispositions" ; usf:inNamedGraph ng:derivedsourcedispositions .
 
 # ---- Integrity rule module (whole-dataset invariants; returns no violations) ----
 rl:integrity a usf:IntegrityRule ; usf:canonicalName "integrity" .

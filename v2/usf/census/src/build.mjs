@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { buildArtifactPlan } from './artifact-plan.mjs';
-import { compareBy, readJsonl, sortUnique, writeJsonAtomic, writeJsonlAtomic } from './canonical.mjs';
+import { compareBy, sortUnique, writeJsonAtomic, writeJsonlAtomic } from './canonical.mjs';
 import { censusRoot } from './constants.mjs';
 import { buildDependencyGraph } from './dependency-graph.mjs';
 import { classifyArtifacts, familyReviewCandidates } from './family.mjs';
@@ -12,7 +12,7 @@ import { sourceSemanticParsers } from './parsers/source-semantic.mjs';
 import { structuredParsers } from './parsers/structured.mjs';
 import { buildRelationships, reconcileInventories } from './relationships.mjs';
 import { enumerateUniverses, universeSummary } from './universe.mjs';
-import { buildWorkPackages, readBaselinePackageMembership } from './work-packages.mjs';
+import { buildWorkPackages } from './work-packages.mjs';
 
 const universeFiles = {
   'repository-output': 'repository-universe.jsonl',
@@ -22,6 +22,7 @@ const universeFiles = {
 };
 
 const retiredOutputs = [
+  'architectural-review.json',
   'census.jsonl', 'classification-summary.json', 'dependencies.json', 'gaps.jsonl',
   'outputs.jsonl', 'reference-findings.jsonl', 'reference-summary.json',
   'references.jsonl', 'replacements.jsonl'
@@ -33,14 +34,10 @@ function distribution(records, selector) {
 }
 
 function identityReview(candidates, ownedArtifactKeys) {
-  const reviewPath = path.join(censusRoot, 'src', 'identity-review-evidence.jsonl');
-  const reviews = fs.existsSync(reviewPath) ? new Map(readJsonl(reviewPath).map((record) => [record.artifactKey, record])) : new Map();
   return candidates.slice(0, 100).map((candidate, index) => {
     const provedIdentity = candidate.matchedResources.length > 0 && candidate.mappingEvidence.some((evidence) => evidence.strength >= 0.8);
     const materialSemantics = candidate.representedSemantics.some((value) => value !== 'semantic-identity');
     const decision = candidate.candidateCoverage === 'identityonly' && materialSemantics ? 'reclassify-partial' : candidate.candidateCoverage;
-    const review = reviews.get(candidate.artifactKey);
-    if (review && (review.rank !== index + 1 || review.independentDecision !== decision || !review.semanticBoundaryVerified || !review.ownershipVerified)) throw new Error(`stale independent identity review: ${candidate.artifactKey}`);
     return {
       rank: index + 1,
       artifactKey: candidate.artifactKey,
@@ -53,9 +50,9 @@ function identityReview(candidates, ownedArtifactKeys) {
       reviewDecision: decision,
       matchedResources: candidate.matchedResources,
       workPackageOwnershipVerified: ownedArtifactKeys.has(candidate.artifactKey),
-      semanticBoundaryVerified: review?.semanticBoundaryVerified ?? false,
-      reviewRationaleCode: review?.rationaleCode ?? 'independent-review-pending',
-      reviewStatus: review?.reviewStatus ?? 'machine-reviewed'
+      semanticBoundaryVerified: false,
+      reviewRationaleCode: 'independent-review-required',
+      reviewStatus: 'machine-reviewed'
     };
   });
 }
@@ -69,11 +66,9 @@ export function buildHardenedCensus() {
   const inventoryResult = reconcileInventories(members, parserResults, relationshipResult.relationships, relationshipResult.relationshipFindings);
   const artifacts = classifyArtifacts(members, parserResults, relationshipResult.relationships, inventoryResult.inventories);
   const mappingResult = buildMappings(artifacts, parserResults, relationshipResult.relationships);
-  const missingEntirely = buildMissingEntirely(mappingResult.mappings);
-  const baselinePackages = readBaselinePackageMembership();
-  const baselineIdentityRows = baselinePackages.filter((record) => record.canonicalOutcome.includes('identityonly')).flatMap((record) => record.affectedRows).filter((row) => !row.startsWith('semantic-layer:'));
-  const identityCandidates = rankIdentityCandidates(artifacts, mappingResult.mappings, relationshipResult.relationships, baselineIdentityRows);
-  const artifactPlan = buildArtifactPlan(artifacts, parserResults, mappingResult.mappings, missingEntirely, relationshipResult.relationships);
+  const identityCandidates = rankIdentityCandidates(artifacts, mappingResult.mappings, relationshipResult.relationships);
+  const artifactPlan = buildArtifactPlan(artifacts, parserResults, mappingResult.mappings, [], relationshipResult.relationships);
+  const missingEntirely = buildMissingEntirely(mappingResult.mappings, artifactPlan.sourcePlanOwnership);
   const packageResult = buildWorkPackages({
     artifacts,
     mappings: mappingResult.mappings,
@@ -98,6 +93,8 @@ export function buildHardenedCensus() {
     unresolvedRelationshipFindingCount: relationshipResult.relationshipFindings.length,
     inventoryCount: inventoryResult.inventories.length,
     inventoryFindingCount: inventoryResult.inventoryFindings.length,
+    inventoryFindingClassDistribution: distribution(inventoryResult.inventoryFindings, (record) => [record.findingClass]),
+    openInventoryFindingCount: inventoryResult.inventoryFindings.filter((record) => record.resolutionStatus === 'open').length,
     artifactCount: artifacts.length,
     artifactFamilyDistribution: distribution(artifacts, (record) => [record.artifactFamily]),
     familyConfidenceDistribution: distribution(artifacts, (record) => [record.familyConfidence.level]),
@@ -112,6 +109,16 @@ export function buildHardenedCensus() {
     gapDistribution: distribution(ownedMissingEntirely, (record) => [record.missingKind]),
     requiredSemanticLayerDistribution: distribution(ownedMissingEntirely, (record) => record.requiredSemanticLayers),
     canonicalArtifactCount: artifactPlan.canonicalArtifacts.length,
+    graphArtefactPlanCount: artifactPlan.observedArtefactPlans.length,
+    sourceDispositionAcceptedCount: artifactPlan.sourcePlanOwnership.acceptedDispositionCount,
+    sourceDispositionRejectedCount: artifactPlan.sourcePlanOwnership.rejectedDispositionCount,
+    sourceDispositionOutputPlanRequiredCount: artifactPlan.sourcePlanOwnership.outputDispositionCount,
+    sourceDispositionAcceptedOutputPlanCount: artifactPlan.sourcePlanOwnership.acceptedOutputPlanCount,
+    sourceDispositionAcceptedNoOutputCount: artifactPlan.sourcePlanOwnership.acceptedNoOutputDispositionCount,
+    sourceDispositionFindingDistribution: artifactPlan.sourcePlanOwnership.findingDistribution,
+    sourceObservationResourceCount: artifactPlan.sourcePlanOwnership.observationResourceCount,
+    sourceDispositionResourceCount: artifactPlan.sourcePlanOwnership.dispositionResourceCount,
+    sourceOrphanObservationCount: artifactPlan.sourcePlanOwnership.orphanObservationCount,
     newCanonicalArtifactCount: artifactPlan.canonicalArtifacts.filter((record) => record.currentArtifacts.length === 0).length,
     replacementCardinalityDistribution: distribution(artifactPlan.replacementGroups, (record) => [record.cardinality]),
     consolidationDistribution: distribution(artifactPlan.replacementGroups, (record) => [record.consolidationClass]),
@@ -124,7 +131,7 @@ export function buildHardenedCensus() {
     baselineDependencyCount: dependencyResult.lineage.length,
     dependencyLineageDistribution: distribution(dependencyResult.lineage, (record) => [record.disposition]),
     ...dependencyResult.metrics,
-    closureStatus: 'pending-independent-audit'
+    closureEvaluation: 'deferred-to-closure-command'
   };
   return {
     enumeration, members, materialisations, parserResults,
@@ -137,6 +144,8 @@ export function buildHardenedCensus() {
     identityReview: identities,
     canonicalArtifacts: artifactPlan.canonicalArtifacts,
     replacementGroups: artifactPlan.replacementGroups,
+    observedArtefactPlans: artifactPlan.observedArtefactPlans,
+    sourceDispositionOwnership: artifactPlan.sourcePlanOwnership,
     workPackages: packageResult.workPackages,
     workPackageLineage: packageResult.workPackageLineage,
     ownership: packageResult.ownership,

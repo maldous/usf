@@ -316,12 +316,12 @@
           "type": "array"
         },
         "independentlyRecomputed": {
-          "const": true
+          "const": false
         },
         "verdict": {
           "enum": [
-            "HARDENED_CENSUS_READY_FOR_PROGRAMME_MATERIALISATION",
-            "HARDENED_CENSUS_INCOMPLETE"
+            "CENSUS_SEMANTIC_AUTHORITY_READY",
+            "CENSUS_SEMANTIC_AUTHORITY_INCOMPLETE"
           ]
         }
       },
@@ -748,6 +748,9 @@
     },
     "relationship": {
       "properties": {
+        "attributes": {
+          "type": "object"
+        },
         "confidence": {
           "$ref": "#/$defs/confidence"
         },

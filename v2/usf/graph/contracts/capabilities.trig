@@ -102,7 +102,6 @@
         usf:inDomain dom:foundation .
     cap:enduserprofileandpreferencesselfservice a usf:Capability ;
         usf:canonicalName "enduserprofileandpreferencesselfservice" ;
-        usf:dependsOn cap:notificationdeliveryandpreferencesandchannels ;
         usf:hasContract sc:enduserprofileandpreferencesselfservice ;
         usf:inDomain dom:identityaccess .
     cap:entitlementengine a usf:Capability ;
@@ -277,7 +276,6 @@
         usf:inDomain dom:identityaccess .
     cap:tenantidentityrecordandfqdn a usf:Capability ;
         usf:canonicalName "tenantidentityrecordandfqdn" ;
-        usf:dependsOn cap:customdomainsdnsownershiptlscanonical ;
         usf:hasContract sc:tenantidentityrecordandfqdn ;
         usf:inDomain dom:identityaccess .
     cap:tenantisolationproof a usf:Capability ;

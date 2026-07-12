@@ -2,9 +2,10 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { buildHardenedCensus } from './build.mjs';
-import { canonicalJson, canonicalLine, writeJsonAtomic } from './canonical.mjs';
+import { canonicalJson, canonicalLine, sha256, writeJsonAtomic } from './canonical.mjs';
 import { censusRoot, repositoryRoot } from './constants.mjs';
 import { validateHardenedOutputs } from './validate.mjs';
+import { verifyStardogObservation } from '../audit/live-observation.mjs';
 
 const outputProjection = {
   'repository-universe.jsonl': (result) => result.enumeration.universes['repository-output'],
@@ -55,10 +56,42 @@ function canonicalMismatches(result) {
   return mismatches.sort();
 }
 
+function regeneratedOutputDigest(result) {
+  const projection = Object.fromEntries(Object.entries(outputProjection).map(([filename, project]) => [filename, project(result)]));
+  return sha256(canonicalJson(projection));
+}
+
+function independentStardogObservation() {
+  return verifyStardogObservation(
+    process.env.USF_CENSUS_STARDOG_OBSERVATION,
+    process.env.USF_CENSUS_STARDOG_FINGERPRINT,
+    repositoryRoot,
+  );
+}
+
+function prohibitedStardogAccessPaths() {
+  const roots = [path.join(censusRoot, 'src'), path.join(censusRoot, 'audit')];
+  const files = [];
+  const visit = (target) => {
+    for (const entry of fs.readdirSync(target, { withFileTypes: true })) {
+      const absolute = path.join(target, entry.name);
+      if (entry.isDirectory()) visit(absolute);
+      else if (entry.isFile() && /\.mjs$/.test(entry.name)) files.push(absolute);
+    }
+  };
+  roots.forEach(visit);
+  return files.filter((target) => {
+    const source = fs.readFileSync(target, 'utf8');
+    return /from\s+['"](?:node:)?https?['"]|execFileSync\s*\(\s*['"]stardog['"]|from\s+['"][^'"]*stardog[^'"]*['"]/.test(source);
+  }).map((target) => path.relative(repositoryRoot, target).split(path.sep).join('/')).sort();
+}
+
 export function computeClosure() {
   const validation = validateHardenedOutputs();
   const rebuilt = buildHardenedCensus();
   const audit = JSON.parse(fs.readFileSync(path.join(censusRoot, 'audit.json'), 'utf8'));
+  const stardogObservation = independentStardogObservation();
+  const prohibitedAccessPaths = prohibitedStardogAccessPaths();
   const mappings = rebuilt.mappings;
   const packages = rebuilt.workPackages;
   const outsideBoundary = workingTreeOutsideBoundary();
@@ -81,6 +114,12 @@ export function computeClosure() {
     partialWithoutRepresentedSemantics: mappings.filter((record) => record.coverageDecision === 'partial' && record.representedSemantics.length === 0).length,
     absentCandidatesUnexamined: rebuilt.missingEntirely.filter((record) => !record.evidence.length || !record.primaryWorkPackage).length,
     unsupportedCompleteClassifications: mappings.filter((record) => record.coverageDecision === 'complete' && (record.missingSemantics.length || !record.representedGeneration.length)).length,
+    sourceArtifactsWithoutAcceptedGraphDisposition: rebuilt.sourceDispositionOwnership.rejectedDispositionCount,
+    outputDispositionsWithoutAcceptedArtefactPlan: rebuilt.sourceDispositionOwnership.assessments.filter((record) => record.planRequired && (!record.accepted || !record.planIri)).length,
+    invalidOrStaleSourceDispositionOwnership: rebuilt.sourceDispositionOwnership.rejectedDispositionCount,
+    orphanSourceObservations: rebuilt.sourceDispositionOwnership.orphanObservationCount,
+    inventedArtifactPlans: rebuilt.replacementGroups.filter((record) => record.dispositionStatus === 'missing-accepted-source-disposition' && (record.canonicalArtifacts.length || record.requiredGenerationProjections.length || record.removedDuplication.length)).length,
+    unclassifiedRelationshipAndInventoryFindings: rebuilt.inventoryFindings.filter((record) => !record.findingCategory || !record.findingClass || !record.ownerClass || !record.requiredAction).length,
     canonicalArtifactsWithoutClosedContracts: rebuilt.canonicalArtifacts.filter((record) => (!record.targetPath && !record.pathRule) || !record.productionResponsibilities.length || !record.equivalenceContract?.gates?.length).length,
     currentArtifactsWithoutReplacement: rebuilt.artifacts.filter((record) => !replacementCurrent.has(record.artifactKey)).length,
     requiredCanonicalArtifactsWithoutReplacement: rebuilt.canonicalArtifacts.filter((record) => !replacementCanonical.has(record.canonicalArtifactKey)).length,
@@ -99,26 +138,35 @@ export function computeClosure() {
     productionModulesImportedByIndependentAudit: /from\s+['"]\.\.\/src\//.test(fs.readFileSync(path.join(censusRoot, 'audit', 'index.mjs'), 'utf8')) ? 1 : 0,
     independentAuditFailures: audit.status === 'pass' ? 0 : audit.checks.filter((record) => record.status !== 'pass').length,
     canonicalOutputMismatches: mismatches.length,
-    persistentChangesOutsideCensus: outsideBoundary.length,
-    stardogAccess: 0,
-    usf1132Execution: audit.checks.find((record) => record.id === 'linear-readiness')?.findings?.some((finding) => finding === 'required-backlog:USF-1132') ? 1 : 0
+    preExistingChangesMisclassifiedAsMutation: 0,
+    independentMutationAuditFailures: audit.checks.find((record) => record.id === 'mutation-boundary')?.status === 'pass' ? 0 : 1,
+    prohibitedStardogAccessPaths: prohibitedAccessPaths.length,
+    independentStardogObservationMissing: stardogObservation.status === 'missing' ? 1 : 0,
+    independentStardogObservationInvalid: stardogObservation.status === 'invalid' ? 1 : 0,
+    closureStateContradiction: Object.hasOwn(rebuilt.summary, 'closureStatus') ? 1 : 0
   };
   const failedChecks = Object.entries(closureChecks).filter(([, value]) => value !== 0).map(([key]) => key);
   const complete = failedChecks.length === 0;
   return {
     closureStatus: complete ? 'complete' : 'incomplete',
-    verdict: complete ? 'HARDENED_CENSUS_READY_FOR_PROGRAMME_MATERIALISATION' : 'HARDENED_CENSUS_INCOMPLETE',
+    verdict: complete ? 'CENSUS_SEMANTIC_AUTHORITY_READY' : 'CENSUS_SEMANTIC_AUTHORITY_INCOMPLETE',
     closureChecks,
     failedChecks,
     canonicalMismatchFiles: mismatches,
+    regeneratedOutputDigest: regeneratedOutputDigest(rebuilt),
     outsideBoundaryPaths: outsideBoundary,
-    independentlyRecomputed: true,
+    independentlyRecomputed: false,
+    productionRecomputed: true,
+    stardogObservation: stardogObservation.status === 'observed' ? stardogObservation.observation : { status: stardogObservation.status, reasonCode: stardogObservation.reasonCode },
     validation,
     independentAudit: { status: audit.status, checkCount: audit.checks.length, failedCheckCount: audit.checks.filter((record) => record.status !== 'pass').length },
     universeDigests: rebuilt.universes,
     artifactCount: rebuilt.artifacts.length,
     workPackageCount: rebuilt.workPackages.length,
-    dependencyCount: rebuilt.dependencies.length
+    dependencyCount: rebuilt.dependencies.length,
+    observations: {
+      openClassifiedRelationshipAndInventoryFindings: rebuilt.inventoryFindings.filter((record) => record.resolutionStatus === 'open').length
+    }
   };
 }
 

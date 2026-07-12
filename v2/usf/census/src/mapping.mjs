@@ -1,7 +1,5 @@
-import fs from 'node:fs';
 import path from 'node:path';
-import { compareBy, readJsonl, sha256, sortUnique } from './canonical.mjs';
-import { censusRoot } from './constants.mjs';
+import { compareBy, sha256, sortUnique } from './canonical.mjs';
 import { assertUnique, validateMapping } from './contract.mjs';
 
 const familyLayers = {
@@ -15,8 +13,30 @@ const familyLayers = {
   'v2-support': ['materialisation-contracts', 'self-hosting-clean-room-support', 'equivalence-rules'],
   verification: ['validation-tests-fixtures-defects', 'proof-obligations', 'generation-renderer-contracts']
 };
-const mappingReviewPath = path.join(censusRoot, 'src', 'mapping-reviews.jsonl');
-const convergenceReviewPath = path.join(censusRoot, 'src', 'identity-convergence-reviews.jsonl');
+const layerResourceKinds = Object.freeze({
+  'artifact-output-plans': 'ArtefactPlan',
+  'collector-normaliser-ingestion-contracts': 'EvidenceIngestionContract',
+  'constraints-permissions': 'Constraint',
+  contracts: 'SemanticContract',
+  'data-configuration-lifecycle': 'ConfigurationContract',
+  'derivation-integrity': 'DerivationIntegrityPolicy',
+  'equivalence-rules': 'EquivalenceRule',
+  'evidence-requirements': 'EvidenceRequirement',
+  'generation-renderer-contracts': 'GeneratorContract',
+  'implementation-obligations': 'ImplementationObligation',
+  'interfaces-events-workflows': 'InterfaceContract',
+  'materialisation-contracts': 'MaterialisationContract',
+  ontology: 'OntologyDefinition',
+  policy: 'Policy',
+  'proof-obligations': 'ProofObligation',
+  'provider-service-realisation': 'ProviderRealisation',
+  'readiness-consequences': 'ReadinessRule',
+  'requirements-projections': 'RequirementProjection',
+  'self-hosting-clean-room-support': 'CleanRoomGenerationContract',
+  taxonomy: 'TaxonomyAssignment',
+  'validation-tests-fixtures-defects': 'TestObligation',
+  vocabulary: 'ControlledValue'
+});
 
 function localName(identifier) {
   const value = String(identifier);
@@ -45,14 +65,7 @@ function graphResources(parserResults) {
 }
 
 function explicitCandidates(artifact, parsed, relations, resources) {
-  const ownedDeclarationKinds = new Set(['async-function', 'class', 'compose-service', 'compose-volume', 'export', 'function', 'graphql-enum', 'graphql-interface', 'graphql-object-type', 'graphql-operation', 'graphql-scalar', 'graphql-union', 'interface', 'method', 'migration', 'namespace', 'table', 'type', 'variable', 'workflow-job']);
-  const genericLocalNames = new Set(['config', 'data', 'error', 'id', 'name', 'result', 'status', 'type', 'value']);
   const byIdentifier = new Map(resources.map((resource) => [resource.identifier, resource]));
-  const byLocal = new Map();
-  for (const resource of resources) {
-    if (!byLocal.has(resource.localName)) byLocal.set(resource.localName, []);
-    byLocal.get(resource.localName).push(resource);
-  }
   const candidates = new Map();
   const evidence = [];
   const add = (resource, kind, source, strength) => {
@@ -63,18 +76,10 @@ function explicitCandidates(artifact, parsed, relations, resources) {
   for (const relation of relations.filter((entry) => entry.targetKind === 'semantic-entity')) {
     const exact = byIdentifier.get(relation.target);
     if (exact) add(exact, 'explicit-semantic-identifier', `relationship:${relation.extractionMethod}`, 1);
-    else for (const candidate of byLocal.get(localName(relation.target)) ?? []) add(candidate, 'confirmed-inventory-declaration', `relationship-local-candidate:${relation.extractionMethod}`, 0.65);
   }
   for (const declaration of parsed.declarations) {
     const exact = byIdentifier.get(declaration.identifier);
     if (exact) add(exact, artifact.universe === 'v2-graph-authority' ? 'manifest-registration' : 'explicit-semantic-identifier', `declaration:${declaration.kind}`, 1);
-    const declarationLocal = localName(declaration.identifier);
-    if (declarationLocal.length >= 4) {
-      for (const candidate of byLocal.get(declarationLocal) ?? []) {
-        const provedInstance = candidate.kind.startsWith('rdf-instance:') && ownedDeclarationKinds.has(declaration.kind) && !genericLocalNames.has(declarationLocal);
-        add(candidate, artifact.universe === 'v2-graph-authority' ? 'manifest-registration' : 'confirmed-inventory-declaration', `declaration-local:${declaration.kind}`, artifact.universe === 'v2-graph-authority' ? 1 : provedInstance ? 0.85 : 0.65);
-      }
-    }
   }
   if (artifact.universe === 'v2-graph-authority') {
     for (const resource of resources.filter((entry) => entry.source === artifact.path)) add(resource, 'manifest-registration', 'graph-source-membership', 1);
@@ -89,12 +94,11 @@ function nonRequired(artifact) {
 
 function coverageFor(artifact, parsed, candidates, evidence) {
   if (nonRequired(artifact)) return { state: 'notrequired', reason: 'Closed removal, exclusion, or transient-state disposition requires no semantic identity.', represented: [], missing: [], score: 0.98 };
-  if (candidates.length === 0) return { state: 'absent', reason: 'No adequate semantic resource was found from structural declarations or relationships.', represented: [], missing: familyLayers[artifact.artifactFamily], score: 0.92 };
+  if (candidates.length === 0) return { state: 'absent', reason: 'No exact semantic resource or accepted graph-owned source disposition was observed; applicability remains review-required.', represented: [], missing: [], score: 0.2 };
   const materialEvidence = evidence.some((entry) => entry.strength >= 0.8) && (parsed.relationships.length > 0 || parsed.declarations.length > 1 || artifact.universe === 'v2-graph-authority');
-  if (!materialEvidence) return { state: 'identityonly', reason: 'A semantic identity is proved, but structural evidence does not materially define behavior or generation.', represented: ['semantic-identity'], missing: familyLayers[artifact.artifactFamily], score: 0.72 };
+  if (!materialEvidence) return { state: 'identityonly', reason: 'A semantic identity is proved, but structural evidence does not determine further applicable semantic layers; source disposition remains review-required.', represented: ['semantic-identity'], missing: [], score: 0.72 };
   const represented = sortUnique(['semantic-identity', ...candidates.map((resource) => `resource-kind:${resource.kind}`)]);
-  const missing = sortUnique(familyLayers[artifact.artifactFamily].filter((layer) => !candidates.some((resource) => localName(resource.identifier).includes(layer.replace(/-/g, '')))));
-  return { state: 'partial', reason: 'A material semantic mapping exists, with explicit remaining semantic and generation boundaries.', represented, missing: missing.length ? missing : ['artifact-output-plans', 'generation-renderer-contracts', 'equivalence-rules'], score: 0.84 };
+  return { state: 'partial', reason: 'An exact semantic identifier exists; no additional per-file obligation is inferred without an explicit graph contract or exact structural evidence.', represented, missing: [], score: 0.7 };
 }
 
 function mappingTypeFor(artifact, candidates, coverage) {
@@ -115,13 +119,11 @@ export function buildMappings(artifacts, parserResults, relationships) {
     relationsByPath.get(relation.source).push(relation);
   }
   const resources = graphResources(parserResults);
-  const reviewRecords = [mappingReviewPath, convergenceReviewPath].flatMap((target) => fs.existsSync(target) ? readJsonl(target) : []);
-  const reviews = new Map(reviewRecords.map((review) => [`${review.artifactKey}\0${review.contentDigest}`, review]));
   const preliminary = [];
   for (const artifact of artifacts) {
     const parsed = parsedByPath.get(artifact.path);
     const discovered = explicitCandidates(artifact, parsed, relationsByPath.get(artifact.path) ?? [], resources);
-    const provedIdentifiers = new Set(discovered.evidence.filter((entry) => entry.strength >= 0.8).map((entry) => entry.resource));
+    const provedIdentifiers = new Set(discovered.evidence.filter((entry) => entry.strength === 1).map((entry) => entry.resource));
     const candidates = discovered.candidates.filter((candidate) => provedIdentifiers.has(candidate.identifier));
     const evidence = discovered.evidence.filter((entry) => provedIdentifiers.has(entry.resource));
     const coverage = coverageFor(artifact, parsed, candidates, evidence);
@@ -134,16 +136,16 @@ export function buildMappings(artifacts, parserResults, relationships) {
     const sharedResource = candidates.some((resource) => resourceUse.get(resource.identifier) > 1);
     const mappingCardinality = coverage.state === 'notrequired' ? 'one-to-zero' : candidates.length === 0 ? 'one-to-zero' : candidates.length > 1 ? 'one-to-many' : sharedResource ? 'many-to-one' : 'one-to-one';
     const mappingConfidence = {
-      level: coverage.state === 'absent' || evidence.some((entry) => entry.strength < 0.8) ? 'medium' : 'high',
-      score: coverage.state === 'absent' ? 0.8 : evidence.length ? Math.min(0.99, evidence.reduce((maximum, entry) => Math.max(maximum, entry.strength), 0)) : 0.95,
+      level: coverage.state === 'absent' ? 'low' : coverage.state === 'notrequired' || evidence.some((entry) => entry.strength === 1) ? 'high' : 'medium',
+      score: coverage.state === 'absent' ? 0.2 : evidence.length ? Math.min(0.99, evidence.reduce((maximum, entry) => Math.max(maximum, entry.strength), 0)) : 0.95,
       reasons: coverage.state === 'absent' ? ['no-adequate-semantic-resource'] : coverage.state === 'notrequired' ? ['closed-no-output-disposition'] : ['explicit-semantic-identifier']
     };
-    const coverageConfidence = { level: coverage.score >= 0.9 ? 'high' : 'medium', score: coverage.score, reasons: [coverage.state === 'absent' ? 'no-adequate-semantic-resource' : coverage.state === 'notrequired' ? 'closed-no-output-disposition' : 'missing-semantic-depth'] };
+    const coverageConfidence = { level: coverage.state === 'absent' ? 'low' : coverage.score >= 0.9 ? 'high' : 'medium', score: coverage.state === 'absent' ? 0.2 : coverage.score, reasons: [coverage.state === 'absent' ? 'no-adequate-semantic-resource' : coverage.state === 'notrequired' ? 'closed-no-output-disposition' : 'missing-semantic-depth'] };
     const mappingEvidence = evidence.length ? evidence.map(({ kind, source, resource, strength }) => ({ kind, source, resource, strength })) : [{
       kind: coverage.state === 'notrequired' ? 'closed-disposition' : 'exhaustive-negative-resource-search',
       source: coverage.state === 'notrequired' ? 'authority-and-lifecycle-disposition' : 'normalized-graph-resource-catalogue',
       resource: null,
-      strength: coverage.state === 'notrequired' ? 0.98 : 0.92
+      strength: coverage.state === 'notrequired' ? 0.98 : 0.2
     }];
     let record = {
       artifactKey: artifact.artifactKey,
@@ -158,36 +160,14 @@ export function buildMappings(artifacts, parserResults, relationships) {
       representedConstraints: candidates.filter((resource) => /shape|constraint|policy|permission/i.test(`${resource.kind} ${resource.identifier}`)).map((resource) => resource.identifier),
       representedProofEvidence: candidates.filter((resource) => /proof|evidence|obligation|result/i.test(`${resource.kind} ${resource.identifier}`)).map((resource) => resource.identifier),
       representedGeneration: candidates.filter((resource) => /artifact|generator|renderer|materiali/i.test(`${resource.kind} ${resource.identifier}`)).map((resource) => resource.identifier),
-      ambiguities: evidence.some((entry) => entry.strength < 0.8) ? ['local-identifier-match-requires-architectural-review'] : [],
+      ambiguities: [],
       conflicts: [],
       mappingConfidence,
       coverageDecision: coverage.state,
       coverageReason: coverage.reason,
       coverageConfidence,
-      reviewStatus: artifact.reviewStatus === 'architect-reviewed' ? 'architect-reviewed' : 'machine-reviewed'
+      reviewStatus: 'machine-reviewed'
     };
-    const review = reviews.get(`${artifact.artifactKey}\0${artifact.contentDigest}`);
-    if (review) {
-      const reviewedResources = review.matchedResources ?? review.acceptedResources ?? [];
-      const reviewedDecision = review.coverageDecision ?? review.correctedDecision ?? review.independentDecision;
-      const rejectedResources = review.rejectedResources ?? [];
-      const reviewedReasons = review.reasonCodes ?? ['reviewed-architectural-determination'];
-      record = {
-      ...record,
-      mappingType: reviewedDecision === 'absent' ? 'unmapped' : mappingTypeFor(artifact, reviewedResources.map((identifier) => ({ identifier })), { state: reviewedDecision }),
-      mappingCardinality: reviewedResources.length === 0 ? 'one-to-zero' : reviewedResources.length > 1 ? 'one-to-many' : 'one-to-one',
-      matchedResources: reviewedResources,
-      mappingEvidence: (reviewedResources.length ? reviewedResources : [null]).map((resource) => ({ kind: 'reviewed-architectural-determination', source: reviewedReasons.join(':'), resource, strength: 1 })),
-      representedSemantics: review.representedSemantics ?? (reviewedDecision === 'partial' ? ['semantic-identity', 'reviewed-audit-event-taxonomy'] : []),
-      missingSemantics: familyLayers[artifact.artifactFamily],
-      ambiguities: rejectedResources.map((resource) => `rejected-local-name-overmatch:${resource}`),
-      mappingConfidence: { level: 'high', score: 0.98, reasons: ['reviewed-architectural-determination'] },
-      coverageDecision: reviewedDecision,
-      coverageReason: reviewedDecision === 'absent' ? 'Independent architectural review rejected incidental local-name matches and found no adequate semantic identity.' : 'Independent architectural review retained proved typed-resource identities, rejected collisions, and preserved explicit missing semantic layers.',
-      coverageConfidence: { level: 'high', score: 0.96, reasons: ['reviewed-architectural-determination', 'missing-semantic-depth'] },
-      reviewStatus: review.reviewStatus
-      };
-    }
     validateMapping(record);
     return record;
   }).sort(compareBy(['universe', 'path']));
@@ -213,18 +193,25 @@ export function rankIdentityCandidates(artifacts, mappings, relationships, basel
     }).sort((a, b) => b.rankingScore - a.rankingScore || a.path.localeCompare(b.path));
 }
 
-export function buildMissingEntirely(mappings) {
-  return mappings.filter((mapping) => mapping.coverageDecision === 'absent').map((mapping) => ({
-    missingKey: sha256(`missing\0${mapping.artifactKey}`),
-    artifactKey: mapping.artifactKey,
-    path: mapping.path,
-    universe: mapping.universe,
-    missingKind: 'required-artifact-semantic-definition',
-    requiredSemanticLayers: mapping.missingSemantics,
-    evidence: ['explicit-unmapped-result', 'normalized-graph-resource-comparison'],
-    requiredCanonicalOutcome: `Define and plan the canonical outcome represented by ${path.posix.basename(mapping.path)}.`,
-    primaryWorkPackage: null
-  })).sort(compareBy(['universe', 'path']));
+export function buildMissingEntirely(mappings, sourceDispositionOwnership = null) {
+  const dispositionByArtifact = new Map((sourceDispositionOwnership?.assessments ?? []).map((record) => [record.artifactKey, record]));
+  return mappings.filter((mapping) => !['complete', 'notrequired'].includes(mapping.coverageDecision))
+    .filter((mapping) => !dispositionByArtifact.get(mapping.artifactKey)?.accepted)
+    .map((mapping) => ({
+      missingKey: sha256(`source-disposition-review\0${mapping.artifactKey}`),
+      artifactKey: mapping.artifactKey,
+      path: mapping.path,
+      universe: mapping.universe,
+      missingKind: 'review-required-source-disposition',
+      requiredSemanticLayers: [],
+      requiredResourceKind: 'SourceArtefactDisposition',
+      requiredClassIri: 'urn:usf:ontology:SourceArtefactDisposition',
+      requiredForPath: mapping.path,
+      reasonCode: 'source-disposition-review-required',
+      evidence: ['exact-iri-resource-comparison', `mapping:${mapping.artifactKey}`, ...(dispositionByArtifact.get(mapping.artifactKey)?.findings ?? ['source-disposition-not-observed'])],
+      requiredCanonicalOutcome: `Record and accept a graph-owned source disposition for ${path.posix.basename(mapping.path)} without inferring output or semantic-layer obligations.`,
+      primaryWorkPackage: null
+    })).sort(compareBy(['universe', 'path', 'requiredClassIri']));
 }
 
-export const mappingInternals = { familyLayers, graphResources, localName };
+export const mappingInternals = { familyLayers, graphResources, layerResourceKinds, localName };

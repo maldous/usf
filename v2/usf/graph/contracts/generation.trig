@@ -1,0 +1,229 @@
+@prefix aprofile: <urn:usf:accessibilityprofile:> .
+@prefix areq: <urn:usf:accessibilityrequirement:> .
+@prefix art: <urn:usf:artefact:> .
+@prefix cap: <urn:usf:capability:> .
+@prefix component: <urn:usf:component:> .
+@prefix compiler: <urn:usf:compiler:> .
+@prefix generator: <urn:usf:generator:> .
+@prefix phase: <urn:usf:compilerphase:> .
+@prefix constraint: <urn:usf:constraint:> .
+@prefix dm: <urn:usf:datamodel:> .
+@prefix error: <urn:usf:errorbinding:> .
+@prefix event: <urn:usf:event:> .
+@prefix field: <urn:usf:formfield:> .
+@prefix form: <urn:usf:form:> .
+@prefix iface: <urn:usf:interface:> .
+@prefix ist: <urn:usf:interactionstate:> .
+@prefix jr: <urn:usf:journey:> .
+@prefix lprofile: <urn:usf:localisationprofile:> .
+@prefix lreq: <urn:usf:localisationrequirement:> .
+@prefix op: <urn:usf:operation:> .
+@prefix path: <urn:usf:pathrule:> .
+@prefix perm: <urn:usf:permission:> .
+@prefix plan: <urn:usf:artefactplan:> .
+@prefix policy: <urn:usf:policy:> .
+@prefix rc: <urn:usf:renderercontract:> .
+@prefix renderer: <urn:usf:renderer:> .
+@prefix repo: <urn:usf:repository:> .
+@prefix route: <urn:usf:route:> .
+@prefix state: <urn:usf:state:> .
+@prefix surf: <urn:usf:surface:> .
+@prefix uim: <urn:usf:uisemanticmodel:> .
+@prefix usf: <urn:usf:ontology:> .
+@prefix validation: <urn:usf:validationbinding:> .
+@prefix vm: <urn:usf:viewmodel:> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:usf:graph:generation> {
+repo:foundation a usf:Repository ; usf:canonicalName "foundation" ;
+        usf:hasArtefactPlan plan:rendererinputschema , plan:uisemanticmodel , plan:viewmodel , plan:routemanifest , plan:formmodel , plan:errorcatalogue , plan:componentmodel , plan:accessibilityprofile , plan:localisationprofile , plan:localisationbundle , plan:rendererinput , plan:previewmodel , plan:e2ejourneymanifest , plan:uidocumentationmodel .
+
+    plan:rendererinputschema a usf:ArtefactPlan ; usf:canonicalName "rendererinputschema" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:rendererinputschema .
+    art:rendererinputschema a usf:Artefact ; usf:canonicalName "rendererinputschema" ; usf:artefactKind <urn:usf:artefactkind:schema> ; usf:canonicalPath "ui/schemas/rendererinput.schema.json" ; usf:governedByPathRule path:rendererinputschema ; usf:generatedByComponent generator:contractprojection .
+    path:rendererinputschema a usf:PathRule ; usf:canonicalName "rendererinputschema" ; usf:pathPattern "ui/schemas/rendererinput.schema.json" .
+
+    plan:uisemanticmodel a usf:ArtefactPlan ; usf:canonicalName "uisemanticmodel" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:uisemanticmodel .
+    art:uisemanticmodel a usf:Artefact ; usf:canonicalName "uisemanticmodel" ; usf:artefactKind <urn:usf:artefactkind:contract> ; usf:canonicalPath "ui/models/index.json" ; usf:governedByPathRule path:uisemanticmodel .
+    path:uisemanticmodel a usf:PathRule ; usf:canonicalName "uisemanticmodel" ; usf:pathPattern "ui/models/{capabilityid}.json" .
+
+    plan:viewmodel a usf:ArtefactPlan ; usf:canonicalName "viewmodel" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:viewmodel .
+    art:viewmodel a usf:Artefact ; usf:canonicalName "viewmodel" ; usf:artefactKind <urn:usf:artefactkind:contract> ; usf:canonicalPath "ui/viewmodels/index.json" ; usf:governedByPathRule path:viewmodel .
+    path:viewmodel a usf:PathRule ; usf:canonicalName "viewmodel" ; usf:pathPattern "ui/viewmodels/{viewmodelid}.json" .
+
+    plan:routemanifest a usf:ArtefactPlan ; usf:canonicalName "routemanifest" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:routemanifest .
+    art:routemanifest a usf:Artefact ; usf:canonicalName "routemanifest" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "ui/routes/index.json" ; usf:governedByPathRule path:routemanifest .
+    path:routemanifest a usf:PathRule ; usf:canonicalName "routemanifest" ; usf:pathPattern "ui/routes/{renderertarget}.json" .
+
+    plan:formmodel a usf:ArtefactPlan ; usf:canonicalName "formmodel" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:formmodel .
+    art:formmodel a usf:Artefact ; usf:canonicalName "formmodel" ; usf:artefactKind <urn:usf:artefactkind:contract> ; usf:canonicalPath "ui/forms/index.json" ; usf:governedByPathRule path:formmodel .
+    path:formmodel a usf:PathRule ; usf:canonicalName "formmodel" ; usf:pathPattern "ui/forms/{formid}.json" .
+
+    plan:errorcatalogue a usf:ArtefactPlan ; usf:canonicalName "errorcatalogue" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:errorcatalogue .
+    art:errorcatalogue a usf:Artefact ; usf:canonicalName "errorcatalogue" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "ui/errors/index.json" ; usf:governedByPathRule path:errorcatalogue .
+    path:errorcatalogue a usf:PathRule ; usf:canonicalName "errorcatalogue" ; usf:pathPattern "ui/errors/{capabilityid}.json" .
+
+    plan:componentmodel a usf:ArtefactPlan ; usf:canonicalName "componentmodel" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:componentmodel .
+    art:componentmodel a usf:Artefact ; usf:canonicalName "componentmodel" ; usf:artefactKind <urn:usf:artefactkind:contract> ; usf:canonicalPath "ui/components/index.json" ; usf:governedByPathRule path:componentmodel .
+    path:componentmodel a usf:PathRule ; usf:canonicalName "componentmodel" ; usf:pathPattern "ui/components/{componentid}.json" .
+
+    plan:accessibilityprofile a usf:ArtefactPlan ; usf:canonicalName "accessibilityprofile" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:accessibilityprofile .
+    art:accessibilityprofile a usf:Artefact ; usf:canonicalName "accessibilityprofile" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "ui/accessibility/index.json" ; usf:governedByPathRule path:accessibilityprofile .
+    path:accessibilityprofile a usf:PathRule ; usf:canonicalName "accessibilityprofile" ; usf:pathPattern "ui/accessibility/{uimodelid}.json" .
+
+    plan:localisationprofile a usf:ArtefactPlan ; usf:canonicalName "localisationprofile" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:localisationprofile .
+    art:localisationprofile a usf:Artefact ; usf:canonicalName "localisationprofile" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "ui/localisation/profiles/index.json" ; usf:governedByPathRule path:localisationprofile .
+    path:localisationprofile a usf:PathRule ; usf:canonicalName "localisationprofile" ; usf:pathPattern "ui/localisation/profiles/{uimodelid}.json" .
+
+    plan:localisationbundle a usf:ArtefactPlan ; usf:canonicalName "localisationbundle" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:localisationbundle .
+    art:localisationbundle a usf:Artefact ; usf:canonicalName "localisationbundle" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "ui/localisation/bundles/index.json" ; usf:governedByPathRule path:localisationbundle .
+    path:localisationbundle a usf:PathRule ; usf:canonicalName "localisationbundle" ; usf:pathPattern "ui/localisation/bundles/{locale}.json" .
+
+    plan:rendererinput a usf:ArtefactPlan ; usf:canonicalName "rendererinput" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:rendererinput .
+    art:rendererinput a usf:Artefact ; usf:canonicalName "rendererinput" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "ui/renderinputs/index.json" ; usf:governedByPathRule path:rendererinput .
+    path:rendererinput a usf:PathRule ; usf:canonicalName "rendererinput" ; usf:pathPattern "ui/renderinputs/{renderertarget}/{uimodelid}.json" .
+
+    plan:previewmodel a usf:ArtefactPlan ; usf:canonicalName "previewmodel" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:previewmodel .
+    art:previewmodel a usf:Artefact ; usf:canonicalName "previewmodel" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "ui/previews/index.json" ; usf:governedByPathRule path:previewmodel .
+    path:previewmodel a usf:PathRule ; usf:canonicalName "previewmodel" ; usf:pathPattern "ui/previews/{surfaceid}.json" .
+
+    plan:e2ejourneymanifest a usf:ArtefactPlan ; usf:canonicalName "e2ejourneymanifest" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:e2ejourneymanifest .
+    art:e2ejourneymanifest a usf:Artefact ; usf:canonicalName "e2ejourneymanifest" ; usf:artefactKind <urn:usf:artefactkind:test> ; usf:canonicalPath "tests/e2e/uijourneys/index.json" ; usf:governedByPathRule path:e2ejourneymanifest .
+    path:e2ejourneymanifest a usf:PathRule ; usf:canonicalName "e2ejourneymanifest" ; usf:pathPattern "tests/e2e/uijourneys/{journeyid}.json" .
+
+    plan:uidocumentationmodel a usf:ArtefactPlan ; usf:canonicalName "uidocumentationmodel" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:uidocumentationmodel .
+    art:uidocumentationmodel a usf:Artefact ; usf:canonicalName "uidocumentationmodel" ; usf:artefactKind <urn:usf:artefactkind:report> ; usf:canonicalPath "docs/ui/index.json" ; usf:governedByPathRule path:uidocumentationmodel .
+    path:uidocumentationmodel a usf:PathRule ; usf:canonicalName "uidocumentationmodel" ; usf:pathPattern "docs/ui/{uimodelid}.json" .
+
+    # Root compiler execution contract. These are authored responsibilities,
+    # not assertions that a run, build, release, or proof has succeeded.
+    policy:deterministicgenerationintegrity a usf:Policy ; usf:canonicalName "deterministicgenerationintegrity" ; usf:policyConstrains constraint:failonmissingsemantics .
+    policy:canonicaloutputnormalisation a usf:Policy ; usf:canonicalName "canonicaloutputnormalisation" ; usf:policyConstrains constraint:failonmissingsemantics .
+    constraint:failonmissingsemantics a usf:Constraint ; usf:canonicalName "failonmissingsemantics" .
+
+    compiler:foundation a usf:Compiler ; usf:canonicalName "foundation" ;
+        usf:hasPhase phase:discover , phase:validateauthored , phase:derive , phase:validatederived ,
+          phase:plan , phase:generate , phase:materialise , phase:collect , phase:normalise , phase:ingest ,
+          phase:verifyintegrity , phase:verifyequivalence , phase:bundle , phase:attest .
+
+    phase:discover a usf:CompilerPhase ; usf:canonicalName "discover" ; usf:phaseKind <urn:usf:compilerphasekind:discover> ; usf:phaseOrder "0"^^xsd:integer ; usf:usesComponent generator:contractprojection ; usf:precedesPhase phase:validateauthored .
+    phase:validateauthored a usf:CompilerPhase ; usf:canonicalName "validateauthored" ; usf:phaseKind <urn:usf:compilerphasekind:validateauthored> ; usf:phaseOrder "1"^^xsd:integer ; usf:usesComponent generator:validation ; usf:precedesPhase phase:derive .
+    phase:derive a usf:CompilerPhase ; usf:canonicalName "derive" ; usf:phaseKind <urn:usf:compilerphasekind:derive> ; usf:phaseOrder "2"^^xsd:integer ; usf:usesComponent generator:contractprojection ; usf:precedesPhase phase:validatederived .
+    phase:validatederived a usf:CompilerPhase ; usf:canonicalName "validatederived" ; usf:phaseKind <urn:usf:compilerphasekind:validatederived> ; usf:phaseOrder "3"^^xsd:integer ; usf:usesComponent generator:validation ; usf:precedesPhase phase:plan .
+    phase:plan a usf:CompilerPhase ; usf:canonicalName "plan" ; usf:phaseKind <urn:usf:compilerphasekind:plan> ; usf:phaseOrder "4"^^xsd:integer ; usf:usesComponent generator:contractprojection ; usf:precedesPhase phase:generate .
+    phase:generate a usf:CompilerPhase ; usf:canonicalName "generate" ; usf:phaseKind <urn:usf:compilerphasekind:generate> ; usf:phaseOrder "5"^^xsd:integer ; usf:usesComponent generator:contractprojection , generator:scaffold , generator:validation , generator:proof , generator:ui , generator:runtime , generator:automation , generator:documentation , generator:assurance ; usf:precedesPhase phase:materialise .
+    phase:materialise a usf:CompilerPhase ; usf:canonicalName "materialise" ; usf:phaseKind <urn:usf:compilerphasekind:materialise> ; usf:phaseOrder "6"^^xsd:integer ; usf:usesComponent generator:scaffold ; usf:precedesPhase phase:collect .
+    phase:collect a usf:CompilerPhase ; usf:canonicalName "collect" ; usf:phaseKind <urn:usf:compilerphasekind:collect> ; usf:phaseOrder "7"^^xsd:integer ; usf:usesComponent generator:proof ; usf:precedesPhase phase:normalise .
+    phase:normalise a usf:CompilerPhase ; usf:canonicalName "normalise" ; usf:phaseKind <urn:usf:compilerphasekind:normalise> ; usf:phaseOrder "8"^^xsd:integer ; usf:usesComponent generator:proof ; usf:precedesPhase phase:ingest .
+    phase:ingest a usf:CompilerPhase ; usf:canonicalName "ingest" ; usf:phaseKind <urn:usf:compilerphasekind:ingest> ; usf:phaseOrder "9"^^xsd:integer ; usf:usesComponent generator:proof ; usf:precedesPhase phase:verifyintegrity .
+    phase:verifyintegrity a usf:CompilerPhase ; usf:canonicalName "verifyintegrity" ; usf:phaseKind <urn:usf:compilerphasekind:verifyintegrity> ; usf:phaseOrder "10"^^xsd:integer ; usf:usesComponent generator:validation ; usf:precedesPhase phase:verifyequivalence .
+    phase:verifyequivalence a usf:CompilerPhase ; usf:canonicalName "verifyequivalence" ; usf:phaseKind <urn:usf:compilerphasekind:verifyequivalence> ; usf:phaseOrder "11"^^xsd:integer ; usf:usesComponent generator:release ; usf:precedesPhase phase:bundle .
+    phase:bundle a usf:CompilerPhase ; usf:canonicalName "bundle" ; usf:phaseKind <urn:usf:compilerphasekind:bundle> ; usf:phaseOrder "12"^^xsd:integer ; usf:usesComponent generator:release ; usf:precedesPhase phase:attest .
+    phase:attest a usf:CompilerPhase ; usf:canonicalName "attest" ; usf:phaseKind <urn:usf:compilerphasekind:attest> ; usf:phaseOrder "13"^^xsd:integer ; usf:usesComponent generator:release .
+
+    generator:contractprojection a usf:Generator ; usf:canonicalName "contractprojection" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:SemanticContract> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:compileroutputschema ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:structural> .
+    generator:scaffold a usf:Generator ; usf:canonicalName "scaffold" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:Implementation> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:workspacemanifest ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:behavioural> .
+    generator:validation a usf:Generator ; usf:canonicalName "validation" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:ValidatorRule> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:validatormanifest ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:behavioural> .
+    generator:proof a usf:Generator ; usf:canonicalName "proof" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:Proof> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:proofmanifest ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:evidential> .
+    generator:ui a usf:Generator ; usf:canonicalName "ui" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:UISemanticModel> . }" ; usf:outputSchema art:rendererinputschema ; usf:outputPathRule path:uisemanticmodel ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:structural> .
+    generator:runtime a usf:Generator ; usf:canonicalName "runtime" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:Service> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:runtimecompose ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:behavioural> .
+    generator:automation a usf:Generator ; usf:canonicalName "automation" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:Command> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:automationworkflow ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:behavioural> .
+    generator:documentation a usf:Generator ; usf:canonicalName "documentation" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:Capability> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:architectureguide ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:structural> .
+    generator:assurance a usf:Generator ; usf:canonicalName "assurance" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:ApplicabilityDecision> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:statementofapplicability ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:evidential> .
+    generator:release a usf:Generator ; usf:canonicalName "release" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:ArtefactPlan> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:releasemanifest ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:fullincremental> , <urn:usf:equivalencekind:evidential> .
+
+    # Shared machine output schema and non-UI output families.
+    plan:compileroutputschema a usf:ArtefactPlan ; usf:canonicalName "compileroutputschema" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:compileroutputschema .
+    art:compileroutputschema a usf:Artefact ; usf:canonicalName "compileroutputschema" ; usf:artefactKind <urn:usf:artefactkind:schema> ; usf:canonicalPath "contracts/schemas/compiler-output.schema.json" ; usf:governedByPathRule path:compileroutputschema ; usf:generatedByComponent generator:contractprojection .
+    path:compileroutputschema a usf:PathRule ; usf:canonicalName "compileroutputschema" ; usf:pathPattern "contracts/schemas/compiler-output.schema.json" .
+
+    plan:authorityprojection a usf:ArtefactPlan ; usf:canonicalName "authorityprojection" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:authorityprojection .
+    art:authorityprojection a usf:Artefact ; usf:canonicalName "authorityprojection" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "authority/index.json" ; usf:governedByPathRule path:authorityprojection ; usf:generatedByComponent generator:contractprojection .
+    path:authorityprojection a usf:PathRule ; usf:canonicalName "authorityprojection" ; usf:pathPattern "authority/index.json" .
+
+    plan:openapicontract a usf:ArtefactPlan ; usf:canonicalName "openapicontract" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:openapicontract .
+    art:openapicontract a usf:Artefact ; usf:canonicalName "openapicontract" ; usf:artefactKind <urn:usf:artefactkind:contract> ; usf:canonicalPath "contracts/openapi/foundation.openapi.json" ; usf:governedByPathRule path:openapicontract ; usf:generatedByComponent generator:contractprojection .
+    path:openapicontract a usf:PathRule ; usf:canonicalName "openapicontract" ; usf:pathPattern "contracts/openapi/foundation.openapi.json" .
+
+    plan:graphqlcontract a usf:ArtefactPlan ; usf:canonicalName "graphqlcontract" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:graphqlcontract .
+    art:graphqlcontract a usf:Artefact ; usf:canonicalName "graphqlcontract" ; usf:artefactKind <urn:usf:artefactkind:contract> ; usf:canonicalPath "contracts/graphql/foundation.graphql" ; usf:governedByPathRule path:graphqlcontract ; usf:generatedByComponent generator:contractprojection .
+    path:graphqlcontract a usf:PathRule ; usf:canonicalName "graphqlcontract" ; usf:pathPattern "contracts/graphql/foundation.graphql" .
+
+    plan:workspacemanifest a usf:ArtefactPlan ; usf:canonicalName "workspacemanifest" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:workspacemanifest .
+    art:workspacemanifest a usf:Artefact ; usf:canonicalName "workspacemanifest" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "workspace/package.json" ; usf:governedByPathRule path:workspacemanifest ; usf:generatedByComponent generator:scaffold .
+    path:workspacemanifest a usf:PathRule ; usf:canonicalName "workspacemanifest" ; usf:pathPattern "workspace/package.json" .
+
+    plan:implementationscaffold a usf:ArtefactPlan ; usf:canonicalName "implementationscaffold" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:implementationscaffold .
+    art:implementationscaffold a usf:Artefact ; usf:canonicalName "implementationscaffold" ; usf:artefactKind <urn:usf:artefactkind:source> ; usf:canonicalPath "workspace/src/implementation-obligations.mjs" ; usf:governedByPathRule path:implementationscaffold ; usf:generatedByComponent generator:scaffold .
+    path:implementationscaffold a usf:PathRule ; usf:canonicalName "implementationscaffold" ; usf:pathPattern "workspace/src/implementation-obligations.mjs" .
+
+    plan:validatormanifest a usf:ArtefactPlan ; usf:canonicalName "validatormanifest" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:validatormanifest .
+    art:validatormanifest a usf:Artefact ; usf:canonicalName "validatormanifest" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "validation/validators.json" ; usf:governedByPathRule path:validatormanifest ; usf:generatedByComponent generator:validation .
+    path:validatormanifest a usf:PathRule ; usf:canonicalName "validatormanifest" ; usf:pathPattern "validation/validators.json" .
+
+    plan:generatedtests a usf:ArtefactPlan ; usf:canonicalName "generatedtests" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:generatedtests .
+    art:generatedtests a usf:Artefact ; usf:canonicalName "generatedtests" ; usf:artefactKind <urn:usf:artefactkind:test> ; usf:canonicalPath "workspace/test/generated.test.mjs" ; usf:governedByPathRule path:generatedtests ; usf:generatedByComponent generator:validation .
+    path:generatedtests a usf:PathRule ; usf:canonicalName "generatedtests" ; usf:pathPattern "workspace/test/generated.test.mjs" .
+
+    plan:proofmanifest a usf:ArtefactPlan ; usf:canonicalName "proofmanifest" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:proofmanifest .
+    art:proofmanifest a usf:Artefact ; usf:canonicalName "proofmanifest" ; usf:artefactKind <urn:usf:artefactkind:proof> ; usf:canonicalPath "proof/obligations.json" ; usf:governedByPathRule path:proofmanifest ; usf:generatedByComponent generator:proof .
+    path:proofmanifest a usf:PathRule ; usf:canonicalName "proofmanifest" ; usf:pathPattern "proof/obligations.json" .
+
+    plan:evidencepipeline a usf:ArtefactPlan ; usf:canonicalName "evidencepipeline" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:evidencepipeline .
+    art:evidencepipeline a usf:Artefact ; usf:canonicalName "evidencepipeline" ; usf:artefactKind <urn:usf:artefactkind:executable> ; usf:canonicalPath "proof/evidence-pipeline.mjs" ; usf:governedByPathRule path:evidencepipeline ; usf:generatedByComponent generator:proof .
+    path:evidencepipeline a usf:PathRule ; usf:canonicalName "evidencepipeline" ; usf:pathPattern "proof/evidence-pipeline.mjs" .
+
+    plan:runtimecompose a usf:ArtefactPlan ; usf:canonicalName "runtimecompose" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:runtimecompose .
+    art:runtimecompose a usf:Artefact ; usf:canonicalName "runtimecompose" ; usf:artefactKind <urn:usf:artefactkind:configuration> ; usf:canonicalPath "runtime/compose.json" ; usf:governedByPathRule path:runtimecompose ; usf:generatedByComponent generator:runtime .
+    path:runtimecompose a usf:PathRule ; usf:canonicalName "runtimecompose" ; usf:pathPattern "runtime/compose.json" .
+
+    plan:automationworkflow a usf:ArtefactPlan ; usf:canonicalName "automationworkflow" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:automationworkflow .
+    art:automationworkflow a usf:Artefact ; usf:canonicalName "automationworkflow" ; usf:artefactKind <urn:usf:artefactkind:configuration> ; usf:canonicalPath ".github/workflows/validate.yml" ; usf:governedByPathRule path:automationworkflow ; usf:generatedByComponent generator:automation .
+    path:automationworkflow a usf:PathRule ; usf:canonicalName "automationworkflow" ; usf:pathPattern ".github/workflows/validate.yml" .
+
+    plan:architectureguide a usf:ArtefactPlan ; usf:canonicalName "architectureguide" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:architectureguide .
+    art:architectureguide a usf:Artefact ; usf:canonicalName "architectureguide" ; usf:artefactKind <urn:usf:artefactkind:report> ; usf:canonicalPath "docs/architecture/index.md" ; usf:governedByPathRule path:architectureguide ; usf:generatedByComponent generator:documentation .
+    path:architectureguide a usf:PathRule ; usf:canonicalName "architectureguide" ; usf:pathPattern "docs/architecture/index.md" .
+
+    plan:statementofapplicability a usf:ArtefactPlan ; usf:canonicalName "statementofapplicability" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:statementofapplicability .
+    art:statementofapplicability a usf:Artefact ; usf:canonicalName "statementofapplicability" ; usf:artefactKind <urn:usf:artefactkind:report> ; usf:canonicalPath "assurance/statement-of-applicability.json" ; usf:governedByPathRule path:statementofapplicability ; usf:generatedByComponent generator:assurance .
+    path:statementofapplicability a usf:PathRule ; usf:canonicalName "statementofapplicability" ; usf:pathPattern "assurance/statement-of-applicability.json" .
+
+    plan:softwarebillofmaterials a usf:ArtefactPlan ; usf:canonicalName "softwarebillofmaterials" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:softwarebillofmaterials .
+    art:softwarebillofmaterials a usf:Artefact ; usf:canonicalName "softwarebillofmaterials" ; usf:artefactKind <urn:usf:artefactkind:softwarebillofmaterials> ; usf:canonicalPath "release/sbom.json" ; usf:governedByPathRule path:softwarebillofmaterials ; usf:generatedByComponent generator:release .
+    path:softwarebillofmaterials a usf:PathRule ; usf:canonicalName "softwarebillofmaterials" ; usf:pathPattern "release/sbom.json" .
+
+    plan:provenancerecord a usf:ArtefactPlan ; usf:canonicalName "provenancerecord" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:provenancerecord .
+    art:provenancerecord a usf:Artefact ; usf:canonicalName "provenancerecord" ; usf:artefactKind <urn:usf:artefactkind:provenancerecord> ; usf:canonicalPath "release/provenance.json" ; usf:governedByPathRule path:provenancerecord ; usf:generatedByComponent generator:release .
+    path:provenancerecord a usf:PathRule ; usf:canonicalName "provenancerecord" ; usf:pathPattern "release/provenance.json" .
+
+    plan:releasemanifest a usf:ArtefactPlan ; usf:canonicalName "releasemanifest" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:releasemanifest .
+    art:releasemanifest a usf:Artefact ; usf:canonicalName "releasemanifest" ; usf:artefactKind <urn:usf:artefactkind:bundle> ; usf:canonicalPath "release/manifest.json" ; usf:governedByPathRule path:releasemanifest ; usf:generatedByComponent generator:release .
+    path:releasemanifest a usf:PathRule ; usf:canonicalName "releasemanifest" ; usf:pathPattern "release/manifest.json" .
+
+    plan:releasechecksums a usf:ArtefactPlan ; usf:canonicalName "releasechecksums" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:releasechecksums .
+    art:releasechecksums a usf:Artefact ; usf:canonicalName "releasechecksums" ; usf:artefactKind <urn:usf:artefactkind:checksum> ; usf:canonicalPath "release/checksums.json" ; usf:governedByPathRule path:releasechecksums ; usf:generatedByComponent generator:release .
+    path:releasechecksums a usf:PathRule ; usf:canonicalName "releasechecksums" ; usf:pathPattern "release/checksums.json" .
+
+    plan:releasesignature a usf:ArtefactPlan ; usf:canonicalName "releasesignature" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:releasesignature .
+    art:releasesignature a usf:Artefact ; usf:canonicalName "releasesignature" ; usf:artefactKind <urn:usf:artefactkind:signature> ; usf:canonicalPath "release/signature.json" ; usf:governedByPathRule path:releasesignature ; usf:generatedByComponent generator:release .
+    path:releasesignature a usf:PathRule ; usf:canonicalName "releasesignature" ; usf:pathPattern "release/signature.json" .
+
+    plan:releaseattestation a usf:ArtefactPlan ; usf:canonicalName "releaseattestation" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:releaseattestation .
+    art:releaseattestation a usf:Artefact ; usf:canonicalName "releaseattestation" ; usf:artefactKind <urn:usf:artefactkind:evidence> ; usf:canonicalPath "release/attestation.json" ; usf:governedByPathRule path:releaseattestation ; usf:generatedByComponent generator:release .
+    path:releaseattestation a usf:PathRule ; usf:canonicalName "releaseattestation" ; usf:pathPattern "release/attestation.json" .
+
+    # Existing UI plans are now explicitly owned by one executable renderer.
+    art:uisemanticmodel usf:generatedByComponent generator:ui .
+    art:viewmodel usf:generatedByComponent generator:ui .
+    art:routemanifest usf:generatedByComponent generator:ui .
+    art:formmodel usf:generatedByComponent generator:ui .
+    art:errorcatalogue usf:generatedByComponent generator:ui .
+    art:componentmodel usf:generatedByComponent generator:ui .
+    art:accessibilityprofile usf:generatedByComponent generator:ui .
+    art:localisationprofile usf:generatedByComponent generator:ui .
+    art:localisationbundle usf:generatedByComponent generator:ui .
+    art:rendererinput usf:generatedByComponent generator:ui .
+    art:previewmodel usf:generatedByComponent generator:ui .
+    art:e2ejourneymanifest usf:generatedByComponent generator:ui .
+    art:uidocumentationmodel usf:generatedByComponent generator:ui .
+}
