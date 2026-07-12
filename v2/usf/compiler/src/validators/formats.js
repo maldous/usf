@@ -14,7 +14,7 @@ function validateJsonSchema(value, path) {
   const findings = [];
   if (!value || typeof value !== 'object' || Array.isArray(value)) findings.push(finding('invalid-json-schema', path, 'schema root must be an object'));
   else {
-    if (typeof value.$schema !== 'string' || !value.$schema.includes('json-schema.org')) findings.push(finding('invalid-json-schema', path, 'schema must declare a JSON Schema dialect'));
+    if (typeof value.$schema !== 'string' || !/^https?:\/\/json-schema\.org\//.test(value.$schema)) findings.push(finding('invalid-json-schema', path, 'schema must declare a JSON Schema dialect'));
     if (typeof value.type !== 'string' && !Array.isArray(value.type)) findings.push(finding('invalid-json-schema', path, 'schema must declare a root type'));
     if (value.required !== undefined && !Array.isArray(value.required)) findings.push(finding('invalid-json-schema', path, 'required must be an array'));
   }

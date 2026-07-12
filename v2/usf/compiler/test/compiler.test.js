@@ -134,7 +134,6 @@ function observedSpec() {
     'shapeGraphs:',
     'observedGraphs:\n  - { collector: repositorysourceobserver, graph: "urn:usf:graph:observed:sourceartefacts", loadOrder: 5, validationOrder: 5 }\nshapeGraphs:'
   );
-  spec['manifest.yaml'] = spec['manifest.yaml'].replace('loadOrder: 4, validationOrder: 4 }\nrules:', 'loadOrder: 4, validationOrder: 4 }\nrules:');
   spec['registry.ttl'] += 'ng:obs a usf:NamedGraph ; usf:canonicalName "sourceobservations" ; usf:graphIri "urn:usf:graph:observed:sourceartefacts" ; usf:graphClass gcl:observedgraph ; usf:loadOrder 5 ; usf:graphValidationOrder 5 .\n';
   return spec;
 }
