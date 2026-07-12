@@ -36,6 +36,8 @@ function validateManifestSchema(manifest, findings) {
   }
   if (manifest.schemaVersion !== 1) findings.push(finding('invalid-manifest-schema', 'release/manifest.json', 'schemaVersion must equal 1'));
   if (typeof manifest.compilerVersion !== 'string' || !/^\d+\.\d+\.\d+([+-][0-9A-Za-z.-]+)?$/.test(manifest.compilerVersion)) findings.push(finding('invalid-manifest-schema', 'release/manifest.json', 'compilerVersion must be SemVer-shaped'));
+  if (typeof manifest.releaseVersion !== 'string' || !/^\d+\.\d+\.\d+([+-][0-9A-Za-z.-]+)?$/.test(manifest.releaseVersion)) findings.push(finding('invalid-manifest-schema', 'release/manifest.json', 'releaseVersion must be SemVer-shaped'));
+  if (typeof manifest.releaseVersionResource !== 'string' || !manifest.releaseVersionResource.startsWith('urn:usf:version:')) findings.push(finding('invalid-manifest-schema', 'release/manifest.json', 'releaseVersionResource must identify the governed graph version'));
   if (typeof manifest.authorityDigest !== 'string' || !HEX_256.test(manifest.authorityDigest)) findings.push(finding('invalid-manifest-schema', 'release/manifest.json', 'authorityDigest must be a lowercase SHA-256 digest'));
   if (!Array.isArray(manifest.files) || manifest.files.length === 0) {
     findings.push(finding('invalid-manifest-schema', 'release/manifest.json', 'files must be a non-empty array'));
@@ -141,18 +143,26 @@ function validateSignature(root, manifest, manifestBytes, findings, expectedPubl
   findings.push(...parsed.findings);
   const signature = parsed.value;
   if (!signature) return;
-  if (signature.algorithm !== 'Ed25519' || signature.signedPath !== 'release/manifest.json' || typeof signature.publicKey !== 'string' || typeof signature.publicKeyFingerprint !== 'string' || typeof signature.signature !== 'string') {
-    findings.push(finding('invalid-release-signature', path, 'signature must declare Ed25519, release manifest path, public key, fingerprint, and base64 signature'));
+  if (signature.algorithm !== 'Ed25519' || signature.signedPath !== 'release/manifest.json' || typeof signature.publicKey !== 'string' || typeof signature.publicKeyFingerprint !== 'string' || typeof signature.signingIdentity !== 'string' || !signature.signingIdentity.startsWith('urn:usf:signingidentity:') || typeof signature.signature !== 'string') {
+    findings.push(finding('invalid-release-signature', path, 'signature must declare Ed25519, release manifest path, public key, governed signing identity, fingerprint, and base64 signature'));
     return;
   }
   const manifestDigest = sha256(manifestBytes);
-  const fingerprint = sha256(signature.publicKey);
+  let publicKey;
+  let fingerprint;
+  try {
+    publicKey = createPublicKey(signature.publicKey);
+    fingerprint = sha256(publicKey.export({ type: 'spki', format: 'der' }));
+  } catch (error) {
+    findings.push(finding('invalid-release-signature', path, error.message));
+    return;
+  }
   if (signature.signedSha256 !== manifestDigest) findings.push(finding('invalid-release-signature', path, 'signedSha256 does not match the release manifest'));
   if (signature.publicKeyFingerprint !== fingerprint) findings.push(finding('invalid-release-signature', path, 'public key fingerprint does not match the embedded key'));
   if (expectedPublicKeyFingerprint && signature.publicKeyFingerprint !== expectedPublicKeyFingerprint) findings.push(finding('unexpected-signing-identity', path, 'release was not signed by the expected identity'));
   try {
     const bytes = Buffer.from(signature.signature, 'base64');
-    if (!bytes.length || !verify(null, manifestBytes, createPublicKey(signature.publicKey), bytes)) findings.push(finding('invalid-release-signature', path, 'Ed25519 signature verification failed'));
+    if (!bytes.length || !verify(null, manifestBytes, publicKey, bytes)) findings.push(finding('invalid-release-signature', path, 'Ed25519 signature verification failed'));
   } catch (error) {
     findings.push(finding('invalid-release-signature', path, error.message));
   }
@@ -166,7 +176,7 @@ function validateSignature(root, manifest, manifestBytes, findings, expectedPubl
   findings.push(...attestation.findings);
   if (!attestation.value) return;
   const value = attestation.value;
-  if (value.schemaVersion !== 1 || value.kind !== 'cleanroomgeneration' || value.authorityDigest !== manifest.authorityDigest || value.manifestPath !== 'release/manifest.json' || value.manifestSha256 !== manifestDigest || value.signaturePath !== path || value.signingIdentityFingerprint !== fingerprint || value.verificationRequired !== true) {
+  if (value.schemaVersion !== 1 || value.kind !== 'cleanroomgeneration' || value.authorityDigest !== manifest.authorityDigest || value.manifestPath !== 'release/manifest.json' || value.manifestSha256 !== manifestDigest || value.signaturePath !== path || value.signingIdentity !== signature.signingIdentity || value.signingIdentityFingerprint !== fingerprint || value.releaseVersion !== manifest.releaseVersion || value.verificationRequired !== true) {
     findings.push(finding('invalid-release-attestation', attestationPath, 'attestation is not consistently bound to authority, manifest, signature, and signing identity'));
   }
 }

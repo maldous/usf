@@ -81,7 +81,22 @@ jobs:
   assert.match(command.attributes.command, /npm ci\nnpm test/);
   assert.equal(command.attributes.executableContext.interpreter, 'bash');
   assert.ok(parsed.relationships.some((entry) => entry.relationshipType === 'needs' && entry.target === 'build'));
+  assert.ok(parsed.relationships.some((entry) => entry.relationshipType === 'uses-action' && entry.target === 'actions/checkout@v4' && entry.targetKind === 'external-resource'));
   assert.equal(parsed.inventory.inventoryKind, 'workflow-definition');
+});
+
+test('generic structured scalars do not become paths without a schema-known field', () => {
+  const generic = parse('structured-json', JSON.stringify({
+    description: 'docs/not-a-reference.md',
+    path: './actual.json',
+    run: 'node scripts/task.mjs',
+    uses: './actions/local'
+  }), 'fixtures/config.json');
+  assert.ok(generic.relationships.some((entry) => entry.target.endsWith('/actual.json') && entry.attributes.pathField === 'path'));
+  assert.ok(!generic.relationships.some((entry) => entry.target.includes('not-a-reference.md')));
+  assert.ok(!generic.relationships.some((entry) => entry.target.includes('scripts/task.mjs')));
+  assert.ok(generic.declarations.some((entry) => entry.kind === 'command' && entry.attributes.command === 'node scripts/task.mjs'));
+  assert.ok(generic.relationships.some((entry) => entry.relationshipType === 'uses-action' && entry.target === './actions/local' && entry.targetKind === 'artifact'));
 });
 
 test('Compose YAML includes nested services, dependencies, anchors, health checks, commands, and inventories', () => {

@@ -32,8 +32,9 @@ export const ROLES = Object.freeze([
   'derived',
 ]);
 
-// The one required derivation order. Rules run obligations → evidence →
-// surfaces → coverage → readiness, then integrity is checked last.
+// The one required derivation order. Repository observations are classified
+// first, then obligations → evidence → surfaces → coverage → readiness; whole-
+// dataset integrity is checked last.
 export const DERIVATION_ORDER = Object.freeze([
   'source-dispositions',
   'obligations',
@@ -118,6 +119,7 @@ function entry(section, raw, graphDir, order) {
     role: roleFor(section, file || raw.collector),
     contentType: file ? contentTypeFor(file) : 'text/turtle',
     order,
+    validationOrder: raw.validationOrder ?? null,
   });
 }
 
@@ -132,9 +134,9 @@ export function loadManifest(graphDir) {
   );
   const authored = (doc.authoredGraphs || []).map((r) => entry('authored', r, root, r.loadOrder));
   const observed = (doc.observedGraphs || []).map((r) => entry('observed', r, root, r.loadOrder));
-  const shapes = (doc.shapeGraphs || []).map((r, i) => entry('shapes', r, root, 1000 + i));
+  const shapes = (doc.shapeGraphs || []).map((r, i) => entry('shapes', r, root, r.loadOrder ?? 1000 + i));
   const rules = (doc.rules || []).map((r, i) => entry('rules', r, root, i));
-  const derived = (doc.derivedGraphs || []).map((r, i) => entry('derived', r, root, 2000 + i));
+  const derived = (doc.derivedGraphs || []).map((r, i) => entry('derived', r, root, r.loadOrder ?? 2000 + i));
 
   const fixtures = doc.fixtures
     ? Object.freeze({

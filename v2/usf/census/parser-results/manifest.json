@@ -1,0 +1,59 @@
+{
+  "aggregate": {
+    "recordCount": 3225,
+    "uncompressedBytes": 173513141,
+    "uncompressedSha256": "5fc45d6720f365d00cb716745d4f70eb9f3454795f070aa58f1870477a5df494"
+  },
+  "encoding": "gzip-jsonl",
+  "formatVersion": 1,
+  "order": [
+    "universe",
+    "path"
+  ],
+  "shards": [
+    {
+      "compressedBytes": 2485008,
+      "compressedSha256": "a19724c7412784baa43edaee81aa94e7cf7ac5181926a47fa5979c7923f60501",
+      "firstPath": ".github/workflows/proof-anchor.yml",
+      "lastPath": "vitest.config.ts",
+      "path": "parser-results/repository-output.jsonl.gz",
+      "recordCount": 3088,
+      "uncompressedBytes": 50858215,
+      "uncompressedSha256": "e14933177a179a64ceccb986480052524e916c5e0f2de1cca40b2922978b4d91",
+      "universe": "repository-output"
+    },
+    {
+      "compressedBytes": 30013,
+      "compressedSha256": "b5a5b74851f792ec17baeb076a5748cfb6a282b058ac0e3832a83787ac1a009e",
+      "firstPath": "v2/usf/compiler/package-lock.json",
+      "lastPath": "v2/usf/compiler/test/generation-output.test.js",
+      "path": "parser-results/v2-compiler-implementation.jsonl.gz",
+      "recordCount": 20,
+      "uncompressedBytes": 433989,
+      "uncompressedSha256": "f4fc413c02bf7cd45905f6ce098b48b63297f2f9a220fd0bbb08bab865d970c4",
+      "universe": "v2-compiler-implementation"
+    },
+    {
+      "compressedBytes": 6972927,
+      "compressedSha256": "e31d3baccb946045c71fbd95a5a40b8684ee65302e5a4016b82c8651f4790171",
+      "firstPath": "v2/usf/graph/assurance/controls.trig",
+      "lastPath": "v2/usf/graph/vocabulary.ttl",
+      "path": "parser-results/v2-graph-authority.jsonl.gz",
+      "recordCount": 95,
+      "uncompressedBytes": 122116956,
+      "uncompressedSha256": "92f05f3ef15a878f531a0e7c5f2c3c0a3c5a8da51b74a2c961e5ccaa9ca74da8",
+      "universe": "v2-graph-authority"
+    },
+    {
+      "compressedBytes": 7657,
+      "compressedSha256": "7e05e9583601da956be06ea559d43b81e6caad859234bc9543ba58fdb6fbe468",
+      "firstPath": "v2/.gitignore",
+      "lastPath": "v2/usf/tools/stardog/.gitkeep",
+      "path": "parser-results/v2-support-provisioning.jsonl.gz",
+      "recordCount": 22,
+      "uncompressedBytes": 103981,
+      "uncompressedSha256": "7361852f1a62e94cd0eb9442d73b7728e536e3e45199a5d5c0138e133143b16c",
+      "universe": "v2-support-provisioning"
+    }
+  ]
+}

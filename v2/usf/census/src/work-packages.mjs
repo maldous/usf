@@ -184,6 +184,20 @@ export function buildWorkPackages(first, ...rest) {
   const replacementOwners = new Map();
   const reuseOwners = new Map();
   const gateOwners = new Map();
+  const semanticLayerOwners = new Map();
+  const semanticLayerArtifactOwners = new Map();
+  const requiredCanonicalLayers = new Set(canonicalArtifacts.flatMap((record) => record.requiredSemanticLayers));
+  for (const artifact of canonicalArtifacts) {
+    if (!Array.isArray(artifact.ownedSemanticLayers)) throw new Error(`canonical artifact lacks explicit semantic layer ownership: ${artifact.canonicalArtifactKey}`);
+    for (const layer of artifact.ownedSemanticLayers) {
+      if (!artifact.requiredSemanticLayers.includes(layer)) throw new Error(`canonical artifact owns an undeclared semantic layer: ${artifact.canonicalArtifactKey}:${layer}`);
+      const existing = semanticLayerArtifactOwners.get(layer);
+      if (existing) throw new Error(`semantic layer has multiple canonical artifact owners: ${layer}:${existing}:${artifact.canonicalArtifactKey}`);
+      semanticLayerArtifactOwners.set(layer, artifact.canonicalArtifactKey);
+    }
+  }
+  const missingCanonicalLayerOwners = [...requiredCanonicalLayers].filter((layer) => !semanticLayerArtifactOwners.has(layer)).sort();
+  if (missingCanonicalLayerOwners.length) throw new Error(`semantic layer lacks canonical artifact owner: ${missingCanonicalLayerOwners.join(',')}`);
   const stateFor = (outcome) => {
     if (!states.has(outcome)) states.set(outcome, packageState(outcome, artifactByKey));
     return states.get(outcome);
@@ -208,6 +222,9 @@ export function buildWorkPackages(first, ...rest) {
       state.canonicalArtifactKeys.add(artifact.canonicalArtifactKey);
       state.canonicalArtifacts.set(artifact.canonicalArtifactKey, artifact);
       artifact.requiredSemanticLayers.forEach((value) => state.requiredSemanticLayers.add(value));
+      for (const layer of artifact.ownedSemanticLayers) {
+        semanticLayerOwners.set(layer, owner);
+      }
       artifact.semanticInputs.forEach((value) => state.semanticInputs.add(value));
       artifact.productionResponsibilities.forEach((value) => state.productionResponsibilities.add(value));
       for (const gate of artifact.equivalenceContract.gates ?? []) addGate(state, gate, artifact.canonicalArtifactKey, 'equivalence');
@@ -257,6 +274,7 @@ export function buildWorkPackages(first, ...rest) {
       reuseActions: [...state.reuseActions.values()].sort(compareBy(['reuseActionKey'])),
       equivalenceGates: [...state.equivalenceGates.values()].sort(compareBy(['gateKey'])),
       semanticInputs: [...state.semanticInputs].sort(),
+      ownedSemanticLayers: [...semanticLayerOwners].filter(([, owner]) => owner === key).map(([layer]) => layer).sort(),
       requiredSemanticLayers: [...state.requiredSemanticLayers].sort(),
       productionResponsibilities: [...state.productionResponsibilities].sort(),
       acceptanceCriteria: [
@@ -281,6 +299,7 @@ export function buildWorkPackages(first, ...rest) {
     artifacts: [...artifactOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     missingEntirely: [...gapOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     canonicalArtifacts: [...canonicalOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
+    semanticLayers: [...semanticLayerOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     replacementGroups: [...replacementOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     reuseActions: [...reuseOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     equivalenceGates: workPackages.flatMap((record) => record.equivalenceGates.map((gate) => ({ ownedKey: gate.gateKey, primaryWorkPackage: record.key }))).sort(compareBy(['ownedKey']))
@@ -301,6 +320,7 @@ export function validateWorkPackageOwnership(workPackages, ownership) {
     artifacts: 'artifactKeys',
     missingEntirely: 'missingEntirelyKeys',
     canonicalArtifacts: 'canonicalArtifactKeys',
+    semanticLayers: 'ownedSemanticLayers',
     replacementGroups: 'replacementGroupKeys',
     reuseActions: 'reuseActions',
     equivalenceGates: 'equivalenceGates'
@@ -332,9 +352,10 @@ export function buildWorkPackageLineage({ baselinePackages, workPackages, artifa
     for (const row of baseline.affectedRows) {
       if (row.startsWith('semantic-layer:')) {
         const layer = row.slice('semantic-layer:'.length);
-        const owners = workPackages.filter((record) => record.requiredSemanticLayers.includes(layer)).map((record) => record.key);
-        owners.forEach((owner) => successors.add(owner));
-        if (owners.length === 0) unmatched.push(row);
+        const owners = workPackages.filter((record) => record.ownedSemanticLayers.includes(layer)).map((record) => record.key);
+        if (owners.length > 1) throw new Error(`semantic layer has multiple primary owners: ${layer}`);
+        if (owners.length === 1) successors.add(owners[0]);
+        else unmatched.push(row);
       } else {
         const artifactKey = artifactByRow.get(row);
         const owner = artifactKey ? ownerByArtifact.get(artifactKey) : null;

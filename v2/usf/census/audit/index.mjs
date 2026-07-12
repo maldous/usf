@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readIndependentParserEvidence } from './parser-evidence.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CENSUS_ROOT = path.resolve(HERE, '..');
@@ -113,6 +114,7 @@ export function auditUniverses({ recordsByUniverse, summary, repositoryRoot, phy
 export function auditParserRelationships(members, parserResults, relationships, inventories = []) {
   if (![members, parserResults, relationships, inventories].every(Array.isArray)) return incomplete('parser-relationships', 'missing-parser-or-relationship-input');
   const findings = [];
+  let unresolvedInternalCount = 0; let unclassifiedExternalCount = 0;
   const memberPaths = new Set(members.map((entry) => entry.path));
   const parsedPaths = new Set(parserResults.map((entry) => entry.path));
   for (const member of members) if (!member.binary && !['gitlink', 'symbolic-link'].includes(member.formatKind) && !parsedPaths.has(member.path)) findings.push(`unparsed:${member.path}`);
@@ -128,7 +130,11 @@ export function auditParserRelationships(members, parserResults, relationships, 
     if (relationKeys.has(key)) findings.push(`duplicate-relationship:${key}`); relationKeys.add(key);
     if (!memberPaths.has(relation.source)) findings.push(`relationship-source-missing:${relation.source}`);
     if (relation.targetKind === 'artifact' && relation.resolved && !/^(?:https?:|urn:|mailto:|data:|node:)/.test(relation.target) && !memberPaths.has(relation.target)) findings.push(`false-resolved-target:${relation.target}`);
+    if (relation.targetKind === 'artifact' && !relation.resolved) unresolvedInternalCount += 1;
+    if (relation.targetKind === 'external-resource' && !relation.reasonCodes?.some((reason) => reason === 'expected-external-reference' || reason === 'parser-classified-external-resource')) unclassifiedExternalCount += 1;
   }
+  if (unresolvedInternalCount) findings.push(`unresolved-internal-targets:${unresolvedInternalCount}`);
+  if (unclassifiedExternalCount) findings.push(`unclassified-external-references:${unclassifiedExternalCount}`);
   for (const inventory of inventories) if (!Array.isArray(inventory.declarations) || !inventory.comparisonExecuted?.length) findings.push(`insubstantive-inventory:${inventory.path}`);
   return outcome('parser-relationships', findings, { parserCount: parserResults.length, relationshipCount: relationships.length, inventoryCount: inventories.length });
 }
@@ -148,7 +154,7 @@ export function auditFamilyOwnership(members, artifacts) {
   return outcome('family-ownership', findings, { ownerCount: owners.size });
 }
 
-export function auditMappingsCoverage(artifacts, mappings, coverage, identityReviews = null, missingEntirely = null) {
+export function auditMappingsCoverage(artifacts, mappings, coverage, identityReviews = null, missingEntirely = null, replacementGroups = null) {
   if (![artifacts, mappings, coverage].every(Array.isArray)) return incomplete('mappings-coverage', 'missing-mapping-input');
   const findings = [];
   const artifactKeys = new Set(artifacts.map((entry) => entry.artifactKey ?? `${entry.universe}:${entry.path}`));
@@ -176,7 +182,8 @@ export function auditMappingsCoverage(artifacts, mappings, coverage, identityRev
   if (missingEntirely !== null) {
     const absent = new Set(mappings.filter((mapping) => mapping.coverageDecision === 'absent').map((mapping) => mapping.artifactKey));
     const missing = new Set((missingEntirely ?? []).map((record) => record.artifactKey));
-    for (const key of absent) if (!missing.has(key)) findings.push(`absent-without-missing-plan:${key}`);
+    const acceptedDisposition = new Set((replacementGroups ?? []).filter((group) => ['graph-owned-output-plan', 'graph-owned-no-output-disposition'].includes(group.dispositionStatus)).flatMap((group) => group.currentArtifacts ?? []));
+    for (const key of absent) if (!missing.has(key) && !acceptedDisposition.has(key)) findings.push(`absent-without-missing-disposition:${key}`);
     const validReviewRequiredDisposition = (record) => record.missingKind === 'review-required-source-disposition' &&
       record.requiredClassIri === 'urn:usf:ontology:SourceArtefactDisposition' &&
       record.reasonCode === 'source-disposition-review-required';
@@ -254,10 +261,21 @@ function sourceTyped(triples, classIri) {
 export function auditSourceDispositionOwnership(artifacts, parserResults, replacementGroups) {
   if (![artifacts, parserResults, replacementGroups].every(Array.isArray)) return incomplete('source-disposition-ownership', 'missing-source-disposition-input');
   const triples = sourceTriples(parserResults);
+  const objectIndex = new Map(); const resourceGraphIndex = new Map();
+  for (const triple of triples) {
+    const key = `${triple.subject}\0${triple.predicate}`;
+    if (!objectIndex.has(key)) objectIndex.set(key, new Set());
+    objectIndex.get(key).add(triple.object);
+    if (triple.graph) {
+      if (!resourceGraphIndex.has(triple.subject)) resourceGraphIndex.set(triple.subject, new Set());
+      resourceGraphIndex.get(triple.subject).add(triple.graph);
+    }
+  }
+  const get = (subject, predicate) => [...(objectIndex.get(`${subject}\0${predicate}`) ?? [])].sort();
   const registered = new Set();
   for (const resource of sourceTyped(triples, SOURCE_TERMS.namedGraph)) {
-    const graphIris = sourceObjects(triples, resource, SOURCE_TERMS.graphIri).map(sourceLexical);
-    const graphClasses = sourceObjects(triples, resource, SOURCE_TERMS.graphClass);
+    const graphIris = get(resource, SOURCE_TERMS.graphIri).map(sourceLexical);
+    const graphClasses = get(resource, SOURCE_TERMS.graphClass);
     if (graphIris.length === 1 && graphClasses.length === 1 && [
       'urn:usf:graphclass:definitiongraph',
       'urn:usf:graphclass:authoredgraph',
@@ -268,23 +286,35 @@ export function auditSourceDispositionOwnership(artifacts, parserResults, replac
   const typed = Object.fromEntries(['source', 'observation', 'disposition', 'kind'].map((name) => [name, new Set(sourceTyped(triples, SOURCE_TERMS[name]))]));
   const plans = new Set(sourceTyped(triples, 'urn:usf:ontology:ArtefactPlan'));
   const resourceRegistered = (subject) => {
-    const graphs = [...new Set(triples.filter((triple) => triple.subject === subject && triple.graph).map((triple) => triple.graph))];
+    const graphs = [...(resourceGraphIndex.get(subject) ?? [])];
     return graphs.length > 0 && graphs.every((graph) => registered.has(graph));
   };
   const observations = [...typed.observation].map((iri) => ({
     iri,
-    sources: sourceObjects(triples, iri, SOURCE_TERMS.observes),
-    paths: sourceObjects(triples, iri, SOURCE_TERMS.path).map(sourceLexical),
-    digests: sourceObjects(triples, iri, SOURCE_TERMS.digest).map(sourceLexical),
-    universes: sourceObjects(triples, iri, SOURCE_TERMS.universe).map(sourceLexical).map((value) => SOURCE_UNIVERSES.get(value) ?? value)
+    sources: get(iri, SOURCE_TERMS.observes),
+    paths: get(iri, SOURCE_TERMS.path).map(sourceLexical),
+    digests: get(iri, SOURCE_TERMS.digest).map(sourceLexical),
+    universes: get(iri, SOURCE_TERMS.universe).map(sourceLexical).map((value) => SOURCE_UNIVERSES.get(value) ?? value)
   }));
+  const observationsByPath = new Map();
+  for (const observation of observations) {
+    if (observation.paths.length !== 1 || observation.universes.length !== 1) continue;
+    const key = `${observation.universes[0]}\0${observation.paths[0]}`;
+    if (!observationsByPath.has(key)) observationsByPath.set(key, []);
+    observationsByPath.get(key).push(observation);
+  }
+  const reverseDispositions = new Map();
+  for (const iri of typed.disposition) for (const sourceIri of get(iri, SOURCE_TERMS.dispositionOf)) {
+    if (!reverseDispositions.has(sourceIri)) reverseDispositions.set(sourceIri, []);
+    reverseDispositions.get(sourceIri).push(iri);
+  }
   const groups = new Map(replacementGroups.flatMap((group) => (group.currentArtifacts ?? []).map((key) => [key, group])));
   const findingCounts = new Map();
   const addFindings = (reasons) => { for (const reason of new Set(reasons)) findingCounts.set(reason, (findingCounts.get(reason) ?? 0) + 1); };
   let acceptedCount = 0; let outputPlanCount = 0; let noOutputCount = 0;
   for (const artifact of artifacts) {
     const artifactFindings = [];
-    const candidates = observations.filter((observation) => observation.paths.length === 1 && observation.paths[0] === artifact.path && observation.universes.length === 1 && observation.universes[0] === artifact.universe);
+    const candidates = observationsByPath.get(`${artifact.universe}\0${artifact.path}`) ?? [];
     if (candidates.length !== 1) { addFindings([candidates.length ? 'source-observation-duplicate' : 'source-observation-missing']); continue; }
     const observation = candidates[0];
     if (observation.digests.length !== 1 || observation.digests[0] !== artifact.contentDigest) artifactFindings.push('source-observation-digest-mismatch');
@@ -292,14 +322,14 @@ export function auditSourceDispositionOwnership(artifacts, parserResults, replac
     const sourceIri = observation.sources[0];
     if (!resourceRegistered(observation.iri)) artifactFindings.push('source-observation-unregistered-graph');
     if (!resourceRegistered(sourceIri)) artifactFindings.push('source-artefact-unregistered-graph');
-    const forward = sourceObjects(triples, sourceIri, SOURCE_TERMS.hasDisposition);
-    const reverse = [...typed.disposition].filter((iri) => sourceObjects(triples, iri, SOURCE_TERMS.dispositionOf).includes(sourceIri));
+    const forward = get(sourceIri, SOURCE_TERMS.hasDisposition);
+    const reverse = (reverseDispositions.get(sourceIri) ?? []).sort();
     const dispositions = [...new Set([...forward, ...reverse])].sort();
     if (forward.length !== 1 || reverse.length !== 1 || dispositions.length !== 1 || forward[0] !== reverse[0]) { addFindings([...artifactFindings, 'source-disposition-bijection-invalid']); continue; }
     const dispositionIri = dispositions[0];
-    const states = sourceObjects(triples, dispositionIri, SOURCE_TERMS.decision);
-    const kinds = sourceObjects(triples, dispositionIri, SOURCE_TERMS.dispositionKind);
-    const assignedPlans = sourceObjects(triples, dispositionIri, SOURCE_TERMS.assignedPlan);
+    const states = get(dispositionIri, SOURCE_TERMS.decision);
+    const kinds = get(dispositionIri, SOURCE_TERMS.dispositionKind);
+    const assignedPlans = get(dispositionIri, SOURCE_TERMS.assignedPlan);
     if (!resourceRegistered(dispositionIri)) artifactFindings.push('source-disposition-unregistered-graph');
     if (states.length !== 1 || states[0] !== ACCEPTED_DISPOSITION) artifactFindings.push(states.includes('urn:usf:dispositiondecisionstate:reviewrequired') ? 'source-disposition-review-required' : 'source-disposition-not-accepted');
     if (kinds.length !== 1 || !typed.kind.has(kinds[0])) artifactFindings.push('source-disposition-kind-invalid');
@@ -328,6 +358,8 @@ export function auditFindingClassifications(findingsInput) {
   for (const record of findingsInput) {
     for (const field of required) if (!(field in record) || record[field] === null || record[field] === '' || (Array.isArray(record[field]) && record[field].length === 0)) findings.push(`unclassified-finding:${record.findingKey ?? '<missing>'}:${field}`);
   }
+  const unexplained = findingsInput.filter((record) => record.resolutionStatus === 'open').length;
+  if (unexplained) findings.push(`unexplained-open-findings:${unexplained}`);
   return outcome('finding-classifications', findings, { findingCount: findingsInput.length, openCount: findingsInput.filter((record) => record.resolutionStatus === 'open').length });
 }
 
@@ -335,28 +367,51 @@ export function auditCanonicalArtifacts(canonicalArtifacts, replacementGroups) {
   if (![canonicalArtifacts, replacementGroups].every(Array.isArray)) return incomplete('canonical-replacements', 'missing-canonical-input');
   const findings = [];
   const keys = new Set(); const groups = new Map(replacementGroups.map((entry) => [entry.groupKey ?? entry.key ?? entry.replacementGroup, entry]));
+  const requiredLayers = new Set(); const semanticLayerArtifactOwners = new Map();
   for (const artifact of canonicalArtifacts) {
     if (keys.has(artifact.canonicalArtifactKey)) findings.push(`duplicate-canonical-key:${artifact.canonicalArtifactKey}`); keys.add(artifact.canonicalArtifactKey);
     if (!artifact.targetPath && !artifact.pathRule && artifact.mutabilityClass !== 'removed') findings.push(`missing-production-path:${artifact.canonicalArtifactKey}`);
     if (!artifact.acceptanceGates?.length || !artifact.productionResponsibilities?.length) findings.push(`missing-production-contract:${artifact.canonicalArtifactKey}`);
     if (!groups.has(artifact.replacementGroup)) findings.push(`missing-replacement-group:${artifact.canonicalArtifactKey}`);
+    for (const layer of artifact.requiredSemanticLayers ?? []) requiredLayers.add(layer);
+    if (!Array.isArray(artifact.ownedSemanticLayers)) findings.push(`semantic-layer-ownership-undeclared:${artifact.canonicalArtifactKey}`);
+    for (const layer of artifact.ownedSemanticLayers ?? []) {
+      if (!(artifact.requiredSemanticLayers ?? []).includes(layer)) findings.push(`owned-semantic-layer-not-required:${artifact.canonicalArtifactKey}:${layer}`);
+      if (semanticLayerArtifactOwners.has(layer)) findings.push(`duplicate-semantic-layer-artifact-owner:${layer}:${semanticLayerArtifactOwners.get(layer)}:${artifact.canonicalArtifactKey}`);
+      else semanticLayerArtifactOwners.set(layer, artifact.canonicalArtifactKey);
+    }
   }
+  for (const layer of requiredLayers) if (!semanticLayerArtifactOwners.has(layer)) findings.push(`missing-semantic-layer-artifact-owner:${layer}`);
   for (const group of replacementGroups) for (const key of group.canonicalArtifacts ?? group.canonicalArtifactKeys ?? group.outputs ?? []) if (!keys.has(key)) findings.push(`replacement-target-missing:${key}`);
-  return outcome('canonical-replacements', findings, { canonicalArtifactCount: keys.size, replacementGroupCount: groups.size });
+  return outcome('canonical-replacements', findings, { canonicalArtifactCount: keys.size, replacementGroupCount: groups.size, semanticLayerArtifactOwnerCount: semanticLayerArtifactOwners.size });
 }
 
 export function auditWorkPackages(canonicalArtifacts, workPackages) {
   if (![canonicalArtifacts, workPackages].every(Array.isArray)) return incomplete('work-packages', 'missing-work-package-input');
-  const findings = []; const ownership = new Map(); const packageKeys = new Set(workPackages.map((entry) => entry.key));
+  const findings = []; const ownership = new Map(); const semanticLayerPackageOwners = new Map(); const packageKeys = new Set(workPackages.map((entry) => entry.key));
   for (const item of workPackages) {
     if (!item.key || !item.architecturalOutcome || !item.acceptanceCriteria?.length || !item.complexityEvidence?.length || !item.equivalenceGates?.length) findings.push(`incoherent-package:${item.key ?? '<missing>'}`);
     for (const key of item.canonicalArtifactKeys ?? item.ownedArtifacts ?? []) {
       if (ownership.has(key)) findings.push(`multiply-packaged:${key}`); ownership.set(key, item.key);
     }
+    for (const layer of item.ownedSemanticLayers ?? []) {
+      if (semanticLayerPackageOwners.has(layer)) findings.push(`multiply-packaged-semantic-layer:${layer}`);
+      else semanticLayerPackageOwners.set(layer, item.key);
+    }
     for (const dependency of item.dependencies ?? []) if (!packageKeys.has(dependency)) findings.push(`package-dependency-missing:${item.key}:${dependency}`);
   }
-  for (const artifact of canonicalArtifacts) if (!ownership.has(artifact.canonicalArtifactKey)) findings.push(`unpackaged:${artifact.canonicalArtifactKey}`);
-  return outcome('work-packages', findings, { workPackageCount: workPackages.length });
+  const expectedLayers = new Set();
+  for (const artifact of canonicalArtifacts) {
+    if (!ownership.has(artifact.canonicalArtifactKey)) findings.push(`unpackaged:${artifact.canonicalArtifactKey}`);
+    for (const layer of artifact.ownedSemanticLayers ?? []) {
+      expectedLayers.add(layer);
+      const artifactPackage = ownership.get(artifact.canonicalArtifactKey);
+      const layerPackage = semanticLayerPackageOwners.get(layer);
+      if (!artifactPackage || layerPackage !== artifactPackage) findings.push(`semantic-layer-package-owner-mismatch:${layer}:${artifact.canonicalArtifactKey}`);
+    }
+  }
+  for (const layer of semanticLayerPackageOwners.keys()) if (!expectedLayers.has(layer)) findings.push(`semantic-layer-package-owner-without-canonical-artifact:${layer}`);
+  return outcome('work-packages', findings, { workPackageCount: workPackages.length, semanticLayerPackageOwnerCount: semanticLayerPackageOwners.size });
 }
 
 export function auditDependencies(workPackages, dependencies) {
@@ -383,6 +438,8 @@ export function auditDependencies(workPackages, dependencies) {
 export function auditDeterminism(outputs) {
   if (!outputs || typeof outputs !== 'object') return incomplete('determinism', 'missing-output-map');
   const findings = [];
+  const digest = createHash('sha256');
+  const frame = (value) => { const bytes = Buffer.from(value); const size = Buffer.alloc(8); size.writeBigUInt64BE(BigInt(bytes.length)); digest.update(size).update(bytes); };
   const selectors = {
     artifacts: (entry) => [entry.universe, entry.path],
     parserResults: (entry) => [entry.universe, entry.path],
@@ -398,6 +455,7 @@ export function auditDeterminism(outputs) {
     inventoryFindings: (entry) => [entry.source, entry.findingKind, entry.subject]
   };
   for (const [name, value] of Object.entries(outputs)) {
+    frame(name);
     const records = Array.isArray(value) ? value : [value];
     const selector = selectors[name] ?? ((entry) => entry?.path ?? entry?.key ?? entry?.canonicalArtifactKey ?? entry?.artifactKey ?? JSON.stringify(entry));
     const keys = records.map((entry) => { const selected = selector(entry); return Array.isArray(selected) ? selected : [selected]; });
@@ -409,9 +467,9 @@ export function auditDeterminism(outputs) {
       return 0;
     });
     if (JSON.stringify(keys) !== JSON.stringify(ordered)) findings.push(`nondeterministic-record-order:${name}`);
-    if (canonicalJson(value) !== canonicalJson(JSON.parse(canonicalJson(value)))) findings.push(`unstable-canonical-json:${name}`);
+    for (const record of records) frame(canonicalJson(record));
   }
-  return outcome('determinism', findings, { outputCount: Object.keys(outputs).length, canonicalDigest: sha256(canonicalJson(outputs)) });
+  return outcome('determinism', findings, { outputCount: Object.keys(outputs).length, canonicalDigest: digest.digest('hex') });
 }
 
 export function auditMutationBoundary(before, after, mutableRoot = 'v2/usf/census') {
@@ -432,8 +490,10 @@ export async function runAudit({ censusRoot = CENSUS_ROOT, repositoryRoot = REPO
   const before = snapshot(repositoryRoot, outside);
   const recordsByUniverse = Object.fromEntries(Object.entries(universeFiles).map(([key, file]) => [key, loadJsonl(censusRoot, file)]));
   const members = Object.values(recordsByUniverse).filter(Array.isArray).flat();
+  let parserEvidence = null; let parserEvidenceFailure = null;
+  try { parserEvidence = await readIndependentParserEvidence(censusRoot); } catch (error) { parserEvidenceFailure = error.message; }
   const outputs = {
-    artifacts: loadJsonl(censusRoot, 'artifacts.jsonl'), parserResults: loadJsonl(censusRoot, 'parser-results.jsonl'), relationships: loadJsonl(censusRoot, 'relationships.jsonl'),
+    artifacts: loadJsonl(censusRoot, 'artifacts.jsonl'), parserResults: parserEvidence?.records ?? null, relationships: loadJsonl(censusRoot, 'relationships.jsonl'),
     inventories: loadJsonl(censusRoot, 'inventories.jsonl'), mappings: loadJsonl(censusRoot, 'mappings.jsonl'), coverage: loadJsonl(censusRoot, 'coverage.jsonl'),
     canonicalArtifacts: loadJsonl(censusRoot, 'canonical-artifacts.jsonl'), replacementGroups: loadJsonl(censusRoot, 'replacement-groups.jsonl'),
     identityReview: loadJsonl(censusRoot, 'identity-review.jsonl'), missingEntirely: loadJsonl(censusRoot, 'missing-entirely.jsonl'),
@@ -442,15 +502,18 @@ export async function runAudit({ censusRoot = CENSUS_ROOT, repositoryRoot = REPO
   };
   const workPackages = Array.isArray(outputs.workPackages) ? outputs.workPackages : outputs.workPackages?.workPackages;
   const checks = [
+    parserEvidenceFailure
+      ? incomplete('parser-evidence-storage', parserEvidenceFailure)
+      : check('parser-evidence-storage', 'pass', [], { recordCount: parserEvidence.manifest.aggregate.recordCount, shardCount: parserEvidence.manifest.shards.length, uncompressedBytes: parserEvidence.manifest.aggregate.uncompressedBytes }),
     auditUniverses({ recordsByUniverse, summary: loadJson(censusRoot, 'universes.json'), repositoryRoot, physicalPaths }),
     auditParserRelationships(members, outputs.parserResults, outputs.relationships, outputs.inventories),
-    auditFamilyOwnership(members, outputs.artifacts), auditMappingsCoverage(outputs.artifacts, outputs.mappings, outputs.coverage, outputs.identityReview, outputs.missingEntirely),
+    auditFamilyOwnership(members, outputs.artifacts), auditMappingsCoverage(outputs.artifacts, outputs.mappings, outputs.coverage, outputs.identityReview, outputs.missingEntirely, outputs.replacementGroups),
     auditCanonicalArtifacts(outputs.canonicalArtifacts, outputs.replacementGroups),
     auditArtifactDispositions(outputs.artifacts, outputs.canonicalArtifacts, outputs.replacementGroups),
     auditSourceDispositionOwnership(outputs.artifacts, outputs.parserResults, outputs.replacementGroups),
     auditWorkPackages(outputs.canonicalArtifacts, workPackages), auditDependencies(workPackages, outputs.dependencies),
     auditFindingClassifications(outputs.inventoryFindings),
-    auditDeterminism(Object.fromEntries(Object.entries(outputs).filter(([, value]) => value !== null)))
+    auditDeterminism(Object.fromEntries(Object.entries(outputs).filter(([name, value]) => value !== null && name !== 'parserResults')))
   ];
   const after = snapshot(repositoryRoot, outside); checks.push(auditMutationBoundary(before, after));
   const status = checks.some((entry) => entry.status === 'fail') ? 'fail' : checks.some((entry) => entry.status === 'incomplete') ? 'incomplete' : 'pass';

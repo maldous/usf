@@ -8,7 +8,10 @@ function ownerMaps(packages) {
   for (const pkg of packages) {
     for (const key of pkg.artifactKeys ?? []) maps.artifacts.set(key, pkg.key);
     for (const key of pkg.canonicalArtifactKeys ?? []) maps.canonical.set(key, pkg.key);
-    for (const key of pkg.requiredSemanticLayers ?? []) if (!maps.layers.has(key)) maps.layers.set(key, pkg.key);
+    for (const key of pkg.ownedSemanticLayers ?? []) {
+      if (maps.layers.has(key)) throw new Error(`semantic layer has multiple package owners: ${key}:${maps.layers.get(key)}:${pkg.key}`);
+      maps.layers.set(key, pkg.key);
+    }
     for (const gate of pkg.equivalenceGates ?? []) maps.gates.set(gate.gateKey ?? gate, pkg.key);
   }
   return maps;
@@ -234,4 +237,4 @@ export function buildDependencyGraph(packages, artifacts, canonicalArtifacts, re
   };
 }
 
-export const dependencyGraphInternals = { cycleComponents, graphMetrics, hasCycle, relationshipDependencyStatus, transitiveReduction };
+export const dependencyGraphInternals = { cycleComponents, graphMetrics, hasCycle, ownerMaps, relationshipDependencyStatus, transitiveReduction };

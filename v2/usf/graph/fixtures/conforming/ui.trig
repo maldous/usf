@@ -9,7 +9,7 @@
     fx:notexposedcapability a usf:Capability ; usf:canonicalName "notexposedcapability" ; usf:uiExposure <urn:usf:uiexposureclass:notexposed> .
 
     fx:journey a usf:Journey ; usf:canonicalName "journey" ; usf:mapsToCapability fx:uicapability .
-    fx:uimodel a usf:UISemanticModel ; usf:canonicalName "uimodel" ; usf:hasJourney fx:journey ; usf:hasViewModel fx:viewmodel ; usf:hasSurface fx:form ; usf:hasAccessibilityProfile fx:accessibilityprofile ; usf:hasLocalisationProfile fx:localisationprofile ; usf:rendererContract fx:renderercontract .
+    fx:uimodel a usf:UISemanticModel ; usf:canonicalName "uimodel" ; usf:hasJourney fx:journey ; usf:hasViewModel fx:viewmodel ; usf:hasSurface fx:form ; usf:hasAccessibilityProfile fx:accessibilityprofile ; usf:hasLocalisationProfile fx:localisationprofile ; usf:rendererContract fx:webrenderercontract , fx:mobilerenderercontract .
     fx:viewmodel a usf:ViewModel ; usf:canonicalName "viewmodel" ; usf:viewDataModel fx:datamodel ; usf:hasComponent fx:component ; usf:hasForm fx:form ; usf:hasErrorBinding fx:errorbinding .
     fx:datamodel a usf:DataModel .
     fx:form a usf:Form ; usf:canonicalName "form" ; usf:surfaceKind <urn:usf:surfacekind:form> ; usf:rendersViewModel fx:viewmodel ; usf:hasField fx:field ; usf:submitsOperation fx:operation .
@@ -34,10 +34,17 @@
     fx:localisationprofile a usf:LocalisationProfile ; usf:canonicalName "localisationprofile" ; usf:defaultLocale "en"^^xsd:language ; usf:supportedLocale "en"^^xsd:language ; usf:hasLocalisationRequirement fx:messagerequirement .
     fx:messagerequirement a usf:LocalisationRequirement ; usf:localisationKind <urn:usf:localisationrequirementkind:messagekey> ; usf:messageKey "fixturemessage" .
 
-    fx:renderercontract a usf:RendererContract ; usf:canonicalName "renderercontract" ; usf:rendererImplementation fx:renderer ; usf:rendererTarget <urn:usf:renderertarget:web> ; usf:rendererInputSchema fx:inputschema ; usf:rendererOutputPlan fx:artefactplan ; usf:supportsSurfaceKind <urn:usf:surfacekind:form> .
-    fx:renderer a usf:Renderer .
+    fx:webrenderercontract a usf:RendererContract ; usf:canonicalName "webrenderercontract" ; usf:rendererImplementation fx:webrenderer ; usf:rendererTarget <urn:usf:renderertarget:web> ; usf:rendererInputSchema fx:inputschema ; usf:rendererOutputPlan fx:webartefactplan ; usf:supportsSurfaceKind <urn:usf:surfacekind:form> .
+    fx:mobilerenderercontract a usf:RendererContract ; usf:canonicalName "mobilerenderercontract" ; usf:rendererImplementation fx:mobilerenderer ; usf:rendererTarget <urn:usf:renderertarget:mobile> ; usf:rendererInputSchema fx:inputschema ; usf:rendererOutputPlan fx:mobileartefactplan ; usf:supportsSurfaceKind <urn:usf:surfacekind:form> .
+    fx:webrenderer a usf:Renderer .
+    fx:mobilerenderer a usf:Renderer .
     fx:repository a usf:Repository .
-    fx:artefactplan a usf:ArtefactPlan ; usf:canonicalName "artefactplan" ; usf:ownedByRepository fx:repository ; usf:plansArtefact fx:inputschema .
+    fx:webartefactplan a usf:ArtefactPlan ; usf:canonicalName "webartefactplan" ; usf:ownedByRepository fx:repository ; usf:plansArtefact fx:webinput .
+    fx:mobileartefactplan a usf:ArtefactPlan ; usf:canonicalName "mobileartefactplan" ; usf:ownedByRepository fx:repository ; usf:plansArtefact fx:mobileinput .
     fx:inputschema a usf:Artefact ; usf:canonicalName "inputschema" ; usf:artefactKind <urn:usf:artefactkind:schema> ; usf:canonicalPath "ui/inputschema.json" ; usf:governedByPathRule fx:pathrule .
+    fx:webinput a usf:Artefact ; usf:canonicalName "webinput" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "ui/renderinputs/web/index.json" ; usf:governedByPathRule fx:webpathrule .
+    fx:mobileinput a usf:Artefact ; usf:canonicalName "mobileinput" ; usf:artefactKind <urn:usf:artefactkind:manifest> ; usf:canonicalPath "ui/renderinputs/mobile/index.json" ; usf:governedByPathRule fx:mobilepathrule .
     fx:pathrule a usf:PathRule ; usf:canonicalName "pathrule" ; usf:pathPattern "ui/{modelid}.json" .
+    fx:webpathrule a usf:PathRule ; usf:canonicalName "webpathrule" ; usf:pathPattern "ui/renderinputs/web/{modelid}.json" .
+    fx:mobilepathrule a usf:PathRule ; usf:canonicalName "mobilepathrule" ; usf:pathPattern "ui/renderinputs/mobile/{modelid}.json" .
 }

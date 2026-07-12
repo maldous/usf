@@ -3,7 +3,17 @@
   "checks": [
     {
       "facts": {
-        "memberCount": 3213,
+        "recordCount": 3225,
+        "shardCount": 4,
+        "uncompressedBytes": 173513141
+      },
+      "findings": [],
+      "id": "parser-evidence-storage",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "memberCount": 3225,
         "universeCount": 4
       },
       "findings": [],
@@ -13,16 +23,18 @@
     {
       "facts": {
         "inventoryCount": 2651,
-        "parserCount": 3213,
-        "relationshipCount": 33561
+        "parserCount": 3225,
+        "relationshipCount": 57060
       },
-      "findings": [],
+      "findings": [
+        "unresolved-internal-targets:3526"
+      ],
       "id": "parser-relationships",
-      "status": "pass"
+      "status": "fail"
     },
     {
       "facts": {
-        "ownerCount": 3213
+        "ownerCount": 3225
       },
       "findings": [],
       "id": "family-ownership",
@@ -30,8 +42,8 @@
     },
     {
       "facts": {
-        "coverageCount": 3213,
-        "mappingCount": 3213
+        "coverageCount": 3225,
+        "mappingCount": 3225
       },
       "findings": [],
       "id": "mappings-coverage",
@@ -40,7 +52,8 @@
     {
       "facts": {
         "canonicalArtifactCount": 0,
-        "replacementGroupCount": 3213
+        "replacementGroupCount": 3225,
+        "semanticLayerArtifactOwnerCount": 0
       },
       "findings": [],
       "id": "canonical-replacements",
@@ -48,39 +61,44 @@
     },
     {
       "facts": {
-        "acceptedDispositionCount": 0,
-        "artifactCount": 3213,
+        "acceptedDispositionCount": 134,
+        "artifactCount": 3225,
         "canonicalArtifactCount": 0,
-        "missingDispositionCount": 3213
+        "missingDispositionCount": 3091
       },
       "findings": [
-        "required-source-disposition-unavailable:3213"
+        "required-source-disposition-unavailable:3091"
       ],
       "id": "artifact-dispositions",
       "status": "fail"
     },
     {
       "facts": {
-        "acceptedDispositionCount": 0,
-        "artifactCount": 3213,
-        "dispositionCount": 0,
+        "acceptedDispositionCount": 134,
+        "artifactCount": 3225,
+        "dispositionCount": 3218,
         "findingDistribution": {
-          "source-observation-missing": 3213
+          "source-disposition-review-required": 2909,
+          "source-observation-digest-mismatch": 1,
+          "source-observation-missing": 181
         },
-        "noOutputDispositionCount": 0,
-        "observationCount": 0,
+        "noOutputDispositionCount": 134,
+        "observationCount": 3218,
         "outputPlanDispositionCount": 0,
-        "rejectedDispositionCount": 3213
+        "rejectedDispositionCount": 3091
       },
       "findings": [
-        "required-source-disposition-unavailable:3213",
-        "source-observation-missing:3213"
+        "required-source-disposition-unavailable:3091",
+        "source-disposition-review-required:2909",
+        "source-observation-digest-mismatch:1",
+        "source-observation-missing:181"
       ],
       "id": "source-disposition-ownership",
       "status": "fail"
     },
     {
       "facts": {
+        "semanticLayerPackageOwnerCount": 0,
         "workPackageCount": 98
       },
       "findings": [],
@@ -89,7 +107,7 @@
     },
     {
       "facts": {
-        "dependencyCount": 51
+        "dependencyCount": 17
       },
       "findings": [],
       "id": "dependencies",
@@ -97,17 +115,19 @@
     },
     {
       "facts": {
-        "findingCount": 134801,
-        "openCount": 134801
+        "findingCount": 100140,
+        "openCount": 100140
       },
-      "findings": [],
+      "findings": [
+        "unexplained-open-findings:100140"
+      ],
       "id": "finding-classifications",
-      "status": "pass"
+      "status": "fail"
     },
     {
       "facts": {
-        "canonicalDigest": "700b97ace481ef82c07f8847cfe7d195898a36d0426ae57a8ddd68a44e2f94c5",
-        "outputCount": 13
+        "canonicalDigest": "239610d6f515bab7aefc8b4ea479ebdbcc6aa5a65adb7376c557f95df7e1ccb3",
+        "outputCount": 12
       },
       "findings": [],
       "id": "determinism",
@@ -115,8 +135,8 @@
     },
     {
       "facts": {
-        "afterCount": 3213,
-        "beforeCount": 3213
+        "afterCount": 3225,
+        "beforeCount": 3225
       },
       "findings": [],
       "id": "mutation-boundary",

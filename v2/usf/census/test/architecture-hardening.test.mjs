@@ -3,6 +3,7 @@ import test from 'node:test';
 import { buildArtifactPlan, validateReplacementGroup } from '../src/artifact-plan.mjs';
 import { dependencyGraphInternals } from '../src/dependency-graph.mjs';
 import { buildMappings, buildMissingEntirely } from '../src/mapping.mjs';
+import { buildRelationships } from '../src/relationships.mjs';
 import { buildSourcePlanOwnership } from '../src/source-plan-ownership.mjs';
 
 const confidence = { level: 'high', score: 0.98, reasons: ['structural-parser-evidence'] };
@@ -177,4 +178,32 @@ test('dependency status is derived from structural relationship context rather t
   assert.equal(classify({ extractionMethod: 'json-pointer', attributes: { keyPath: 'compilerOptions.paths.alias.0' } }), 'coordination');
   assert.equal(classify({ extractionMethod: 'json-pointer', attributes: { keyPath: 'extends' } }), 'blocking');
   assert.equal(classify({ extractionMethod: 'babel-import-declaration', attributes: {} }), 'blocking');
+});
+
+test('dependency ownership uses the canonical semantic-layer owner, not the first consumer', () => {
+  const packages = [
+    { key: 'consumer', requiredSemanticLayers: ['equivalence-rules'], ownedSemanticLayers: [] },
+    { key: 'validation-owner', requiredSemanticLayers: ['equivalence-rules'], ownedSemanticLayers: ['equivalence-rules'] }
+  ];
+  assert.equal(dependencyGraphInternals.ownerMaps(packages).layers.get('equivalence-rules'), 'validation-owner');
+  assert.throws(
+    () => dependencyGraphInternals.ownerMaps([...packages, { key: 'duplicate-owner', ownedSemanticLayers: ['equivalence-rules'] }]),
+    /semantic layer has multiple package owners/
+  );
+});
+
+test('relationship closure distinguishes allowlisted external references from unresolved internal targets', () => {
+  const raw = parsed('src/example.mjs', [], 'repository-output');
+  raw.relationships = [
+    { relationshipType: 'references', target: 'https://example.test/schema.json', targetKind: 'artifact', extractionMethod: 'fixture', evidenceKind: 'structurally-proven', confidence },
+    { relationshipType: 'imports', target: './missing.mjs', targetKind: 'artifact', extractionMethod: 'fixture', evidenceKind: 'structurally-proven', confidence }
+  ];
+  const result = buildRelationships([{ path: 'src/example.mjs' }], [raw]);
+  const external = result.relationships.find((record) => record.target.startsWith('https:'));
+  const internal = result.relationships.find((record) => record.target === './missing.mjs');
+  assert.equal(external.targetKind, 'external-resource');
+  assert.ok(external.reasonCodes.includes('expected-external-reference'));
+  assert.equal(internal.resolved, false);
+  assert.equal(result.relationshipFindings.length, 1);
+  assert.equal(result.relationshipFindings[0].resolutionStatus, 'open');
 });

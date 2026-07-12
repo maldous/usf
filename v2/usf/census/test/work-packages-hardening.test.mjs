@@ -10,13 +10,14 @@ function mapping(key, ambiguity = false) {
   return { artifactKey: key, ambiguities: ambiguity ? ['review'] : [], conflicts: [] };
 }
 
-function canonical(key, currentArtifacts, layer, kind = 'source-module', responsibility = 'generator') {
+function canonical(key, currentArtifacts, layer, kind = 'source-module', responsibility = 'generator', ownsLayer = false) {
   const gateKey = `gate-${key}`;
   return {
     canonicalArtifactKey: key,
     artifactKind: kind,
     currentArtifacts,
     requiredSemanticLayers: [layer],
+    ownedSemanticLayers: ownsLayer ? [layer] : [],
     semanticInputs: [`semantic:${layer}`],
     productionResponsibilities: [responsibility],
     materialisationContract: null,
@@ -44,9 +45,9 @@ const artifacts = [
 ];
 const mappings = artifacts.map(({ artifactKey }) => mapping(artifactKey, artifactKey === 'b'));
 const canonicalArtifacts = [
-  canonical('ca', ['a'], 'implementation-obligations'),
+  canonical('ca', ['a'], 'implementation-obligations', 'source-module', 'generator', true),
   canonical('cb', ['b'], 'implementation-obligations'),
-  canonical('cc', ['c'], 'proof-obligations', 'proof-executable'),
+  canonical('cc', ['c'], 'proof-obligations', 'proof-executable', 'generator', true),
   canonical('cd', ['d'], 'proof-obligations', 'evidence-output', 'collector')
 ];
 const replacementGroups = [
@@ -65,6 +66,7 @@ test('builder creates cohesive outcomes with exact primary ownership', () => {
   assert.equal(result.ownership.artifacts.length, artifacts.length);
   assert.equal(result.ownership.missingEntirely.length, 1);
   assert.equal(result.ownership.canonicalArtifacts.length, canonicalArtifacts.length);
+  assert.deepEqual(new Set(result.ownership.semanticLayers.map((record) => record.ownedKey)), new Set(['implementation-obligations', 'proof-obligations']));
   assert.equal(result.ownership.replacementGroups.length, replacementGroups.length);
   assert.equal(result.ownership.reuseActions.length, replacementGroups.length);
   const gateKeys = new Set(canonicalArtifacts.map((record) => record.equivalenceContract.gates[0].gateKey).concat('absence-re'));
@@ -91,7 +93,7 @@ test('lineage supports retained, merged, split, and retired dispositions', () =>
     { key: 'baseline-retained', affectedRows: ['repository-output:obsolete/e.txt'], canonicalOutcome: 'closed' },
     { key: 'baseline-merged-a', affectedRows: ['repository-output:src/a.mjs'], canonicalOutcome: 'implementation-a' },
     { key: 'baseline-merged-b', affectedRows: ['repository-output:src/b.mjs'], canonicalOutcome: 'implementation-b' },
-    { key: 'baseline-split', affectedRows: ['repository-output:proof/c.json', 'semantic-layer:equivalence-rules'], canonicalOutcome: 'mixed' },
+    { key: 'baseline-split', affectedRows: ['repository-output:proof/c.json', 'semantic-layer:implementation-obligations'], canonicalOutcome: 'mixed' },
     { key: 'baseline-retired', affectedRows: ['repository-output:absent.txt'], canonicalOutcome: 'invalid' }
   ];
   const lineage = buildWorkPackageLineage({ baselinePackages: baseline, workPackages, artifacts });
@@ -115,4 +117,34 @@ test('the retained baseline lineage is nonempty and deterministic without fixing
 
 test('builder fails closed when an artifact has no replacement owner', () => {
   assert.throws(() => buildWorkPackages({ artifacts, mappings, missingEntirely, canonicalArtifacts, replacementGroups: replacementGroups.slice(1), baselinePackages: [] }), /artifact primary ownership is not closed/);
+});
+
+test('semantic layer ownership comes only from one canonical artifact owner', () => {
+  const result = buildWorkPackages({ artifacts, mappings, missingEntirely, canonicalArtifacts, replacementGroups, baselinePackages: [] });
+  const equivalence = result.ownership.semanticLayers.find((record) => record.ownedKey === 'equivalence-rules');
+  assert.equal(equivalence, undefined, 'a missing-entirely demand must not manufacture semantic-layer ownership');
+  const lineage = buildWorkPackageLineage({
+    baselinePackages: [{ key: 'missing-layer', affectedRows: ['semantic-layer:equivalence-rules'], canonicalOutcome: 'review' }],
+    workPackages: result.workPackages,
+    artifacts
+  });
+  assert.deepEqual(lineage[0].successorWorkPackageKeys, []);
+  assert.deepEqual(lineage[0].lineageEvidence.unmatchedBaselineRows, ['semantic-layer:equivalence-rules']);
+  assert.deepEqual(canonicalArtifacts.find((record) => record.canonicalArtifactKey === 'ca').ownedSemanticLayers, ['implementation-obligations']);
+
+  const samePackageDuplicate = canonicalArtifacts.map((record) => record.canonicalArtifactKey === 'cb'
+    ? { ...record, ownedSemanticLayers: ['implementation-obligations'] }
+    : record);
+  assert.throws(
+    () => buildWorkPackages({ artifacts, mappings, missingEntirely, canonicalArtifacts: samePackageDuplicate, replacementGroups, baselinePackages: [] }),
+    /semantic layer has multiple canonical artifact owners/
+  );
+
+  const missingOwner = canonicalArtifacts.map((record) => record.canonicalArtifactKey === 'ca'
+    ? { ...record, ownedSemanticLayers: [] }
+    : record);
+  assert.throws(
+    () => buildWorkPackages({ artifacts, mappings, missingEntirely, canonicalArtifacts: missingOwner, replacementGroups, baselinePackages: [] }),
+    /semantic layer lacks canonical artifact owner: implementation-obligations/
+  );
 });

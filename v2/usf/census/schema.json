@@ -208,6 +208,13 @@
           },
           "type": "array"
         },
+        "ownedSemanticLayers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
         "pathRule": {
           "type": [
             "string",
@@ -277,6 +284,7 @@
         "mutabilityClass",
         "semanticInputs",
         "requiredSemanticLayers",
+        "ownedSemanticLayers",
         "proofInputs",
         "evidenceInputs",
         "implementationObligations",
@@ -657,6 +665,119 @@
       "type": "array",
       "uniqueItems": true
     },
+    "parserEvidenceManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "aggregate": {
+          "additionalProperties": false,
+          "properties": {
+            "recordCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "uncompressedBytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "uncompressedSha256": {
+              "$ref": "#/$defs/digest"
+            }
+          },
+          "required": [
+            "recordCount",
+            "uncompressedBytes",
+            "uncompressedSha256"
+          ],
+          "type": "object"
+        },
+        "encoding": {
+          "const": "gzip-jsonl"
+        },
+        "formatVersion": {
+          "const": 1
+        },
+        "order": {
+          "items": false,
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "const": "universe"
+            },
+            {
+              "const": "path"
+            }
+          ],
+          "type": "array"
+        },
+        "shards": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "compressedBytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "compressedSha256": {
+                "$ref": "#/$defs/digest"
+              },
+              "firstPath": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lastPath": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "path": {
+                "$ref": "#/$defs/relativePath"
+              },
+              "recordCount": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "uncompressedBytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "uncompressedSha256": {
+                "$ref": "#/$defs/digest"
+              },
+              "universe": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "compressedBytes",
+              "compressedSha256",
+              "firstPath",
+              "lastPath",
+              "path",
+              "recordCount",
+              "uncompressedBytes",
+              "uncompressedSha256",
+              "universe"
+            ],
+            "type": "object"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "type": "array"
+        }
+      },
+      "required": [
+        "aggregate",
+        "encoding",
+        "formatVersion",
+        "order",
+        "shards"
+      ],
+      "type": "object"
+    },
     "parserResult": {
       "additionalProperties": false,
       "properties": {
@@ -976,6 +1097,13 @@
           "minLength": 1,
           "type": "string"
         },
+        "ownedSemanticLayers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
         "primaryOwnership": {
           "type": "object"
         },
@@ -1008,6 +1136,7 @@
         "key",
         "architecturalOutcome",
         "outcomeClass",
+        "ownedSemanticLayers",
         "primaryOwnership",
         "semanticInputs",
         "requiredSemanticLayers",

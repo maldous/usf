@@ -4,13 +4,24 @@ import { assertUnique, validateConfidence, validateRelationship } from './contra
 
 function extensionCandidates(value) {
   if (path.posix.extname(value)) return [value];
-  return [value, `${value}.js`, `${value}.mjs`, `${value}.cjs`, `${value}.ts`, `${value}.tsx`, `${value}.json`, `${value}.yaml`, `${value}.yml`, `${value}/index.js`, `${value}/index.mjs`, `${value}/package.json`];
+  return [value, `${value}.js`, `${value}.mjs`, `${value}.cjs`, `${value}.ts`, `${value}.tsx`, `${value}.py`, `${value}.json`, `${value}.yaml`, `${value}.yml`, `${value}/index.js`, `${value}/index.mjs`, `${value}/__init__.py`, `${value}/package.json`];
+}
+
+function externalReferenceClass(value) {
+  const target = String(value);
+  if (/^https?:/.test(target)) return 'web-uri';
+  if (/^urn:/.test(target)) return 'semantic-urn';
+  if (/^mailto:/.test(target)) return 'mail-uri';
+  if (/^data:/.test(target)) return 'embedded-data';
+  if (/^node:/.test(target)) return 'runtime-module';
+  if (target.startsWith('@')) return 'scoped-package';
+  return null;
 }
 
 function resolveArtifactTarget(source, target, pathSet) {
   const clean = String(target).split('#')[0].split('?')[0];
   if (!clean) return { target: String(target), resolved: true };
-  if (/^(?:https?:|urn:|mailto:|data:|node:)/.test(clean) || clean.startsWith('@')) return { target: clean, resolved: true };
+  if (externalReferenceClass(clean)) return { target: clean, resolved: true };
   if (clean.startsWith('/')) {
     for (const candidate of extensionCandidates(`v2${clean}`)) if (pathSet.has(candidate)) return { target: candidate, resolved: true };
   }
@@ -43,7 +54,8 @@ export function buildRelationships(members, parserResults) {
   const findings = [];
   for (const parsed of parserResults) {
     for (const raw of parsed.relationships) {
-      const externalArtifactTarget = raw.targetKind === 'artifact' && /^(?:https?:|urn:|mailto:|data:|node:)/.test(raw.target);
+      const externalClass = externalReferenceClass(raw.target);
+      const externalArtifactTarget = raw.targetKind === 'artifact' && externalClass !== null;
       const targetKind = externalArtifactTarget ? 'external-resource' : raw.targetKind;
       const resolvedTarget = targetKind === 'artifact' ? resolveArtifactTarget(parsed.path, raw.target, pathSet) : { target: raw.target, resolved: true };
       const record = {
@@ -56,7 +68,11 @@ export function buildRelationships(members, parserResults) {
         evidenceKind: raw.evidenceKind,
         confidence: raw.confidence,
         resolved: resolvedTarget.resolved,
-        reasonCodes: [resolvedTarget.resolved ? 'structural-parser-evidence' : 'unresolved-target-finding']
+        reasonCodes: externalClass
+          ? ['structural-parser-evidence', 'expected-external-reference', `external-reference-class:${externalClass}`]
+          : raw.targetKind === 'external-resource'
+            ? ['structural-parser-evidence', 'parser-classified-external-resource']
+            : [resolvedTarget.resolved ? 'structural-parser-evidence' : 'unresolved-target-finding']
       };
       validateRelationship(record);
       relationships.push(record);
@@ -95,7 +111,7 @@ export function reconcileInventories(members, parserResults, relationships, rela
     const declared = declaredIdentifiers(parsed);
     const rawTargets = (parsed.inventory.relationships ?? []).map((entry) => typeof entry === 'string' ? entry : entry.target).filter(Boolean);
     const missingDeclarations = rawTargets.filter((target) => {
-      if (/^(?:https?:|urn:|mailto:|data:|node:)/.test(target) || target.startsWith('@')) return false;
+      if (externalReferenceClass(target)) return false;
       return !resolveArtifactTarget(parsed.path, target, pathSet).resolved;
     });
     const duplicateDeclarations = declared.filter((identifier, index) => declared.indexOf(identifier) !== index);
@@ -160,4 +176,4 @@ export function reconcileInventories(members, parserResults, relationships, rela
   return { inventories, inventoryFindings: uniqueFindings };
 }
 
-export const relationshipInternals = { relationshipKey, resolveArtifactTarget };
+export const relationshipInternals = { externalReferenceClass, relationshipKey, resolveArtifactTarget };

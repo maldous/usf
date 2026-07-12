@@ -1,9 +1,11 @@
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { buildHardenedCensus } from './build.mjs';
-import { canonicalJson, canonicalLine, sha256, writeJsonAtomic } from './canonical.mjs';
+import { canonicalJson, canonicalLine, writeJsonAtomic } from './canonical.mjs';
 import { censusRoot, repositoryRoot } from './constants.mjs';
+import { createParserEvidence, parserEvidenceMismatches } from './parser-evidence.mjs';
 import { validateHardenedOutputs } from './validate.mjs';
 import { verifyStardogObservation } from '../audit/live-observation.mjs';
 
@@ -13,7 +15,6 @@ const outputProjection = {
   'v2-compiler-universe.jsonl': (result) => result.enumeration.universes['v2-compiler-implementation'],
   'v2-support-universe.jsonl': (result) => result.enumeration.universes['v2-support-provisioning'],
   'materialisations.jsonl': (result) => result.materialisations,
-  'parser-results.jsonl': (result) => result.parserResults,
   'relationships.jsonl': (result) => result.relationships,
   'inventories.jsonl': (result) => result.inventories,
   'inventory-findings.jsonl': (result) => result.inventoryFindings,
@@ -49,16 +50,41 @@ function canonicalMismatches(result) {
   const mismatches = [];
   for (const [filename, project] of Object.entries(outputProjection)) {
     const expectedValue = project(result);
-    const expected = filename.endsWith('.jsonl') ? expectedValue.map(canonicalLine).join('') : canonicalJson(expectedValue);
     const target = path.join(censusRoot, filename);
-    if (!fs.existsSync(target) || fs.readFileSync(target, 'utf8') !== expected) mismatches.push(filename);
+    if (!fs.existsSync(target)) { mismatches.push(filename); continue; }
+    const expectedHash = cryptoHash(); let expectedBytes = 0;
+    const update = (value) => { const bytes = Buffer.from(value); expectedHash.update(bytes); expectedBytes += bytes.length; };
+    if (filename.endsWith('.jsonl')) for (const record of expectedValue) update(canonicalLine(record));
+    else update(canonicalJson(expectedValue));
+    const actual = fileDigest(target);
+    if (actual.bytes !== expectedBytes || actual.digest !== expectedHash.digest('hex')) mismatches.push(filename);
   }
-  return mismatches.sort();
+  mismatches.push(...parserEvidenceMismatches(censusRoot, result.parserResults));
+  return [...new Set(mismatches)].sort();
 }
 
 function regeneratedOutputDigest(result) {
-  const projection = Object.fromEntries(Object.entries(outputProjection).map(([filename, project]) => [filename, project(result)]));
-  return sha256(canonicalJson(projection));
+  const hash = cryptoHash();
+  const frame = (value) => { const bytes = Buffer.isBuffer(value) ? value : Buffer.from(value); const size = Buffer.alloc(8); size.writeBigUInt64BE(BigInt(bytes.length)); hash.update(size).update(bytes); };
+  for (const [filename, project] of Object.entries(outputProjection)) {
+    frame(filename);
+    const value = project(result);
+    if (filename.endsWith('.jsonl')) for (const record of value) frame(canonicalLine(record));
+    else frame(canonicalJson(value));
+  }
+  const parserEvidence = createParserEvidence(result.parserResults);
+  frame('parser-results/manifest.json'); frame(canonicalJson(parserEvidence.manifest));
+  for (const shard of parserEvidence.shards) { frame(shard.descriptor.path); frame(shard.compressed); }
+  return hash.digest('hex');
+}
+
+function cryptoHash() { return createHash('sha256'); }
+
+function fileDigest(target) {
+  const hash = cryptoHash(); const descriptor = fs.openSync(target, 'r'); const buffer = Buffer.alloc(1024 * 1024); let bytes = 0;
+  try { let count; while ((count = fs.readSync(descriptor, buffer, 0, buffer.length, null)) > 0) { hash.update(buffer.subarray(0, count)); bytes += count; } }
+  finally { fs.closeSync(descriptor); }
+  return { bytes, digest: hash.digest('hex') };
 }
 
 function independentStardogObservation() {
@@ -86,8 +112,8 @@ function prohibitedStardogAccessPaths() {
   }).map((target) => path.relative(repositoryRoot, target).split(path.sep).join('/')).sort();
 }
 
-export function computeClosure() {
-  const validation = validateHardenedOutputs();
+export async function computeClosure() {
+  const validation = await validateHardenedOutputs();
   const rebuilt = buildHardenedCensus();
   const audit = JSON.parse(fs.readFileSync(path.join(censusRoot, 'audit.json'), 'utf8'));
   const stardogObservation = independentStardogObservation();
@@ -120,6 +146,9 @@ export function computeClosure() {
     orphanSourceObservations: rebuilt.sourceDispositionOwnership.orphanObservationCount,
     inventedArtifactPlans: rebuilt.replacementGroups.filter((record) => record.dispositionStatus === 'missing-accepted-source-disposition' && (record.canonicalArtifacts.length || record.requiredGenerationProjections.length || record.removedDuplication.length)).length,
     unclassifiedRelationshipAndInventoryFindings: rebuilt.inventoryFindings.filter((record) => !record.findingCategory || !record.findingClass || !record.ownerClass || !record.requiredAction).length,
+    unresolvedInternalLookingRelationships: rebuilt.relationships.filter((record) => record.targetKind === 'artifact' && !record.resolved).length,
+    unexplainedInventoryFindings: rebuilt.inventoryFindings.filter((record) => record.resolutionStatus === 'open').length,
+    invalidExpectedExternalReferences: rebuilt.relationships.filter((record) => record.targetKind === 'external-resource' && !record.reasonCodes.some((reason) => reason === 'expected-external-reference' || reason === 'parser-classified-external-resource')).length,
     canonicalArtifactsWithoutClosedContracts: rebuilt.canonicalArtifacts.filter((record) => (!record.targetPath && !record.pathRule) || !record.productionResponsibilities.length || !record.equivalenceContract?.gates?.length).length,
     currentArtifactsWithoutReplacement: rebuilt.artifacts.filter((record) => !replacementCurrent.has(record.artifactKey)).length,
     requiredCanonicalArtifactsWithoutReplacement: rebuilt.canonicalArtifacts.filter((record) => !replacementCanonical.has(record.canonicalArtifactKey)).length,
@@ -173,7 +202,7 @@ export function computeClosure() {
 export function writeClosure(result) { writeJsonAtomic(path.join(censusRoot, 'closure.json'), result); }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const result = computeClosure();
+  const result = await computeClosure();
   writeClosure(result);
   process.stdout.write(`${JSON.stringify({ closureStatus: result.closureStatus, verdict: result.verdict, failedChecks: result.failedChecks })}\n`);
   if (result.closureStatus !== 'complete') process.exitCode = 1;

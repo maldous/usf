@@ -1,6 +1,7 @@
 import { createHash, createPrivateKey, createPublicKey, sign, verify } from 'node:crypto';
 import {
   existsSync,
+  copyFileSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -57,6 +58,29 @@ function projection(store, output, sourceDigest) {
   };
 }
 
+function releaseAuthority(store, output) {
+  const component = namedNode(output.component);
+  const identities = store.getObjects(component, namedNode(`${USF}authorisedSigningIdentity`), null);
+  if (identities.length !== 1) throw new CompilerError('release generator requires exactly one authorised signing identity', {
+    phase: 'generate:signing-authority', component: output.component, observed: identities.length,
+  });
+  const fingerprint = literalValue(oneObject(store, identities[0], namedNode(`${USF}signingKeyFingerprint`)));
+  if (!fingerprint || !/^[0-9a-f]{64}$/.test(fingerprint)) throw new CompilerError('authorised signing identity has no valid key fingerprint', {
+    phase: 'generate:signing-authority', signingIdentity: identities[0].value,
+  });
+  const versions = subjectsOfType(store, `${USF}Version`).filter((subject) =>
+    store.countQuads(subject, namedNode(`${USF}versionOf`), namedNode(output.artefact), null) === 1
+  );
+  if (versions.length !== 1) throw new CompilerError('release manifest requires exactly one governed version', {
+    phase: 'generate:release-version', artefact: output.artefact, observed: versions.length,
+  });
+  const version = literalValue(oneObject(store, versions[0], namedNode(`${USF}versionIdentifier`)));
+  if (!version || !/^\d+\.\d+\.\d+(?:[+-][0-9A-Za-z.-]+)?$/.test(version)) throw new CompilerError('governed release version is not SemVer-shaped', {
+    phase: 'generate:release-version', versionResource: versions[0].value,
+  });
+  return { signingIdentity: identities[0].value, signingKeyFingerprint: fingerprint, versionResource: versions[0].value, version };
+}
+
 function render(output, data) {
   if (output.path === 'contracts/schemas/compiler-output.schema.json') {
     return stableJson({
@@ -70,6 +94,24 @@ function render(output, data) {
         artefact: { type: 'string' }, component: { type: 'string' }, resources: { type: 'array' },
       },
       additionalProperties: true,
+    });
+  }
+  if (output.path === 'ui/schemas/rendererinput.schema.json') {
+    return stableJson({
+      $schema: 'https://json-schema.org/draft/2020-12/schema',
+      $id: 'urn:usf:generated:schema:renderer-input',
+      title: 'USF framework-neutral renderer input',
+      type: 'object',
+      required: ['schemaVersion', 'authorityDigest', 'artefact', 'component', 'resources'],
+      properties: {
+        schemaVersion: { const: 1 },
+        authorityDigest: { type: 'string', pattern: '^[0-9a-f]{64}$' },
+        artefact: { type: 'string', format: 'uri' },
+        component: { type: 'string', format: 'uri' },
+        resources: { type: 'array', items: { type: 'object' } },
+        nonClaims: { type: 'array', items: { type: 'string' } },
+      },
+      additionalProperties: false,
     });
   }
   if (output.path === 'contracts/openapi/foundation.openapi.json') {
@@ -108,11 +150,17 @@ function render(output, data) {
   return stableJson(data);
 }
 
-function write(root, relativePath, content) {
+function write(root, relativePath, content, reuseRoot = null) {
   const target = join(root, relativePath);
   mkdirSync(dirname(target), { recursive: true });
+  const digest = sha256(content);
+  const prior = reuseRoot ? join(reuseRoot, relativePath) : null;
+  if (prior && existsSync(prior) && sha256(readFileSync(prior)) === digest) {
+    copyFileSync(prior, target);
+    return { path: relativePath, bytes: Buffer.byteLength(content), sha256: digest, reused: true };
+  }
   writeFileSync(target, content, { encoding: 'utf8', mode: relativePath.endsWith('.mjs') ? 0o755 : 0o644 });
-  return { path: relativePath, bytes: Buffer.byteLength(content), sha256: sha256(content) };
+  return { path: relativePath, bytes: Buffer.byteLength(content), sha256: digest, reused: false };
 }
 
 export function generateAuthority({ store, outputDir, mode = 'full', signingKeyPath }) {
@@ -121,26 +169,32 @@ export function generateAuthority({ store, outputDir, mode = 'full', signingKeyP
   if (mode === 'full' && existsSync(target)) throw new CompilerError('full generation requires an absent output directory', { phase: 'generate:clean-room', outputDir: target });
   const plan = requireCompleteGenerationPlan(store);
   const sourceDigest = authorityDigest(store);
+  mkdirSync(dirname(target), { recursive: true });
+  const old = mode === 'incremental' && existsSync(target) ? verifyOutput(target, false) : null;
+  const reuseRoot = old ? target : null;
   const staging = mkdtempSync(join(dirname(target) || tmpdir(), '.usf-generation-'));
   const ordinary = plan.outputs.filter((item) => !item.path.startsWith('release/'));
   const release = plan.outputs.filter((item) => item.path.startsWith('release/'));
   const files = [];
   try {
-    for (const output of ordinary) files.push(write(staging, output.path, render(output, projection(store, output, sourceDigest))));
+    for (const output of ordinary) files.push(write(staging, output.path, render(output, projection(store, output, sourceDigest)), reuseRoot));
     const generatedRelease = release.filter((item) => !/(?:manifest|checksums|signature|attestation)\.json$/.test(item.path));
     for (const output of generatedRelease) {
       const base = projection(store, output, sourceDigest);
       const content = output.path.endsWith('/sbom.json')
         ? stableJson({ bomFormat: 'CycloneDX', specVersion: '1.5', version: 1, components: files.map((f) => ({ type: 'file', name: f.path, hashes: [{ alg: 'SHA-256', content: f.sha256 }] })) })
         : stableJson({ ...base, materials: files.map((f) => ({ path: f.path, sha256: f.sha256 })) });
-      files.push(write(staging, output.path, content));
+      files.push(write(staging, output.path, content, reuseRoot));
     }
     const checksumOutput = release.find((item) => item.path.endsWith('/checksums.json'));
     if (!checksumOutput) throw new CompilerError('release checksum artefact is absent from semantic plan', { phase: 'generate:release' });
-    files.push(write(staging, checksumOutput.path, stableJson({ algorithm: 'sha256', files: [...files].sort((a, b) => a.path.localeCompare(b.path)) })));
+    files.push(write(staging, checksumOutput.path, stableJson({ algorithm: 'sha256', files: [...files].map(({ reused, ...record }) => record).sort((a, b) => a.path.localeCompare(b.path)) }), reuseRoot));
     const manifestOutput = release.find((item) => item.path.endsWith('/manifest.json'));
     if (!manifestOutput) throw new CompilerError('release manifest artefact is absent from semantic plan', { phase: 'generate:release' });
-    const manifest = { schemaVersion: 1, compilerVersion: '0.1.0', authorityDigest: sourceDigest, files: [...files].sort((a, b) => a.path.localeCompare(b.path)) };
+    const releaseAuthorityContract = releaseAuthority(store, manifestOutput);
+    const manifestFiles = [...files].map(({ reused, ...record }) => record).sort((a, b) => a.path.localeCompare(b.path));
+    const manifest = { schemaVersion: 1, compilerVersion: '0.1.0', releaseVersion: releaseAuthorityContract.version,
+      releaseVersionResource: releaseAuthorityContract.versionResource, authorityDigest: sourceDigest, files: manifestFiles };
     const manifestContent = stableJson(manifest);
     write(staging, manifestOutput.path, manifestContent);
     const signatureOutput = release.find((item) => item.path.endsWith('/signature.json'));
@@ -149,17 +203,28 @@ export function generateAuthority({ store, outputDir, mode = 'full', signingKeyP
     if (!signingKeyPath) throw new CompilerError('release signing requires --signing-key <PEM path>', { phase: 'generate:signing' });
     const privateKey = createPrivateKey(readFileSync(resolve(signingKeyPath)));
     const publicKey = createPublicKey(privateKey).export({ type: 'spki', format: 'pem' }).toString();
-    const fingerprint = sha256(publicKey);
+    const fingerprint = sha256(createPublicKey(privateKey).export({ type: 'spki', format: 'der' }));
+    if (fingerprint !== releaseAuthorityContract.signingKeyFingerprint) throw new CompilerError('release key is not authorised by graph authority', {
+      phase: 'generate:signing-authority', expected: releaseAuthorityContract.signingKeyFingerprint, observed: fingerprint,
+    });
     const signature = sign(null, Buffer.from(manifestContent), privateKey).toString('base64');
-    write(staging, signatureOutput.path, stableJson({ algorithm: 'Ed25519', signedPath: manifestOutput.path, signedSha256: sha256(manifestContent), publicKey, publicKeyFingerprint: fingerprint, signature }));
-    write(staging, attestationOutput.path, stableJson({ schemaVersion: 1, kind: 'cleanroomgeneration', authorityDigest: sourceDigest, manifestPath: manifestOutput.path, manifestSha256: sha256(manifestContent), signaturePath: signatureOutput.path, signingIdentityFingerprint: fingerprint, verificationRequired: true, nonClaims: ['integrity proof is not production readiness or external certification'] }));
-    const old = mode === 'incremental' && existsSync(target) ? verifyOutput(target, false) : null;
-    if (existsSync(target)) rmSync(target, { recursive: true, force: true });
-    renameSync(staging, target);
-    const verified = verifyOutput(target);
+    write(staging, signatureOutput.path, stableJson({ algorithm: 'Ed25519', signedPath: manifestOutput.path, signedSha256: sha256(manifestContent), publicKey, publicKeyFingerprint: fingerprint, signingIdentity: releaseAuthorityContract.signingIdentity, signature }), reuseRoot);
+    write(staging, attestationOutput.path, stableJson({ schemaVersion: 1, kind: 'cleanroomgeneration', authorityDigest: sourceDigest, manifestPath: manifestOutput.path, manifestSha256: sha256(manifestContent), signaturePath: signatureOutput.path, signingIdentity: releaseAuthorityContract.signingIdentity, signingIdentityFingerprint: fingerprint, releaseVersion: releaseAuthorityContract.version, verificationRequired: true, nonClaims: ['integrity proof is not production readiness or external certification'] }), reuseRoot);
+    const verified = verifyOutput(staging, true, releaseAuthorityContract.signingKeyFingerprint);
+    const backup = `${target}.previous-${process.pid}`;
+    if (existsSync(backup)) rmSync(backup, { recursive: true, force: true });
+    if (existsSync(target)) renameSync(target, backup);
+    try {
+      renameSync(staging, target);
+      if (existsSync(backup)) rmSync(backup, { recursive: true, force: true });
+    } catch (error) {
+      if (existsSync(target)) rmSync(target, { recursive: true, force: true });
+      if (existsSync(backup)) renameSync(backup, target);
+      throw error;
+    }
     const prior = new Map((old?.manifest?.files ?? []).map((f) => [f.path, f.sha256]));
     return { ok: true, mode, outputDir: target, authorityDigest: sourceDigest, outputCount: verified.manifest.files.length + 3,
-      reused: verified.manifest.files.filter((f) => prior.get(f.path) === f.sha256).length, changed: verified.manifest.files.filter((f) => prior.get(f.path) !== f.sha256).length,
+      reused: files.filter((f) => f.reused).length, changed: verified.manifest.files.filter((f) => prior.get(f.path) !== f.sha256).length,
       aggregateDigest: sha256(verified.manifest.files.map((f) => `${f.path}\u0000${f.sha256}`).join('\n')) };
   } catch (error) {
     if (existsSync(staging)) rmSync(staging, { recursive: true, force: true });
@@ -190,7 +255,7 @@ export function verifyOutput(outputDir, required = true, expectedPublicKeyFinger
   if (existsSync(signaturePath)) {
     try {
       const signature = JSON.parse(readFileSync(signaturePath, 'utf8'));
-      const fingerprint = sha256(signature.publicKey);
+      const fingerprint = sha256(createPublicKey(signature.publicKey).export({ type: 'spki', format: 'der' }));
       if (signature.algorithm !== 'Ed25519' || signature.signedSha256 !== sha256(manifestContent)) failures.push({ path: 'release/signature.json', reason: 'signature-metadata-mismatch' });
       if (signature.publicKeyFingerprint !== fingerprint) failures.push({ path: 'release/signature.json', reason: 'public-key-fingerprint-mismatch' });
       if (expectedPublicKeyFingerprint && fingerprint !== expectedPublicKeyFingerprint) failures.push({ path: 'release/signature.json', reason: 'unexpected-signing-identity' });

@@ -18,6 +18,11 @@ import {
 const STRUCTURED_SYNTAXES = new Set(['structured-json', 'data-jsonl', 'json-schema', 'yaml', 'compose-yaml', 'workflow-yaml', 'toml', 'xml', 'csv', 'svg', 'certificate', 'git-lfs-pointer']);
 const BOUNDED_COMMAND_SYNTAXES = new Set(['make', 'shell']);
 const BOUNDED_SYNTAXES = new Set(['markdown', 'configuration', 'html', 'css', 'plain-text']);
+const STRUCTURED_PATH_FIELDS = new Set([
+  '$ref', 'context', 'cwd', 'dockerfile', 'env_file', 'envfile', 'exclude', 'excludes',
+  'extends', 'file', 'files', 'include', 'includes', 'manifest', 'path', 'paths',
+  'working-directory', 'workingdirectory'
+]);
 
 function contextPath(parts) {
   return parts.length ? parts.join('.') : '$';
@@ -44,18 +49,31 @@ function addPathRelationship(relationships, source, value, extractionMethod, att
   relationships.push(relationship('references', normaliseTarget(source, value), 'artifact', extractionMethod, 'structurally-proven', confidence.structural, attributes));
 }
 
+function structuredField(keyPath) {
+  const last = keyPath.at(-1);
+  return /^\d+$/.test(String(last)) ? keyPath.at(-2) : last;
+}
+
+function addActionRelationship(relationships, value, extractionMethod, attributes = {}) {
+  if (typeof value !== 'string') return;
+  const local = /^(?:\.\.?\/)/.test(value);
+  relationships.push(relationship('uses-action', value, local ? 'artifact' : 'external-resource', extractionMethod, 'structurally-proven', confidence.structural, { ...attributes, actionClass: local ? 'local-action' : 'external-action' }));
+}
+
 function structuredObjectEvidence(value, source, extractionMethod, rootKind = 'document') {
   const declarations = [declaration(rootKind, source, { valueType: Array.isArray(value) ? 'array' : typeof value })];
   const relationships = [];
   walkObject(value, (entry, keyPath) => {
-    const field = keyPath.at(-1);
+    const field = structuredField(keyPath);
     if (keyPath.length > 0 && entry && typeof entry === 'object') {
       declarations.push(declaration(Array.isArray(entry) ? 'sequence' : 'mapping', contextPath(keyPath), {
         entryCount: Array.isArray(entry) ? entry.length : Object.keys(entry).length
       }));
     }
     if (typeof entry !== 'string') return;
-    addPathRelationship(relationships, source, entry, extractionMethod, { keyPath: contextPath(keyPath) });
+    const normalisedField = String(field).toLowerCase();
+    if (STRUCTURED_PATH_FIELDS.has(normalisedField)) addPathRelationship(relationships, source, entry, extractionMethod, { keyPath: contextPath(keyPath), pathField: String(field) });
+    if (normalisedField === 'uses') addActionRelationship(relationships, entry, extractionMethod, { keyPath: contextPath(keyPath) });
     if (['command', 'entrypoint', 'run'].includes(String(field).toLowerCase())) {
       addCommand(declarations, entry, { kind: 'structured-command-field', owner: contextPath(keyPath.slice(0, -1)), field: String(field) });
     }
@@ -176,7 +194,7 @@ function workflowEvidence(value, declarations, relationships) {
     if (job?.if !== undefined) declarations.push(declaration('workflow-condition', `jobs.${jobName}.if`, { expression: String(job.if) }));
     const needs = Array.isArray(job?.needs) ? job.needs : job?.needs ? [job.needs] : [];
     for (const dependency of needs) relationships.push(relationship('needs', dependency, 'semantic-entity', 'workflow.jobs.needs'));
-    if (job?.uses) relationships.push(relationship('uses-action', job.uses, 'external-resource', 'workflow.jobs.uses'));
+    if (job?.uses) addActionRelationship(relationships, job.uses, 'workflow.jobs.uses', { job: jobName });
     const matrix = job?.strategy?.matrix;
     if (matrix && typeof matrix === 'object') {
       for (const [axis, values] of Object.entries(matrix)) declarations.push(declaration('workflow-matrix-axis', `${jobName}.${axis}`, { values }));
@@ -185,7 +203,7 @@ function workflowEvidence(value, declarations, relationships) {
       const owner = `${jobName}.steps.${step.id ?? stepIndex + 1}`;
       declarations.push(declaration('workflow-step', owner, { name: step.name ?? null, condition: step.if ?? null }));
       if (step.if !== undefined) declarations.push(declaration('workflow-condition', `${owner}.if`, { expression: String(step.if) }));
-      if (step.uses) relationships.push(relationship('uses-action', step.uses, 'external-resource', 'workflow.jobs.steps.uses'));
+      if (step.uses) addActionRelationship(relationships, step.uses, 'workflow.jobs.steps.uses', { job: jobName, step: owner });
       if (step.run !== undefined) addCommand(declarations, step.run, {
         kind: 'workflow-step', owner, field: 'run', interpreter: step.shell ?? 'runner-default-shell', condition: step.if ?? null, workingDirectory: step['working-directory'] ?? null
       });

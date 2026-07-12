@@ -26,8 +26,12 @@ SELECT DISTINCT ?violation ?subject WHERE {
     FILTER NOT EXISTS { ?cls a owl:Class }
     BIND("undefinedterm" AS ?violation)
   } UNION {
-    # unresolved cross-graph reference: an entity/value IRI referenced but never defined
-    ?s ?pp ?subject .
+    # unresolved cross-graph reference in semantic authority: an entity/value IRI
+    # referenced but never defined. Observed graphs are deliberately excluded:
+    # they record source IRIs as evidence and do not promote those IRIs into USF
+    # canonical identity or impose definition obligations on authority graphs.
+    GRAPH ?referenceGraph { ?s ?pp ?subject }
+    FILTER(?referenceGraph != <urn:usf:graph:observed:sourceartefacts>)
     FILTER(isIRI(?subject) && STRSTARTS(STR(?subject), "urn:usf:"))
     FILTER(!STRSTARTS(STR(?subject), "urn:usf:ontology:"))
     FILTER(!STRSTARTS(STR(?subject), "urn:usf:graph:"))

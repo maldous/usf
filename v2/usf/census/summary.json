@@ -1,11 +1,11 @@
 {
-  "absentCount": 3126,
-  "artifactCount": 3219,
+  "absentCount": 3125,
+  "artifactCount": 3225,
   "artifactFamilyDistribution": {
     "automation": 2,
     "documentation-assets": 474,
     "implementation": 131,
-    "machine-semantics": 124,
+    "machine-semantics": 130,
     "proof-evidence": 81,
     "repository-governance": 2322,
     "runtime-topology": 9,
@@ -20,18 +20,19 @@
   "canonicalArtifactCount": 0,
   "closureEvaluation": "deferred-to-closure-command",
   "consolidationDistribution": {
-    "source-disposition-unavailable": 3219
+    "accepted-no-output-disposition": 134,
+    "source-disposition-unavailable": 3091
   },
-  "coordinationRelationshipCount": 36,
+  "coordinationRelationshipCount": 2,
   "coverageConfidenceDistribution": {
     "high": 12,
-    "low": 3126,
-    "medium": 81
+    "low": 3125,
+    "medium": 88
   },
   "coverageStateDistribution": {
-    "absent": 3126,
+    "absent": 3125,
     "notrequired": 12,
-    "partial": 81
+    "partial": 88
   },
   "criticalPathLength": 5,
   "dependencyLineageDistribution": {
@@ -42,37 +43,37 @@
   "equivalenceDistribution": {},
   "familyConfidenceDistribution": {
     "high": 3104,
-    "medium": 115
+    "medium": 121
   },
   "familyOnlyLinkCount": 0,
-  "familyReviewCandidateCount": 396,
+  "familyReviewCandidateCount": 402,
   "gapDistribution": {
-    "review-required-source-disposition": 3207
+    "review-required-source-disposition": 3091
   },
-  "graphArtefactPlanCount": 34,
+  "graphArtefactPlanCount": 35,
   "identityOnlyCohortSize": 0,
   "identityReviewCount": 0,
   "inventoryCount": 2651,
   "inventoryFindingClassDistribution": {
-    "inventory-local-duplicate": 7935,
-    "inventory-owner-collision": 84893,
-    "inventory-target-missing": 21955,
-    "unresolved-relationship-target": 20018
+    "inventory-local-duplicate": 7950,
+    "inventory-owner-collision": 84938,
+    "inventory-target-missing": 3726,
+    "unresolved-relationship-target": 3526
   },
-  "inventoryFindingCount": 134801,
+  "inventoryFindingCount": 100140,
   "mappingTypeDistribution": {
     "exact-semantic-identity": 1,
     "not-required": 12,
-    "semantic-resource-component": 80,
-    "unmapped": 3126
+    "semantic-resource-component": 87,
+    "unmapped": 3125
   },
   "materialisationContractCount": 3,
-  "missingEntirelyCount": 3207,
+  "missingEntirelyCount": 3091,
   "newCanonicalArtifactCount": 0,
-  "openInventoryFindingCount": 134801,
+  "openInventoryFindingCount": 100140,
   "outputDispositionDistribution": {},
   "parallelWaveCount": 5,
-  "parserCount": 3219,
+  "parserCount": 3225,
   "parserCoverageByFormat": {
     "binary": 202,
     "compose-yaml": 5,
@@ -84,7 +85,7 @@
     "markdown": 261,
     "plain-text": 17,
     "python": 52,
-    "rdf-trig": 33,
+    "rdf-trig": 39,
     "rdf-turtle": 48,
     "shell": 22,
     "sparql": 7,
@@ -95,30 +96,30 @@
     "workflow-yaml": 2,
     "yaml": 7
   },
-  "relationshipCount": 60391,
+  "relationshipCount": 57060,
   "replacementCardinalityDistribution": {
-    "one-to-zero": 3219
+    "one-to-zero": 3225
   },
   "repositoryUniverseDigest": "8f74c5d3cb36f06f0c600f31802db35f44f831123954ead51a5be7820f16280e",
   "requiredSemanticLayerDistribution": {},
   "reuseDistribution": {
-    "none": 3219
+    "none": 3225
   },
-  "sourceDispositionAcceptedCount": 0,
-  "sourceDispositionAcceptedNoOutputCount": 0,
+  "sourceDispositionAcceptedCount": 134,
+  "sourceDispositionAcceptedNoOutputCount": 134,
   "sourceDispositionAcceptedOutputPlanCount": 0,
   "sourceDispositionFindingDistribution": {
-    "source-disposition-bijection-invalid": 3038,
-    "source-observation-digest-mismatch": 3,
+    "source-disposition-review-required": 2909,
+    "source-observation-digest-mismatch": 1,
     "source-observation-missing": 181
   },
   "sourceDispositionOutputPlanRequiredCount": 0,
-  "sourceDispositionRejectedCount": 3219,
-  "sourceDispositionResourceCount": 0,
-  "sourceObservationResourceCount": 3212,
+  "sourceDispositionRejectedCount": 3091,
+  "sourceDispositionResourceCount": 3218,
+  "sourceObservationResourceCount": 3218,
   "sourceOrphanObservationCount": 174,
   "structuralCoverageDistribution": {
-    "complete": 2685,
+    "complete": 2691,
     "not-applicable": 202,
     "partial": 332
   },
@@ -126,17 +127,17 @@
   "universeCounts": {
     "repository-output": 3088,
     "v2-compiler-implementation": 20,
-    "v2-graph-authority": 89,
+    "v2-graph-authority": 95,
     "v2-support-provisioning": 22
   },
-  "unresolvedRelationshipFindingCount": 57051,
+  "unresolvedRelationshipFindingCount": 3765,
   "unreviewedParallelismReductionCount": 0,
   "unsupportedEvidenceCount": 0,
   "unsupportedFormatCount": 0,
   "untypedLinkCount": 0,
-  "v2CompilerUniverseDigest": "b5128071012a6e1073ac2653dcfd9efded0938e5cac22930e91148f3d84180d2",
-  "v2GraphUniverseDigest": "6dcf43d71d3f3ecaef6866b42016bf8c6ec45ee15f9ec74850fb069ebc0a0020",
-  "v2SupportUniverseDigest": "57dafee47db3ee0ded6dbaa2ea57eb5680df745644c75695c15f4824cab625a4",
+  "v2CompilerUniverseDigest": "c00821b635515fe6188b51d9a1ac612e124309e8bbc29d4cebc519151919c449",
+  "v2GraphUniverseDigest": "b034b9aecf1664cb3825762163373b19ed41faa4e97958c2cfc08e08bb7ad330",
+  "v2SupportUniverseDigest": "03c5225abc8a70b47088281a8c5347271429e2c58726e184bcff221fde788ddf",
   "waves": [
     [
       "work-package-003757b24af277a87600",

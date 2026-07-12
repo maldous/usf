@@ -6,6 +6,8 @@ import {
   readFileSync,
   readlinkSync,
   realpathSync,
+  renameSync,
+  unlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
@@ -31,6 +33,14 @@ function stable(value) {
 
 export const stableJson = (value) => JSON.stringify(stable(value));
 
+async function canonicalNQuads(nquads) {
+  return rdfCanonize.canonize(nquads, {
+    algorithm: 'URDNA2015',
+    inputFormat: NQUADS,
+    format: NQUADS,
+  });
+}
+
 function nquadsFor(quads) {
   return new Promise((resolveOutput, reject) => {
     const writer = new Writer({ format: 'N-Quads' });
@@ -40,17 +50,23 @@ function nquadsFor(quads) {
 }
 
 export async function canonicalGraphDigest(nquads) {
-  const canonical = await rdfCanonize.canonize(nquads, {
-    algorithm: 'URDNA2015',
-    inputFormat: NQUADS,
-    format: NQUADS,
-  });
+  const canonical = await canonicalNQuads(nquads);
   return {
     algorithm: 'URDNA2015',
     digestAlgorithm: 'sha256',
     sha256: sha256(canonical),
     triples: canonical.split('\n').filter(Boolean).length,
   };
+}
+
+export async function canonicalGraphTrig(graph, nquads) {
+  if (typeof graph !== 'string' || !graph.startsWith('urn:usf:graph:derived:')) {
+    throw new CompilerError('derived snapshot requires a registered derived graph IRI', { phase: 'snapshot:derived' });
+  }
+  const canonical = await canonicalNQuads(nquads);
+  const triples = canonical.split('\n').filter(Boolean);
+  if (!triples.length) throw new CompilerError(`derived graph is empty: ${graph}`, { phase: 'snapshot:derived' });
+  return `GRAPH <${graph}> {\n${triples.map((line) => `  ${line}`).join('\n')}\n}\n`;
 }
 
 function scopeBlankNodes(parsed, scope) {
@@ -69,7 +85,7 @@ function scopeBlankNodes(parsed, scope) {
 }
 
 function graphEntries(manifest) {
-  return [...authoredLoadList(manifest), ...manifest.shapes, ...manifest.derived];
+  return [...authoredLoadList(manifest), ...manifest.observed, ...manifest.shapes, ...manifest.derived];
 }
 
 export async function localGraphDigests(manifest) {
@@ -87,15 +103,61 @@ export async function localGraphDigests(manifest) {
 }
 
 export async function liveGraphDigests(manifest, client) {
+  const rows = await client.select(
+    'SELECT DISTINCT ?g WHERE { GRAPH ?g { ?s ?p ?o } FILTER(STRSTARTS(STR(?g), "urn:usf:graph:")) }',
+  );
+  const present = rows.map((row) => row.g?.value).filter(Boolean);
+  const graphs = new Set([...managedGraphs(manifest), ...present]);
   const records = [];
-  for (const graph of [...managedGraphs(manifest)].sort()) {
+  for (const graph of [...graphs].sort()) {
     const content = await client.construct(
       `CONSTRUCT { ?s ?p ?o } WHERE { GRAPH <${graph}> { ?s ?p ?o } }`,
       NQUADS,
     );
-    records.push({ graph, ...await canonicalGraphDigest(content) });
+    const record = { graph, ...await canonicalGraphDigest(content) };
+    if (record.triples > 0) records.push(record);
   }
   return records;
+}
+
+export async function snapshotDerivedGraphs({ manifest, client }) {
+  await client.connectivity();
+  const staged = [];
+  try {
+    for (const entry of manifest.derived) {
+      const nquads = await client.construct(
+        `CONSTRUCT { ?s ?p ?o } WHERE { GRAPH <${entry.graph}> { ?s ?p ?o } }`,
+        NQUADS,
+      );
+      const content = await canonicalGraphTrig(entry.graph, nquads);
+      const temporary = `${entry.path}.next`;
+      writeFileSync(temporary, content, { encoding: 'utf8', mode: 0o644 });
+      staged.push({ entry, temporary, content });
+    }
+    for (const item of staged) renameSync(item.temporary, item.entry.path);
+  } catch (error) {
+    for (const item of staged) if (existsSync(item.temporary)) unlinkSync(item.temporary);
+    if (error instanceof CompilerError) throw error;
+    throw new CompilerError(error.message, { phase: 'snapshot:derived' });
+  }
+  const source = await localGraphDigests(manifest);
+  const database = await liveGraphDigests(manifest, client);
+  const comparison = compareGraphDigests(source, database);
+  if (comparison.missingGraphs.length || comparison.unexpectedGraphs.length || comparison.mismatchedGraphs.length) {
+    throw new CompilerError('derived snapshots do not match live rule output', {
+      phase: 'snapshot:derived:parity', failures: comparison,
+    });
+  }
+  return {
+    ok: true,
+    graphs: staged.map(({ entry, content }) => ({
+      graph: entry.graph,
+      file: entry.file,
+      triples: content.split('\n').filter((line) => line.trim().endsWith(' .')).length,
+      sha256: sha256(content),
+    })),
+    comparison,
+  };
 }
 
 export function compareGraphDigests(source, database) {
@@ -209,14 +271,33 @@ export async function proveLiveRollback({ manifest, client }) {
   const firstAuthored = authoredLoadList(manifest)[0].graph;
   const faults = [
     ['load', () => ({ async addData() { throw new Error('injected load failure'); } })],
+    ['collect-observed', () => ({}), {
+      observedCollector: async () => { throw new Error('injected observed collection failure'); },
+    }],
+    ['invalid-observed-rdf', () => ({}), {
+      observedCollector: async ({ entry }) => ({
+        graph: entry.graph,
+        contentType: 'text/turtle',
+        content: '<urn:usf:invalid',
+        sourceCount: 1,
+        tripleCount: 1,
+        observationSetDigest: '0'.repeat(64),
+        excludedCarrierPaths: [],
+      }),
+    }],
     ['validate-authored', () => {
       let calls = 0;
       return { async validateInTx(...args) { calls += 1; return calls === 1 ? false : client.validateInTx(...args); } };
     }],
-    ['derive', () => ({ async constructInTx() { throw new Error('injected derivation failure'); } })],
-    ['validate-derived', () => {
+    ['validate-observed', () => {
       let calls = 0;
       return { async validateInTx(...args) { calls += 1; return calls === 2 ? false : client.validateInTx(...args); } };
+    }],
+    ['derive', () => ({ async constructInTx() { throw new Error('injected derivation failure'); } })],
+    ['wrong-rule-output', () => ({ async constructInTx() { return ''; } })],
+    ['validate-derived', () => {
+      let calls = 0;
+      return { async validateInTx(...args) { calls += 1; return calls === 3 ? false : client.validateInTx(...args); } };
     }],
     ['integrity', () => ({
       async selectInTx(tx, query) {
@@ -237,21 +318,31 @@ export async function proveLiveRollback({ manifest, client }) {
       },
     })],
     ['commit', () => ({ async commit() { throw new Error('injected commit failure'); } })],
+    ['rollback-response', () => ({
+      async addData() { throw new Error('injected pre-commit failure'); },
+      async rollback(tx) {
+        await client.rollback(tx);
+        throw new Error('injected ambiguous rollback response');
+      },
+    })],
   ];
   const results = [];
-  for (const [name, buildFault] of faults) {
+  for (const [name, buildFault, compileOptions = {}] of faults) {
     let rollbacks = 0;
+    const injected = buildFault();
+    const injectedRollback = injected.rollback;
     const faultClient = {
       ...client,
-      ...buildFault(),
+      ...injected,
       async rollback(tx) {
         rollbacks += 1;
+        if (injectedRollback) return injectedRollback(tx);
         return client.rollback(tx);
       },
     };
     let observedError = null;
     try {
-      await compile({ manifest, client: faultClient });
+      await compile({ manifest, client: faultClient, ...compileOptions });
     } catch (error) {
       observedError = error;
     }

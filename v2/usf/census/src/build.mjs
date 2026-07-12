@@ -7,6 +7,7 @@ import { buildDependencyGraph } from './dependency-graph.mjs';
 import { classifyArtifacts, familyReviewCandidates } from './family.mjs';
 import { buildMappings, buildMissingEntirely, rankIdentityCandidates } from './mapping.mjs';
 import { discoverMaterialisationContracts } from './materialisation.mjs';
+import { writeParserEvidence } from './parser-evidence.mjs';
 import { parseMembers } from './parsers/registry.mjs';
 import { sourceSemanticParsers } from './parsers/source-semantic.mjs';
 import { structuredParsers } from './parsers/structured.mjs';
@@ -165,7 +166,7 @@ export function writeHardenedCensus(result) {
   writeJsonAtomic(path.join(censusRoot, 'universes.json'), result.universes);
   writeJsonAtomic(path.join(censusRoot, 'ignore-audit.json'), result.enumeration.ignoreAudit);
   writeJsonlAtomic(path.join(censusRoot, 'materialisations.jsonl'), result.materialisations);
-  writeJsonlAtomic(path.join(censusRoot, 'parser-results.jsonl'), result.parserResults);
+  writeParserEvidence(censusRoot, result.parserResults);
   writeJsonlAtomic(path.join(censusRoot, 'relationships.jsonl'), result.relationships);
   writeJsonlAtomic(path.join(censusRoot, 'inventories.jsonl'), result.inventories);
   writeJsonlAtomic(path.join(censusRoot, 'inventory-findings.jsonl'), result.inventoryFindings);

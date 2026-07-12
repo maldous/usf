@@ -53,6 +53,21 @@
     bad:documentationwithoutmodel a usf:RendererContract ; usf:rendererImplementation bad:renderer ; usf:rendererTarget <urn:usf:renderertarget:documentation> ; usf:rendererInputSchema bad:artefact ; usf:rendererOutputPlan bad:plan ; usf:supportsSurfaceKind <urn:usf:surfacekind:documentation> .
     bad:renderer a usf:Renderer .
 
+    bad:missingtarget a usf:RendererContract ; usf:rendererImplementation bad:missingtargetrenderer ; usf:rendererInputSchema bad:artefact ; usf:rendererOutputPlan bad:missingtargetplan ; usf:supportsSurfaceKind <urn:usf:surfacekind:webroute> .
+    bad:missingtargetrenderer a usf:Renderer .
+    bad:missingtargetplan a usf:ArtefactPlan ; usf:ownedByRepository bad:repository ; usf:plansArtefact bad:missingtargetartefact .
+    bad:missingtargetartefact a usf:Artefact .
+
+    bad:unownedrenderer a usf:Renderer .
+
+    bad:sharedwebcontract a usf:RendererContract ; usf:rendererImplementation bad:sharedwebrenderer ; usf:rendererTarget <urn:usf:renderertarget:web> ; usf:rendererInputSchema bad:artefact ; usf:rendererOutputPlan bad:sharedtargetplan ; usf:supportsSurfaceKind <urn:usf:surfacekind:webroute> .
+    bad:sharedmobilecontract a usf:RendererContract ; usf:rendererImplementation bad:sharedmobilerenderer ; usf:rendererTarget <urn:usf:renderertarget:mobile> ; usf:rendererInputSchema bad:artefact ; usf:rendererOutputPlan bad:sharedtargetplan ; usf:supportsSurfaceKind <urn:usf:surfacekind:mobilescreen> .
+    bad:sharedwebrenderer a usf:Renderer .
+    bad:sharedmobilerenderer a usf:Renderer .
+    bad:sharedtargetplan a usf:ArtefactPlan ; usf:ownedByRepository bad:repository ; usf:plansArtefact bad:sharedtargetartefact .
+    bad:sharedtargetartefact a usf:Artefact .
+    bad:repository a usf:Repository .
+
     bad:plan a usf:ArtefactPlan .
     bad:artefact a usf:Artefact .
     bad:pathrule a usf:PathRule .

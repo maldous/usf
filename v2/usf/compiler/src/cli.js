@@ -21,6 +21,7 @@ import { generateAuthority, verifyOutput } from './generate.js';
 import {
   createLiveAttestation,
   observeLiveDrift,
+  snapshotDerivedGraphs,
   verifyLiveAttestation,
 } from './live-attestation.js';
 
@@ -92,6 +93,15 @@ async function main() {
     return 0;
   }
 
+  if (command === 'snapshot-derived') {
+    const config = loadConfig();
+    const manifest = loadManifest(GRAPH_DIR);
+    checkLocal(manifest);
+    const client = createClient(config);
+    emit({ command, target: describeConfig(config), ...await snapshotDerivedGraphs({ manifest, client }) });
+    return 0;
+  }
+
   if (command === 'drift-live') {
     const config = loadConfig();
     const manifest = loadManifest(GRAPH_DIR);
@@ -158,7 +168,7 @@ async function main() {
     return conformant ? 0 : 1;
   }
 
-  process.stderr.write('usage: cli.js <check|plan|snapshot-observed|generate|verify-output|compile|verify|drift-live|attest-live|verify-live-attestation>\n');
+  process.stderr.write('usage: cli.js <check|plan|snapshot-observed|snapshot-derived|generate|verify-output|compile|verify|drift-live|attest-live|verify-live-attestation>\n');
   return 2;
 }
 

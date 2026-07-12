@@ -51,6 +51,10 @@ shp:ReleaseShape a sh:NodeShape ; usf:canonicalName "releaseshape" ; sh:targetCl
   sh:property [ sh:path usf:releaseFromBuild ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Build ] ;
   sh:property [ sh:path usf:releaseBundle ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Bundle ] .
 
+shp:VersionShape a sh:NodeShape ; usf:canonicalName "versionshape" ; sh:targetClass usf:Version ;
+  sh:property [ sh:path usf:versionOf ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Artefact ] ;
+  sh:property [ sh:path usf:versionIdentifier ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[+-][0-9A-Za-z.-]+)?$" ] .
+
 shp:CompatibilityContractShape a sh:NodeShape ; usf:canonicalName "compatibilitycontractshape" ; sh:targetClass usf:CompatibilityContract ;
   sh:property [ sh:path usf:compatibilitySourceVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Version ] ;
   sh:property [ sh:path usf:compatibilityTargetVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Version ] ;
@@ -70,6 +74,9 @@ shp:SignatureShape a sh:NodeShape ; usf:canonicalName "signatureshape" ; sh:targ
   sh:property [ sh:path usf:signingPolicy ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Policy ] ;
   sh:property [ sh:path usf:signedBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:SigningIdentity ] ;
   sh:property [ sh:path usf:signatureValue ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+shp:SigningIdentityShape a sh:NodeShape ; usf:canonicalName "signingidentityshape" ; sh:targetClass usf:SigningIdentity ;
+  sh:property [ sh:path usf:signingKeyFingerprint ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] .
 
 shp:AttestationShape a sh:NodeShape ; usf:canonicalName "attestationshape" ; sh:targetClass usf:Attestation ;
   sh:property [ sh:path usf:attestationKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:AttestationKind ] ;

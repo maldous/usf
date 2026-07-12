@@ -11,8 +11,8 @@ const digest = 'a'.repeat(64);
 const member = (path, universe = 'repository-output') => ({ path, universe, contentDigest: digest, sourceState: 'tracked', fileMode: '100644', binary: false, formatKind: 'structured-json' });
 const artifact = { artifactKey: 'repository-output:a.json', universe: 'repository-output', path: 'a.json', artifactFamily: 'machine-semantics', ownershipEvidence: [{ reason: 'parsed semantic structure' }], familyConfidence: { level: 'high' } };
 const mapping = { artifactKey: artifact.artifactKey, mappingEvidence: [{}], coverageDecision: 'partial', coverageReason: 'observed', representedGeneration: [], missingSemantics: ['x'] };
-const canonical = { canonicalArtifactKey: 'artifact.a', targetPath: 'a.json', pathRule: null, mutabilityClass: 'generated', acceptanceGates: [{}], productionResponsibilities: ['generator'], replacementGroup: 'group.a' };
-const work = { key: 'work.a', architecturalOutcome: 'Produce one canonical outcome.', canonicalArtifactKeys: ['artifact.a'], acceptanceCriteria: ['a'], complexityEvidence: [{}], equivalenceGates: [{}], dependencies: [] };
+const canonical = { canonicalArtifactKey: 'artifact.a', targetPath: 'a.json', pathRule: null, mutabilityClass: 'generated', acceptanceGates: [{}], productionResponsibilities: ['generator'], replacementGroup: 'group.a', requiredSemanticLayers: [], ownedSemanticLayers: [] };
+const work = { key: 'work.a', architecturalOutcome: 'Produce one canonical outcome.', canonicalArtifactKeys: ['artifact.a'], ownedSemanticLayers: [], acceptanceCriteria: ['a'], complexityEvidence: [{}], equivalenceGates: [{}], dependencies: [] };
 const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
 const auditTriple = (graph, subject, predicate, object) => ({ kind: 'semantic-triple', attributes: { graph, subject, predicate, object } });
 function auditDispositionFixture({ state = 'urn:usf:dispositiondecisionstate:accepted', digestValue = digest, kind = 'urn:usf:dispositionkind:retainedasset', includePlan = false, graph = 'urn:usf:graph:source-dispositions' } = {}) {
@@ -86,6 +86,17 @@ test('work package coherence enforces singular complete artifact ownership', () 
   assert.equal(auditWorkPackages([canonical], [work, { ...work, key: 'work.b' }]).status, 'fail');
 });
 
+test('semantic layers require one explicit canonical artifact owner and its primary package', () => {
+  const owner = { ...canonical, requiredSemanticLayers: ['policy'], ownedSemanticLayers: ['policy'] };
+  const consumer = { ...canonical, canonicalArtifactKey: 'artifact.b', targetPath: 'b.json', requiredSemanticLayers: ['policy'], ownedSemanticLayers: [] };
+  const groups = [{ key: 'group.a', canonicalArtifactKeys: ['artifact.a', 'artifact.b'] }];
+  assert.equal(auditCanonicalArtifacts([owner, consumer], groups).status, 'pass');
+  assert.equal(auditCanonicalArtifacts([{ ...owner, ownedSemanticLayers: [] }, consumer], groups).status, 'fail');
+  assert.equal(auditCanonicalArtifacts([owner, { ...consumer, ownedSemanticLayers: ['policy'] }], groups).status, 'fail');
+  assert.equal(auditWorkPackages([owner, consumer], [{ ...work, canonicalArtifactKeys: ['artifact.a', 'artifact.b'], ownedSemanticLayers: ['policy'] }]).status, 'pass');
+  assert.equal(auditWorkPackages([owner, consumer], [{ ...work, canonicalArtifactKeys: ['artifact.a', 'artifact.b'], ownedSemanticLayers: [] }]).status, 'fail');
+});
+
 test('dependency audit catches cycles, transitive edges, missing endpoints, and missing evidence', () => {
   const packages = ['a', 'b', 'c'].map((key) => ({ key }));
   const edge = (source, prerequisite) => ({ source, prerequisite, dependencyType: 'blocking', semanticEvidence: [`${source}:${prerequisite}`] });
@@ -111,8 +122,11 @@ test('artifact dispositions and finding classifications are independently fail-c
   const dispositionAudit = auditArtifactDispositions(source, [], unavailable);
   assert.equal(dispositionAudit.status, 'fail');
   assert.equal(dispositionAudit.facts.missingDispositionCount, 1);
-  const classified = [{ findingKey: 'f', source: 'a', findingCategory: 'relationship-resolution', findingClass: 'unresolved-target', severity: 'blocking', resolutionStatus: 'open', ownerClass: 'source-artifact-owner', requiredAction: 'define-target', classificationEvidence: ['physical-universe'] }];
+  const classified = [{ findingKey: 'f', source: 'a', findingCategory: 'relationship-resolution', findingClass: 'unresolved-target', severity: 'blocking', resolutionStatus: 'closed', ownerClass: 'source-artifact-owner', requiredAction: 'define-target', classificationEvidence: ['physical-universe'] }];
   assert.equal(auditFindingClassifications(classified).status, 'pass');
+  classified[0].resolutionStatus = 'open';
+  assert.equal(auditFindingClassifications(classified).status, 'fail');
+  classified[0].resolutionStatus = 'closed';
   delete classified[0].ownerClass;
   assert.equal(auditFindingClassifications(classified).status, 'fail');
 });

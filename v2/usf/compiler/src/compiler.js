@@ -7,6 +7,7 @@
 
 import { readFileSync, statSync, readdirSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
+import { DataFactory, Parser, Store } from 'n3';
 import {
   authoredLoadList,
   observedLoadList,
@@ -49,6 +50,80 @@ const SPARQL_CONTAMINATION = CONTAMINATION_PATTERNS.join('|').replace(/\\/g, '\\
 const SHAPES_GRAPH_MARKER = 'urn:usf:graph:shapes';
 
 const readText = (p) => readFileSync(p, 'utf8');
+const { namedNode } = DataFactory;
+const RDF_TYPE = namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+const USF = 'urn:usf:ontology:';
+
+function registryParityFailures(manifest) {
+  const failures = [];
+  const registry = manifest.definitions.find((entry) => entry.file === 'registry.ttl');
+  if (!registry) return ['manifest has no registry.ttl definition graph'];
+  let store;
+  try {
+    store = new Store(new Parser({ format: 'text/turtle', baseIRI: 'urn:usf:' }).parse(readText(registry.path)));
+  } catch (error) {
+    return [`registry.ttl is not parseable RDF: ${error.message}`];
+  }
+  const one = (subject, local) => {
+    const values = store.getObjects(subject, namedNode(`${USF}${local}`), null);
+    return values.length === 1 ? values[0] : null;
+  };
+  const namedGraphClass = namedNode(`${USF}NamedGraph`);
+  const registryRows = new Map();
+  for (const subject of store.getSubjects(RDF_TYPE, namedGraphClass, null)) {
+    const graph = one(subject, 'graphIri')?.value;
+    if (!graph) { failures.push(`registry named graph has no unique graphIri: ${subject.value}`); continue; }
+    if (registryRows.has(graph)) failures.push(`registry graph IRI is declared more than once: ${graph}`);
+    registryRows.set(graph, {
+      subject,
+      graphClass: one(subject, 'graphClass')?.value,
+      loadOrder: Number(one(subject, 'loadOrder')?.value),
+      validationOrder: Number(one(subject, 'graphValidationOrder')?.value),
+    });
+  }
+  const expected = new Map();
+  const add = (entries, graphClass) => {
+    for (const entry of entries) {
+      const prior = expected.get(entry.graph);
+      const row = { graphClass: `urn:usf:graphclass:${graphClass}`, loadOrder: entry.order, validationOrder: entry.validationOrder };
+      if (prior && (prior.graphClass !== row.graphClass || prior.loadOrder !== row.loadOrder || prior.validationOrder !== row.validationOrder)) {
+        failures.push(`manifest entries disagree for shared graph: ${entry.graph}`);
+      } else expected.set(entry.graph, row);
+    }
+  };
+  add(manifest.definitions, 'definitiongraph');
+  add(manifest.authored, 'authoredgraph');
+  add(manifest.shapes, 'shapegraph');
+  add(manifest.observed, 'observedgraph');
+  add(manifest.derived, 'derivedgraph');
+  for (const graph of expected.keys()) if (!registryRows.has(graph)) failures.push(`manifest graph absent from RDF registry: ${graph}`);
+  for (const graph of registryRows.keys()) if (!expected.has(graph)) failures.push(`RDF registry graph absent from manifest: ${graph}`);
+  for (const [graph, row] of expected) {
+    const actual = registryRows.get(graph);
+    if (!actual) continue;
+    if (actual.graphClass !== row.graphClass) failures.push(`registry graph class mismatch for ${graph}`);
+    if (!Number.isFinite(row.loadOrder) || actual.loadOrder !== row.loadOrder) failures.push(`registry load order mismatch for ${graph}`);
+    if (!Number.isFinite(row.validationOrder) || actual.validationOrder !== row.validationOrder) failures.push(`registry validation order mismatch for ${graph}`);
+  }
+  const derivedByOrder = [...manifest.derived].sort((a, b) => a.order - b.order).map((entry) => entry.graph);
+  const ruleOutputs = derivationRules(manifest).map((rule) => rule.output);
+  if (derivedByOrder.join('\0') !== ruleOutputs.join('\0')) failures.push('registry/manifest derived graph order differs from compiler rule order');
+  const ruleClass = namedNode(`${USF}DerivationRule`);
+  const registeredRules = new Map();
+  for (const subject of store.getSubjects(RDF_TYPE, ruleClass, null)) {
+    const name = one(subject, 'canonicalName')?.value;
+    const graphSubject = one(subject, 'inNamedGraph');
+    const graph = graphSubject ? one(graphSubject, 'graphIri')?.value : null;
+    if (!name || !graph) failures.push(`registry derivation rule is incomplete: ${subject.value}`);
+    else registeredRules.set(name, graph);
+  }
+  for (const rule of derivationRules(manifest)) {
+    const name = rule.file.split('/').pop().replace('.rq', '').replace(/[^a-z0-9]/g, '');
+    if (registeredRules.get(name) !== rule.output) failures.push(`registry rule output mismatch for ${name}`);
+  }
+  if (registeredRules.size !== derivationRules(manifest).length) failures.push('registry and manifest derivation rule sets differ');
+  return failures;
+}
 
 // --- Local, offline checks -------------------------------------------------
 
@@ -78,6 +153,25 @@ export function checkLocal(manifest) {
     ...manifest.rules,
     ...manifest.derived,
   ];
+
+  // Parse every RDF authority, snapshot, and fixture file locally. TriG graph
+  // placement is checked against the registered graph IRI so valid syntax in
+  // the wrong named graph cannot pass merely because Stardog accepts it.
+  const entryByPath = new Map(all.filter((entry) => entry.path).map((entry) => [entry.path, entry]));
+  for (const path of listLoadable(manifest.root)) {
+    if (path.endsWith('.rq')) continue;
+    try {
+      const format = path.endsWith('.trig') ? 'application/trig' : 'text/turtle';
+      const quads = new Parser({ format, baseIRI: 'urn:usf:' }).parse(readText(path));
+      const registeredEntry = entryByPath.get(path);
+      if (registeredEntry && format === 'application/trig') {
+        const misplaced = quads.find((quad) => quad.graph.termType !== 'NamedNode' || quad.graph.value !== registeredEntry.graph);
+        if (misplaced) fail(`registered TriG file writes outside its graph: ${relative(manifest.root, path)}`);
+      }
+    } catch (error) {
+      fail(`RDF parse failed for ${relative(manifest.root, path)}: ${error.message}`);
+    }
+  }
 
   // Every registered file exists, is a regular file, and is non-empty.
   for (const e of all) {
@@ -124,8 +218,16 @@ export function checkLocal(manifest) {
     if (authoredGraphs.includes(graph) || derivedGraphs.includes(graph)) fail(`observed graph IRI overlaps authored or derived graph: ${graph}`);
   }
 
-  // Load order is deterministic: no repeated order among authored inputs.
-  const orders = [...authoredLoadList(manifest), ...observedLoadList(manifest)].map((e) => e.order);
+  // Named-graph load order is deterministic across definitions, authored,
+  // shapes, observations and derived snapshots. Multiple shape files share one
+  // graph and therefore one order.
+  const orderedGraphEntries = [
+    ...authoredLoadList(manifest),
+    manifest.shapes[0],
+    ...observedLoadList(manifest),
+    ...manifest.derived,
+  ].filter(Boolean);
+  const orders = orderedGraphEntries.map((e) => e.order);
   if (orders.some((o, i) => orders.indexOf(o) !== i) || orders.some((o) => typeof o !== 'number')) {
     fail('authored load order is not a unique, total ordering');
   }
@@ -136,6 +238,8 @@ export function checkLocal(manifest) {
     fail(`derivation rule order is ${ruleNames.join(',')}, expected ${DERIVATION_ORDER.join(',')}`);
   }
   if (!integrityRule(manifest)) fail('no integrity rule registered');
+
+  for (const failure of registryParityFailures(manifest)) fail(failure);
 
   // Each rule output is a registered derived graph (no rule writes elsewhere).
   for (const r of derivationRules(manifest)) {

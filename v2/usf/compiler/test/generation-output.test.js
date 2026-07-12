@@ -50,7 +50,8 @@ function signManifest(root, keys, mutate = (value) => value) {
     signedPath: 'release/manifest.json',
     signedSha256: sha256(bytes),
     publicKey: keys.publicKey.export({ type: 'spki', format: 'pem' }),
-    publicKeyFingerprint: sha256(keys.publicKey.export({ type: 'spki', format: 'pem' })),
+    publicKeyFingerprint: sha256(keys.publicKey.export({ type: 'spki', format: 'der' })),
+    signingIdentity: 'urn:usf:signingidentity:test',
     signature: sign(null, bytes, keys.privateKey).toString('base64'),
   };
   writeFileSync(join(root, 'release/signature.json'), json(signature));
@@ -61,7 +62,9 @@ function signManifest(root, keys, mutate = (value) => value) {
     manifestPath: 'release/manifest.json',
     manifestSha256: sha256(bytes),
     signaturePath: 'release/signature.json',
+    signingIdentity: signature.signingIdentity,
     signingIdentityFingerprint: signature.publicKeyFingerprint,
+    releaseVersion: manifest.releaseVersion,
     verificationRequired: true,
   }));
 }
@@ -73,6 +76,8 @@ function refreshManifest(root, keys) {
   const manifest = {
     schemaVersion: 1,
     compilerVersion: '0.1.0',
+    releaseVersion: '0.1.0',
+    releaseVersionResource: 'urn:usf:version:test010',
     authorityDigest: 'a'.repeat(64),
     files: records(root, paths),
   };
@@ -138,6 +143,11 @@ test('planted defect: invalid manifest schema fails closed', () => withBundle(({
   assert.ok(codes(validateGeneratedOutput(root)).has('invalid-manifest-schema'));
 }));
 
+test('planted defect: missing governed release version fails closed', () => withBundle(({ root, keys }) => {
+  signManifest(root, keys, (manifest) => ({ ...manifest, releaseVersion: undefined }));
+  assert.ok(codes(validateGeneratedOutput(root)).has('invalid-manifest-schema'));
+}));
+
 test('planted defect: parent path in the manifest is rejected before reading it', () => withBundle(({ root, keys }) => {
   signManifest(root, keys, (manifest) => ({ ...manifest, files: [{ path: '../escape.json', bytes: 0, sha256: '0'.repeat(64) }, ...manifest.files] }));
   assert.ok(codes(validateGeneratedOutput(root)).has('path-containment'));
@@ -158,6 +168,7 @@ test('planted defect: missing required output family is explicit', () => withBun
 for (const [name, path, invalid, expected] of [
   ['OpenAPI', 'contracts/openapi/foundation.openapi.json', json({ resources: [] }), 'invalid-openapi'],
   ['GraphQL', 'contracts/graphql/foundation.graphql', 'type Query { broken: String\n', 'invalid-graphql'],
+  ['renderer JSON Schema', 'contracts/schemas/output.schema.json', json({ resources: [] }), 'invalid-json-schema'],
   ['package', 'workspace/package.json', json({ name: 'generated-foundation', version: 'not-semver', private: false, scripts: {} }), 'invalid-package'],
   ['workflow', '.github/workflows/validate.yml', 'name: invalid\njobs: [\n', 'invalid-workflow'],
 ]) {
@@ -197,6 +208,11 @@ test('planted defect: invalid release signature fails cryptographic verification
   signature.signature = Buffer.alloc(64).toString('base64');
   writeFileSync(path, json(signature));
   assert.ok(codes(validateGeneratedOutput(root)).has('invalid-release-signature'));
+}));
+
+test('planted defect: unexpected release signing identity fails trust verification', () => withBundle(({ root }) => {
+  const report = validateGeneratedOutput(root, { expectedPublicKeyFingerprint: '0'.repeat(64) });
+  assert.ok(codes(report).has('unexpected-signing-identity'));
 }));
 
 test('assertion API exposes structured findings without compiler coupling', () => withBundle(({ root }) => {

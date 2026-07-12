@@ -180,7 +180,7 @@ shape:LocalisationRequirementShape a sh:NodeShape ;
 shape:RendererContractShape a sh:NodeShape ;
     sh:targetClass usf:RendererContract ;
     sh:property [ sh:path usf:rendererImplementation ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Renderer ] ;
-    sh:property [ sh:path usf:rendererTarget ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path usf:rendererTarget ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:RendererTarget ] ;
     sh:property [ sh:path usf:rendererInputSchema ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Artefact ] ;
     sh:property [ sh:path usf:rendererOutputPlan ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:ArtefactPlan ] ;
     sh:property [ sh:path usf:supportsSurfaceKind ; sh:minCount 1 ] ;
@@ -194,6 +194,19 @@ shape:RendererContractShape a sh:NodeShape ;
                      (?target = <urn:usf:renderertarget:documentation> && NOT EXISTS { $this usf:documentationModel ?model }))
             }
         """
+    ] .
+
+shape:RendererOutputPlanOwnershipShape a sh:NodeShape ;
+    sh:targetObjectsOf usf:rendererOutputPlan ;
+    sh:property [
+        sh:path [ sh:inversePath usf:rendererOutputPlan ] ;
+        sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:RendererContract ;
+        sh:message "Each renderer-output plan must be owned by exactly one renderer target contract."
+    ] ;
+    sh:property [
+        sh:path usf:plansArtefact ;
+        sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Artefact ;
+        sh:message "Each renderer-output plan must own exactly one target-specific artefact."
     ] .
 
 shape:RendererShape a sh:NodeShape ;

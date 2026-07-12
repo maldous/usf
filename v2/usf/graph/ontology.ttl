@@ -1012,6 +1012,9 @@ usf:integrityPolicy a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain u
 usf:normalisationPolicy a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:CompilerComponent ; rdfs:range usf:Policy .
 usf:missingSemanticsConstraint a owl:ObjectProperty ; rdfs:domain usf:CompilerComponent ; rdfs:range usf:Constraint .
 usf:requiresEquivalenceKind a owl:ObjectProperty ; rdfs:domain usf:CompilerComponent ; rdfs:range usf:EquivalenceKind .
+usf:authorisedSigningIdentity a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:CompilerComponent ; rdfs:range usf:SigningIdentity ;
+  rdfs:label "authorised signing identity" ;
+  rdfs:comment "Identifies the graph-governed signing identity whose external key may sign outputs from a compiler component." .
 usf:precedesPhase a owl:ObjectProperty ; rdfs:domain usf:CompilerPhase ; rdfs:range usf:CompilerPhase .
 usf:materialisesArtefact a owl:ObjectProperty ; rdfs:domain usf:ArtefactMaterialisation ; rdfs:range usf:Artefact .
 usf:collectsEvidence a owl:ObjectProperty ; rdfs:domain usf:EvidenceCollection ; rdfs:range usf:EvidenceResult .
@@ -1041,6 +1044,9 @@ usf:hasSignature a owl:ObjectProperty ; rdfs:domain usf:Bundle ; rdfs:range usf:
 usf:signatureMethod a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:Signature ; rdfs:range usf:SignatureMethod .
 usf:signingPolicy a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:Signature ; rdfs:range usf:Policy .
 usf:signedBy a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:Signature ; rdfs:range usf:SigningIdentity .
+usf:signingKeyFingerprint a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SigningIdentity ; rdfs:range xsd:string ;
+  rdfs:label "signing key fingerprint" ;
+  rdfs:comment "Records the lowercase SHA-256 fingerprint of the external SubjectPublicKeyInfo DER bytes; private key material remains outside graph authority." .
 usf:signatureValue a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:Signature ; rdfs:range xsd:string .
 usf:hasAttestation a owl:ObjectProperty ; rdfs:domain usf:Bundle ; rdfs:range usf:Attestation .
 usf:attestationKind a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:Attestation ; rdfs:range usf:AttestationKind .

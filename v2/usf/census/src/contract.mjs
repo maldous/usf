@@ -121,12 +121,14 @@ export function validateMapping(record) {
 }
 
 export function validateCanonicalArtifact(record) {
-  requireFields(record, ['canonicalArtifactKey', 'semanticPurpose', 'artifactKind', 'mediaType', 'targetPath', 'pathRule', 'authorityStatus', 'mutabilityClass', 'semanticInputs', 'requiredSemanticLayers', 'artifactDependencies', 'productionResponsibilities', 'productionContract', 'integrityPolicy', 'equivalenceContract', 'acceptanceGates', 'currentArtifacts', 'replacementGroup', 'lifecyclePolicy', 'confidence', 'reviewStatus'], 'canonical artifact');
+  requireFields(record, ['canonicalArtifactKey', 'semanticPurpose', 'artifactKind', 'mediaType', 'targetPath', 'pathRule', 'authorityStatus', 'mutabilityClass', 'semanticInputs', 'requiredSemanticLayers', 'ownedSemanticLayers', 'artifactDependencies', 'productionResponsibilities', 'productionContract', 'integrityPolicy', 'equivalenceContract', 'acceptanceGates', 'currentArtifacts', 'replacementGroup', 'lifecyclePolicy', 'confidence', 'reviewStatus'], 'canonical artifact');
   assertClassification('artifactKinds', record.artifactKind);
   assertClassification('authorityStatuses', record.authorityStatus);
   assertClassification('mutabilityClasses', record.mutabilityClass);
   assertClassification('reviewStatuses', record.reviewStatus);
   validateControlledArray('semanticLayers', record.requiredSemanticLayers, 'semantic layer');
+  validateControlledArray('semanticLayers', record.ownedSemanticLayers, 'owned semantic layer');
+  if (record.ownedSemanticLayers.some((layer) => !record.requiredSemanticLayers.includes(layer))) throw new Error(`canonical artifact owns undeclared semantic layer: ${record.canonicalArtifactKey}`);
   validateControlledArray('productionResponsibilities', record.productionResponsibilities, 'production responsibility');
   if (record.targetPath !== null) validateRelativePath(record.targetPath);
   if (record.targetPath === null && record.pathRule === null && record.mutabilityClass !== 'removed') throw new Error(`canonical artifact lacks path: ${record.canonicalArtifactKey}`);

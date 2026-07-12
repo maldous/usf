@@ -66,7 +66,7 @@ test('cloud: every compiler failure barrier rolls back without graph drift', { .
   const manifest = loadManifest(GRAPH_DIR);
   const result = await proveLiveRollback({ manifest, client });
   assert.equal(result.ok, true);
-  assert.equal(result.faultCount, 8);
+  assert.equal(result.faultCount, 13);
   assert.equal(result.digestsUnchanged, true);
   assert.ok(result.faults.every((fault) => fault.rollbackCount === 1));
 });

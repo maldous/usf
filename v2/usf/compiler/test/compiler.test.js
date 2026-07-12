@@ -6,9 +6,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash, generateKeyPairSync } from 'node:crypto';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { DataFactory } from 'n3';
 
 import { loadConfig, describeConfig, ConfigError } from '../src/config.js';
 import { loadManifest, managedGraphs, ManifestError } from '../src/manifest.js';
@@ -16,7 +19,8 @@ import { checkLocal, compile, buildPlan, CompilerError } from '../src/compiler.j
 import { createClient } from '../src/stardog.js';
 import { loadAuthorityDataset } from '../src/authority-dataset.js';
 import { buildGenerationPlan, requireCompleteGenerationPlan } from '../src/generation-plan.js';
-import { canonicalGraphDigest, compareGraphDigests } from '../src/live-attestation.js';
+import { canonicalGraphDigest, canonicalGraphTrig, compareGraphDigests } from '../src/live-attestation.js';
+import { generateAuthority, verifyOutput } from '../src/generate.js';
 
 // --- Fixtures --------------------------------------------------------------
 
@@ -29,11 +33,12 @@ function baseSpec() {
 database: USF
 baseIri: "urn:usf:"
 definitionGraphs:
-  - { file: ontology.ttl, graph: "urn:usf:graph:ontology", loadOrder: 1 }
+  - { file: ontology.ttl, graph: "urn:usf:graph:ontology", loadOrder: 1, validationOrder: 1 }
+  - { file: registry.ttl, graph: "urn:usf:graph:registry", loadOrder: 2, validationOrder: 2 }
 authoredGraphs:
-  - { file: providers.ttl, graph: "urn:usf:graph:providers", loadOrder: 2 }
+  - { file: providers.ttl, graph: "urn:usf:graph:providers", loadOrder: 3, validationOrder: 3 }
 shapeGraphs:
-  - { file: shapes.ttl, graph: "urn:usf:graph:shapes" }
+  - { file: shapes.ttl, graph: "urn:usf:graph:shapes", loadOrder: 4, validationOrder: 4 }
 rules:
   - { file: rules/source-dispositions.rq, output: "urn:usf:graph:derived:sourcedispositions", kind: derivation }
   - { file: rules/obligations.rq, output: "urn:usf:graph:derived:obligations", kind: derivation }
@@ -43,18 +48,37 @@ rules:
   - { file: rules/readiness.rq, output: "urn:usf:graph:derived:readiness", kind: derivation }
   - { file: rules/integrity.rq, kind: integrity }
 derivedGraphs:
-  - { file: derived/source-dispositions.trig, graph: "urn:usf:graph:derived:sourcedispositions" }
-  - { file: derived/obligations.trig, graph: "urn:usf:graph:derived:obligations" }
-  - { file: derived/evidence.trig, graph: "urn:usf:graph:derived:evidence" }
-  - { file: derived/surfaces.trig, graph: "urn:usf:graph:derived:surfaces" }
-  - { file: derived/coverage.trig, graph: "urn:usf:graph:derived:coverage" }
-  - { file: derived/readiness.trig, graph: "urn:usf:graph:derived:readiness" }
+  - { file: derived/source-dispositions.trig, graph: "urn:usf:graph:derived:sourcedispositions", loadOrder: 10, validationOrder: 10 }
+  - { file: derived/obligations.trig, graph: "urn:usf:graph:derived:obligations", loadOrder: 11, validationOrder: 11 }
+  - { file: derived/evidence.trig, graph: "urn:usf:graph:derived:evidence", loadOrder: 12, validationOrder: 12 }
+  - { file: derived/surfaces.trig, graph: "urn:usf:graph:derived:surfaces", loadOrder: 13, validationOrder: 13 }
+  - { file: derived/coverage.trig, graph: "urn:usf:graph:derived:coverage", loadOrder: 14, validationOrder: 14 }
+  - { file: derived/readiness.trig, graph: "urn:usf:graph:derived:readiness", loadOrder: 15, validationOrder: 15 }
 fixtures:
   conforming: fixtures/conforming
   defects: fixtures/defects
   loadAsAuthority: false
 `,
     'ontology.ttl': '@prefix usf: <urn:usf:ontology:> .\nusf:Thing a <http://www.w3.org/2002/07/owl#Class> .\n',
+    'registry.ttl': `@prefix usf: <urn:usf:ontology:> .
+@prefix ng: <urn:usf:namedgraph:> . @prefix rl: <urn:usf:rule:> . @prefix gcl: <urn:usf:graphclass:> .
+ng:o a usf:NamedGraph ; usf:canonicalName "ontology" ; usf:graphIri "urn:usf:graph:ontology" ; usf:graphClass gcl:definitiongraph ; usf:loadOrder 1 ; usf:graphValidationOrder 1 .
+ng:r a usf:NamedGraph ; usf:canonicalName "registry" ; usf:graphIri "urn:usf:graph:registry" ; usf:graphClass gcl:definitiongraph ; usf:loadOrder 2 ; usf:graphValidationOrder 2 .
+ng:p a usf:NamedGraph ; usf:canonicalName "providers" ; usf:graphIri "urn:usf:graph:providers" ; usf:graphClass gcl:authoredgraph ; usf:loadOrder 3 ; usf:graphValidationOrder 3 .
+ng:s a usf:NamedGraph ; usf:canonicalName "shapes" ; usf:graphIri "urn:usf:graph:shapes" ; usf:graphClass gcl:shapegraph ; usf:loadOrder 4 ; usf:graphValidationOrder 4 .
+ng:d0 a usf:NamedGraph ; usf:canonicalName "d0" ; usf:graphIri "urn:usf:graph:derived:sourcedispositions" ; usf:graphClass gcl:derivedgraph ; usf:loadOrder 10 ; usf:graphValidationOrder 10 .
+ng:d1 a usf:NamedGraph ; usf:canonicalName "d1" ; usf:graphIri "urn:usf:graph:derived:obligations" ; usf:graphClass gcl:derivedgraph ; usf:loadOrder 11 ; usf:graphValidationOrder 11 .
+ng:d2 a usf:NamedGraph ; usf:canonicalName "d2" ; usf:graphIri "urn:usf:graph:derived:evidence" ; usf:graphClass gcl:derivedgraph ; usf:loadOrder 12 ; usf:graphValidationOrder 12 .
+ng:d3 a usf:NamedGraph ; usf:canonicalName "d3" ; usf:graphIri "urn:usf:graph:derived:surfaces" ; usf:graphClass gcl:derivedgraph ; usf:loadOrder 13 ; usf:graphValidationOrder 13 .
+ng:d4 a usf:NamedGraph ; usf:canonicalName "d4" ; usf:graphIri "urn:usf:graph:derived:coverage" ; usf:graphClass gcl:derivedgraph ; usf:loadOrder 14 ; usf:graphValidationOrder 14 .
+ng:d5 a usf:NamedGraph ; usf:canonicalName "d5" ; usf:graphIri "urn:usf:graph:derived:readiness" ; usf:graphClass gcl:derivedgraph ; usf:loadOrder 15 ; usf:graphValidationOrder 15 .
+rl:r0 a usf:DerivationRule ; usf:canonicalName "sourcedispositions" ; usf:inNamedGraph ng:d0 .
+rl:r1 a usf:DerivationRule ; usf:canonicalName "obligations" ; usf:inNamedGraph ng:d1 .
+rl:r2 a usf:DerivationRule ; usf:canonicalName "evidence" ; usf:inNamedGraph ng:d2 .
+rl:r3 a usf:DerivationRule ; usf:canonicalName "surfaces" ; usf:inNamedGraph ng:d3 .
+rl:r4 a usf:DerivationRule ; usf:canonicalName "coverage" ; usf:inNamedGraph ng:d4 .
+rl:r5 a usf:DerivationRule ; usf:canonicalName "readiness" ; usf:inNamedGraph ng:d5 .
+`,
     'providers.ttl': '@prefix usf: <urn:usf:> .\nusf:providers:acme a usf:ontology:Thing .\n',
     'shapes.ttl':
       '# SHACL detectors legitimately mention forbidden markers: github.com USF-1 commitSha\n@prefix sh: <http://www.w3.org/ns/shacl#> .\n',
@@ -66,12 +90,12 @@ fixtures:
     'rules/readiness.rq': rule('Readiness'),
     'rules/integrity.rq':
       'SELECT ?violation ?subject WHERE { ?subject a ?t . BIND("x" AS ?violation) FILTER(false) }\n',
-    'derived/source-dispositions.trig': '# placeholder derived source dispositions\n<urn:usf:x> a <urn:usf:ontology:SourceArtefactDisposition> .\n',
+    'derived/source-dispositions.trig': 'GRAPH <urn:usf:graph:derived:sourcedispositions> { <urn:usf:x> a <urn:usf:ontology:SourceArtefactDisposition> . }\n',
     'derived/obligations.trig': '@prefix usf: <urn:usf:ontology:> .\nGRAPH <urn:usf:graph:derived:obligations> { usf:x a usf:ProofObligation }\n',
-    'derived/evidence.trig': '# placeholder derived evidence\n<urn:usf:x> a <urn:usf:ontology:EvidenceRequirement> .\n',
-    'derived/surfaces.trig': '# placeholder derived surfaces\n<urn:usf:x> a <urn:usf:ontology:Surface> .\n',
-    'derived/coverage.trig': '# placeholder derived coverage\n<urn:usf:x> a <urn:usf:ontology:Coverage> .\n',
-    'derived/readiness.trig': '# placeholder derived readiness\n<urn:usf:x> a <urn:usf:ontology:Readiness> .\n',
+    'derived/evidence.trig': 'GRAPH <urn:usf:graph:derived:evidence> { <urn:usf:x> a <urn:usf:ontology:EvidenceRequirement> . }\n',
+    'derived/surfaces.trig': 'GRAPH <urn:usf:graph:derived:surfaces> { <urn:usf:x> a <urn:usf:ontology:Surface> . }\n',
+    'derived/coverage.trig': 'GRAPH <urn:usf:graph:derived:coverage> { <urn:usf:x> a <urn:usf:ontology:Coverage> . }\n',
+    'derived/readiness.trig': 'GRAPH <urn:usf:graph:derived:readiness> { <urn:usf:x> a <urn:usf:ontology:Readiness> . }\n',
     'fixtures/conforming/sample.ttl': '# fixture, never loaded as authority\n<urn:usf:x> a <urn:usf:ontology:Thing> .\n',
   };
 }
@@ -96,8 +120,10 @@ function observedSpec() {
   const spec = baseSpec();
   spec['manifest.yaml'] = spec['manifest.yaml'].replace(
     'shapeGraphs:',
-    'observedGraphs:\n  - { collector: repositorysourceobserver, graph: "urn:usf:graph:observed:sourceartefacts", loadOrder: 3 }\nshapeGraphs:'
+    'observedGraphs:\n  - { collector: repositorysourceobserver, graph: "urn:usf:graph:observed:sourceartefacts", loadOrder: 5, validationOrder: 5 }\nshapeGraphs:'
   );
+  spec['manifest.yaml'] = spec['manifest.yaml'].replace('loadOrder: 4, validationOrder: 4 }\nrules:', 'loadOrder: 4, validationOrder: 4 }\nrules:');
+  spec['registry.ttl'] += 'ng:obs a usf:NamedGraph ; usf:canonicalName "sourceobservations" ; usf:graphIri "urn:usf:graph:observed:sourceartefacts" ; usf:graphClass gcl:observedgraph ; usf:loadOrder 5 ; usf:graphValidationOrder 5 .\n';
   return spec;
 }
 
@@ -245,8 +271,8 @@ test('manifest: observed collector is registered separately from authority', () 
 test('checkLocal: a duplicate authored graph IRI fails', () => {
   const spec = baseSpec();
   spec['manifest.yaml'] = spec['manifest.yaml'].replace(
-    '  - { file: providers.ttl, graph: "urn:usf:graph:providers", loadOrder: 2 }',
-    '  - { file: providers.ttl, graph: "urn:usf:graph:providers", loadOrder: 2 }\n  - { file: providers2.ttl, graph: "urn:usf:graph:providers", loadOrder: 3 }'
+    '  - { file: providers.ttl, graph: "urn:usf:graph:providers", loadOrder: 3, validationOrder: 3 }',
+    '  - { file: providers.ttl, graph: "urn:usf:graph:providers", loadOrder: 3, validationOrder: 3 }\n  - { file: providers2.ttl, graph: "urn:usf:graph:providers", loadOrder: 4, validationOrder: 4 }'
   );
   spec['providers2.ttl'] = '<urn:usf:providers:beta> a <urn:usf:ontology:Thing> .\n';
   const dir = writeGraph(spec);
@@ -260,6 +286,23 @@ test('checkLocal: a non-deterministic (duplicate) load order fails', () => {
   assert.throws(() => checkLocal(loadManifest(dir)), hasFailure('load order'));
 });
 
+test('checkLocal: RDF registry graph class and order must match the manifest', () => {
+  const spec = baseSpec();
+  spec['registry.ttl'] = spec['registry.ttl'].replace(
+    'usf:graphClass gcl:authoredgraph ; usf:loadOrder 3',
+    'usf:graphClass gcl:definitiongraph ; usf:loadOrder 99',
+  );
+  const dir = writeGraph(spec);
+  assert.throws(() => checkLocal(loadManifest(dir)), hasFailure('registry graph class mismatch'));
+});
+
+test('checkLocal: RDF registry derivation ownership must match compiler rule outputs', () => {
+  const spec = baseSpec();
+  spec['registry.ttl'] = spec['registry.ttl'].replace('usf:canonicalName "obligations" ; usf:inNamedGraph ng:d1', 'usf:canonicalName "obligations" ; usf:inNamedGraph ng:d2');
+  const dir = writeGraph(spec);
+  assert.throws(() => checkLocal(loadManifest(dir)), hasFailure('registry rule output mismatch'));
+});
+
 test('checkLocal: an unexpected unregistered graph file fails', () => {
   const spec = baseSpec();
   spec['stray.ttl'] = '<urn:usf:x> a <urn:usf:ontology:Thing> .\n';
@@ -267,11 +310,25 @@ test('checkLocal: an unexpected unregistered graph file fails', () => {
   assert.throws(() => checkLocal(loadManifest(dir)), hasFailure('unregistered loadable file'));
 });
 
+test('checkLocal: malformed RDF fails before any live transaction', () => {
+  const spec = baseSpec();
+  spec['providers.ttl'] = '<urn:usf:broken';
+  const dir = writeGraph(spec);
+  assert.throws(() => checkLocal(loadManifest(dir)), hasFailure('RDF parse failed'));
+});
+
+test('checkLocal: registered TriG cannot write to another named graph', () => {
+  const spec = baseSpec();
+  spec['derived/obligations.trig'] = 'GRAPH <urn:usf:graph:wrong> { <urn:usf:x> a <urn:usf:ontology:ProofObligation> . }\n';
+  const dir = writeGraph(spec);
+  assert.throws(() => checkLocal(loadManifest(dir)), hasFailure('writes outside its graph'));
+});
+
 test('checkLocal: a derived graph treated as authored fails', () => {
   const spec = baseSpec();
   spec['manifest.yaml'] = spec['manifest.yaml'].replace(
-    '  - { file: providers.ttl, graph: "urn:usf:graph:providers", loadOrder: 2 }',
-    '  - { file: providers.ttl, graph: "urn:usf:graph:derived:obligations", loadOrder: 2 }'
+    '  - { file: providers.ttl, graph: "urn:usf:graph:providers", loadOrder: 3, validationOrder: 3 }',
+    '  - { file: providers.ttl, graph: "urn:usf:graph:derived:obligations", loadOrder: 3, validationOrder: 3 }'
   );
   const dir = writeGraph(spec);
   assert.throws(() => checkLocal(loadManifest(dir)), hasFailure('both authored and derived'));
@@ -465,6 +522,48 @@ test('live attestation: RDF canonicalization ignores blank-node labels', async (
   const left = '_:left <urn:usf:p> "value" .\n';
   const right = '_:unrelated <urn:usf:p> "value" .\n';
   assert.deepEqual(await canonicalGraphDigest(left), await canonicalGraphDigest(right));
+});
+
+test('derived snapshot: canonical TriG is deterministic across blank-node labels', async () => {
+  const graph = 'urn:usf:graph:derived:test';
+  const left = '_:left <urn:usf:p> "value" .\n';
+  const right = '_:unrelated <urn:usf:p> "value" .\n';
+  assert.equal(await canonicalGraphTrig(graph, left), await canonicalGraphTrig(graph, right));
+  assert.match(await canonicalGraphTrig(graph, left), /^GRAPH <urn:usf:graph:derived:test>/);
+});
+
+test('generation: real authority validates before replacement and reuses deterministic incremental outputs', () => {
+  const graphDir = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'graph');
+  const manifest = loadManifest(graphDir);
+  const dataset = loadAuthorityDataset(manifest);
+  const keys = generateKeyPairSync('ed25519');
+  const fingerprint = createHash('sha256').update(keys.publicKey.export({ type: 'spki', format: 'der' })).digest('hex');
+  const identity = DataFactory.namedNode('urn:usf:signingidentity:foundationrelease');
+  const predicate = DataFactory.namedNode('urn:usf:ontology:signingKeyFingerprint');
+  dataset.store.removeQuads(dataset.store.getQuads(identity, predicate, null, null));
+  dataset.store.addQuad(identity, predicate, DataFactory.literal(fingerprint));
+  const root = mkdtempSync(join(tmpdir(), 'usf-real-generation-'));
+  dirs.push(root);
+  const keyPath = join(root, 'signing-key.pem');
+  writeFileSync(keyPath, keys.privateKey.export({ type: 'pkcs8', format: 'pem' }), { mode: 0o600 });
+  const outputDir = join(root, 'output');
+  const full = generateAuthority({ store: dataset.store, outputDir, mode: 'full', signingKeyPath: keyPath });
+  assert.ok(full.outputCount > 0);
+  assert.equal(verifyOutput(outputDir, true, fingerprint).independent.signingIdentityTrusted, true);
+
+  const wrong = generateKeyPairSync('ed25519');
+  const wrongPath = join(root, 'wrong-key.pem');
+  writeFileSync(wrongPath, wrong.privateKey.export({ type: 'pkcs8', format: 'pem' }), { mode: 0o600 });
+  assert.throws(
+    () => generateAuthority({ store: dataset.store, outputDir, mode: 'incremental', signingKeyPath: wrongPath }),
+    (error) => error instanceof CompilerError && error.phase === 'generate:signing-authority',
+  );
+  assert.equal(verifyOutput(outputDir, true, fingerprint).ok, true);
+
+  const incremental = generateAuthority({ store: dataset.store, outputDir, mode: 'incremental', signingKeyPath: keyPath });
+  assert.equal(incremental.aggregateDigest, full.aggregateDigest);
+  assert.equal(incremental.changed, 0);
+  assert.ok(incremental.reused > 0);
 });
 
 test('live attestation: graph comparison reports missing, unexpected and mismatched graphs', () => {
