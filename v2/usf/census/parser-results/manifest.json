@@ -1,8 +1,8 @@
 {
   "aggregate": {
-    "recordCount": 3236,
-    "uncompressedBytes": 75207747,
-    "uncompressedSha256": "9d0b00942d7e3813d3feaf934ab400d6bac8698905aa9f8a9de0e0bc884b1058"
+    "recordCount": 3237,
+    "uncompressedBytes": 75215662,
+    "uncompressedSha256": "13b5f7f4c56b420cb75fe89258f60a9947b5bf3a6377e85acb73a5d6383644eb"
   },
   "encoding": "gzip-jsonl",
   "formatVersion": 1,
@@ -23,14 +23,14 @@
       "universe": "repository-output"
     },
     {
-      "compressedBytes": 47489,
-      "compressedSha256": "d60a28841c772055f46f6d51ce8cdbb9f12dd61ac6ad893aac50c801ad99aa85",
+      "compressedBytes": 48093,
+      "compressedSha256": "447ab04bf78e1b49271f651de887249f385c0df144d797bbf6ce14aae196cb89",
       "firstPath": "v2/usf/compiler/package-lock.json",
       "lastPath": "v2/usf/compiler/test/generation-output.test.js",
       "path": "parser-results/v2-compiler-implementation.jsonl.gz",
-      "recordCount": 21,
-      "uncompressedBytes": 730744,
-      "uncompressedSha256": "a88fcd06aa1e5d5c49741ef6917d6df235a9ea58db5db670ce2ba60faa7e4177",
+      "recordCount": 22,
+      "uncompressedBytes": 738043,
+      "uncompressedSha256": "339f60608d07ba4651d9c8605209414e58259480a4a6262b4f48bd0f64fed139",
       "universe": "v2-compiler-implementation"
     },
     {
@@ -45,14 +45,14 @@
       "universe": "v2-graph-authority"
     },
     {
-      "compressedBytes": 7657,
-      "compressedSha256": "7e05e9583601da956be06ea559d43b81e6caad859234bc9543ba58fdb6fbe468",
+      "compressedBytes": 7683,
+      "compressedSha256": "8a2fc10cbef83681e6f6987b11eb8c6f0550052503a0d5f82817d2f62e832ca7",
       "firstPath": "v2/.gitignore",
       "lastPath": "v2/usf/tools/stardog/.gitkeep",
       "path": "parser-results/v2-support-provisioning.jsonl.gz",
       "recordCount": 22,
-      "uncompressedBytes": 103981,
-      "uncompressedSha256": "7361852f1a62e94cd0eb9442d73b7728e536e3e45199a5d5c0138e133143b16c",
+      "uncompressedBytes": 104597,
+      "uncompressedSha256": "f4f13df087832a66d5dd80cb57bbf42b541a7af36894d60fe30367f636f9bdbb",
       "universe": "v2-support-provisioning"
     }
   ]

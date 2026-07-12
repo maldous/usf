@@ -11038,6 +11038,10 @@
         "primaryWorkPackage": "work-package-324e11fa2bdc638725ed"
       },
       {
+        "ownedKey": "daa078f6b5322783c0046dddf64333976452de2103b45f3d57d20de182c6bc6f",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
+      },
+      {
         "ownedKey": "dab63c8e0ea44497d7d8fc3b1f28a7b08d627cbcc5ebb834e1d0137d2102e1cf",
         "primaryWorkPackage": "work-package-ad9ecc8c046381e575a9"
       },
@@ -24006,6 +24010,10 @@
         "primaryWorkPackage": "work-package-324e11fa2bdc638725ed"
       },
       {
+        "ownedKey": "artifact-plan-required-daa078f6b5322783c0046dddf64333976452de2103b45f3d57d20de182c6bc6f",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
+      },
+      {
         "ownedKey": "artifact-plan-required-dab63c8e0ea44497d7d8fc3b1f28a7b08d627cbcc5ebb834e1d0137d2102e1cf",
         "primaryWorkPackage": "work-package-ad9ecc8c046381e575a9"
       },
@@ -26172,8 +26180,16 @@
         "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
       },
       {
+        "ownedKey": "119a99027db318bb21ecaeb2570a8a0eec81d044795a38fa220383bb856d22e5",
+        "primaryWorkPackage": "work-package-8e0c93d0a3fa11555026"
+      },
+      {
         "ownedKey": "20037d028873e3dab94f61d44893b6ba1cf8578d3f06ebd39e74a3f5995198c7",
         "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
+      },
+      {
+        "ownedKey": "22903315e7916ab5f9462e0d71b22913526350a4a92e026f2b41c44dde3c6449",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
       },
       {
         "ownedKey": "328d55fff50d3330837a2c32aa71658679368fa01a1155843c5f485fe05ce1a8",
@@ -26184,12 +26200,20 @@
         "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
       },
       {
+        "ownedKey": "5b39b122179d4b3991c506c132dcf10c480e8d818b78e567583113f5fd782395",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
+      },
+      {
         "ownedKey": "7e509022bc6b5c98268af1d7387feb8dffb58afd769968e3bf98b914b22df9e5",
         "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
       },
       {
         "ownedKey": "7f96b6588a04c5ac5bc8f06dbb4b3766f0c04708a8dd9456079b20a5f832aa28",
         "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
+      },
+      {
+        "ownedKey": "8dd325a42bdb0754573c0cc7e37003e25da0938926f8761613f2995b845c0fc1",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
       },
       {
         "ownedKey": "927a20d25ba3b64e1e9c25222c607d1d6da009bb7eebbc61e23c72824ff78b22",
@@ -34036,6 +34060,10 @@
       {
         "ownedKey": "replacement-989075bbddd4330e6b92565b",
         "primaryWorkPackage": "work-package-5fec561767cac1fdfa01"
+      },
+      {
+        "ownedKey": "replacement-9894b203faa39bd1589305b4",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
       },
       {
         "ownedKey": "replacement-989f6c0b964e30c4e695b096",
@@ -46982,6 +47010,10 @@
       {
         "ownedKey": "replacement-989075bbddd4330e6b92565b:reuse:0",
         "primaryWorkPackage": "work-package-5fec561767cac1fdfa01"
+      },
+      {
+        "ownedKey": "replacement-9894b203faa39bd1589305b4:reuse:0",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
       },
       {
         "ownedKey": "replacement-989f6c0b964e30c4e695b096:reuse:0",
@@ -109123,7 +109155,7 @@
         {
           "criterionKey": "work-package-8e0c93d0a3fa11555026:ownership",
           "evidence": [
-            "ownership-index:work-package-8e0c93d0a3fa11555026:e2b9fd4be02b8523a07109e4acd59ac6148e94d9c2fb2fd776a516878c81248f"
+            "ownership-index:work-package-8e0c93d0a3fa11555026:a1dbd69a9148ca39ee5fae8c71f19b5fb48c7f38f1c7bf840ac10335bd0086aa"
           ],
           "requirement": "Every scoped entity has this package as its sole primary owner."
         },
@@ -109185,11 +109217,11 @@
         }
       ],
       "confidence": {
-        "level": "high",
+        "level": "low",
         "reasons": [
-          "exact-machine-verifiable-input"
+          "unmet-graph-authority"
         ],
-        "score": 1
+        "score": 0.2
       },
       "equivalenceGates": [
         {
@@ -109250,7 +109282,9 @@
         }
       ],
       "key": "work-package-8e0c93d0a3fa11555026",
-      "missingEntirelyKeys": [],
+      "missingEntirelyKeys": [
+        "119a99027db318bb21ecaeb2570a8a0eec81d044795a38fa220383bb856d22e5"
+      ],
       "outcomeClass": "artifact-plan-closure:v2/usf/scripts",
       "ownedSemanticLayers": [],
       "primaryOwnership": {
@@ -109273,7 +109307,9 @@
           "artifact-plan-required-8f97951c776eff5cf581f63eb7c2c2c02e9e41d324ea25a2229fbc13ea2a86fa",
           "artifact-plan-required-d2cc31574b349a4ed9d868d8620844a04cd46d9c7a6e2e375acfb3bdc4dc48b2"
         ],
-        "missingEntirelyKeys": [],
+        "missingEntirelyKeys": [
+          "119a99027db318bb21ecaeb2570a8a0eec81d044795a38fa220383bb856d22e5"
+        ],
         "replacementGroupKeys": [
           "replacement-086bee90e8672a49f864f92c",
           "replacement-3a56bf615ff38b105e13e52b",
@@ -113871,7 +113907,7 @@
         {
           "criterionKey": "work-package-b066aa31871a52cb170c:ownership",
           "evidence": [
-            "ownership-index:work-package-b066aa31871a52cb170c:ba552a5747722c4767e3ab3742b45f3f1ff522bdf6df233d747c7fbf489c7cc0"
+            "ownership-index:work-package-b066aa31871a52cb170c:a4be9036106d0db7b0ee5f72a26425e150dc6247cfb83dd9b96d111409c8e2fb"
           ],
           "requirement": "Every scoped entity has this package as its sole primary owner."
         },
@@ -113897,6 +113933,7 @@
             "artifact-plan-required-b42d0f6c90241820f813a79b70581dd5de1bb4452edc1a6ae2aa480ac737035a",
             "artifact-plan-required-ca8020288b93ac144f8e16c0245b295c5ba786ee4a3c89c421d99e9ee66b8b21",
             "artifact-plan-required-cd923bddd4d4bcf74a10ca45c5ccaba1966789b6b9bc07374c251fa3852005f9",
+            "artifact-plan-required-daa078f6b5322783c0046dddf64333976452de2103b45f3d57d20de182c6bc6f",
             "artifact-plan-required-ddb0dc8ef14cf313adb0ad59508c2608b62df5fe19f8a9af445338fef68ba539",
             "artifact-plan-required-ff17e86890c84830faa14f59774a6ad82e983cbaad4a0dd937d2d4e843c5f731"
           ],
@@ -113915,6 +113952,7 @@
             "replacement-5b0a2a5e5352ce62d798103a",
             "replacement-5eb910d55771fc7a09e597ba",
             "replacement-7c01238ac11cb52dfbb65234",
+            "replacement-9894b203faa39bd1589305b4",
             "replacement-9a6948727f7c055d7b5bef26",
             "replacement-9b44ed99d0f16354706df349",
             "replacement-ab3cc5bd59d2aac71df22449",
@@ -113951,6 +113989,7 @@
         "b42d0f6c90241820f813a79b70581dd5de1bb4452edc1a6ae2aa480ac737035a",
         "ca8020288b93ac144f8e16c0245b295c5ba786ee4a3c89c421d99e9ee66b8b21",
         "cd923bddd4d4bcf74a10ca45c5ccaba1966789b6b9bc07374c251fa3852005f9",
+        "daa078f6b5322783c0046dddf64333976452de2103b45f3d57d20de182c6bc6f",
         "ddb0dc8ef14cf313adb0ad59508c2608b62df5fe19f8a9af445338fef68ba539",
         "ff17e86890c84830faa14f59774a6ad82e983cbaad4a0dd937d2d4e843c5f731"
       ],
@@ -113985,15 +114024,15 @@
           "driver": "proof-equivalence-complexity",
           "measure": "proof-equivalence-gate-count",
           "reason": "Multiple independent gates must pass before replacement closure.",
-          "value": 21
+          "value": 22
         }
       ],
       "confidence": {
-        "level": "high",
+        "level": "low",
         "reasons": [
-          "exact-machine-verifiable-input"
+          "unmet-graph-authority"
         ],
-        "score": 1
+        "score": 0.2
       },
       "equivalenceGates": [
         {
@@ -114150,6 +114189,14 @@
         },
         {
           "gateClass": "proof",
+          "gateKey": "artifact-plan-required-daa078f6b5322783c0046dddf64333976452de2103b45f3d57d20de182c6bc6f",
+          "mechanism": null,
+          "sources": [
+            "replacement-9894b203faa39bd1589305b4"
+          ]
+        },
+        {
+          "gateClass": "proof",
           "gateKey": "artifact-plan-required-ddb0dc8ef14cf313adb0ad59508c2608b62df5fe19f8a9af445338fef68ba539",
           "mechanism": null,
           "sources": [
@@ -114166,7 +114213,11 @@
         }
       ],
       "key": "work-package-b066aa31871a52cb170c",
-      "missingEntirelyKeys": [],
+      "missingEntirelyKeys": [
+        "22903315e7916ab5f9462e0d71b22913526350a4a92e026f2b41c44dde3c6449",
+        "5b39b122179d4b3991c506c132dcf10c480e8d818b78e567583113f5fd782395",
+        "8dd325a42bdb0754573c0cc7e37003e25da0938926f8761613f2995b845c0fc1"
+      ],
       "outcomeClass": "artifact-plan-closure:v2/usf/compiler",
       "ownedSemanticLayers": [],
       "primaryOwnership": {
@@ -114190,6 +114241,7 @@
           "b42d0f6c90241820f813a79b70581dd5de1bb4452edc1a6ae2aa480ac737035a",
           "ca8020288b93ac144f8e16c0245b295c5ba786ee4a3c89c421d99e9ee66b8b21",
           "cd923bddd4d4bcf74a10ca45c5ccaba1966789b6b9bc07374c251fa3852005f9",
+          "daa078f6b5322783c0046dddf64333976452de2103b45f3d57d20de182c6bc6f",
           "ddb0dc8ef14cf313adb0ad59508c2608b62df5fe19f8a9af445338fef68ba539",
           "ff17e86890c84830faa14f59774a6ad82e983cbaad4a0dd937d2d4e843c5f731"
         ],
@@ -114214,10 +114266,15 @@
           "artifact-plan-required-b42d0f6c90241820f813a79b70581dd5de1bb4452edc1a6ae2aa480ac737035a",
           "artifact-plan-required-ca8020288b93ac144f8e16c0245b295c5ba786ee4a3c89c421d99e9ee66b8b21",
           "artifact-plan-required-cd923bddd4d4bcf74a10ca45c5ccaba1966789b6b9bc07374c251fa3852005f9",
+          "artifact-plan-required-daa078f6b5322783c0046dddf64333976452de2103b45f3d57d20de182c6bc6f",
           "artifact-plan-required-ddb0dc8ef14cf313adb0ad59508c2608b62df5fe19f8a9af445338fef68ba539",
           "artifact-plan-required-ff17e86890c84830faa14f59774a6ad82e983cbaad4a0dd937d2d4e843c5f731"
         ],
-        "missingEntirelyKeys": [],
+        "missingEntirelyKeys": [
+          "22903315e7916ab5f9462e0d71b22913526350a4a92e026f2b41c44dde3c6449",
+          "5b39b122179d4b3991c506c132dcf10c480e8d818b78e567583113f5fd782395",
+          "8dd325a42bdb0754573c0cc7e37003e25da0938926f8761613f2995b845c0fc1"
+        ],
         "replacementGroupKeys": [
           "replacement-0501e3ea581147cf9a9a1a44",
           "replacement-1c8d7804f4ec4d4c8b927f37",
@@ -114229,6 +114286,7 @@
           "replacement-5b0a2a5e5352ce62d798103a",
           "replacement-5eb910d55771fc7a09e597ba",
           "replacement-7c01238ac11cb52dfbb65234",
+          "replacement-9894b203faa39bd1589305b4",
           "replacement-9a6948727f7c055d7b5bef26",
           "replacement-9b44ed99d0f16354706df349",
           "replacement-ab3cc5bd59d2aac71df22449",
@@ -114252,6 +114310,7 @@
           "replacement-5b0a2a5e5352ce62d798103a:reuse:0",
           "replacement-5eb910d55771fc7a09e597ba:reuse:0",
           "replacement-7c01238ac11cb52dfbb65234:reuse:0",
+          "replacement-9894b203faa39bd1589305b4:reuse:0",
           "replacement-9a6948727f7c055d7b5bef26:reuse:0",
           "replacement-9b44ed99d0f16354706df349:reuse:0",
           "replacement-ab3cc5bd59d2aac71df22449:reuse:0",
@@ -114277,6 +114336,7 @@
         "replacement-5b0a2a5e5352ce62d798103a",
         "replacement-5eb910d55771fc7a09e597ba",
         "replacement-7c01238ac11cb52dfbb65234",
+        "replacement-9894b203faa39bd1589305b4",
         "replacement-9a6948727f7c055d7b5bef26",
         "replacement-9b44ed99d0f16354706df349",
         "replacement-ab3cc5bd59d2aac71df22449",
@@ -114340,6 +114400,11 @@
           "action": "none",
           "replacementGroupKey": "replacement-7c01238ac11cb52dfbb65234",
           "reuseActionKey": "replacement-7c01238ac11cb52dfbb65234:reuse:0"
+        },
+        {
+          "action": "none",
+          "replacementGroupKey": "replacement-9894b203faa39bd1589305b4",
+          "reuseActionKey": "replacement-9894b203faa39bd1589305b4:reuse:0"
         },
         {
           "action": "none",
