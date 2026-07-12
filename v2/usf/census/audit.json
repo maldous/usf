@@ -5,7 +5,7 @@
       "facts": {
         "recordCount": 3225,
         "shardCount": 4,
-        "uncompressedBytes": 173594730
+        "uncompressedBytes": 173820303
       },
       "findings": [],
       "id": "parser-evidence-storage",
@@ -24,7 +24,7 @@
       "facts": {
         "inventoryCount": 2651,
         "parserCount": 3225,
-        "relationshipCount": 57345
+        "relationshipCount": 57464
       },
       "findings": [],
       "id": "parser-relationships",
@@ -59,36 +59,34 @@
     },
     {
       "facts": {
-        "acceptedDispositionCount": 133,
+        "acceptedDispositionCount": 137,
         "artifactCount": 3225,
         "canonicalArtifactCount": 0,
-        "missingDispositionCount": 3092
+        "missingDispositionCount": 3088
       },
       "findings": [
-        "required-source-disposition-unavailable:3092"
+        "required-source-disposition-unavailable:3088"
       ],
       "id": "artifact-dispositions",
       "status": "fail"
     },
     {
       "facts": {
-        "acceptedDispositionCount": 133,
+        "acceptedDispositionCount": 137,
         "artifactCount": 3225,
         "dispositionCount": 3218,
         "findingDistribution": {
-          "source-disposition-review-required": 3083,
-          "source-observation-digest-mismatch": 2,
+          "source-disposition-review-required": 3081,
           "source-observation-missing": 7
         },
-        "noOutputDispositionCount": 133,
+        "noOutputDispositionCount": 135,
         "observationCount": 3218,
-        "outputPlanDispositionCount": 0,
-        "rejectedDispositionCount": 3092
+        "outputPlanDispositionCount": 2,
+        "rejectedDispositionCount": 3088
       },
       "findings": [
-        "required-source-disposition-unavailable:3092",
-        "source-disposition-review-required:3083",
-        "source-observation-digest-mismatch:2",
+        "required-source-disposition-unavailable:3088",
+        "source-disposition-review-required:3081",
         "source-observation-missing:7"
       ],
       "id": "source-disposition-ownership",
@@ -122,7 +120,7 @@
     },
     {
       "facts": {
-        "canonicalDigest": "809237090b1b71b7d87f4d0831fcc6f4e9eacd16c68f0c9697ff0bcc5e887736",
+        "canonicalDigest": "a77bd9397360220ac57e06903d4b578b2d1105a2b2d32ff3ed835f7132d3131d",
         "outputCount": 12
       },
       "findings": [],

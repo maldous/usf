@@ -921,8 +921,9 @@ usf:DependencyLock a owl:Class ;
   rdfs:label "Dependency lock" .
 
 usf:Checksum a owl:Class ;
-  rdfs:subClassOf usf:Artefact ;
-  rdfs:label "Checksum" .
+  rdfs:subClassOf usf:Entity ;
+  rdfs:label "Checksum" ;
+  rdfs:comment "A digest record that identifies canonical bytes; it describes an artefact but is not itself a materialised file." .
 
 usf:Bundle a owl:Class ;
   rdfs:subClassOf usf:Artefact ;

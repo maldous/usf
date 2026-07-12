@@ -557,7 +557,7 @@ test('generation: real authority validates before replacement and reuses determi
   dirs.push(root);
   const keyPath = join(root, 'signing-key.pem');
   writeFileSync(keyPath, keys.privateKey.export({ type: 'pkcs8', format: 'pem' }), { mode: 0o600 });
-  const templateChecksum = DataFactory.namedNode('urn:usf:checksum:proofanchorworkflow');
+  const templateChecksum = DataFactory.namedNode('urn:usf:checksum:proofanchorworkflowchecksum');
   const checksumValue = DataFactory.namedNode('urn:usf:ontology:checksumValue');
   const expectedChecksum = dataset.store.getObjects(templateChecksum, checksumValue, null)[0];
   dataset.store.removeQuads(dataset.store.getQuads(templateChecksum, checksumValue, null, null));

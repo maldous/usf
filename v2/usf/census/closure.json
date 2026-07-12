@@ -23,7 +23,7 @@
     "independentStardogObservationMissing": 1,
     "installedDependenciesAsCanonicalCompilerSource": 0,
     "invalidExpectedExternalReferences": 0,
-    "invalidOrStaleSourceDispositionOwnership": 3092,
+    "invalidOrStaleSourceDispositionOwnership": 3088,
     "inventedArtifactPlans": 0,
     "mappingsWithoutEvidence": 0,
     "orphanSourceObservations": 0,
@@ -36,7 +36,7 @@
     "prohibitedStardogAccessPaths": 0,
     "relationshipFalsePositivesAccepted": 0,
     "requiredCanonicalArtifactsWithoutReplacement": 0,
-    "sourceArtifactsWithoutAcceptedGraphDisposition": 3092,
+    "sourceArtifactsWithoutAcceptedGraphDisposition": 3088,
     "unboundedPartialParsers": 0,
     "unclassifiedRelationshipAndInventoryFindings": 0,
     "unclosedReplacementCardinalities": 0,
@@ -140,6 +140,12 @@
     "v2/usf/.work/USF-1149/worker6/shapes-proposal.ttl",
     "v2/usf/.work/USF-1149/worker6/taxonomy-proposal.ttl",
     "v2/usf/.work/USF-1149/worker6/vocabulary-proposal.ttl",
+    "v2/usf/.work/USF-1152/implementation-output-ownership/proposals.jsonl",
+    "v2/usf/.work/USF-1152/implementation-output-ownership/summary.json",
+    "v2/usf/.work/USF-1152/machine-semantics-output-ownership/proposals.jsonl",
+    "v2/usf/.work/USF-1152/machine-semantics-output-ownership/summary.json",
+    "v2/usf/.work/USF-1152/proof-runtime-output-ownership/proposals.jsonl",
+    "v2/usf/.work/USF-1152/proof-runtime-output-ownership/summary.json",
     "v2/usf/.work/USF-1152/source-disposition/authority-proposal.ttl",
     "v2/usf/.work/USF-1152/source-disposition/derivation-proposal.rq",
     "v2/usf/.work/USF-1152/source-disposition/fixture-plan.md",
@@ -168,10 +174,14 @@
     "v2/usf/.work/USF-1152/worker7/ui-exposure-matrix.jsonl",
     "v2/usf/.work/baseline/build-baseline.mjs",
     "v2/usf/.work/baseline/dataset-index.json",
-    "v2/usf/compiler/src/live-attestation.js"
+    "v2/usf/compiler/test/compiler.test.js",
+    "v2/usf/graph/contracts/generation.trig",
+    "v2/usf/graph/derived/source-dispositions.trig",
+    "v2/usf/graph/observed/source-artefacts.trig",
+    "v2/usf/graph/ontology.ttl"
   ],
   "productionRecomputed": true,
-  "regeneratedOutputDigest": "c40a6ef4b5a26d2b3c89c5adad1a15fe20d5d923245f425de727b1ef068ac907",
+  "regeneratedOutputDigest": "7632452923797c4052f67aeeb9c432bab6f50a018a79d0999724b0507cbc8f9e",
   "stardogObservation": {
     "reasonCode": "independent-stardog-observation-not-injected",
     "status": "missing"
@@ -184,8 +194,8 @@
       "v2-graph-authority": 95,
       "v2-support-provisioning": 22
     },
-    "v2CompilerUniverseDigest": "413e82c03e5112fb986faccd20b75b9a1c14629bfb21098c0bef4540ab4628b7",
-    "v2GraphUniverseDigest": "ff1899a6bb0ed9fc808cd0759bd1910e5c730d12fef2aef3c809c6528702d7d0",
+    "v2CompilerUniverseDigest": "b6095785fdca2bf1d0055635cf47d9c439b57c7e9a583b98aa28a5c8e631ddcc",
+    "v2GraphUniverseDigest": "710fb6c91f895417a8584e3c2ae710e2dff7961c52aed4eab2a06f23177f5074",
     "v2SupportUniverseDigest": "03c5225abc8a70b47088281a8c5347271429e2c58726e184bcff221fde788ddf"
   },
   "validation": {
@@ -196,10 +206,10 @@
     "jsonFiles": 7,
     "jsonlFiles": 18,
     "mappings": 3225,
-    "parserEvidenceCompressedBytes": 9506825,
+    "parserEvidenceCompressedBytes": 9517503,
     "parserEvidenceShards": 4,
-    "parserEvidenceUncompressedBytes": 173594730,
-    "relationships": 57345,
+    "parserEvidenceUncompressedBytes": 173820303,
+    "relationships": 57464,
     "validationStatus": "pass",
     "workPackages": 98
   },
