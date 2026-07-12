@@ -551,8 +551,21 @@ function writeTriG(quads) {
   return new Promise((resolvePromise, reject) => {
     const writer = new Writer({ format: 'application/trig' });
     writer.addQuads(interleaveQuadsBySubject(quads));
-    writer.end((error, output) => error ? reject(error) : resolvePromise(output));
+    writer.end((error, output) => error ? reject(error) : resolvePromise(spaceBeforeTerminator(output)));
   });
+}
+
+// N3 writes a bare boolean or integer object immediately before the statement
+// terminator with no separating space (e.g. `... true.`, `... 5.`). That is
+// lenient Turtle: Stardog's stricter TurtleParser consumes the dot as part of a
+// prefixed name, then fails with "Expected ':'", rejecting the entire load
+// (silently committing only the triples before the first such line). Guarantee a
+// space before every statement-terminating dot. interleaveQuadsBySubject keeps
+// one statement per line, and N3 escapes newlines inside literals, so the final
+// dot on each line is always the terminator.
+// ponytail: text fix-up for an N3/Stardog serialisation mismatch; drop it if N3 or Stardog stops disagreeing.
+function spaceBeforeTerminator(trig) {
+  return trig.replace(/([^\s.])\.(\r?\n|$)/g, '$1 .$2');
 }
 
 // N3 Writer compacts adjacent quads for one subject into comma/semicolon
@@ -620,8 +633,11 @@ function interleaveQuadsBySubject(quads) {
 }
 
 export async function collectRepositorySourceObservations({ manifest, entry }) {
-  const repositoryRoot = resolve(manifest.root, '../../..');
-  const censusRoot = join(repositoryRoot, 'v2/usf/census');
+  // census is always a sibling of the graph directory (…/census next to …/graph),
+  // so resolve it relative to the graph root. Deriving it from a 3-levels-up
+  // repository root assumed the host's v2/usf/graph nesting and broke inside the
+  // chroot, where the graph is mounted directly at /usf/graph.
+  const censusRoot = resolve(manifest.root, '../census');
   const inputSpecs = [
     ['artifacts.jsonl', 'jsonl'], ['mappings.jsonl', 'jsonl'], ['relationships.jsonl', 'jsonl'],
     ['workpackages.json', 'json'], ['dependencies.jsonl', 'jsonl'], ['dependency-lineage.jsonl', 'jsonl'],

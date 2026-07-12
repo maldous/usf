@@ -9,6 +9,7 @@
   },
   "scripts": {
     "check": "node src/cli.js check",
+    "provision:db": "node src/ensure-db-config.js",
     "compile": "node src/cli.js compile",
     "plan": "node src/cli.js plan",
     "migrate:contract-authority": "node src/migrate-contract-authority.js",

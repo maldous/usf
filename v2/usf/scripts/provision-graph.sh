@@ -9,6 +9,9 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$HERE/../compiler"
 npm run check
 npm test
+# A dropped/recreated USF database returns to Stardog defaults; reassert the
+# options the compiler and integrity rules require before the transactional load.
+npm run provision:db
 npm run compile
 npm run verify
 echo "provision-graph: official-SDK transaction and read-only verification completed"
