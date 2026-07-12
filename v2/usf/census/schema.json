@@ -208,6 +208,13 @@
           },
           "type": "array"
         },
+        "ownedSemanticLayers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
         "pathRule": {
           "type": [
             "string",
@@ -277,6 +284,7 @@
         "mutabilityClass",
         "semanticInputs",
         "requiredSemanticLayers",
+        "ownedSemanticLayers",
         "proofInputs",
         "evidenceInputs",
         "implementationObligations",
@@ -316,12 +324,12 @@
           "type": "array"
         },
         "independentlyRecomputed": {
-          "const": true
+          "const": false
         },
         "verdict": {
           "enum": [
-            "HARDENED_CENSUS_READY_FOR_PROGRAMME_MATERIALISATION",
-            "HARDENED_CENSUS_INCOMPLETE"
+            "CENSUS_SEMANTIC_AUTHORITY_READY",
+            "CENSUS_SEMANTIC_AUTHORITY_INCOMPLETE"
           ]
         }
       },
@@ -362,6 +370,26 @@
     },
     "dependency": {
       "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "required-prerequisite"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "satisfactionStatus",
+              "satisfactionBasis"
+            ]
+          }
+        }
+      ],
       "properties": {
         "artifactEvidence": {
           "items": {
@@ -372,6 +400,10 @@
         },
         "confidence": {
           "$ref": "#/$defs/confidence"
+        },
+        "dependencyKey": {
+          "pattern": "^dependency-[a-f0-9]{64}$",
+          "type": "string"
         },
         "dependencyType": {
           "type": "string"
@@ -405,8 +437,74 @@
           "type": "array",
           "uniqueItems": true
         },
+        "resolutionBasis": {
+          "type": "object"
+        },
+        "resolutionStatus": {
+          "const": "resolved-retained"
+        },
         "reviewStatus": {
           "type": "string"
+        },
+        "satisfactionBasis": {
+          "additionalProperties": false,
+          "properties": {
+            "currentPrerequisiteArtifactCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "currentPrerequisiteArtifactHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "currentRelationshipHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "directionMatchedRelationshipHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "edgeSurvivedTransitiveReduction": {
+              "type": "boolean"
+            },
+            "exactEvidenceHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "prerequisiteEndpointExists": {
+              "type": "boolean"
+            },
+            "requiredPrerequisiteGraphAcyclic": {
+              "type": "boolean"
+            },
+            "sourceEndpointExists": {
+              "type": "boolean"
+            },
+            "structurallyProvenRelationshipHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "exactEvidenceHashCount",
+            "currentRelationshipHashCount",
+            "structurallyProvenRelationshipHashCount",
+            "directionMatchedRelationshipHashCount",
+            "currentPrerequisiteArtifactHashCount",
+            "currentPrerequisiteArtifactCount",
+            "sourceEndpointExists",
+            "prerequisiteEndpointExists",
+            "edgeSurvivedTransitiveReduction",
+            "requiredPrerequisiteGraphAcyclic"
+          ],
+          "type": "object"
+        },
+        "satisfactionStatus": {
+          "enum": [
+            "satisfied",
+            "unsatisfied"
+          ]
         },
         "semanticEvidence": {
           "items": {
@@ -424,6 +522,7 @@
         }
       },
       "required": [
+        "dependencyKey",
         "source",
         "prerequisite",
         "dependencyType",
@@ -435,7 +534,9 @@
         "proofEquivalenceEvidence",
         "migrationEvidence",
         "confidence",
-        "reviewStatus"
+        "reviewStatus",
+        "resolutionStatus",
+        "resolutionBasis"
       ],
       "type": "object"
     },
@@ -657,6 +758,119 @@
       "type": "array",
       "uniqueItems": true
     },
+    "parserEvidenceManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "aggregate": {
+          "additionalProperties": false,
+          "properties": {
+            "recordCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "uncompressedBytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "uncompressedSha256": {
+              "$ref": "#/$defs/digest"
+            }
+          },
+          "required": [
+            "recordCount",
+            "uncompressedBytes",
+            "uncompressedSha256"
+          ],
+          "type": "object"
+        },
+        "encoding": {
+          "const": "gzip-jsonl"
+        },
+        "formatVersion": {
+          "const": 1
+        },
+        "order": {
+          "items": false,
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "const": "universe"
+            },
+            {
+              "const": "path"
+            }
+          ],
+          "type": "array"
+        },
+        "shards": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "compressedBytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "compressedSha256": {
+                "$ref": "#/$defs/digest"
+              },
+              "firstPath": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lastPath": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "path": {
+                "$ref": "#/$defs/relativePath"
+              },
+              "recordCount": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "uncompressedBytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "uncompressedSha256": {
+                "$ref": "#/$defs/digest"
+              },
+              "universe": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "compressedBytes",
+              "compressedSha256",
+              "firstPath",
+              "lastPath",
+              "path",
+              "recordCount",
+              "uncompressedBytes",
+              "uncompressedSha256",
+              "universe"
+            ],
+            "type": "object"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "type": "array"
+        }
+      },
+      "required": [
+        "aggregate",
+        "encoding",
+        "formatVersion",
+        "order",
+        "shards"
+      ],
+      "type": "object"
+    },
     "parserResult": {
       "additionalProperties": false,
       "properties": {
@@ -748,6 +962,9 @@
     },
     "relationship": {
       "properties": {
+        "attributes": {
+          "type": "object"
+        },
         "confidence": {
           "$ref": "#/$defs/confidence"
         },
@@ -973,6 +1190,13 @@
           "minLength": 1,
           "type": "string"
         },
+        "ownedSemanticLayers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
         "primaryOwnership": {
           "type": "object"
         },
@@ -1005,6 +1229,7 @@
         "key",
         "architecturalOutcome",
         "outcomeClass",
+        "ownedSemanticLayers",
         "primaryOwnership",
         "semanticInputs",
         "requiredSemanticLayers",

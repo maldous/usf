@@ -139,6 +139,9 @@
     perm:tenantmembersread a usf:Permission ;
         usf:boundedBy tb:tenant ;
         usf:canonicalName "tenantmembersread" .
+    perm:apikeycreate a usf:Permission ;
+        usf:boundedBy tb:tenant ;
+        usf:canonicalName "apikeycreate" .
     pol:abacclassification a usf:Policy ;
         usf:canonicalName "abacclassification" ;
         usf:policyConstrains con:abacclassification .

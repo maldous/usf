@@ -26,14 +26,19 @@ export const ROLES = Object.freeze([
   'assurance',
   'realisation',
   'execution',
+  'observed',
   'shapes',
   'rules',
   'derived',
 ]);
 
-// The one required derivation order. Rules run obligations → evidence →
-// surfaces → coverage → readiness, then integrity is checked last.
+// The one required derivation order. Repository structure is promoted from
+// validated observations first, source dispositions are then classified, and
+// obligations → evidence → surfaces → coverage → readiness follow; whole-
+// dataset integrity is checked last.
 export const DERIVATION_ORDER = Object.freeze([
+  'repository-structure',
+  'source-dispositions',
   'obligations',
   'evidence',
   'surfaces',
@@ -67,6 +72,8 @@ function roleFor(section, file) {
       return 'rules';
     case 'derived':
       return 'derived';
+    case 'observed':
+      return 'observed';
     case 'definition':
       if (base === 'ontology.ttl') return 'ontology';
       if (base === 'vocabulary.ttl' || base === 'taxonomy.ttl') return 'vocabulary';
@@ -99,18 +106,22 @@ function assertContained(graphDir, file) {
 }
 
 function entry(section, raw, graphDir, order) {
-  if (!raw || typeof raw.file !== 'string') {
-    throw new ManifestError(`Malformed ${section} entry: missing file`);
+  if (!raw || (typeof raw.file !== 'string' && typeof raw.collector !== 'string')) {
+    throw new ManifestError(`Malformed ${section} entry: missing file or collector`);
   }
+  if (raw.file && raw.collector && section !== 'observed') throw new ManifestError(`Malformed ${section} entry: file and collector are mutually exclusive`);
+  const file = raw.file || null;
   return Object.freeze({
-    file: raw.file,
-    path: assertContained(graphDir, raw.file),
+    file,
+    collector: raw.collector || null,
+    path: file ? assertContained(graphDir, file) : null,
     graph: raw.graph || null,
     output: raw.output || null,
     kind: raw.kind || null,
-    role: roleFor(section, raw.file),
-    contentType: contentTypeFor(raw.file),
+    role: roleFor(section, file || raw.collector),
+    contentType: file ? contentTypeFor(file) : 'text/turtle',
     order,
+    validationOrder: raw.validationOrder ?? null,
   });
 }
 
@@ -124,9 +135,10 @@ export function loadManifest(graphDir) {
     entry('definition', r, root, r.loadOrder)
   );
   const authored = (doc.authoredGraphs || []).map((r) => entry('authored', r, root, r.loadOrder));
-  const shapes = (doc.shapeGraphs || []).map((r, i) => entry('shapes', r, root, 1000 + i));
+  const observed = (doc.observedGraphs || []).map((r) => entry('observed', r, root, r.loadOrder));
+  const shapes = (doc.shapeGraphs || []).map((r, i) => entry('shapes', r, root, r.loadOrder ?? 1000 + i));
   const rules = (doc.rules || []).map((r, i) => entry('rules', r, root, i));
-  const derived = (doc.derivedGraphs || []).map((r, i) => entry('derived', r, root, 2000 + i));
+  const derived = (doc.derivedGraphs || []).map((r, i) => entry('derived', r, root, r.loadOrder ?? 2000 + i));
 
   const fixtures = doc.fixtures
     ? Object.freeze({
@@ -143,6 +155,7 @@ export function loadManifest(graphDir) {
     baseIri: doc.baseIri,
     definitions: Object.freeze(definitions),
     authored: Object.freeze(authored),
+    observed: Object.freeze(observed),
     shapes: Object.freeze(shapes),
     rules: Object.freeze(rules),
     derived: Object.freeze(derived),
@@ -155,6 +168,10 @@ export function loadManifest(graphDir) {
 // part of this list.
 export function authoredLoadList(manifest) {
   return [...manifest.definitions, ...manifest.authored].sort((a, b) => a.order - b.order);
+}
+
+export function observedLoadList(manifest) {
+  return [...manifest.observed].sort((a, b) => a.order - b.order);
 }
 
 // The single shapes graph IRI (all shape files register into one graph).
@@ -171,6 +188,7 @@ export function shapesGraph(manifest) {
 export function managedGraphs(manifest) {
   const set = new Set();
   for (const e of authoredLoadList(manifest)) set.add(e.graph);
+  for (const e of observedLoadList(manifest)) set.add(e.graph);
   set.add(shapesGraph(manifest));
   for (const d of manifest.derived) set.add(d.graph);
   for (const r of manifest.rules) if (r.output) set.add(r.output);

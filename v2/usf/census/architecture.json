@@ -33,7 +33,11 @@
     "mappings.jsonl",
     "materialisations.jsonl",
     "missing-entirely.jsonl",
-    "parser-results.jsonl",
+    "parser-results/manifest.json",
+    "parser-results/repository-output.jsonl.gz",
+    "parser-results/v2-compiler-implementation.jsonl.gz",
+    "parser-results/v2-graph-authority.jsonl.gz",
+    "parser-results/v2-support-provisioning.jsonl.gz",
     "relationships.jsonl",
     "replacement-groups.jsonl",
     "repository-universe.jsonl",
@@ -83,6 +87,11 @@
       "disposition": "retain-unchanged",
       "module": "src/canonical.mjs",
       "responsibility": "canonical serialization and framed hashing"
+    },
+    {
+      "disposition": "active",
+      "module": "src/parser-evidence.mjs",
+      "responsibility": "deterministic sharded parser-evidence storage, streaming verification, and fail-closed integrity"
     },
     {
       "disposition": "refactor",

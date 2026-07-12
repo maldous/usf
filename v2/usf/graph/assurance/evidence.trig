@@ -10,6 +10,7 @@
     evr:evidencenormalisedauthenticationsliceprooflineage a usf:EvidenceResult ;
         usf:canonicalName "evidencenormalisedauthenticationsliceprooflineage" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:normalisedevidence ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:localdev ;
@@ -17,6 +18,7 @@
     evr:evidencenormalisedobservabilitysignalsruntimeprooflineage a usf:EvidenceResult ;
         usf:canonicalName "evidencenormalisedobservabilitysignalsruntimeprooflineage" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:normalisedevidence ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:localdev ;
@@ -24,6 +26,7 @@
     evr:evidenceregister a usf:EvidenceResult ;
         usf:canonicalName "evidenceregister" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:runtimeproofevidence ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:localdev ;
@@ -31,6 +34,7 @@
     evr:evidenceruntimeproofauthenticationsliceproof a usf:EvidenceResult ;
         usf:canonicalName "evidenceruntimeproofauthenticationsliceproof" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:runtimeproofevidence ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:hermetic ;
@@ -38,6 +42,7 @@
     evr:evidenceruntimeproofobservabilitysignalsruntimeproof a usf:EvidenceResult ;
         usf:canonicalName "evidenceruntimeproofobservabilitysignalsruntimeproof" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:runtimeproofevidence ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:hermetic ;
@@ -45,6 +50,7 @@
     evr:proofcockpitexternalreviewbundle a usf:EvidenceResult ;
         usf:canonicalName "proofcockpitexternalreviewbundle" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:runtimeproofevidence ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:localdev ;
@@ -52,6 +58,7 @@
     evr:proofcockpithumanreviewactions a usf:EvidenceResult ;
         usf:canonicalName "proofcockpithumanreviewactions" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:runtimeproofevidence ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:localdev ;
@@ -59,6 +66,7 @@
     evr:proofcockpitstagingevidencestore a usf:EvidenceResult ;
         usf:canonicalName "proofcockpitstagingevidencestore" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:runtimeproofevidence ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:localdev ;
@@ -66,6 +74,7 @@
     evr:proofcockpitwarninginventory a usf:EvidenceResult ;
         usf:canonicalName "proofcockpitwarninginventory" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:runtimeproofevidence ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:localdev ;
@@ -73,6 +82,7 @@
     evr:repositoryoptimisationgeneratedreports a usf:EvidenceResult ;
         usf:canonicalName "repositoryoptimisationgeneratedreports" ;
         usf:evidenceForContract sc:universalservicefoundationscopeandprinciples ;
+        usf:evidenceFor sc:universalservicefoundationscopeandprinciples ;
         usf:evidenceKind evk:generatedreport ;
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:localdev ;

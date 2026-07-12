@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
-import { createParserRegistry, parseMembers } from '../src/parsers/registry.mjs';
+import { createParserRegistry, parseMembers, parserInternals } from '../src/parsers/registry.mjs';
 import { structuredParsers } from '../src/parsers/structured.mjs';
 
 function context(syntaxKind, text, path = `fixtures/example.${syntaxKind}`) {
@@ -34,6 +34,23 @@ test('identical content at distinct paths retains member-specific cached project
   assert.notEqual(parsed[0].cacheKey, parsed[1].cacheKey);
   assert.deepEqual(parsed.map((entry) => entry.inventory.scope).sort(), paths.sort());
   assert.deepEqual(parsed.map((entry) => entry.declarations[0].identifier).sort(), paths.sort());
+});
+
+test('graph census evidence retains exact observed paths that resemble coordination metadata', () => {
+  const declaration = {
+    kind: 'semantic-triple',
+    identifier: 'observation path',
+    attributes: { object: '"tools/example/USF-42-defect.json"' }
+  };
+  const parsed = { declarations: [declaration], relationships: [], inventory: null };
+  assert.deepEqual(
+    parserInternals.sanitizeParsed({ path: 'v2/usf/graph/observed/source-artefacts.trig', universe: 'v2-graph-authority' }, parsed).declarations,
+    [declaration]
+  );
+  assert.deepEqual(
+    parserInternals.sanitizeParsed({ path: 'docs/example.json', universe: 'repository-output' }, parsed).declarations,
+    []
+  );
 });
 
 test('JSON and JSONL inventories are substantive and retain declared relationships', () => {
@@ -81,7 +98,22 @@ jobs:
   assert.match(command.attributes.command, /npm ci\nnpm test/);
   assert.equal(command.attributes.executableContext.interpreter, 'bash');
   assert.ok(parsed.relationships.some((entry) => entry.relationshipType === 'needs' && entry.target === 'build'));
+  assert.ok(parsed.relationships.some((entry) => entry.relationshipType === 'uses-action' && entry.target === 'actions/checkout@v4' && entry.targetKind === 'external-resource'));
   assert.equal(parsed.inventory.inventoryKind, 'workflow-definition');
+});
+
+test('generic structured scalars do not become paths without a schema-known field', () => {
+  const generic = parse('structured-json', JSON.stringify({
+    description: 'docs/not-a-reference.md',
+    path: './actual.json',
+    run: 'node scripts/task.mjs',
+    uses: './actions/local'
+  }), 'fixtures/config.json');
+  assert.ok(generic.relationships.some((entry) => entry.target === './actual.json' && entry.attributes.pathField === 'path'));
+  assert.ok(!generic.relationships.some((entry) => entry.target.includes('not-a-reference.md')));
+  assert.ok(!generic.relationships.some((entry) => entry.target.includes('scripts/task.mjs')));
+  assert.ok(generic.declarations.some((entry) => entry.kind === 'command' && entry.attributes.command === 'node scripts/task.mjs'));
+  assert.ok(generic.relationships.some((entry) => entry.relationshipType === 'uses-action' && entry.target === './actions/local' && entry.targetKind === 'artifact'));
 });
 
 test('Compose YAML includes nested services, dependencies, anchors, health checks, commands, and inventories', () => {

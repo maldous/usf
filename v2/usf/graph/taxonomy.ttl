@@ -102,10 +102,131 @@ usf:Shape           usf:classifiedAs tax:execution .
 usf:ProofObligation     usf:classifiedAs tax:derivation .
 usf:TestObligation      usf:classifiedAs tax:derivation .
 usf:EvidenceRequirement usf:classifiedAs tax:derivation .
-usf:Surface             usf:classifiedAs tax:derivation .
+usf:DerivedSurface      usf:classifiedAs tax:derivation .
 usf:ContractSurface     usf:classifiedAs tax:derivation .
 usf:Coverage            usf:classifiedAs tax:derivation .
 usf:Readiness           usf:classifiedAs tax:derivation .
 
 # Authority family
 usf:NamedGraph usf:classifiedAs tax:authority .
+
+@prefix usf: <urn:usf:ontology:> .
+
+# Merge target: urn:usf:graph:taxonomy.
+# Reuse the nine existing semantic families; no new family is necessary.
+
+# Contract terms.
+usf:ArtefactPlan usf:classifiedAs <urn:usf:taxonomy:contract> .
+usf:PathRule usf:classifiedAs <urn:usf:taxonomy:contract> .
+usf:CompatibilityContract usf:classifiedAs <urn:usf:taxonomy:contract> .
+usf:MigrationPolicy usf:classifiedAs <urn:usf:taxonomy:contract> .
+
+# Realisation terms.
+usf:ArtefactContainer usf:classifiedAs <urn:usf:taxonomy:realisation> .
+usf:Artefact usf:classifiedAs <urn:usf:taxonomy:realisation> .
+usf:Repository usf:classifiedAs <urn:usf:taxonomy:realisation> .
+usf:Workspace usf:classifiedAs <urn:usf:taxonomy:realisation> .
+usf:Package usf:classifiedAs <urn:usf:taxonomy:realisation> .
+usf:Module usf:classifiedAs <urn:usf:taxonomy:realisation> .
+usf:Template usf:classifiedAs <urn:usf:taxonomy:realisation> .
+
+# Execution terms.
+usf:Compiler usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:CompilerComponent usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:Generator usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:Renderer usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:Transform usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:Importer usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:ArtefactMaterialisation usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:EvidenceCollection usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:EvidenceNormalisation usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:EvidenceIngestion usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:CompilerPhase usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:CompilerRun usf:classifiedAs <urn:usf:taxonomy:execution> .
+usf:CleanRoomGeneration usf:classifiedAs <urn:usf:taxonomy:execution> .
+
+# Platform and release terms.
+usf:Build usf:classifiedAs <urn:usf:taxonomy:platform> .
+usf:Release usf:classifiedAs <urn:usf:taxonomy:platform> .
+usf:Version usf:classifiedAs <urn:usf:taxonomy:platform> .
+usf:DependencyLock usf:classifiedAs <urn:usf:taxonomy:platform> .
+usf:Bundle usf:classifiedAs <urn:usf:taxonomy:platform> .
+
+# Assurance and integrity terms.
+usf:Signature usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:SigningIdentity usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:Attestation usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:ProvenanceRecord usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:SoftwareBillOfMaterials usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:Checksum usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:EquivalenceClaim usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:EquivalenceRule usf:classifiedAs <urn:usf:taxonomy:assurance> .
+
+# Enterprise assurance terms. Controlled-value subclasses remain exempt under
+# the closed-vocabulary rule below.
+usf:AssuranceFramework usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:FrameworkEdition usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:FrameworkClause usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:FrameworkControl usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:ControlImplementation usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:ControlScopeMapping usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:StatementOfApplicability usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:ApplicabilityDecision usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:AssuranceOwnerRole usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:ControlException usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:CompensatingControl usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:RiskAssessment usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:RiskTreatment usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:RiskAcceptance usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:ControlAssessment usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:AssuranceFinding usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:CorrectiveAction usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:ControlReview usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:EvidenceReview usf:classifiedAs <urn:usf:taxonomy:assurance> .
+
+# Taxonomy exemptions (enforced as rules rather than RDF assertions):
+# Merge target: urn:usf:graph:taxonomy. Existing semantic families suffice.
+usf:UISemanticModel usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:ViewModel usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:Surface usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:Form usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:FormField usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:ValidationBinding usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:ErrorBinding usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:Component usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:AccessibilityProfile usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:LocalisationProfile usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:Preview usf:classifiedAs <urn:usf:taxonomy:experience> .
+usf:Route usf:classifiedAs <urn:usf:taxonomy:interaction> .
+usf:RendererContract usf:classifiedAs <urn:usf:taxonomy:contract> .
+
+# Universal assurance and readiness terms. The five new controlled-value
+# classes remain exempt and are not assigned to a nonexistent vocabulary family.
+usf:AssuranceObligation usf:classifiedAs <urn:usf:taxonomy:derivation> .
+usf:ReadinessGateResult usf:classifiedAs <urn:usf:taxonomy:derivation> .
+usf:AssuranceMatrix usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:AssuranceMatrixCell usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:ReadinessGate usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:GateCriterion usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:TestExecution usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:TestResult usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:IntegrityVerification usf:classifiedAs <urn:usf:taxonomy:assurance> .
+
+# Repository source observation and disposition.
+usf:ObservedEntity usf:classifiedAs <urn:usf:taxonomy:derivation> .
+usf:SourceArtefact usf:classifiedAs <urn:usf:taxonomy:realisation> .
+usf:SourceArtefactObservation usf:classifiedAs <urn:usf:taxonomy:derivation> .
+usf:SourceArtefactDisposition usf:classifiedAs <urn:usf:taxonomy:derivation> .
+usf:SourceDispositionPolicy usf:classifiedAs <urn:usf:taxonomy:contract> .
+usf:SourceSemanticBinding usf:classifiedAs <urn:usf:taxonomy:contract> .
+usf:AutomationWorkflowContract usf:classifiedAs <urn:usf:taxonomy:contract> .
+
+# ControlledValue subclasses retain the existing controlled-value exemption;
+# properties are closed by declaration/domain/range rather than classifiedAs.
+
+# - subclasses of usf:ControlledValue are closed-vocabulary dimensions and do
+#   not receive semantic-family assignments;
+# - the existing abstract bases usf:Entity, usf:DerivedEntity, and
+#   usf:ControlledValue retain their current abstract-base exemption;
+# - properties are classified by domain/range and graph ownership, not with
+#   usf:classifiedAs.

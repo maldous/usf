@@ -30,7 +30,7 @@ shp:EvidenceRequirementShape a sh:NodeShape ;
 
 shp:SurfaceShape a sh:NodeShape ;
     usf:canonicalName "surfaceshape" ;
-    sh:targetClass usf:Surface ;
+    sh:targetClass usf:DerivedSurface ;
     sh:property [ sh:path usf:surfaceOf ; sh:minCount 1 ;
         sh:message "surfacesubject: surface must name what it surfaces" ] ;
     sh:property [ sh:path usf:derivedFrom ; sh:minCount 1 ] .

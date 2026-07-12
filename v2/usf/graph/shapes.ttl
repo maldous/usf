@@ -66,6 +66,7 @@ shp:ContaminationShape a sh:NodeShape ;
         sh:message "forbiddenmetadata: forbidden external metadata pattern in IRI" ;
         sh:prefixes usf:prefixes ;
         sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this usf:observedInCensusRun ?run }
             FILTER(isIRI($this))
             FILTER(REGEX(STR($this),'linear[.]app|github[.]com|gitlab[.]com|refs/heads|commitSha|branchName|issueId|projectId|ADR-[0-9]|USF-[0-9]','i'))
         }""" ;
@@ -74,6 +75,7 @@ shp:ContaminationShape a sh:NodeShape ;
         sh:message "forbiddenmetadata: forbidden external metadata pattern in literal value" ;
         sh:prefixes usf:prefixes ;
         sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this usf:observedInCensusRun ?run }
             $this ?p ?o .
             FILTER(isLiteral(?o))
             FILTER(REGEX(STR(?o),'linear[.]app|github[.]com|gitlab[.]com|refs/heads|commitSha|branchName|issueId|projectId|ADR-[0-9]|USF-[0-9]'))
@@ -99,7 +101,7 @@ shp:ProviderModeShape a sh:NodeShape ;
 
 shp:ContractFacetCompletenessShape a sh:NodeShape ;
     usf:canonicalName "contractfacetcompletenessshape" ;
-    sh:targetClass usf:SemanticContract ;
+    sh:targetObjectsOf usf:hasContract ;
     sh:sparql [
         sh:message "missingcontractfacet: semantic contract does not declare all ten mandatory facet kinds" ;
         sh:prefixes usf:prefixes ;

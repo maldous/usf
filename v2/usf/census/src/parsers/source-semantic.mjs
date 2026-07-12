@@ -437,7 +437,11 @@ class Visitor(ast.NodeVisitor):
             add_rel('imports', item.name, 'package', 'python-ast-import', node)
     def visit_ImportFrom(self, node):
         module = '.' * node.level + (node.module or '')
-        if module: add_rel('imports', module, 'package', 'python-ast-import-from', node)
+        if node.level > 0:
+            if node.module: add_rel('imports', module, 'artifact', 'python-ast-import-from', node, relativeLevel=node.level, module=node.module)
+            else:
+                for item in node.names: add_rel('imports', '.' * node.level + item.name, 'artifact', 'python-ast-import-from', node, relativeLevel=node.level, module=item.name)
+        elif module: add_rel('imports', module, 'package', 'python-ast-import-from', node, relativeLevel=0, module=node.module)
         for item in node.names:
             local = item.asname or item.name
             add_decl('import-binding', local, node, source=module, imported=item.name)
@@ -496,6 +500,12 @@ Visitor().visit(tree)
 print(json.dumps({'declarations': declarations, 'relationships': relationships, 'unsupported': unsupported}, sort_keys=True, separators=(',', ':')))
 `;
 
+function pythonRelativeTarget(specifier, level) {
+  const module = specifier.slice(level).replaceAll('.', '/');
+  const prefix = level === 1 ? './' : '../'.repeat(level - 1);
+  return `${prefix}${module}`;
+}
+
 function parsePython({ text }) {
   const execution = spawnSync("python3", ["-I", "-c", PYTHON_AST_PROGRAM], {
     input: text,
@@ -515,8 +525,10 @@ function parsePython({ text }) {
     const relationships = parsed.relationships.map((entry) =>
       relationship(
         entry.relationshipType,
-        entry.target,
-        entry.targetKind,
+        entry.extractionMethod === 'python-ast-import-from' && entry.attributes?.relativeLevel > 0
+          ? pythonRelativeTarget(entry.target, entry.attributes.relativeLevel)
+          : entry.target,
+        entry.extractionMethod === 'python-ast-import-from' && entry.attributes?.relativeLevel > 0 ? 'artifact' : entry.targetKind,
         entry.extractionMethod,
         "structurally-proven",
         confidence.structural,

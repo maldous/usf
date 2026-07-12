@@ -50,3 +50,16 @@ gcl:fixturegraph
     usf:authoritative false ;
     usf:loadedAsAuthority false ;
     usf:mayReference gcl:definitiongraph .
+
+gcl:observedgraph
+    usf:mayDeclareTerms false ;
+    usf:mayAssertInstances true ;
+    usf:authoritative false ;
+    usf:loadedAsAuthority false ;
+    usf:loadedForValidation true ;
+    usf:loadedForDerivation true ;
+    usf:mayReference gcl:definitiongraph , gcl:authoredgraph , gcl:observedgraph .
+
+gcl:shapegraph usf:mayConstrain gcl:observedgraph ; usf:mayReference gcl:observedgraph .
+gcl:rulegraph usf:mayReference gcl:observedgraph .
+gcl:derivedgraph usf:mayReference gcl:observedgraph .

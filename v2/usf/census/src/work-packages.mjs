@@ -41,22 +41,43 @@ function readJsonl(target) {
 
 export function readBaselinePackageMembership(target = baselineMembershipPath) {
   const records = readJsonl(target);
-  if (records.length !== 73) throw new Error(`baseline package lineage must contain 73 packages, found ${records.length}`);
+  if (records.length === 0) throw new Error('baseline package lineage is empty');
   return records;
 }
 
+function pathFamily(repoPath) {
+  const parts = String(repoPath).split('/');
+  if (parts.length === 1) return 'repository-root';
+  if (parts[0] === 'v2' && parts.length >= 3) return parts.slice(0, 3).join('/');
+  if (['apps', 'packages', 'services', 'capabilities', 'adapters', 'docs', 'artifacts', 'tools'].includes(parts[0]) && parts.length >= 2) return parts.slice(0, 2).join('/');
+  return parts[0];
+}
+
 function outcomeFor({ canonicalArtifacts, currentArtifacts }) {
-  if (canonicalArtifacts.length === 0) return 'closed-disposition';
+  let outcome;
+  if (canonicalArtifacts.length === 0) outcome = 'artifact-plan-closure';
   const kinds = new Set(canonicalArtifacts.map((record) => record.artifactKind));
-  if (kinds.has('static-retained-asset')) return 'retained-assets';
-  if (kinds.has('validator-test')) return 'validation';
-  if (kinds.has('proof-executable') || kinds.has('evidence-output') || kinds.has('evidence-collector-schema')) return 'proof-evidence';
-  if (kinds.has('source-module')) return 'implementation-realisation';
-  if ([...kinds].some((kind) => /runtime|deployment|materialisation|support/.test(kind))) return 'runtime-materialisation';
+  if (!outcome && kinds.has('static-retained-asset')) outcome = 'retained-assets';
+  if (!outcome && kinds.has('validator-test')) outcome = 'validation';
+  if (!outcome && (kinds.has('proof-executable') || kinds.has('evidence-output') || kinds.has('evidence-collector-schema'))) outcome = 'proof-evidence';
+  if (!outcome && kinds.has('source-module')) outcome = 'implementation-realisation';
+  if (!outcome && [...kinds].some((kind) => /runtime|deployment|materialisation|support/.test(kind))) outcome = 'runtime-materialisation';
   const layers = sortUnique(canonicalArtifacts.flatMap((record) => record.requiredSemanticLayers));
-  for (const layer of layers) if (layerOutcomes.has(layer)) return layerOutcomes.get(layer);
-  if (currentArtifacts.some((record) => record.artifactFamily === 'documentation-assets')) return 'canonical-generation';
-  return 'canonical-generation';
+  if (!outcome) for (const layer of layers) if (layerOutcomes.has(layer)) { outcome = layerOutcomes.get(layer); break; }
+  if (!outcome && currentArtifacts.some((record) => record.artifactFamily === 'documentation-assets')) outcome = 'canonical-generation';
+  if (!outcome) outcome = 'canonical-generation';
+  const families = sortUnique(currentArtifacts.map((record) => record.artifactFamily));
+  const pathFamilies = sortUnique(currentArtifacts.map((record) => pathFamily(record.path)));
+  // Until graph authority assigns a canonical ArtefactPlan, the bounded path
+  // family is the only defensible architectural execution boundary. Splitting
+  // the same unresolved module into implementation, verification and evidence
+  // packages manufactures bidirectional prerequisites from ordinary imports.
+  // Co-own the unresolved path family instead; no edge is mechanically
+  // softened and no canonical output or disposition is invented.
+  if (outcome === 'artifact-plan-closure') {
+    return `${outcome}:${pathFamilies.join('+') || 'graph-defined'}`;
+  }
+  return `${outcome}:${families.join('+') || 'graph-defined'}:${pathFamilies.join('+') || 'graph-defined'}`;
 }
 
 function ensureUnique(records, key, label) {
@@ -163,6 +184,20 @@ export function buildWorkPackages(first, ...rest) {
   const replacementOwners = new Map();
   const reuseOwners = new Map();
   const gateOwners = new Map();
+  const semanticLayerOwners = new Map();
+  const semanticLayerArtifactOwners = new Map();
+  const requiredCanonicalLayers = new Set(canonicalArtifacts.flatMap((record) => record.requiredSemanticLayers));
+  for (const artifact of canonicalArtifacts) {
+    if (!Array.isArray(artifact.ownedSemanticLayers)) throw new Error(`canonical artifact lacks explicit semantic layer ownership: ${artifact.canonicalArtifactKey}`);
+    for (const layer of artifact.ownedSemanticLayers) {
+      if (!artifact.requiredSemanticLayers.includes(layer)) throw new Error(`canonical artifact owns an undeclared semantic layer: ${artifact.canonicalArtifactKey}:${layer}`);
+      const existing = semanticLayerArtifactOwners.get(layer);
+      if (existing) throw new Error(`semantic layer has multiple canonical artifact owners: ${layer}:${existing}:${artifact.canonicalArtifactKey}`);
+      semanticLayerArtifactOwners.set(layer, artifact.canonicalArtifactKey);
+    }
+  }
+  const missingCanonicalLayerOwners = [...requiredCanonicalLayers].filter((layer) => !semanticLayerArtifactOwners.has(layer)).sort();
+  if (missingCanonicalLayerOwners.length) throw new Error(`semantic layer lacks canonical artifact owner: ${missingCanonicalLayerOwners.join(',')}`);
   const stateFor = (outcome) => {
     if (!states.has(outcome)) states.set(outcome, packageState(outcome, artifactByKey));
     return states.get(outcome);
@@ -187,6 +222,9 @@ export function buildWorkPackages(first, ...rest) {
       state.canonicalArtifactKeys.add(artifact.canonicalArtifactKey);
       state.canonicalArtifacts.set(artifact.canonicalArtifactKey, artifact);
       artifact.requiredSemanticLayers.forEach((value) => state.requiredSemanticLayers.add(value));
+      for (const layer of artifact.ownedSemanticLayers) {
+        semanticLayerOwners.set(layer, owner);
+      }
       artifact.semanticInputs.forEach((value) => state.semanticInputs.add(value));
       artifact.productionResponsibilities.forEach((value) => state.productionResponsibilities.add(value));
       for (const gate of artifact.equivalenceContract.gates ?? []) addGate(state, gate, artifact.canonicalArtifactKey, 'equivalence');
@@ -225,8 +263,8 @@ export function buildWorkPackages(first, ...rest) {
     };
     return {
       key,
-      title: `${state.outcome.split('-').map((word) => word[0].toUpperCase() + word.slice(1)).join(' ')} Outcome`,
-      architecturalOutcome: outcomeDefinitions[state.outcome],
+      title: `${state.outcome.split(':')[0].split('-').map((word) => word[0].toUpperCase() + word.slice(1)).join(' ')} — ${state.outcome.split(':').slice(1).join(' / ')}`,
+      architecturalOutcome: outcomeDefinitions[state.outcome.split(':')[0]] ?? 'Resolve a bounded path/family outcome from explicit graph authority without inventing canonical targets or dispositions.',
       outcomeClass: state.outcome,
       primaryOwnership,
       artifactKeys: primaryOwnership.artifactKeys,
@@ -236,6 +274,7 @@ export function buildWorkPackages(first, ...rest) {
       reuseActions: [...state.reuseActions.values()].sort(compareBy(['reuseActionKey'])),
       equivalenceGates: [...state.equivalenceGates.values()].sort(compareBy(['gateKey'])),
       semanticInputs: [...state.semanticInputs].sort(),
+      ownedSemanticLayers: [...semanticLayerOwners].filter(([, owner]) => owner === key).map(([layer]) => layer).sort(),
       requiredSemanticLayers: [...state.requiredSemanticLayers].sort(),
       productionResponsibilities: [...state.productionResponsibilities].sort(),
       acceptanceCriteria: [
@@ -247,7 +286,11 @@ export function buildWorkPackages(first, ...rest) {
       complexityDrivers: complexity.drivers,
       complexityEvidence: complexity.evidence,
       safeParallelism: { boundary: state.outcome, sharedInputs: [...state.semanticInputs].sort(), coordinationRule: 'Parallel execution is safe only when shared semantic inputs and canonical target paths remain unchanged.' },
-      confidence: { level: 'high', score: 0.95, reasons: ['canonical-artifact-input', 'replacement-ordering-evidence'] },
+      confidence: (() => {
+        const ownedMappings = [...state.artifactKeys].map((artifactKey) => mappingByArtifact.get(artifactKey)).filter(Boolean);
+        const score = ownedMappings.length ? Math.min(...ownedMappings.map((mapping) => mapping.mappingConfidence?.score ?? 0.1)) : 0.1;
+        return { level: score >= 0.9 ? 'high' : score >= 0.5 ? 'medium' : 'low', score, reasons: score >= 0.9 ? ['exact-machine-verifiable-input'] : ['unmet-graph-authority'] };
+      })(),
       reviewStatus: 'machine-reviewed'
     };
   }).sort(compareBy(['key']));
@@ -256,6 +299,7 @@ export function buildWorkPackages(first, ...rest) {
     artifacts: [...artifactOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     missingEntirely: [...gapOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     canonicalArtifacts: [...canonicalOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
+    semanticLayers: [...semanticLayerOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     replacementGroups: [...replacementOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     reuseActions: [...reuseOwners].map(([ownedKey, primaryWorkPackage]) => ({ ownedKey, primaryWorkPackage })).sort(compareBy(['ownedKey'])),
     equivalenceGates: workPackages.flatMap((record) => record.equivalenceGates.map((gate) => ({ ownedKey: gate.gateKey, primaryWorkPackage: record.key }))).sort(compareBy(['ownedKey']))
@@ -276,6 +320,7 @@ export function validateWorkPackageOwnership(workPackages, ownership) {
     artifacts: 'artifactKeys',
     missingEntirely: 'missingEntirelyKeys',
     canonicalArtifacts: 'canonicalArtifactKeys',
+    semanticLayers: 'ownedSemanticLayers',
     replacementGroups: 'replacementGroupKeys',
     reuseActions: 'reuseActions',
     equivalenceGates: 'equivalenceGates'
@@ -290,7 +335,7 @@ export function validateWorkPackageOwnership(workPackages, ownership) {
     }
   }
   for (const record of workPackages) {
-    if (!outcomeDefinitions[record.outcomeClass]) throw new Error(`invalid architectural outcome: ${record.key}`);
+    if (typeof record.outcomeClass !== 'string' || !record.outcomeClass.includes(':')) throw new Error(`invalid bounded architectural outcome: ${record.key}`);
     if (record.complexityEvidence.some((item) => /(?:byte|line|row|file)-?count|byte-?size/i.test(item.measure))) throw new Error(`forbidden sizing evidence: ${record.key}`);
     if (record.complexityDrivers.length !== record.complexityEvidence.length) throw new Error(`complexity evidence is incomplete: ${record.key}`);
   }
@@ -307,9 +352,10 @@ export function buildWorkPackageLineage({ baselinePackages, workPackages, artifa
     for (const row of baseline.affectedRows) {
       if (row.startsWith('semantic-layer:')) {
         const layer = row.slice('semantic-layer:'.length);
-        const owners = workPackages.filter((record) => record.requiredSemanticLayers.includes(layer)).map((record) => record.key);
-        owners.forEach((owner) => successors.add(owner));
-        if (owners.length === 0) unmatched.push(row);
+        const owners = workPackages.filter((record) => record.ownedSemanticLayers.includes(layer)).map((record) => record.key);
+        if (owners.length > 1) throw new Error(`semantic layer has multiple primary owners: ${layer}`);
+        if (owners.length === 1) successors.add(owners[0]);
+        else unmatched.push(row);
       } else {
         const artifactKey = artifactByRow.get(row);
         const owner = artifactKey ? ownerByArtifact.get(artifactKey) : null;

@@ -1,12 +1,7 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { censusRoot } from './constants.mjs';
-import { compareBy, readJsonl, sha256, sortUnique } from './canonical.mjs';
+import { compareBy, sha256 } from './canonical.mjs';
 import { assertUnique, validateConfidence } from './contract.mjs';
 
 const families = ['automation', 'documentation-assets', 'implementation', 'machine-semantics', 'proof-evidence', 'repository-governance', 'runtime-topology', 'v2-support', 'verification'];
-const reviewPath = path.join(censusRoot, 'src', 'family-reviews.jsonl');
-const convergenceReviewPath = path.join(censusRoot, 'src', 'identity-convergence-reviews.jsonl');
 
 function add(score, evidence, family, points, reason, source) {
   score[family] += points;
@@ -76,13 +71,6 @@ export function classifyArtifacts(members, parserResults, relationships, invento
     relationsByPath.get(relation.source).push(relation);
   }
   const inventoryByPath = new Map(inventories.map((record) => [record.path, record]));
-  const familyReviews = fs.existsSync(reviewPath) ? readJsonl(reviewPath) : [];
-  const convergenceReviews = fs.existsSync(convergenceReviewPath) ? readJsonl(convergenceReviewPath).map((review) => ({
-    universe: 'repository-output', path: review.path, contentDigest: review.contentDigest,
-    finalOwner: review.finalOwner, confidence: { level: 'high', score: 0.99, reasons: ['independent-architectural-review', 'structural-parser-evidence'] },
-    evidence: review.ownershipEvidence, reviewStatus: review.reviewStatus
-  })) : [];
-  const reviews = new Map([...familyReviews, ...convergenceReviews].map((review) => [`${review.universe}\0${review.path}\0${review.contentDigest}`, review]));
   const records = [];
   for (const member of members) {
     const parsed = parserByPath.get(member.path);
@@ -91,10 +79,9 @@ export function classifyArtifacts(members, parserResults, relationships, invento
     const { score, evidence } = contentScores(member, parsed, relations, inventoryByPath.get(member.path));
     const sorted = Object.entries(score).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
     const machineProposal = sorted[0][0];
-    const review = reviews.get(`${member.universe}\0${member.path}\0${member.contentDigest}`);
-    const finalOwner = review?.finalOwner ?? machineProposal;
+    const finalOwner = machineProposal;
     if (!families.includes(finalOwner)) throw new Error(`invalid reviewed family: ${member.path}`);
-    const familyConfidence = review?.confidence ?? confidenceFromScores(sorted, evidence);
+    const familyConfidence = confidenceFromScores(sorted, evidence);
     validateConfidence(familyConfidence);
     const relationshipConfidence = relations.length === 0
       ? { level: 'medium', score: 0.7, reasons: ['no-structural-relationships-observed'] }
@@ -114,15 +101,15 @@ export function classifyArtifacts(members, parserResults, relationships, invento
       machineFamilyProposal: machineProposal,
       artifactFamily: finalOwner,
       familyScores: score,
-      ownershipEvidence: review ? review.evidence.map((source) => ({ family: finalOwner, points: 10, reason: 'independent-architectural-review', source })) : evidence.filter((entry) => entry.family === finalOwner),
+      ownershipEvidence: evidence.filter((entry) => entry.family === finalOwner),
       authorityStatus: authorityStatus(member, finalOwner, parsed),
       formatConfidence: parsed.confidence,
       relationshipConfidence,
       familyConfidence,
       mappingConfidence: { level: 'low', score: 0, reasons: ['mapping-stage-required'] },
       coverageConfidence: { level: 'low', score: 0, reasons: ['mapping-stage-required'] },
-      reviewStatus: review?.reviewStatus ?? 'machine-reviewed',
-      reviewEvidence: review?.evidence ?? []
+      reviewStatus: 'machine-reviewed',
+      reviewEvidence: []
     });
   }
   records.sort(compareBy(['universe', 'path']));

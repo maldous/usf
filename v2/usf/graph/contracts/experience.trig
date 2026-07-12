@@ -79,60 +79,49 @@
         usf:canonicalName "webroutedeveloperhomedefault" .
     jr:authsessiondevidentitychecks a usf:Journey ;
         usf:canonicalName "authsessiondevidentitychecks" ;
-        usf:hasInteractionState ist:authsessiondevidentitychecksdefault ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples .
+        usf:hasInteractionState ist:authsessiondevidentitychecksdefault .
     jr:authsessiontenantnegativepathcatalogue a usf:Journey ;
         usf:canonicalName "authsessiontenantnegativepathcatalogue" ;
-        usf:hasInteractionState ist:authsessiontenantnegativepathcataloguedefault ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples .
+        usf:hasInteractionState ist:authsessiontenantnegativepathcataloguedefault .
     jr:commandformapikeyonboarding a usf:Journey ;
         usf:canonicalName "commandformapikeyonboarding" ;
         usf:hasInteractionState ist:commandformapikeyonboardingidle , ist:commandformapikeyonboardingsubmitted , ist:commandformapikeyonboardingvalidationerror ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples ;
         usf:requiresAccessibility acc:commandformapikeyonboardinga11y ;
         usf:requiresLocalisation loc:commandformapikeyonboardinglocale .
     jr:mobilescreendeveloperhome a usf:Journey ;
         usf:canonicalName "mobilescreendeveloperhome" ;
         usf:hasInteractionState ist:mobilescreendeveloperhomedefault ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples ;
         usf:requiresAccessibility acc:mobilescreendeveloperhomea11y ;
         usf:requiresLocalisation loc:mobilescreendeveloperhomelocale .
     jr:notificationsurfacedeveloperbanner a usf:Journey ;
         usf:canonicalName "notificationsurfacedeveloperbanner" ;
         usf:hasInteractionState ist:notificationsurfacedeveloperbannerdefault ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples ;
         usf:requiresConsent cr:notificationsurfacedeveloperbannerconsent .
     jr:notificationsurfacedeveloperinbox a usf:Journey ;
         usf:canonicalName "notificationsurfacedeveloperinbox" ;
         usf:hasInteractionState ist:notificationsurfacedeveloperinboxdefault ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples ;
         usf:requiresConsent cr:notificationsurfacedeveloperinboxconsent .
     jr:notificationsurfacedevelopertoast a usf:Journey ;
         usf:canonicalName "notificationsurfacedevelopertoast" ;
         usf:hasInteractionState ist:notificationsurfacedevelopertoastdefault ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples ;
         usf:requiresConsent cr:notificationsurfacedevelopertoastconsent .
     jr:queryviewdeveloperprofiledetail a usf:Journey ;
         usf:canonicalName "queryviewdeveloperprofiledetail" ;
         usf:hasInteractionState ist:queryviewdeveloperprofiledetailerror , ist:queryviewdeveloperprofiledetailloaded , ist:queryviewdeveloperprofiledetailnotfound ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples ;
         usf:requiresAccessibility acc:queryviewdeveloperprofiledetaila11y ;
         usf:requiresLocalisation loc:queryviewdeveloperprofiledetaillocale .
     jr:queryviewdeveloperprofilelist a usf:Journey ;
         usf:canonicalName "queryviewdeveloperprofilelist" ;
         usf:hasInteractionState ist:queryviewdeveloperprofilelistempty , ist:queryviewdeveloperprofilelisterror , ist:queryviewdeveloperprofilelistloaded ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples ;
         usf:requiresAccessibility acc:queryviewdeveloperprofilelista11y ;
         usf:requiresLocalisation loc:queryviewdeveloperprofilelistlocale .
     jr:uiauthenticationlogin a usf:Journey ;
         usf:canonicalName "uiauthenticationlogin" ;
         usf:hasInteractionState ist:uiauthenticationloginauthenticated , ist:uiauthenticationloginauthenticating , ist:uiauthenticationloginautherror , ist:uiauthenticationlogindenied , ist:uiauthenticationloginforbidden , ist:uiauthenticationloginnosession , ist:uiauthenticationloginproviderfailure , ist:uiauthenticationloginunauthenticated ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples ;
         usf:requiresAccessibility acc:uiauthenticationlogina11y .
     jr:webroutedeveloperhome a usf:Journey ;
         usf:canonicalName "webroutedeveloperhome" ;
         usf:hasInteractionState ist:webroutedeveloperhomedefault ;
-        usf:mapsToCapability cap:universalservicefoundationscopeandprinciples ;
         usf:requiresAccessibility acc:webroutedeveloperhomea11y ;
         usf:requiresLocalisation loc:webroutedeveloperhomelocale .
     loc:commandformapikeyonboardinglocale a usf:LocalisationRequirement ;

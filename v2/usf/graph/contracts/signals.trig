@@ -182,6 +182,12 @@
         usf:canonicalName "authloginpostcmd" ;
         usf:emitsSignal sig:auditcorrelation ;
         usf:recordsOperation op:authloginpost .
+    aud:apikeycreatecmd a usf:AuditEvent ;
+        usf:auditCategory acat:datamutation ;
+        usf:auditSeverity asev:notice ;
+        usf:canonicalName "apikeycreatecmd" ;
+        usf:emitsSignal sig:auditcorrelation ;
+        usf:recordsOperation op:apikeycreate .
     aud:authorizationdecision a usf:AuditEvent ;
         usf:auditCategory acat:authorization ;
         usf:auditSeverity asev:notice ;

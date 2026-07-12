@@ -70,7 +70,7 @@
     "strengthened-to-blocking"
   ],
   "dependencyStatuses": [
-    "blocking",
+    "required-prerequisite",
     "coordination"
   ],
   "dependencyTypes": [

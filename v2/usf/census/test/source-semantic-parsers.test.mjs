@@ -9,6 +9,7 @@ import {
   sparqlParser,
 } from "../src/parsers/source-semantic.mjs";
 import { createParserRegistry } from "../src/parsers/registry.mjs";
+import { buildRelationships } from "../src/relationships.mjs";
 
 function parse(parser, syntaxKind, text, memberPath) {
   return parser.parse({
@@ -202,6 +203,34 @@ class Worker(BaseWorker):
     !parsed.declarations.some((entry) => /Imaginary|documented-only/.test(entry.identifier)),
   );
   assert.ok(!parsed.relationships.some((entry) => /documented-only/.test(entry.target)));
+});
+
+test("Python relative imports resolve as artifacts including package initializers", () => {
+  const parsed = parse(
+    pythonParser,
+    "python",
+    "from .helpers import run\nfrom ..core import value\nfrom . import sibling\n",
+    "packages/example/sub/module.py",
+  );
+  const imports = relationshipsOf(parsed, "python-ast-import-from");
+  assert.deepEqual(imports.map((entry) => [entry.target, entry.targetKind]), [
+    ["../core", "artifact"],
+    ["./helpers", "artifact"],
+    ["./sibling", "artifact"],
+  ]);
+  const members = [
+    "packages/example/sub/module.py",
+    "packages/example/sub/helpers.py",
+    "packages/example/core/__init__.py",
+    "packages/example/sub/sibling/__init__.py",
+  ].map((path) => ({ path }));
+  const relationships = buildRelationships(members, [{ path: "packages/example/sub/module.py", relationships: parsed.relationships }]).relationships
+    .filter((entry) => entry.extractionMethod === "python-ast-import-from");
+  assert.deepEqual(relationships.map((entry) => [entry.target, entry.resolved]), [
+    ["packages/example/core/__init__.py", true],
+    ["packages/example/sub/helpers.py", true],
+    ["packages/example/sub/sibling/__init__.py", true],
+  ]);
 });
 
 test("Python syntax outside the available stdlib AST is reported as partial, not lexically invented", () => {

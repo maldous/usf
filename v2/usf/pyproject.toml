@@ -1,21 +1,16 @@
 [project]
 name = "usf"
 version = "0.0.0"
-description = "USF v2 graph-authority replacement project (scaffold; no semantic content yet)"
+description = "USF semantic graph authority, compiler, and chroot validation toolchain"
 requires-python = ">=3.11"
 dependencies = [
-  "rdflib",
-  "pyshacl",
-  "requests",
-  "httpx",
-  "pydantic",
-  "pyyaml",
-  "click",
-  "pytest",
+  "rdflib==7.6.0",
+  "pyshacl==0.40.0",
+  "pyyaml==6.0.3",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = []
 
 [build-system]
 requires = ["setuptools>=68"]

@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
-import { auditIgnoreText, enumerateUniverses, universeSummary } from '../src/universe.mjs';
+import { auditIgnoreText, enumerateObservationCarrierMembers, enumerateUniverses, observationCarrierPaths, universeForPath, universeSummary } from '../src/universe.mjs';
 import { discoverMaterialisationContracts } from '../src/materialisation.mjs';
 
 function write(root, relative, content) {
@@ -25,6 +25,15 @@ function fixture() {
   write(root, '.gitignore', 'node_modules/\n');
   write(root, 'docs/readme.md', 'repository\n');
   write(root, 'v2/usf/graph/authority.ttl', '@prefix usf: <urn:usf:> .\n');
+  write(root, 'v2/usf/graph/manifest.yaml', [
+    'observedGraphs:',
+    '  - file: observed/source-artefacts.trig',
+    'derivedGraphs:',
+    '  - file: derived/projection.trig',
+    ''
+  ].join('\n'));
+  write(root, 'v2/usf/graph/observed/source-artefacts.trig', 'GRAPH <urn:observed> {}\n');
+  write(root, 'v2/usf/graph/derived/projection.trig', 'GRAPH <urn:derived> {}\n');
   write(root, 'v2/usf/compiler/package.json', '{"engines":{"node":">=22"}}\n');
   write(root, 'v2/usf/compiler/package-lock.json', '{"lockfileVersion":3,"packages":{}}\n');
   write(root, 'v2/usf/compiler/src/compiler.js', 'export const compiler = true;\n');
@@ -47,7 +56,35 @@ test('four universes are disjoint, canonical, and deterministically ordered', (t
     'v2/usf/compiler/package-lock.json', 'v2/usf/compiler/package.json', 'v2/usf/compiler/src/compiler.js'
   ]);
   assert.ok(Object.values(first.universes).flat().every((member) => member.canonicalSource === true));
+  assert.ok(!Object.values(first.universes).flat().some((member) => member.path.includes('/observed/') || member.path.includes('/derived/')));
   assert.deepEqual(universeSummary(first.universes), universeSummary(second.universes));
+});
+
+test('observation carriers and noncanonical work state are excluded even if tracked', (t) => {
+  const root = fixture();
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  write(root, 'v2/usf/.work/audit/result.json', '{}\n');
+  git(root, ['add', 'v2/usf/.work/audit/result.json']);
+  git(root, ['commit', '--quiet', '-m', 'plant forbidden scratch']);
+  const carriers = observationCarrierPaths(root);
+  assert.equal(universeForPath('v2/usf/graph/observed/source-artefacts.trig', carriers), null);
+  assert.equal(universeForPath('v2/usf/graph/derived/projection.trig', carriers), null);
+  assert.equal(universeForPath('v2/usf/.work/audit/result.json', carriers), null);
+  const paths = Object.values(enumerateUniverses({ repositoryRoot: root }).universes).flat().map((member) => member.path);
+  assert.ok(!paths.includes('v2/usf/.work/audit/result.json'));
+  assert.deepEqual(enumerateObservationCarrierMembers({ repositoryRoot: root }).map((member) => [member.path, member.universe]), [
+    ['v2/usf/graph/derived/projection.trig', 'v2-graph-authority'],
+    ['v2/usf/graph/observed/source-artefacts.trig', 'v2-graph-authority']
+  ]);
+});
+
+test('observation carrier paths fail closed on noncanonical or missing manifest members', (t) => {
+  const root = fixture();
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  write(root, 'v2/usf/graph/manifest.yaml', 'observedGraphs:\n  - file: ./observed/source-artefacts.trig\n');
+  assert.throws(() => observationCarrierPaths(root), /contained relative POSIX path/);
+  write(root, 'v2/usf/graph/manifest.yaml', 'observedGraphs:\n  - file: observed/missing.trig\n');
+  assert.throws(() => enumerateObservationCarrierMembers({ repositoryRoot: root }), /graph observation carrier is missing/);
 });
 
 test('clean, installed, and removed dependency states never change compiler source identity', (t) => {

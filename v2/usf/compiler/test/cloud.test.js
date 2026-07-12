@@ -14,6 +14,7 @@ import { loadConfig } from '../src/config.js';
 import { loadManifest, managedGraphs } from '../src/manifest.js';
 import { createClient } from '../src/stardog.js';
 import { verify } from '../src/compiler.js';
+import { proveLiveRollback } from '../src/live-attestation.js';
 
 const GRAPH_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'graph');
 const configured = Boolean(process.env.STARDOG_SERVER && (process.env.STARDOG_TOKEN || process.env.STARDOG_PASSWORD));
@@ -58,4 +59,16 @@ test('cloud: clearing a graph inside a transaction is undone by rollback', opts,
 
   const after = count(await client.select(q));
   assert.equal(after, before, 'rollback must restore the graph unchanged');
+});
+
+test('cloud: every compiler failure barrier rolls back without graph drift', { ...opts, timeout: 300_000 }, async () => {
+  const client = createClient(loadConfig());
+  const manifest = loadManifest(GRAPH_DIR);
+  const result = await proveLiveRollback({ manifest, client });
+  assert.equal(result.ok, true);
+  assert.equal(result.faultCount, 15);
+  assert.equal(result.digestsUnchanged, true);
+  assert.ok(result.faults.every((fault) => fault.rollbackCount === 1 && fault.activationCount > 0));
+  assert.equal(result.commitOutcomeCoverage.mode, 'pre-dispatch-only');
+  assert.equal(result.commitOutcomeCoverage.ambiguousPostDispatchOutcomeProven, false);
 });
