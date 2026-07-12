@@ -5,7 +5,7 @@
       "facts": {
         "recordCount": 3225,
         "shardCount": 4,
-        "uncompressedBytes": 173513141
+        "uncompressedBytes": 173594730
       },
       "findings": [],
       "id": "parser-evidence-storage",
@@ -24,13 +24,11 @@
       "facts": {
         "inventoryCount": 2651,
         "parserCount": 3225,
-        "relationshipCount": 57060
+        "relationshipCount": 57345
       },
-      "findings": [
-        "unresolved-internal-targets:3526"
-      ],
+      "findings": [],
       "id": "parser-relationships",
-      "status": "fail"
+      "status": "pass"
     },
     {
       "facts": {
@@ -61,37 +59,37 @@
     },
     {
       "facts": {
-        "acceptedDispositionCount": 134,
+        "acceptedDispositionCount": 133,
         "artifactCount": 3225,
         "canonicalArtifactCount": 0,
-        "missingDispositionCount": 3091
+        "missingDispositionCount": 3092
       },
       "findings": [
-        "required-source-disposition-unavailable:3091"
+        "required-source-disposition-unavailable:3092"
       ],
       "id": "artifact-dispositions",
       "status": "fail"
     },
     {
       "facts": {
-        "acceptedDispositionCount": 134,
+        "acceptedDispositionCount": 133,
         "artifactCount": 3225,
         "dispositionCount": 3218,
         "findingDistribution": {
-          "source-disposition-review-required": 2909,
-          "source-observation-digest-mismatch": 1,
-          "source-observation-missing": 181
+          "source-disposition-review-required": 3083,
+          "source-observation-digest-mismatch": 2,
+          "source-observation-missing": 7
         },
-        "noOutputDispositionCount": 134,
+        "noOutputDispositionCount": 133,
         "observationCount": 3218,
         "outputPlanDispositionCount": 0,
-        "rejectedDispositionCount": 3091
+        "rejectedDispositionCount": 3092
       },
       "findings": [
-        "required-source-disposition-unavailable:3091",
-        "source-disposition-review-required:2909",
-        "source-observation-digest-mismatch:1",
-        "source-observation-missing:181"
+        "required-source-disposition-unavailable:3092",
+        "source-disposition-review-required:3083",
+        "source-observation-digest-mismatch:2",
+        "source-observation-missing:7"
       ],
       "id": "source-disposition-ownership",
       "status": "fail"
@@ -107,7 +105,7 @@
     },
     {
       "facts": {
-        "dependencyCount": 17
+        "dependencyCount": 92
       },
       "findings": [],
       "id": "dependencies",
@@ -115,18 +113,16 @@
     },
     {
       "facts": {
-        "findingCount": 100140,
-        "openCount": 100140
+        "findingCount": 0,
+        "openCount": 0
       },
-      "findings": [
-        "unexplained-open-findings:100140"
-      ],
+      "findings": [],
       "id": "finding-classifications",
-      "status": "fail"
+      "status": "pass"
     },
     {
       "facts": {
-        "canonicalDigest": "239610d6f515bab7aefc8b4ea479ebdbcc6aa5a65adb7376c557f95df7e1ccb3",
+        "canonicalDigest": "809237090b1b71b7d87f4d0831fcc6f4e9eacd16c68f0c9697ff0bcc5e887736",
         "outputCount": 12
       },
       "findings": [],

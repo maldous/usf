@@ -16,14 +16,14 @@
   "baselineWorkPackageCount": 73,
   "blockingCycleComponents": [],
   "blockingCycleCount": 0,
-  "blockingRelationshipCount": 15,
+  "blockingRelationshipCount": 9,
   "canonicalArtifactCount": 0,
   "closureEvaluation": "deferred-to-closure-command",
   "consolidationDistribution": {
-    "accepted-no-output-disposition": 134,
-    "source-disposition-unavailable": 3091
+    "accepted-no-output-disposition": 133,
+    "source-disposition-unavailable": 3092
   },
-  "coordinationRelationshipCount": 2,
+  "coordinationRelationshipCount": 83,
   "coverageConfidenceDistribution": {
     "high": 12,
     "low": 3125,
@@ -34,11 +34,11 @@
     "notrequired": 12,
     "partial": 88
   },
-  "criticalPathLength": 5,
+  "criticalPathLength": 2,
   "dependencyLineageDistribution": {
     "removed-unsupported": 345,
-    "represented-indirectly": 122,
-    "retained-with-evidence": 2
+    "represented-indirectly": 114,
+    "retained-with-evidence": 10
   },
   "equivalenceDistribution": {},
   "familyConfidenceDistribution": {
@@ -48,19 +48,14 @@
   "familyOnlyLinkCount": 0,
   "familyReviewCandidateCount": 402,
   "gapDistribution": {
-    "review-required-source-disposition": 3091
+    "review-required-source-disposition": 3092
   },
   "graphArtefactPlanCount": 35,
   "identityOnlyCohortSize": 0,
   "identityReviewCount": 0,
   "inventoryCount": 2651,
-  "inventoryFindingClassDistribution": {
-    "inventory-local-duplicate": 7950,
-    "inventory-owner-collision": 84938,
-    "inventory-target-missing": 3726,
-    "unresolved-relationship-target": 3526
-  },
-  "inventoryFindingCount": 100140,
+  "inventoryFindingClassDistribution": {},
+  "inventoryFindingCount": 0,
   "mappingTypeDistribution": {
     "exact-semantic-identity": 1,
     "not-required": 12,
@@ -68,11 +63,11 @@
     "unmapped": 3125
   },
   "materialisationContractCount": 3,
-  "missingEntirelyCount": 3091,
+  "missingEntirelyCount": 3092,
   "newCanonicalArtifactCount": 0,
-  "openInventoryFindingCount": 100140,
+  "openInventoryFindingCount": 0,
   "outputDispositionDistribution": {},
-  "parallelWaveCount": 5,
+  "parallelWaveCount": 2,
   "parserCount": 3225,
   "parserCoverageByFormat": {
     "binary": 202,
@@ -96,7 +91,7 @@
     "workflow-yaml": 2,
     "yaml": 7
   },
-  "relationshipCount": 57060,
+  "relationshipCount": 57345,
   "replacementCardinalityDistribution": {
     "one-to-zero": 3225
   },
@@ -105,19 +100,19 @@
   "reuseDistribution": {
     "none": 3225
   },
-  "sourceDispositionAcceptedCount": 134,
-  "sourceDispositionAcceptedNoOutputCount": 134,
+  "sourceDispositionAcceptedCount": 133,
+  "sourceDispositionAcceptedNoOutputCount": 133,
   "sourceDispositionAcceptedOutputPlanCount": 0,
   "sourceDispositionFindingDistribution": {
-    "source-disposition-review-required": 2909,
-    "source-observation-digest-mismatch": 1,
-    "source-observation-missing": 181
+    "source-disposition-review-required": 3083,
+    "source-observation-digest-mismatch": 2,
+    "source-observation-missing": 7
   },
   "sourceDispositionOutputPlanRequiredCount": 0,
-  "sourceDispositionRejectedCount": 3091,
+  "sourceDispositionRejectedCount": 3092,
   "sourceDispositionResourceCount": 3218,
   "sourceObservationResourceCount": 3218,
-  "sourceOrphanObservationCount": 174,
+  "sourceOrphanObservationCount": 0,
   "structuralCoverageDistribution": {
     "complete": 2691,
     "not-applicable": 202,
@@ -130,13 +125,13 @@
     "v2-graph-authority": 95,
     "v2-support-provisioning": 22
   },
-  "unresolvedRelationshipFindingCount": 3765,
+  "unresolvedRelationshipFindingCount": 0,
   "unreviewedParallelismReductionCount": 0,
   "unsupportedEvidenceCount": 0,
   "unsupportedFormatCount": 0,
   "untypedLinkCount": 0,
-  "v2CompilerUniverseDigest": "c00821b635515fe6188b51d9a1ac612e124309e8bbc29d4cebc519151919c449",
-  "v2GraphUniverseDigest": "b034b9aecf1664cb3825762163373b19ed41faa4e97958c2cfc08e08bb7ad330",
+  "v2CompilerUniverseDigest": "413e82c03e5112fb986faccd20b75b9a1c14629bfb21098c0bef4540ab4628b7",
+  "v2GraphUniverseDigest": "ff1899a6bb0ed9fc808cd0759bd1910e5c730d12fef2aef3c809c6528702d7d0",
   "v2SupportUniverseDigest": "03c5225abc8a70b47088281a8c5347271429e2c58726e184bcff221fde788ddf",
   "waves": [
     [
@@ -149,6 +144,8 @@
       "work-package-0c2cacbce23642803bb4",
       "work-package-0d1e9499bf7beaea6afc",
       "work-package-115506e29991cd4cf4a4",
+      "work-package-12b52a3118cca9ef20d0",
+      "work-package-172c3fccbd1241cee181",
       "work-package-1b9bbbe2ad985a28371a",
       "work-package-2149ea6ca46ba44d6a81",
       "work-package-2194a7502b7acc97a91f",
@@ -186,6 +183,7 @@
       "work-package-827a96ea08c2800a738f",
       "work-package-84c508a6cb848d696535",
       "work-package-85a02d05a6044963d5a9",
+      "work-package-861cb0825b6b8675bc1f",
       "work-package-8a7c0ede86e215c64117",
       "work-package-8d6a8ad88b7e9dadf688",
       "work-package-8e0c93d0a3fa11555026",
@@ -200,6 +198,7 @@
       "work-package-a671ca64aa7400e15470",
       "work-package-aacd348ed14c2f91dc32",
       "work-package-ad1138531176162ee589",
+      "work-package-ad53b111dd53b2d83215",
       "work-package-af915c3d91b0ffdd2b35",
       "work-package-afbdf11e8e9de5e72f32",
       "work-package-b066aa31871a52cb170c",
@@ -216,6 +215,7 @@
       "work-package-d68e508a284e8ba10ac6",
       "work-package-d68fb501fa10f5307b5e",
       "work-package-d7c7400ba4030228298c",
+      "work-package-d89cca285fe9829ef1b1",
       "work-package-da4ee7c5fe58e634dd2f",
       "work-package-dfea7862492b17394907",
       "work-package-e0362f2d12598a1a0dc7",
@@ -227,24 +227,13 @@
       "work-package-f089c795701e83026b31",
       "work-package-f56dd072bce3da49af2c",
       "work-package-f6736838faaa999c35c5",
+      "work-package-f7c4045d10b0e4ce7802",
       "work-package-fda5cd84458db6dcc1ef",
       "work-package-fe345bb7666006ce58a4"
     ],
     [
       "work-package-0ade0c66479293352cae",
-      "work-package-12b52a3118cca9ef20d0",
-      "work-package-2a6a372e56f32e31cc7d"
-    ],
-    [
-      "work-package-861cb0825b6b8675bc1f",
-      "work-package-d89cca285fe9829ef1b1"
-    ],
-    [
-      "work-package-172c3fccbd1241cee181",
-      "work-package-ad53b111dd53b2d83215",
-      "work-package-f7c4045d10b0e4ce7802"
-    ],
-    [
+      "work-package-2a6a372e56f32e31cc7d",
       "work-package-ad9ecc8c046381e575a9"
     ]
   ],

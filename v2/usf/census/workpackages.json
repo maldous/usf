@@ -38091,6 +38091,10 @@
         "primaryWorkPackage": "work-package-478649d8c8928091ed4d"
       },
       {
+        "ownedKey": "fe145aeb18f8607bd84f6ed26051e64d7be897e3456e432a6de4e5810a308aa5",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
+      },
+      {
         "ownedKey": "fe62d7de532aeaa29c480d5f6d9ab1a171e5a5bac79e757289cd8fd967f0176c",
         "primaryWorkPackage": "work-package-478649d8c8928091ed4d"
       },
@@ -128840,7 +128844,7 @@
         {
           "criterionKey": "work-package-b066aa31871a52cb170c:ownership",
           "evidence": [
-            "ownership-index:work-package-b066aa31871a52cb170c:5b4bbab60ebf925c79981956c06b2bc0b9053ce3098f337c04f5e9639a0a75ec"
+            "ownership-index:work-package-b066aa31871a52cb170c:6f842ac57490c1fb89e2fe289e67e52b9ceef6a4bb28dc4ff15ee7c8af8d942b"
           ],
           "requirement": "Every scoped entity has this package as its sole primary owner."
         },
@@ -129125,7 +129129,8 @@
       ],
       "key": "work-package-b066aa31871a52cb170c",
       "missingEntirelyKeys": [
-        "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9"
+        "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9",
+        "fe145aeb18f8607bd84f6ed26051e64d7be897e3456e432a6de4e5810a308aa5"
       ],
       "outcomeClass": "artifact-plan-closure:v2/usf/compiler",
       "ownedSemanticLayers": [],
@@ -129176,7 +129181,8 @@
           "artifact-plan-required-ff17e86890c84830faa14f59774a6ad82e983cbaad4a0dd937d2d4e843c5f731"
         ],
         "missingEntirelyKeys": [
-          "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9"
+          "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9",
+          "fe145aeb18f8607bd84f6ed26051e64d7be897e3456e432a6de4e5810a308aa5"
         ],
         "replacementGroupKeys": [
           "replacement-0501e3ea581147cf9a9a1a44",

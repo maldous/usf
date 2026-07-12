@@ -178,6 +178,8 @@ test('dependency status is derived from structural relationship context rather t
   assert.equal(classify({ extractionMethod: 'json-pointer', attributes: { keyPath: 'compilerOptions.paths.alias.0' } }), 'coordination');
   assert.equal(classify({ extractionMethod: 'json-pointer', attributes: { keyPath: 'extends' } }), 'blocking');
   assert.equal(classify({ extractionMethod: 'babel-import-declaration', attributes: {} }), 'blocking');
+  assert.equal(classify({ relationshipType: 'references', extractionMethod: 'json-pointer', attributes: { keyPath: 'authorityInputs.0.path' } }, { artifactFamily: 'documentation-assets' }), 'coordination');
+  assert.equal(classify({ relationshipType: 'references', extractionMethod: 'markdown-inline-link', attributes: {} }, { artifactFamily: 'repository-governance' }), 'coordination');
 });
 
 test('dependency ownership uses the canonical semantic-layer owner, not the first consumer', () => {
@@ -206,4 +208,50 @@ test('relationship closure distinguishes allowlisted external references from un
   assert.equal(internal.resolved, false);
   assert.equal(result.relationshipFindings.length, 1);
   assert.equal(result.relationshipFindings[0].resolutionStatus, 'open');
+});
+
+test('relationship closure resolves structural bases and classifies proven non-file references', () => {
+  const source = parsed('docs/authority.json', [], 'repository-output');
+  source.relationships = [
+    { relationshipType: 'references', target: 'spec/existing.json', targetKind: 'artifact', extractionMethod: 'json-pointer', attributes: { keyPath: 'authority.path', pathField: 'path' }, evidenceKind: 'structurally-proven', confidence },
+    { relationshipType: 'references', target: 'donor/apps/api.ts', targetKind: 'artifact', extractionMethod: 'json-pointer', attributes: { keyPath: 'entries.0.sourceRef.path', pathField: 'path' }, evidenceKind: 'structurally-proven', confidence },
+    { relationshipType: 'references', target: 'docs/retired.json', targetKind: 'artifact', extractionMethod: 'json-pointer', attributes: { keyPath: 'removedInvalidOrStaleReferences.0.path', pathField: 'path' }, evidenceKind: 'structurally-proven', confidence },
+    { relationshipType: 'references', target: 'artifacts/old.json', targetKind: 'artifact', extractionMethod: 'json-pointer', attributes: { keyPath: 'observedArtifactSizeSnapshot.largestObservedFiles.0.path', pathField: 'path' }, evidenceKind: 'structurally-proven', confidence },
+    { relationshipType: 'references', target: 'v2/tmp/run/output.json', targetKind: 'artifact', extractionMethod: 'json-pointer', attributes: { keyPath: 'outputs.0.files.0', pathField: 'files' }, evidenceKind: 'structurally-proven', confidence },
+    { relationshipType: 'references', target: 'spec/', targetKind: 'artifact', extractionMethod: 'json-pointer', attributes: { keyPath: 'scopes.0.path', pathField: 'path' }, evidenceKind: 'structurally-proven', confidence },
+    { relationshipType: 'references', target: 'src/**/*.ts', targetKind: 'artifact', extractionMethod: 'json-pointer', attributes: { keyPath: 'include.0', pathField: 'include' }, evidenceKind: 'structurally-proven', confidence },
+    { relationshipType: 'references', target: '/v2/openapi.json', targetKind: 'artifact', extractionMethod: 'json-pointer', attributes: { keyPath: 'renderedEndpoints.0.path', pathField: 'path' }, evidenceKind: 'structurally-proven', confidence }
+  ];
+  const manifest = parsed('tools/validate-spec/manifests/adr.json', [], 'repository-output');
+  manifest.relationships = [{ relationshipType: 'references', target: 'negative/adr/bad.json', targetKind: 'artifact', extractionMethod: 'json-pointer', attributes: { keyPath: '0.path', pathField: 'path' }, evidenceKind: 'structurally-proven', confidence }];
+  const result = buildRelationships([
+    { path: 'docs/authority.json' },
+    { path: 'spec/existing.json' },
+    { path: 'tools/validate-spec/manifests/adr.json' },
+    { path: 'tools/validate-spec/fixtures/negative/adr/bad.json' }
+  ], [source, manifest]);
+  assert.equal(result.relationshipFindings.length, 0);
+  assert.ok(result.relationships.some((record) => record.target === 'spec/existing.json' && record.targetKind === 'artifact' && record.resolved));
+  assert.ok(result.relationships.some((record) => record.target === 'tools/validate-spec/fixtures/negative/adr/bad.json' && record.targetKind === 'artifact' && record.resolved));
+  const byClass = new Map(result.relationships.flatMap((record) => record.reasonCodes.filter((reason) => reason.startsWith('non-internal-reference-class:')).map((reason) => [reason, record])));
+  for (const expected of [
+    'non-internal-reference-class:source-lineage-reference',
+    'non-internal-reference-class:declared-stale-or-removed-reference',
+    'non-internal-reference-class:historical-size-snapshot',
+    'non-internal-reference-class:generated-or-runtime-output',
+    'non-internal-reference-class:directory-scope',
+    'non-internal-reference-class:path-pattern',
+    'non-internal-reference-class:http-route'
+  ]) assert.ok(byClass.has(expected), expected);
+  for (const expected of [
+    'non-internal-reference-class:source-lineage-reference',
+    'non-internal-reference-class:generated-or-runtime-output'
+  ]) assert.equal(byClass.get(expected).targetKind, 'external-resource', expected);
+  for (const expected of [
+    'non-internal-reference-class:declared-stale-or-removed-reference',
+    'non-internal-reference-class:historical-size-snapshot',
+    'non-internal-reference-class:directory-scope',
+    'non-internal-reference-class:path-pattern',
+    'non-internal-reference-class:http-route'
+  ]) assert.equal(byClass.get(expected).targetKind, 'semantic-entity', expected);
 });

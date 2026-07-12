@@ -19,7 +19,25 @@ import { compile, CompilerError, verify as verifyDatabase } from './compiler.js'
 
 const { blankNode, defaultGraph, quad } = DataFactory;
 const NQUADS = 'application/n-quads';
-const REPOSITORY_BINDING_EXCLUSIONS = Object.freeze(['v2/usf/census/closure.json']);
+const REPOSITORY_BINDING_EXCLUSIONS = Object.freeze([
+  'v2/usf/census/audit.json',
+  'v2/usf/census/closure.json',
+]);
+const REQUIRED_ROLLBACK_FAULTS = Object.freeze([
+  'collect-observed',
+  'commit',
+  'contamination',
+  'derive',
+  'integrity',
+  'invalid-observed-rdf',
+  'load',
+  'rollback-response',
+  'validate-authored',
+  'validate-derived',
+  'validate-observed',
+  'verify-counts',
+  'wrong-rule-output',
+]);
 
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 
@@ -326,6 +344,13 @@ export async function proveLiveRollback({ manifest, client }) {
       },
     })],
   ];
+  const configuredFaults = faults.map(([name]) => name).sort();
+  if (stableJson(configuredFaults) !== stableJson(REQUIRED_ROLLBACK_FAULTS)) {
+    throw new CompilerError('rollback proof barriers differ from the attestation verification contract', {
+      phase: 'attest:rollback',
+      failures: [{ configuredFaults, requiredFaults: REQUIRED_ROLLBACK_FAULTS }],
+    });
+  }
   const results = [];
   for (const [name, buildFault, compileOptions = {}] of faults) {
     let rollbacks = 0;
@@ -456,10 +481,9 @@ export async function verifyLiveAttestation({
   const validationVerified = verificationPasses(currentVerification) &&
     stableJson(currentVerification) === stableJson(envelope.payload?.verification);
   const rollback = envelope.payload?.rollback;
-  const requiredFaults = ['commit', 'contamination', 'derive', 'integrity', 'load', 'validate-authored', 'validate-derived', 'verify-counts'];
   const rollbackVerified = rollback?.ok === true && rollback?.digestsUnchanged === true &&
-    rollback?.faultCount === requiredFaults.length &&
-    stableJson((rollback?.faults ?? []).map((item) => item.name).sort()) === stableJson(requiredFaults) &&
+    rollback?.faultCount === REQUIRED_ROLLBACK_FAULTS.length &&
+    stableJson((rollback?.faults ?? []).map((item) => item.name).sort()) === stableJson(REQUIRED_ROLLBACK_FAULTS) &&
     (rollback?.faults ?? []).every((item) => item.rollbackCount === 1 && typeof item.errorPhase === 'string');
   const ok = signatureVerified && trustVerified && repositoryVerified && sourceVerified &&
     databaseVerified && validationVerified && rollbackVerified && drift.conforms;

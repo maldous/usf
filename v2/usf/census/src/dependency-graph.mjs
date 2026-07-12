@@ -37,7 +37,7 @@ function addCandidate(candidates, source, prerequisite, dependencyType, evidence
   candidates.set(key, candidate);
 }
 
-function relationshipDependencyStatus(relation) {
+function relationshipDependencyStatus(relation, sourceArtifact) {
   const keyPath = relation.attributes?.keyPath ?? '';
   // Aggregation selectors and path aliases declare compilation scope or name
   // resolution. They coordinate the configuration with the selected artefact;
@@ -47,6 +47,11 @@ function relationshipDependencyStatus(relation) {
   // is therefore not cycle-driven dependency softening.
   if (relation.extractionMethod === 'json-pointer' &&
       /^(?:include|exclude)(?:\.|$)|^compilerOptions[.]paths(?:\.|$)/.test(keyPath)) {
+    return 'coordination';
+  }
+  if (/^markdown-/.test(relation.extractionMethod)) return 'coordination';
+  if (relation.extractionMethod === 'json-pointer' && relation.relationshipType === 'references' &&
+      ['documentation-assets', 'repository-governance'].includes(sourceArtifact?.artifactFamily)) {
     return 'coordination';
   }
   return 'blocking';
@@ -190,7 +195,7 @@ export function buildDependencyGraph(packages, artifacts, canonicalArtifacts, re
     const targetArtifact = artifactByPath.get(relation.target);
     const source = sourceArtifact && owners.artifacts.get(sourceArtifact.artifactKey);
     const prerequisite = targetArtifact && owners.artifacts.get(targetArtifact.artifactKey);
-    addCandidate(candidates, source, prerequisite, 'canonical-artifact-input', { relationship: sha256(`${relation.source}\0${relation.relationshipType}\0${relation.target}`) }, relationshipDependencyStatus(relation));
+    addCandidate(candidates, source, prerequisite, 'canonical-artifact-input', { relationship: sha256(`${relation.source}\0${relation.relationshipType}\0${relation.target}`) }, relationshipDependencyStatus(relation, sourceArtifact));
   }
   for (const artifact of canonicalArtifacts) {
     const source = owners.canonical.get(artifact.canonicalArtifactKey);

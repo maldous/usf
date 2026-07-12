@@ -126,7 +126,7 @@ export function auditParserRelationships(members, parserResults, relationships, 
   }
   const relationKeys = new Set();
   for (const relation of relationships) {
-    const key = [relation.source, relation.relationshipType, relation.target, relation.extractionMethod].join('\0');
+    const key = [relation.source, relation.relationshipType, relation.target, relation.targetKind, relation.extractionMethod].join('\0');
     if (relationKeys.has(key)) findings.push(`duplicate-relationship:${key}`); relationKeys.add(key);
     if (!memberPaths.has(relation.source)) findings.push(`relationship-source-missing:${relation.source}`);
     if (relation.targetKind === 'artifact' && relation.resolved && !/^(?:https?:|urn:|mailto:|data:|node:)/.test(relation.target) && !memberPaths.has(relation.target)) findings.push(`false-resolved-target:${relation.target}`);

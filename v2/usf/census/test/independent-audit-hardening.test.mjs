@@ -131,6 +131,20 @@ test('artifact dispositions and finding classifications are independently fail-c
   assert.equal(auditFindingClassifications(classified).status, 'fail');
 });
 
+test('independent relationship identity preserves distinct target semantics', () => {
+  const members = [
+    { path: 'a.json', universe: 'repository-output', contentDigest: digest, sourceState: 'tracked', fileMode: '100644', binary: false, formatKind: 'structured-json' },
+    { path: 'retired.json', universe: 'repository-output', contentDigest: digest, sourceState: 'tracked', fileMode: '100644', binary: true, formatKind: 'opaque-binary' }
+  ];
+  const parser = { path: 'a.json', parserImplementation: 'fixture', parserMode: 'structural', pathContext: 'fixture', structuralCoverage: 'complete', declarations: [] };
+  const base = { source: 'a.json', target: 'retired.json', resolved: true, relationshipType: 'references', extractionMethod: 'json-pointer', reasonCodes: ['structural-parser-evidence'] };
+  const relationships = [
+    { ...base, targetKind: 'artifact' },
+    { ...base, targetKind: 'semantic-entity' }
+  ];
+  assert.equal(auditParserRelationships(members, [parser], relationships, []).status, 'pass');
+});
+
 test('independent source disposition audit accepts no-output and planned output, and rejects all fail-closed cases', () => {
   assert.equal(auditSourceDispositionOwnership([sourceArtifact], auditDispositionFixture(), [dispositionGroup('graph-owned-no-output-disposition')]).status, 'pass');
   assert.equal(auditSourceDispositionOwnership([sourceArtifact], auditDispositionFixture({ kind: 'urn:usf:dispositionkind:generateequivalent', includePlan: true }), [dispositionGroup('graph-owned-output-plan', 'urn:usf:artefactplan:a')]).status, 'pass');

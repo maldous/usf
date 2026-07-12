@@ -19,6 +19,13 @@ function sanitizeParsed(member, parsed) {
     const declaration = { kind: 'governance-directive', identifier: member.path, attributes: { contentExcluded: true } };
     return { ...parsed, declarations: [declaration], relationships: [], inventory: { inventoryKind: 'entity-collection', scope: member.path, declarations: [declaration], relationships: [], completenessClaims: ['directive-content-intentionally-excluded'], authorityAssessment: 'execution-directive-not-semantic-authority' } };
   }
+  // Graph parsing is also the census' independent observation boundary.  It
+  // must retain every RDF statement so contamination checks and
+  // source-observation reconciliation see the dataset that is actually on
+  // disk.  Filtering an observed path merely because the historical filename
+  // contains coordination-looking text silently manufactures missing and
+  // orphan observations.
+  if (member.universe === 'v2-graph-authority') return parsed;
   const declarations = (parsed.declarations ?? []).filter((entry) => !containsCoordinationMetadata(entry));
   const relationships = (parsed.relationships ?? []).filter((entry) => !containsCoordinationMetadata(entry));
   const inventory = parsed.inventory ? { ...parsed.inventory, declarations: (parsed.inventory.declarations ?? declarations).filter((entry) => !containsCoordinationMetadata(entry)), relationships: (parsed.inventory.relationships ?? relationships).filter((entry) => !containsCoordinationMetadata(entry)) } : null;
@@ -172,4 +179,4 @@ export function parseMembers(members, implementations) {
   return results.sort(compareBy(['universe', 'path']));
 }
 
-export const parserInternals = { pathContext, sniffSyntax };
+export const parserInternals = { pathContext, sanitizeParsed, sniffSyntax };

@@ -63,7 +63,7 @@ export async function validateHardenedOutputs() {
   const relationships = parsedJsonl['relationships.jsonl'];
   relationships.forEach(validateRelationship);
   if (relationships.some((record) => !record.evidenceKind)) throw new Error('hardened relationship lacks evidence kind');
-  assertUnique(relationships, (record) => [record.source, record.relationshipType, record.target, record.extractionMethod].join('\0'));
+  assertUnique(relationships, (record) => [record.source, record.relationshipType, record.target, record.targetKind, record.extractionMethod].join('\0'));
   const findings = parsedJsonl['inventory-findings.jsonl'];
   assertUnique(findings, 'findingKey');
   const findingFields = ['findingCategory', 'findingClass', 'severity', 'resolutionStatus', 'ownerClass', 'requiredAction', 'classificationEvidence'];

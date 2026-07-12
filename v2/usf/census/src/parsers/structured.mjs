@@ -8,7 +8,6 @@ import {
   confidence,
   declaration,
   inventory,
-  normaliseTarget,
   pathLike,
   relationship,
   result,
@@ -46,7 +45,9 @@ function addCommand(declarations, command, context) {
 
 function addPathRelationship(relationships, source, value, extractionMethod, attributes = {}) {
   if (!pathLike(value)) return;
-  relationships.push(relationship('references', normaliseTarget(source, value), 'artifact', extractionMethod, 'structurally-proven', confidence.structural, attributes));
+  // Path fields have schema-specific bases. Preserve the authored value here;
+  // repository resolution owns root-, source-, fixture-, and non-file scope.
+  relationships.push(relationship('references', value, 'artifact', extractionMethod, 'structurally-proven', confidence.structural, attributes));
 }
 
 function structuredField(keyPath) {

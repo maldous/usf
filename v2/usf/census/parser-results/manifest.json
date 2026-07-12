@@ -1,8 +1,8 @@
 {
   "aggregate": {
     "recordCount": 3225,
-    "uncompressedBytes": 173513141,
-    "uncompressedSha256": "5fc45d6720f365d00cb716745d4f70eb9f3454795f070aa58f1870477a5df494"
+    "uncompressedBytes": 173594730,
+    "uncompressedSha256": "d3470b33f8e406695796601caa2bd13f56cc0015b90d71e0bdb55f9d0ca62826"
   },
   "encoding": "gzip-jsonl",
   "formatVersion": 1,
@@ -12,36 +12,36 @@
   ],
   "shards": [
     {
-      "compressedBytes": 2485008,
-      "compressedSha256": "a19724c7412784baa43edaee81aa94e7cf7ac5181926a47fa5979c7923f60501",
+      "compressedBytes": 2480250,
+      "compressedSha256": "43149f892beffc8f15c2c44ccba462d412c20b17e0b27a61343d44d5a48db98f",
       "firstPath": ".github/workflows/proof-anchor.yml",
       "lastPath": "vitest.config.ts",
       "path": "parser-results/repository-output.jsonl.gz",
       "recordCount": 3088,
-      "uncompressedBytes": 50858215,
-      "uncompressedSha256": "e14933177a179a64ceccb986480052524e916c5e0f2de1cca40b2922978b4d91",
+      "uncompressedBytes": 50713455,
+      "uncompressedSha256": "8dc94e4643232ab8e34c34aa4d06c6a6e07556d486a6357a4d5c9bff02d12653",
       "universe": "repository-output"
     },
     {
-      "compressedBytes": 30013,
-      "compressedSha256": "b5a5b74851f792ec17baeb076a5748cfb6a282b058ac0e3832a83787ac1a009e",
+      "compressedBytes": 30077,
+      "compressedSha256": "b4806240105312d8f54b1dabb3ee56e3a3bee133afa96d3b757431910cc936b9",
       "firstPath": "v2/usf/compiler/package-lock.json",
       "lastPath": "v2/usf/compiler/test/generation-output.test.js",
       "path": "parser-results/v2-compiler-implementation.jsonl.gz",
       "recordCount": 20,
-      "uncompressedBytes": 433989,
-      "uncompressedSha256": "f4fc413c02bf7cd45905f6ce098b48b63297f2f9a220fd0bbb08bab865d970c4",
+      "uncompressedBytes": 434744,
+      "uncompressedSha256": "ed414f56c7467b8e7dc03bf3565e3fa82c8fe65160f7fa86539275e317918b29",
       "universe": "v2-compiler-implementation"
     },
     {
-      "compressedBytes": 6972927,
-      "compressedSha256": "e31d3baccb946045c71fbd95a5a40b8684ee65302e5a4016b82c8651f4790171",
+      "compressedBytes": 6988841,
+      "compressedSha256": "24ac5735aeb09de6e4d7d91e65a0422b20e6bef0c1dbc8cf738eb90c4a540063",
       "firstPath": "v2/usf/graph/assurance/controls.trig",
       "lastPath": "v2/usf/graph/vocabulary.ttl",
       "path": "parser-results/v2-graph-authority.jsonl.gz",
       "recordCount": 95,
-      "uncompressedBytes": 122116956,
-      "uncompressedSha256": "92f05f3ef15a878f531a0e7c5f2c3c0a3c5a8da51b74a2c961e5ccaa9ca74da8",
+      "uncompressedBytes": 122342550,
+      "uncompressedSha256": "449ce14ac292234dd7c4330a82725f19d7cbddfadb294925d639ec983b412f88",
       "universe": "v2-graph-authority"
     },
     {
