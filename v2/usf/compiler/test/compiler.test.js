@@ -21,6 +21,7 @@ import { loadAuthorityDataset } from '../src/authority-dataset.js';
 import { buildGenerationPlan, requireCompleteGenerationPlan } from '../src/generation-plan.js';
 import { canonicalGraphDigest, canonicalGraphTrig, compareGraphDigests } from '../src/live-attestation.js';
 import { generateAuthority, generatorInternals, verifyOutput } from '../src/generate.js';
+import { sourceObserverInternals } from '../src/source-observer.js';
 
 // --- Fixtures --------------------------------------------------------------
 
@@ -266,6 +267,25 @@ test('manifest: observed collector is registered separately from authority', () 
   assert.equal(manifest.observed[0].collector, 'repositorysourceobserver');
   assert.equal(manifest.observed[0].path, null);
   assert.ok(managedGraphs(manifest).includes('urn:usf:graph:observed:sourceartefacts'));
+});
+
+test('source observer: progressive fixtures receive a non-accepting equivalence role', () => {
+  const manifest = { fixtures: { conforming: 'fixtures/conforming', defects: 'fixtures/defects' } };
+  const progressive = sourceObserverInternals.rolesFor({
+    path: 'tools/validate-spec/provider-planted-defects/001.json',
+    artifactFamily: 'repository-governance',
+    universe: 'repository-output',
+  }, new Map(), manifest);
+  assert.deepEqual(progressive, ['equivalencefixture', 'repositorygovernance']);
+  const graphFixture = sourceObserverInternals.rolesFor({
+    path: 'v2/usf/graph/fixtures/defects/sample.trig',
+    artifactFamily: 'machine-semantics',
+    universe: 'v2-graph-authority',
+  }, new Map(), { fixtures: { conforming: 'fixtures/conforming', defects: 'fixtures/defects' } });
+  assert.deepEqual(graphFixture, ['fixture', 'machinesemantics']);
+  assert.equal(sourceObserverInternals.isEquivalenceFixture({
+    path: 'docs/fixture-governance.md', artifactFamily: 'documentation-assets', universe: 'repository-output',
+  }), false);
 });
 
 test('checkLocal: a duplicate authored graph IRI fails', () => {

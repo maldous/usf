@@ -28215,6 +28215,10 @@
         "primaryWorkPackage": "work-package-5fec561767cac1fdfa01"
       },
       {
+        "ownedKey": "3387a43d7a9d6ce7df722c8e495f48e92ef625fdeaedfb1816f5581b038a07f5",
+        "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
+      },
+      {
         "ownedKey": "33c847970898ac1ab42c4c6df204b3702ac7b808b6896d4228ee3078849117d9",
         "primaryWorkPackage": "work-package-5fec561767cac1fdfa01"
       },
@@ -29765,6 +29769,10 @@
       {
         "ownedKey": "536ddabdc9e1d1cfdb1f643578c22c4d0c53f21b7104a503de365e5dd2ee1e8e",
         "primaryWorkPackage": "work-package-7a5888c3dae147d45050"
+      },
+      {
+        "ownedKey": "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
       },
       {
         "ownedKey": "539b3821561fff935981952c46f68896b732bd56f671bc8209fa7578062bab5a",
@@ -32605,6 +32613,10 @@
       {
         "ownedKey": "8dcf32d7e011271ef95a7f72fac0fdfaecdc8cd41dd2f96c69a799816778474c",
         "primaryWorkPackage": "work-package-478649d8c8928091ed4d"
+      },
+      {
+        "ownedKey": "8dd325a42bdb0754573c0cc7e37003e25da0938926f8761613f2995b845c0fc1",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
       },
       {
         "ownedKey": "8df0a1f9e7a13d9026872800da7f6ad90842b0fc231f06bafea3ca72b73e8ccc",
@@ -79048,7 +79060,7 @@
         {
           "criterionKey": "work-package-3b26c3ff6ecc7d7e0d0d:ownership",
           "evidence": [
-            "ownership-index:work-package-3b26c3ff6ecc7d7e0d0d:5a60ed54ed0b9846cc3090660072b9d9cd5d83a50fbafdd34e1134faf108ba80"
+            "ownership-index:work-package-3b26c3ff6ecc7d7e0d0d:f9f3ed1ed19997d2b0d1eca0ffbf99b0def8b8a92787721bba7af81358f84bb9"
           ],
           "requirement": "Every scoped entity has this package as its sole primary owner."
         },
@@ -80151,6 +80163,7 @@
       ],
       "key": "work-package-3b26c3ff6ecc7d7e0d0d",
       "missingEntirelyKeys": [
+        "3387a43d7a9d6ce7df722c8e495f48e92ef625fdeaedfb1816f5581b038a07f5",
         "52705156fd31162250ccbf997d872acb9b4af5c0321b121a6799289daf12eecc",
         "57b4ede4e2093c98a9c8d486e33331ec3bf4c190506f6ecc49671806fe2a9493",
         "afc5b0f8c679419b9764b490052525a94c1c85d5d2ac3995b904b7919bb1bcd1",
@@ -80358,6 +80371,7 @@
           "artifact-plan-required-ffc269c348a7d5c6300134df369f638f0303791594c7e25c87cdfa4f8765f97d"
         ],
         "missingEntirelyKeys": [
+          "3387a43d7a9d6ce7df722c8e495f48e92ef625fdeaedfb1816f5581b038a07f5",
           "52705156fd31162250ccbf997d872acb9b4af5c0321b121a6799289daf12eecc",
           "57b4ede4e2093c98a9c8d486e33331ec3bf4c190506f6ecc49671806fe2a9493",
           "afc5b0f8c679419b9764b490052525a94c1c85d5d2ac3995b904b7919bb1bcd1",
@@ -128822,7 +128836,7 @@
         {
           "criterionKey": "work-package-b066aa31871a52cb170c:ownership",
           "evidence": [
-            "ownership-index:work-package-b066aa31871a52cb170c:abe9bbd56e3fabd1844cde4dd3f263541273d89adfbb60a284d7e882127df8fd"
+            "ownership-index:work-package-b066aa31871a52cb170c:b6ebc296e97bc5bc7c9747eeceb65a0c2597ddddbbc9cd4d156b2d4bf04d49de"
           ],
           "requirement": "Every scoped entity has this package as its sole primary owner."
         },
@@ -129106,7 +129120,10 @@
         }
       ],
       "key": "work-package-b066aa31871a52cb170c",
-      "missingEntirelyKeys": [],
+      "missingEntirelyKeys": [
+        "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9",
+        "8dd325a42bdb0754573c0cc7e37003e25da0938926f8761613f2995b845c0fc1"
+      ],
       "outcomeClass": "artifact-plan-closure:v2/usf/compiler",
       "ownedSemanticLayers": [],
       "primaryOwnership": {
@@ -129155,7 +129172,10 @@
           "artifact-plan-required-ddb0dc8ef14cf313adb0ad59508c2608b62df5fe19f8a9af445338fef68ba539",
           "artifact-plan-required-ff17e86890c84830faa14f59774a6ad82e983cbaad4a0dd937d2d4e843c5f731"
         ],
-        "missingEntirelyKeys": [],
+        "missingEntirelyKeys": [
+          "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9",
+          "8dd325a42bdb0754573c0cc7e37003e25da0938926f8761613f2995b845c0fc1"
+        ],
         "replacementGroupKeys": [
           "replacement-0501e3ea581147cf9a9a1a44",
           "replacement-1c8d7804f4ec4d4c8b927f37",

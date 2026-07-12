@@ -28,6 +28,18 @@ const FAMILY_ROLES = Object.freeze({
   verification: 'verification',
 });
 
+const EQUIVALENCE_FIXTURE_EXACT_PATHS = new Set([
+  'tests/packages/supply-chain/supply-chain-planted-defects.json',
+]);
+
+function isEquivalenceFixture(artifact) {
+  if (artifact.universe !== 'repository-output') return false;
+  if (EQUIVALENCE_FIXTURE_EXACT_PATHS.has(artifact.path)) return true;
+  return artifact.path.split('/').some((segment) =>
+    segment === 'fixtures' || segment === 'planted-defects' || segment.endsWith('-planted-defects')
+  );
+}
+
 function readJsonl(path) {
   return readFileSync(path, 'utf8').split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line));
 }
@@ -54,6 +66,7 @@ function rolesFor(artifact, registeredRoles, manifest) {
   const fixtureRoots = [manifest.fixtures?.conforming, manifest.fixtures?.defects].filter(Boolean)
     .map((root) => `v2/usf/graph/${root}/`);
   if (fixtureRoots.some((root) => artifact.path.startsWith(root))) roles.add('fixture');
+  if (isEquivalenceFixture(artifact)) roles.add('equivalencefixture');
   if (artifact.path.endsWith('/.gitkeep') || artifact.path === '.gitkeep') roles.add('placeholder');
   if (artifact.universe === 'v2-support-provisioning' && !roles.has('placeholder')) roles.add('supportprovisioning');
   return [...roles].sort();
@@ -144,4 +157,4 @@ export async function collectObservedEntry({ manifest, entry }) {
   throw new Error(`unknown observed graph collector: ${entry.collector}`);
 }
 
-export const sourceObserverInternals = { FAMILY_ROLES, UNIVERSES, observationRows, rolesFor };
+export const sourceObserverInternals = { EQUIVALENCE_FIXTURE_EXACT_PATHS, FAMILY_ROLES, UNIVERSES, isEquivalenceFixture, observationRows, rolesFor };
