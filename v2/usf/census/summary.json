@@ -1,5 +1,5 @@
 {
-  "absentCount": 5,
+  "absentCount": 7,
   "activeBlockingRelationshipCount": 0,
   "artifactCount": 3237,
   "artifactFamilyDistribution": {
@@ -19,19 +19,19 @@
   "canonicalArtifactCount": 68,
   "closureEvaluation": "deferred-to-closure-command",
   "consolidationDistribution": {
-    "accepted-no-output-disposition": 3157,
+    "accepted-no-output-disposition": 3155,
     "accepted-output-plan": 68,
-    "source-disposition-unavailable": 12
+    "source-disposition-unavailable": 14
   },
   "coordinationRelationshipCount": 83,
   "coverageConfidenceDistribution": {
-    "high": 3157,
-    "low": 5,
+    "high": 3155,
+    "low": 7,
     "medium": 75
   },
   "coverageStateDistribution": {
-    "absent": 5,
-    "notrequired": 3157,
+    "absent": 7,
+    "notrequired": 3155,
     "partial": 75
   },
   "criticalPathLength": 2,
@@ -50,7 +50,7 @@
   "familyOnlyLinkCount": 0,
   "familyReviewCandidateCount": 411,
   "gapDistribution": {
-    "review-required-source-disposition": 12
+    "review-required-source-disposition": 14
   },
   "graphArtefactPlanCount": 103,
   "identityOnlyCohortSize": 0,
@@ -59,13 +59,13 @@
   "inventoryFindingClassDistribution": {},
   "inventoryFindingCount": 0,
   "mappingTypeDistribution": {
-    "not-required": 3157,
+    "not-required": 3155,
     "semantic-resource-component": 7,
     "semantic-resource-projection": 68,
-    "unmapped": 5
+    "unmapped": 7
   },
   "materialisationContractCount": 3,
-  "missingEntirelyCount": 12,
+  "missingEntirelyCount": 14,
   "newCanonicalArtifactCount": 0,
   "openInventoryFindingCount": 0,
   "outputDispositionDistribution": {
@@ -111,16 +111,16 @@
     "rewrite": 68
   },
   "satisfiedPrerequisiteRelationshipCount": 11,
-  "sourceDispositionAcceptedCount": 3225,
-  "sourceDispositionAcceptedNoOutputCount": 3157,
+  "sourceDispositionAcceptedCount": 3223,
+  "sourceDispositionAcceptedNoOutputCount": 3155,
   "sourceDispositionAcceptedOutputPlanCount": 68,
   "sourceDispositionFindingDistribution": {
     "source-disposition-bijection-invalid": 8,
-    "source-observation-digest-mismatch": 3,
+    "source-observation-digest-mismatch": 5,
     "source-observation-missing": 1
   },
   "sourceDispositionOutputPlanRequiredCount": 68,
-  "sourceDispositionRejectedCount": 12,
+  "sourceDispositionRejectedCount": 14,
   "sourceDispositionResourceCount": 3228,
   "sourceObservationResourceCount": 3236,
   "sourceOrphanObservationCount": 0,
@@ -141,7 +141,7 @@
   "unsupportedEvidenceCount": 0,
   "unsupportedFormatCount": 0,
   "untypedLinkCount": 0,
-  "v2CompilerUniverseDigest": "ac3498662cf2ae6f2a54e651cd025f66f1ab1b08bab0a058a3116f08c0c2316b",
+  "v2CompilerUniverseDigest": "faf340b4485af65d12f0d854033776a5bfa7d243663f86f2b56ae8fc9bde9952",
   "v2GraphUniverseDigest": "fc34dad94ffa9d7703aed1bd5ddacdca0859e0835a75b521934904c700a2ea6b",
   "v2SupportUniverseDigest": "95043ce17450efe02434c93c565a681b98e51ad286f6bb1da2a56b74255bb2fd",
   "waves": [

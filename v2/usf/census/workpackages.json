@@ -26200,6 +26200,14 @@
         "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
       },
       {
+        "ownedKey": "4c18766ec46cfd07477344d80edfdb3a4404b43c61ec8f462cfb0a7f7002bea0",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
+      },
+      {
+        "ownedKey": "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9",
+        "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
+      },
+      {
         "ownedKey": "5b39b122179d4b3991c506c132dcf10c480e8d818b78e567583113f5fd782395",
         "primaryWorkPackage": "work-package-b066aa31871a52cb170c"
       },
@@ -113907,7 +113915,7 @@
         {
           "criterionKey": "work-package-b066aa31871a52cb170c:ownership",
           "evidence": [
-            "ownership-index:work-package-b066aa31871a52cb170c:a4be9036106d0db7b0ee5f72a26425e150dc6247cfb83dd9b96d111409c8e2fb"
+            "ownership-index:work-package-b066aa31871a52cb170c:631bba2089b6481e45851ffbc063da2e8c93499f8d7176600b25a23d37b40044"
           ],
           "requirement": "Every scoped entity has this package as its sole primary owner."
         },
@@ -114215,6 +114223,8 @@
       "key": "work-package-b066aa31871a52cb170c",
       "missingEntirelyKeys": [
         "22903315e7916ab5f9462e0d71b22913526350a4a92e026f2b41c44dde3c6449",
+        "4c18766ec46cfd07477344d80edfdb3a4404b43c61ec8f462cfb0a7f7002bea0",
+        "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9",
         "5b39b122179d4b3991c506c132dcf10c480e8d818b78e567583113f5fd782395",
         "8dd325a42bdb0754573c0cc7e37003e25da0938926f8761613f2995b845c0fc1"
       ],
@@ -114272,6 +114282,8 @@
         ],
         "missingEntirelyKeys": [
           "22903315e7916ab5f9462e0d71b22913526350a4a92e026f2b41c44dde3c6449",
+          "4c18766ec46cfd07477344d80edfdb3a4404b43c61ec8f462cfb0a7f7002bea0",
+          "538704356a920e81d0f88f8422ae487c85092f9235dc982c494285631ece50a9",
           "5b39b122179d4b3991c506c132dcf10c480e8d818b78e567583113f5fd782395",
           "8dd325a42bdb0754573c0cc7e37003e25da0938926f8761613f2995b845c0fc1"
         ],

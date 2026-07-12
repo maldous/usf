@@ -1,8 +1,8 @@
 {
   "aggregate": {
     "recordCount": 3237,
-    "uncompressedBytes": 75215662,
-    "uncompressedSha256": "13b5f7f4c56b420cb75fe89258f60a9947b5bf3a6377e85acb73a5d6383644eb"
+    "uncompressedBytes": 75215509,
+    "uncompressedSha256": "4e8fb7375e459bbfbe9c996bd6a2211fed3c27184de03d8b48481966fd48a2f8"
   },
   "encoding": "gzip-jsonl",
   "formatVersion": 1,
@@ -23,14 +23,14 @@
       "universe": "repository-output"
     },
     {
-      "compressedBytes": 48093,
-      "compressedSha256": "447ab04bf78e1b49271f651de887249f385c0df144d797bbf6ce14aae196cb89",
+      "compressedBytes": 48053,
+      "compressedSha256": "eb7cd6eb9dfdcfbd9c1193c77f3d8bdfc3b14d150db1b7a0cce183f64cbb0d86",
       "firstPath": "v2/usf/compiler/package-lock.json",
       "lastPath": "v2/usf/compiler/test/generation-output.test.js",
       "path": "parser-results/v2-compiler-implementation.jsonl.gz",
       "recordCount": 22,
-      "uncompressedBytes": 738043,
-      "uncompressedSha256": "339f60608d07ba4651d9c8605209414e58259480a4a6262b4f48bd0f64fed139",
+      "uncompressedBytes": 737890,
+      "uncompressedSha256": "1352aa9410debde231f024b70acb5161cf228a28d342768bf265ecc06a963f89",
       "universe": "v2-compiler-implementation"
     },
     {
