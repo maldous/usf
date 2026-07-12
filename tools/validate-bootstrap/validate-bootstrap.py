@@ -286,10 +286,6 @@ def current_head():
     return git_value("rev-parse", "HEAD") or ""
 
 
-def current_short_head():
-    return git_value("rev-parse", "--short", "HEAD") or ""
-
-
 def remote_main_head():
     return git_value("rev-parse", "origin/main") or ""
 
@@ -309,6 +305,47 @@ def remote_has_tag(tag):
     if completed.returncode != 0:
         return False
     return f"refs/tags/{tag}" in completed.stdout
+
+
+def remote_anchor_commits():
+    """Full commit SHAs on origin that carry a proof-anchor-* tag, resolved by
+    the commit each tag targets rather than by the tag's abbreviated name.
+
+    The proof-anchor workflow and this validator each derive the tag's short SHA
+    with `git rev-parse --short`, but that abbreviation length is environment-
+    dependent (a larger local object set — e.g. a git object-mirror alternate on
+    the CI runner — forces a longer unique prefix). Matching a proof-anchor tag
+    by name is therefore unreliable across environments; matching by the commit
+    the tag targets is exact and abbreviation-independent."""
+    completed = subprocess.run(
+        ["git", "ls-remote", "--tags", "origin"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return set()
+    direct = {}
+    peeled = {}
+    for line in completed.stdout.splitlines():
+        parts = line.split("\t")
+        if len(parts) != 2:
+            continue
+        sha, ref = parts
+        if not ref.startswith("refs/tags/proof-anchor-"):
+            continue
+        if ref.endswith("^{}"):
+            peeled[ref[:-3]] = sha
+        else:
+            direct[ref] = sha
+    # Prefer the peeled commit for annotated tags (proof-anchor tags are
+    # annotated); fall back to the direct SHA for any lightweight tag.
+    commits = set(peeled.values())
+    for ref, sha in direct.items():
+        if ref not in peeled:
+            commits.add(sha)
+    return commits
 
 
 def is_ancestor(ancestor, descendant):
@@ -566,8 +603,8 @@ def check_mapping_substrate(F, state):
             F.add("USF-BOOTSTRAP-005", DIRECTIVE_PATH, f"semantic capability domain missing from directive: {domain}")
 
 
-def parent_short_head():
-    return git_value("rev-parse", "--short", "HEAD^") or ""
+def parent_head():
+    return git_value("rev-parse", "HEAD^") or ""
 
 
 def racing_push_first_attempt():
@@ -579,8 +616,14 @@ def racing_push_first_attempt():
     )
 
 
-def missing_anchor_message(short_head, parent_short, has_tag, racing):
+def missing_anchor_message(head, parent, has_anchor, racing):
     """Return a finding message when main anchor coverage is broken, else None.
+
+    has_anchor(commit) is true when origin exposes a proof-anchor tag whose
+    target commit is that commit. Coverage is matched by target commit, not by
+    the tag's abbreviated name, because the proof-anchor workflow and this
+    validator abbreviate the short SHA independently and that length is
+    environment-dependent (see remote_anchor_commits).
 
     The newest main commit's anchor is published by the proof-anchor workflow
     triggered by the same push, so only the first attempt of that push-event
@@ -591,12 +634,12 @@ def missing_anchor_message(short_head, parent_short, has_tag, racing):
     outside the racing first attempt, and even there the first-parent anchor
     must already be exposed.
     """
-    if has_tag(f"proof-anchor-{short_head}"):
+    if has_anchor(head):
         return None
-    if racing and parent_short and has_tag(f"proof-anchor-{parent_short}"):
+    if racing and parent and has_anchor(parent):
         return None
     return (
-        f"origin does not expose a proof-anchor tag for current main ({short_head})"
+        f"origin does not expose a proof-anchor tag for current main ({head[:9]})"
         + (" or its first parent" if racing else "")
     )
 
@@ -607,14 +650,12 @@ def check_anchor_for_current_main(F):
         return
     if current_branch() != "main" or remote_main_head() != head:
         return
-    short_head = current_short_head()
-    if not short_head:
-        return
+    anchored = remote_anchor_commits()
     message = missing_anchor_message(
-        short_head, parent_short_head(), remote_has_tag, racing_push_first_attempt()
+        head, parent_head(), lambda commit: commit in anchored, racing_push_first_attempt()
     )
     if message:
-        F.add("USF-BOOTSTRAP-006", f"proof-anchor-{short_head}", message)
+        F.add("USF-BOOTSTRAP-006", f"proof-anchor-{head[:9]}", message)
 
 
 def check_validate_spec_wiring(F, state):
@@ -1286,17 +1327,19 @@ def run_selftest(F):
         run_checks(["readiness", "implementation"], local, build_state(overrides))
         if expected not in {item["ruleId"] for item in local.items}:
             F.add("USF-BOOTSTRAP-SELFTEST", path, f"expected {expected}; got {sorted({item['ruleId'] for item in local.items})}")
+    # The set holds anchored *commit* SHAs (matched by tag target, not tag name).
     anchor_cases = [
-        ("anchor-present-passes", "aaaaaaaa", {"proof-anchor-aaaaaaaa"}, True, None),
-        ("racing-first-attempt-parent-covered-passes", "cccccccc", {"proof-anchor-bbbbbbbb"}, True, None),
-        ("non-racing-parent-covered-still-fails", "cccccccc", {"proof-anchor-bbbbbbbb"}, False, "finding"),
+        ("anchor-present-passes", "aaaaaaaa", {"aaaaaaaa"}, True, None),
+        ("racing-first-attempt-parent-covered-passes", "cccccccc", {"bbbbbbbb"}, True, None),
+        ("non-racing-parent-covered-still-fails", "cccccccc", {"bbbbbbbb"}, False, "finding"),
         ("racing-anchor-and-parent-missing-fails", "cccccccc", set(), True, "finding"),
+        ("name-length-differs-still-matches-by-commit", "de809ebd64f", {"de809ebd64f"}, False, None),
     ]
-    for case_name, short_head, tags, racing, expectation in anchor_cases:
+    for case_name, head, anchored, racing, expectation in anchor_cases:
         message = missing_anchor_message(
-            short_head,
+            head,
             "bbbbbbbb",
-            lambda tag, _tags=tags: tag in _tags,
+            lambda commit, _anchored=anchored: commit in _anchored,
             racing,
         )
         if expectation is None and message is not None:
