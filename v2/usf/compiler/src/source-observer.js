@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { DataFactory, Writer } from 'n3';
+import { DataFactory, Parser, Store, Writer } from 'n3';
 
 const { namedNode, literal, quad } = DataFactory;
 const RDF_TYPE = namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
@@ -44,6 +44,31 @@ function readJsonl(path) {
   return readFileSync(path, 'utf8').split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line));
 }
 
+function exactlyOne(store, subject, predicate, label) {
+  const values = store.getObjects(subject, predicate, null);
+  if (values.length !== 1) throw new Error(`${label} requires exactly one value for ${subject.value}; observed ${values.length}`);
+  return values[0];
+}
+
+function sourceSemanticBindings(manifest) {
+  const store = new Store();
+  for (const entry of [...manifest.definitions, ...manifest.authored]) {
+    store.addQuads(new Parser({ format: entry.contentType, baseIRI: manifest.baseIri }).parse(readFileSync(entry.path, 'utf8')));
+  }
+  const bindings = new Map();
+  for (const binding of store.getSubjects(RDF_TYPE, namedNode(`${USF}SourceSemanticBinding`), null)) {
+    const source = exactlyOne(store, binding, p('sourceBindingSource'), 'source semantic binding source');
+    const path = exactlyOne(store, binding, p('sourceBindingPath'), 'source semantic binding path').value;
+    const contentDigest = exactlyOne(store, binding, p('sourceBindingContentDigest'), 'source semantic binding content digest').value;
+    const match = source.value.match(/^urn:usf:sourceartefact:s([0-9a-f]{64})$/);
+    if (!match || !/^[0-9a-f]{64}$/.test(contentDigest)) throw new Error(`invalid source semantic binding identity: ${binding.value}`);
+    const targets = store.getObjects(binding, p('sourceBindingTarget'), null).filter((term) => term.termType === 'NamedNode').map((term) => term.value).sort();
+    if (!targets.length || bindings.has(match[1])) throw new Error(`ambiguous or empty source semantic binding: ${binding.value}`);
+    bindings.set(match[1], { binding: binding.value, path, contentDigest, targets });
+  }
+  return bindings;
+}
+
 function graphRoleByPath(manifest) {
   const result = new Map();
   const add = (entries, role) => {
@@ -72,7 +97,7 @@ function rolesFor(artifact, registeredRoles, manifest) {
   return [...roles].sort();
 }
 
-function observationRows(artifacts, mappings, manifest) {
+function observationRows(artifacts, mappings, manifest, semanticBindings = new Map()) {
   const mappingByKey = new Map(mappings.map((record) => [record.artifactKey, record]));
   const registeredRoles = graphRoleByPath(manifest);
   const carrierPaths = new Set([
@@ -84,7 +109,14 @@ function observationRows(artifacts, mappings, manifest) {
     if (!universe) throw new Error(`unknown source universe: ${artifact.universe}`);
     const roles = rolesFor(artifact, registeredRoles, manifest);
     if (!roles.length) throw new Error(`source observation has no structural role: ${artifact.artifactKey}`);
-    const semanticReferences = [...new Set(mappingByKey.get(artifact.artifactKey)?.matchedResources ?? [])].sort();
+    const binding = semanticBindings.get(artifact.artifactKey);
+    if (binding && (binding.path !== artifact.path || binding.contentDigest !== artifact.contentDigest)) {
+      throw new Error(`source semantic binding does not match current artifact: ${binding.binding}`);
+    }
+    const semanticReferences = [...new Set([
+      ...(mappingByKey.get(artifact.artifactKey)?.matchedResources ?? []),
+      ...(binding?.targets ?? []),
+    ])].sort();
     return {
       artifactKey: artifact.artifactKey,
       path: artifact.path,
@@ -116,7 +148,11 @@ export async function collectRepositorySourceObservations({ manifest, entry }) {
   if (artifacts.some((artifact) => !mappingKeys.has(artifact.artifactKey))) {
     throw new Error('source observation collection requires one current mapping per artifact');
   }
-  const { rows, setDigest, carrierPaths } = observationRows(artifacts, mappings, manifest);
+  const bindings = sourceSemanticBindings(manifest);
+  for (const artifactKey of bindings.keys()) if (!artifacts.some((artifact) => artifact.artifactKey === artifactKey)) {
+    throw new Error(`source semantic binding has no current census artifact: ${artifactKey}`);
+  }
+  const { rows, setDigest, carrierPaths } = observationRows(artifacts, mappings, manifest, bindings);
   const quads = [];
   for (const row of rows) {
     const sourceName = `s${row.artifactKey}`;
@@ -157,4 +193,4 @@ export async function collectObservedEntry({ manifest, entry }) {
   throw new Error(`unknown observed graph collector: ${entry.collector}`);
 }
 
-export const sourceObserverInternals = { EQUIVALENCE_FIXTURE_EXACT_PATHS, FAMILY_ROLES, UNIVERSES, isEquivalenceFixture, observationRows, rolesFor };
+export const sourceObserverInternals = { EQUIVALENCE_FIXTURE_EXACT_PATHS, FAMILY_ROLES, UNIVERSES, isEquivalenceFixture, observationRows, rolesFor, sourceSemanticBindings };

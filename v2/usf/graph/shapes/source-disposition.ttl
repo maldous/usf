@@ -42,13 +42,14 @@ shp:SourceDispositionPolicyShape a sh:NodeShape ;
   sh:property [ sh:path usf:policyMatchesUniverse ; sh:class usf:SourceUniverse ] ;
   sh:property [ sh:path usf:policyMatchesContentRole ; sh:class usf:SourceContentRole ] ;
   sh:property [ sh:path usf:policyMatchesExactSemanticReference ; sh:nodeKind sh:IRI ] ;
+  sh:property [ sh:path usf:policyMatchesSourceBinding ; sh:class usf:SourceSemanticBinding ] ;
   sh:property [ sh:path usf:isDefaultDispositionPolicy ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
   sh:property [ sh:path usf:isActiveDispositionPolicy ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
   sh:property [ sh:path usf:decisionRationale ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ] ;
   sh:sparql [ sh:prefixes usf:prefixes ; sh:message "policyselector: non-default policy requires a structural or exact selector; default policy forbids selectors" ;
     sh:select """SELECT $this WHERE {
       $this usf:isDefaultDispositionPolicy ?default .
-      BIND(EXISTS { $this usf:policyMatchesSourceIdentityDigest|usf:policyMatchesUniverse|usf:policyMatchesContentRole|usf:policyMatchesExactSemanticReference ?selector } AS ?hasSelector)
+      BIND(EXISTS { $this usf:policyMatchesSourceIdentityDigest|usf:policyMatchesUniverse|usf:policyMatchesContentRole|usf:policyMatchesExactSemanticReference|usf:policyMatchesSourceBinding ?selector } AS ?hasSelector)
       FILTER((?default = false && !?hasSelector) || (?default = true && ?hasSelector))
     }""" ] ;
   sh:sparql [ sh:prefixes usf:prefixes ; sh:message "policydefault: default policy must be reviewrequired and nooutput" ;

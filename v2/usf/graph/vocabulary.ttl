@@ -534,6 +534,18 @@ rr:unsignedevidence          a usf:ReadinessReason ; usf:canonicalName "unsigned
 <urn:usf:sourcecontentrole:derivedprojection> a usf:SourceContentRole ; usf:canonicalName "derivedprojection" .
 <urn:usf:sourcecontentrole:fixture> a usf:SourceContentRole ; usf:canonicalName "fixture" .
 <urn:usf:sourcecontentrole:equivalencefixture> a usf:SourceContentRole ; usf:canonicalName "equivalencefixture" .
+<urn:usf:semanticlifecyclestate:proposed> a usf:SemanticLifecycleState ; usf:canonicalName "proposed" .
+<urn:usf:semanticlifecyclestate:planned> a usf:SemanticLifecycleState ; usf:canonicalName "planned" .
+<urn:usf:semanticlifecyclestate:draft> a usf:SemanticLifecycleState ; usf:canonicalName "draft" .
+<urn:usf:semanticlifecyclestate:active> a usf:SemanticLifecycleState ; usf:canonicalName "active" .
+<urn:usf:semanticlifecyclestate:deprecated> a usf:SemanticLifecycleState ; usf:canonicalName "deprecated" .
+<urn:usf:semanticlifecyclestate:retired> a usf:SemanticLifecycleState ; usf:canonicalName "retired" .
+<urn:usf:semanticlifecyclestate:replaced> a usf:SemanticLifecycleState ; usf:canonicalName "replaced" .
+<urn:usf:semanticlifecyclestate:deferred> a usf:SemanticLifecycleState ; usf:canonicalName "deferred" .
+<urn:usf:facetstatus:complete> a usf:FacetStatus ; usf:canonicalName "complete" .
+<urn:usf:facetstatus:gap> a usf:FacetStatus ; usf:canonicalName "gap" .
+<urn:usf:facetstatus:notapplicable> a usf:FacetStatus ; usf:canonicalName "notapplicable" .
+<urn:usf:equivalencekind:semantic> a usf:EquivalenceKind ; usf:canonicalName "semantic" .
 <urn:usf:sourcecontentrole:authoritymanifest> a usf:SourceContentRole ; usf:canonicalName "authoritymanifest" .
 <urn:usf:sourcecontentrole:materialisationdeclaration> a usf:SourceContentRole ; usf:canonicalName "materialisationdeclaration" .
 <urn:usf:sourcecontentrole:placeholder> a usf:SourceContentRole ; usf:canonicalName "placeholder" .
@@ -563,6 +575,7 @@ rr:unsignedevidence          a usf:ReadinessReason ; usf:canonicalName "unsigned
 <urn:usf:dispositionbasis:declaredmaterialisationcontract> a usf:DispositionBasis ; usf:canonicalName "declaredmaterialisationcontract" .
 <urn:usf:dispositionbasis:acceptedhumandecision> a usf:DispositionBasis ; usf:canonicalName "acceptedhumandecision" .
 <urn:usf:dispositionbasis:independentintegrityobservation> a usf:DispositionBasis ; usf:canonicalName "independentintegrityobservation" .
+<urn:usf:dispositionbasis:exactsemanticbinding> a usf:DispositionBasis ; usf:canonicalName "exactsemanticbinding" .
 
 <urn:usf:dispositiondecisionstate:reviewrequired> a usf:DispositionDecisionState ; usf:canonicalName "reviewrequired" .
 <urn:usf:dispositiondecisionstate:accepted> a usf:DispositionDecisionState ; usf:canonicalName "accepted" .

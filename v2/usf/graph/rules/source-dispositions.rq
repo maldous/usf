@@ -18,10 +18,18 @@ WHERE {
       usf:policyOutputMode ?outputMode ; usf:decisionRationale ?rationale .
   OPTIONAL { ?policy usf:policyArtefactPlan ?plan }
   OPTIONAL { ?policy usf:policyGenerationInputRole ?inputRole }
-  FILTER NOT EXISTS { ?policy usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
-  FILTER NOT EXISTS { ?policy usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
-  FILTER NOT EXISTS { ?policy usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
-  FILTER NOT EXISTS { ?policy usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+  {
+    ?policy usf:policyMatchesSourceBinding ?binding .
+    ?binding usf:sourceBindingSource ?source .
+  }
+  UNION
+  {
+    FILTER NOT EXISTS { ?policy usf:policyMatchesSourceBinding ?binding }
+    FILTER NOT EXISTS { ?policy usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
+    FILTER NOT EXISTS { ?policy usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
+    FILTER NOT EXISTS { ?policy usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
+    FILTER NOT EXISTS { ?policy usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+  }
   BIND(SHA256(CONCAT(STR(?source), "|", STR(?observation), "|", STR(?policy))) AS ?digest)
   BIND(CONCAT("d", ?digest) AS ?name)
   BIND(IRI(CONCAT("urn:usf:sourceartefactdisposition:", ?name)) AS ?disposition)
@@ -47,10 +55,18 @@ WHERE {
       usf:decisionRationale ?rationale .
   FILTER NOT EXISTS {
     ?policy a usf:SourceDispositionPolicy ; usf:isActiveDispositionPolicy true ; usf:isDefaultDispositionPolicy false .
-    FILTER NOT EXISTS { ?policy usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
-    FILTER NOT EXISTS { ?policy usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
-    FILTER NOT EXISTS { ?policy usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
-    FILTER NOT EXISTS { ?policy usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+    {
+      ?policy usf:policyMatchesSourceBinding ?binding .
+      ?binding usf:sourceBindingSource ?source .
+    }
+    UNION
+    {
+      FILTER NOT EXISTS { ?policy usf:policyMatchesSourceBinding ?binding }
+      FILTER NOT EXISTS { ?policy usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
+      FILTER NOT EXISTS { ?policy usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
+      FILTER NOT EXISTS { ?policy usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
+      FILTER NOT EXISTS { ?policy usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+    }
   }
   BIND(SHA256(CONCAT(STR(?source), "|", STR(?observation), "|", STR(?defaultPolicy))) AS ?digest)
   BIND(CONCAT("d", ?digest) AS ?name)

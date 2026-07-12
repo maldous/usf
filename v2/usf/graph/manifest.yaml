@@ -129,54 +129,58 @@ authoredGraphs:
     validationOrder: 35
   - file: contracts/source-dispositions.trig
     graph: "urn:usf:graph:sourcedispositionpolicies"
+    loadOrder: 33
+    validationOrder: 37
+  - file: contracts/semantic-depth.trig
+    graph: "urn:usf:graph:semanticdepth"
     loadOrder: 32
     validationOrder: 36
 observedGraphs:
   - file: observed/source-artefacts.trig
     collector: repositorysourceobserver
     graph: "urn:usf:graph:observed:sourceartefacts"
-    loadOrder: 34
-    validationOrder: 37
+    loadOrder: 35
+    validationOrder: 38
 shapeGraphs:
   - file: shapes.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
   - file: shapes/contracts.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
   - file: shapes/assurance.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
   - file: shapes/realisation.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
   - file: shapes/execution.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
   - file: shapes/derivation.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
   - file: shapes/generation.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
   - file: shapes/readiness.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
   - file: shapes/experience.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
   - file: shapes/source-disposition.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 33
+    loadOrder: 34
     validationOrder: 6
 rules:
   - file: rules/source-dispositions.rq

@@ -132,14 +132,28 @@ SELECT DISTINCT ?violation ?subject WHERE {
     ?left a usf:SourceDispositionPolicy ; usf:isActiveDispositionPolicy true ; usf:isDefaultDispositionPolicy false .
     ?right a usf:SourceDispositionPolicy ; usf:isActiveDispositionPolicy true ; usf:isDefaultDispositionPolicy false .
     FILTER(?left != ?right)
-    FILTER NOT EXISTS { ?left usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
-    FILTER NOT EXISTS { ?left usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
-    FILTER NOT EXISTS { ?left usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
-    FILTER NOT EXISTS { ?left usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
-    FILTER NOT EXISTS { ?right usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
-    FILTER NOT EXISTS { ?right usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
-    FILTER NOT EXISTS { ?right usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
-    FILTER NOT EXISTS { ?right usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+    {
+      { ?left usf:policyMatchesSourceBinding ?leftBinding . ?leftBinding usf:sourceBindingSource ?source }
+      UNION
+      {
+        FILTER NOT EXISTS { ?left usf:policyMatchesSourceBinding ?leftBinding }
+        FILTER NOT EXISTS { ?left usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
+        FILTER NOT EXISTS { ?left usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
+        FILTER NOT EXISTS { ?left usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
+        FILTER NOT EXISTS { ?left usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+      }
+    }
+    {
+      { ?right usf:policyMatchesSourceBinding ?rightBinding . ?rightBinding usf:sourceBindingSource ?source }
+      UNION
+      {
+        FILTER NOT EXISTS { ?right usf:policyMatchesSourceBinding ?rightBinding }
+        FILTER NOT EXISTS { ?right usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
+        FILTER NOT EXISTS { ?right usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
+        FILTER NOT EXISTS { ?right usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
+        FILTER NOT EXISTS { ?right usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+      }
+    }
     BIND("sourcedispositionpolicyoverlap" AS ?violation)
     BIND(?source AS ?subject)
   } UNION {

@@ -43,13 +43,14 @@ ng:readinessgates a usf:NamedGraph ; usf:canonicalName "readinessgates" ; usf:gr
 ng:ui a usf:NamedGraph ; usf:canonicalName "ui" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:ui"^^xsd:anyURI ; usf:loadOrder 29 ; usf:graphValidationOrder 33 .
 ng:renderers a usf:NamedGraph ; usf:canonicalName "renderers" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:renderers"^^xsd:anyURI ; usf:loadOrder 30 ; usf:graphValidationOrder 34 .
 ng:generation a usf:NamedGraph ; usf:canonicalName "generation" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:generation"^^xsd:anyURI ; usf:loadOrder 31 ; usf:graphValidationOrder 35 .
-ng:sourcedispositionpolicies a usf:NamedGraph ; usf:canonicalName "sourcedispositionpolicies" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:sourcedispositionpolicies"^^xsd:anyURI ; usf:loadOrder 32 ; usf:graphValidationOrder 36 .
+ng:semanticdepth a usf:NamedGraph ; usf:canonicalName "semanticdepth" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:semanticdepth"^^xsd:anyURI ; usf:loadOrder 32 ; usf:graphValidationOrder 36 .
+ng:sourcedispositionpolicies a usf:NamedGraph ; usf:canonicalName "sourcedispositionpolicies" ; usf:graphClass gcl:authoredgraph ; usf:graphIri "urn:usf:graph:sourcedispositionpolicies"^^xsd:anyURI ; usf:loadOrder 33 ; usf:graphValidationOrder 37 .
 
 # ---- Observed graphs (non-authoritative external/repository evidence) ----
-ng:sourceobservations a usf:NamedGraph ; usf:canonicalName "sourceobservations" ; usf:graphClass gcl:observedgraph ; usf:graphIri "urn:usf:graph:observed:sourceartefacts"^^xsd:anyURI ; usf:loadOrder 34 ; usf:graphValidationOrder 37 .
+ng:sourceobservations a usf:NamedGraph ; usf:canonicalName "sourceobservations" ; usf:graphClass gcl:observedgraph ; usf:graphIri "urn:usf:graph:observed:sourceartefacts"^^xsd:anyURI ; usf:loadOrder 35 ; usf:graphValidationOrder 38 .
 
 # ---- Shape graph ----
-ng:shapes a usf:NamedGraph ; usf:canonicalName "shapes" ; usf:graphClass gcl:shapegraph ; usf:graphIri "urn:usf:graph:shapes"^^xsd:anyURI ; usf:loadOrder 33 ; usf:graphValidationOrder 6 .
+ng:shapes a usf:NamedGraph ; usf:canonicalName "shapes" ; usf:graphClass gcl:shapegraph ; usf:graphIri "urn:usf:graph:shapes"^^xsd:anyURI ; usf:loadOrder 34 ; usf:graphValidationOrder 6 .
 
 # ---- Derived graphs ----
 ng:derivedsourcedispositions a usf:NamedGraph ; usf:canonicalName "derivedsourcedispositions" ; usf:graphClass gcl:derivedgraph ; usf:graphIri "urn:usf:graph:derived:sourcedispositions"^^xsd:anyURI ; usf:loadOrder 40 ; usf:graphValidationOrder 40 .

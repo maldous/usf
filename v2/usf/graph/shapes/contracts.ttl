@@ -1,6 +1,7 @@
 @prefix usf: <urn:usf:ontology:> .
 @prefix sh:  <http://www.w3.org/ns/shacl#> .
 @prefix shp: <urn:usf:shacl:> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 shp:CapabilityShape a sh:NodeShape ;
     usf:canonicalName "capabilityshape" ;
@@ -13,6 +14,8 @@ shp:CapabilityShape a sh:NodeShape ;
 shp:SemanticContractShape a sh:NodeShape ;
     usf:canonicalName "semanticcontractshape" ;
     sh:targetObjectsOf usf:hasContract ;
+    sh:property [ sh:path usf:semanticLifecycleState ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:SemanticLifecycleState ;
+        sh:message "contractlifecycle: contract must declare exactly one semantic lifecycle state" ] ;
     sh:property [ sh:path usf:declaresFacet ; sh:minCount 1 ; sh:class usf:ContractFacet ;
         sh:message "contractfacet: contract must declare facets" ] .
 
@@ -20,7 +23,29 @@ shp:ContractFacetShape a sh:NodeShape ;
     usf:canonicalName "contractfacetshape" ;
     sh:targetClass usf:ContractFacet ;
     sh:property [ sh:path usf:facetKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:FacetKind ;
-        sh:message "facetkind: facet must have exactly one facet kind" ] .
+        sh:message "facetkind: facet must have exactly one facet kind" ] ;
+    sh:property [ sh:path usf:facetStatus ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:FacetStatus ;
+        sh:message "facetstatus: facet must declare exactly one completeness status" ] ;
+    sh:property [ sh:path usf:facetStatement ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "facetstatement: identity-only facets are forbidden" ] .
+
+shp:SourceSemanticBindingShape a sh:NodeShape ;
+    usf:canonicalName "sourcesemanticbindingshape" ;
+    sh:targetClass usf:SourceSemanticBinding ;
+    sh:property [ sh:path usf:sourceBindingSource ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path usf:sourceBindingTarget ; sh:minCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path usf:sourceBindingContentDigest ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
+    sh:property [ sh:path usf:sourceBindingPath ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path usf:sourceBindingEquivalenceKind ; sh:minCount 1 ; sh:class usf:EquivalenceKind ] ;
+    sh:sparql [ sh:prefixes usf:prefixes ; sh:message "sourcebindingcurrent: bound path and content digest must match the source current observation" ;
+      sh:select """SELECT $this WHERE {
+        $this usf:sourceBindingSource ?source ; usf:sourceBindingPath ?path ; usf:sourceBindingContentDigest ?digest .
+        FILTER EXISTS { ?anyObservation a usf:SourceArtefactObservation }
+        FILTER NOT EXISTS {
+          ?source a usf:SourceArtefact ; usf:hasCurrentSourceObservation ?observation .
+          ?observation usf:observedSourcePath ?path ; usf:observedContentDigest ?digest .
+        }
+      }""" ] .
 
 shp:PolicyShape a sh:NodeShape ;
     usf:canonicalName "policyshape" ;

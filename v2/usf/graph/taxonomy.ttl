@@ -217,6 +217,7 @@ usf:SourceArtefact usf:classifiedAs <urn:usf:taxonomy:realisation> .
 usf:SourceArtefactObservation usf:classifiedAs <urn:usf:taxonomy:derivation> .
 usf:SourceArtefactDisposition usf:classifiedAs <urn:usf:taxonomy:derivation> .
 usf:SourceDispositionPolicy usf:classifiedAs <urn:usf:taxonomy:contract> .
+usf:SourceSemanticBinding usf:classifiedAs <urn:usf:taxonomy:contract> .
 usf:AutomationWorkflowContract usf:classifiedAs <urn:usf:taxonomy:contract> .
 
 # ControlledValue subclasses retain the existing controlled-value exemption;

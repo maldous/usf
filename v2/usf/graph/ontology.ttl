@@ -45,6 +45,14 @@ usf:ContractFacet a owl:Class ; rdfs:subClassOf usf:Entity ;
     rdfs:label "ContractFacet" ;
     rdfs:comment "One required aspect of a semantic contract, classified by a FacetKind." .
 
+usf:SemanticLifecycleState a owl:Class ; rdfs:subClassOf usf:ControlledValue ;
+    rdfs:label "Semantic lifecycle state" ;
+    rdfs:comment "A closed lifecycle state for a capability or semantic contract." .
+
+usf:FacetStatus a owl:Class ; rdfs:subClassOf usf:ControlledValue ;
+    rdfs:label "Facet status" ;
+    rdfs:comment "A closed status that distinguishes complete, gapped, and inapplicable contract facets." .
+
 usf:Policy a owl:Class ; rdfs:subClassOf usf:Entity ;
     rdfs:label "Policy" ;
     rdfs:comment "A binding rule governing permitted behaviour of a contract or capability." .
@@ -444,6 +452,12 @@ usf:declaresFacet a owl:ObjectProperty ;
     rdfs:domain usf:SemanticContract ; rdfs:range usf:ContractFacet ; rdfs:label "declaresFacet" .
 usf:facetKind a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:domain usf:ContractFacet ; rdfs:range usf:FacetKind ; rdfs:label "facetKind" .
+usf:semanticLifecycleState a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:SemanticContract ; rdfs:range usf:SemanticLifecycleState ; rdfs:label "semanticLifecycleState" .
+usf:facetStatus a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ContractFacet ; rdfs:range usf:FacetStatus ; rdfs:label "facetStatus" .
+usf:facetStatement a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ContractFacet ; rdfs:range xsd:string ; rdfs:label "facetStatement" .
 usf:governedByPolicy a owl:ObjectProperty ;
     rdfs:domain usf:SemanticContract ; rdfs:range usf:Policy ; rdfs:label "governedByPolicy" .
 usf:appliesToCapability a owl:ObjectProperty ;
@@ -1683,6 +1697,11 @@ usf:SourceDispositionPolicy a owl:Class ;
   rdfs:label "Source disposition policy" ;
   rdfs:comment "An authored, fail-closed policy selecting observations by controlled structural evidence or exact identity and assigning a disposition without using path or local-name resemblance." .
 
+usf:SourceSemanticBinding a owl:Class ;
+  rdfs:subClassOf usf:Entity ;
+  rdfs:label "Source semantic binding" ;
+  rdfs:comment "An authored exact binding from one observed source identity and content digest to one or more semantic resources; path or local-name similarity is not a binding." .
+
 usf:SourceUniverse a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Source universe" .
 usf:SourceContentRole a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Source content role" .
 usf:DispositionKind a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Disposition kind" .
@@ -1723,6 +1742,12 @@ usf:policyMatchesSourceIdentityDigest a owl:DatatypeProperty ; rdfs:domain usf:S
 usf:policyMatchesUniverse a owl:ObjectProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:SourceUniverse .
 usf:policyMatchesContentRole a owl:ObjectProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:SourceContentRole .
 usf:policyMatchesExactSemanticReference a owl:ObjectProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range rdfs:Resource .
+usf:policyMatchesSourceBinding a owl:ObjectProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:SourceSemanticBinding .
+usf:sourceBindingSource a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range usf:SourceArtefact .
+usf:sourceBindingTarget a owl:ObjectProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range rdfs:Resource .
+usf:sourceBindingContentDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range xsd:string .
+usf:sourceBindingPath a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range xsd:string .
+usf:sourceBindingEquivalenceKind a owl:ObjectProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range usf:EquivalenceKind .
 usf:isDefaultDispositionPolicy a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range xsd:boolean .
 usf:isActiveDispositionPolicy a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range xsd:boolean .
 usf:permitsDispositionOutputMode a owl:ObjectProperty ; rdfs:domain usf:DispositionKind ; rdfs:range usf:DispositionOutputMode .

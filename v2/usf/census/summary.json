@@ -1,11 +1,11 @@
 {
-  "absentCount": 3125,
-  "artifactCount": 3225,
+  "absentCount": 3126,
+  "artifactCount": 3227,
   "artifactFamilyDistribution": {
     "automation": 2,
     "documentation-assets": 474,
-    "implementation": 131,
-    "machine-semantics": 130,
+    "implementation": 132,
+    "machine-semantics": 131,
     "proof-evidence": 81,
     "repository-governance": 2322,
     "runtime-topology": 9,
@@ -20,20 +20,20 @@
   "canonicalArtifactCount": 0,
   "closureEvaluation": "deferred-to-closure-command",
   "consolidationDistribution": {
-    "accepted-no-output-disposition": 132,
+    "accepted-no-output-disposition": 130,
     "accepted-output-plan": 2,
-    "source-disposition-unavailable": 3091
+    "source-disposition-unavailable": 3095
   },
   "coordinationRelationshipCount": 83,
   "coverageConfidenceDistribution": {
     "high": 12,
-    "low": 3125,
-    "medium": 88
+    "low": 3126,
+    "medium": 89
   },
   "coverageStateDistribution": {
-    "absent": 3125,
+    "absent": 3126,
     "notrequired": 12,
-    "partial": 88
+    "partial": 89
   },
   "criticalPathLength": 2,
   "dependencyLineageDistribution": {
@@ -43,13 +43,13 @@
   },
   "equivalenceDistribution": {},
   "familyConfidenceDistribution": {
-    "high": 3103,
+    "high": 3105,
     "medium": 122
   },
   "familyOnlyLinkCount": 0,
   "familyReviewCandidateCount": 403,
   "gapDistribution": {
-    "review-required-source-disposition": 3091
+    "review-required-source-disposition": 3095
   },
   "graphArtefactPlanCount": 36,
   "identityOnlyCohortSize": 0,
@@ -60,28 +60,28 @@
   "mappingTypeDistribution": {
     "exact-semantic-identity": 1,
     "not-required": 12,
-    "semantic-resource-component": 87,
-    "unmapped": 3125
+    "semantic-resource-component": 88,
+    "unmapped": 3126
   },
   "materialisationContractCount": 3,
-  "missingEntirelyCount": 3091,
+  "missingEntirelyCount": 3095,
   "newCanonicalArtifactCount": 0,
   "openInventoryFindingCount": 0,
   "outputDispositionDistribution": {},
   "parallelWaveCount": 2,
-  "parserCount": 3225,
+  "parserCount": 3227,
   "parserCoverageByFormat": {
     "binary": 202,
     "compose-yaml": 5,
     "configuration": 5,
     "html": 2,
-    "javascript-typescript": 226,
+    "javascript-typescript": 227,
     "json-schema": 36,
     "make": 1,
     "markdown": 261,
     "plain-text": 17,
     "python": 52,
-    "rdf-trig": 39,
+    "rdf-trig": 40,
     "rdf-turtle": 48,
     "shell": 22,
     "sparql": 7,
@@ -92,38 +92,39 @@
     "workflow-yaml": 2,
     "yaml": 7
   },
-  "relationshipCount": 57466,
+  "relationshipCount": 59328,
   "replacementCardinalityDistribution": {
-    "one-to-zero": 3225
+    "one-to-zero": 3227
   },
   "repositoryUniverseDigest": "8f74c5d3cb36f06f0c600f31802db35f44f831123954ead51a5be7820f16280e",
   "requiredSemanticLayerDistribution": {},
   "reuseDistribution": {
-    "none": 3225
+    "none": 3227
   },
-  "sourceDispositionAcceptedCount": 134,
-  "sourceDispositionAcceptedNoOutputCount": 132,
+  "sourceDispositionAcceptedCount": 132,
+  "sourceDispositionAcceptedNoOutputCount": 130,
   "sourceDispositionAcceptedOutputPlanCount": 2,
   "sourceDispositionFindingDistribution": {
+    "source-disposition-bijection-invalid": 2,
     "source-disposition-review-required": 3081,
-    "source-observation-digest-mismatch": 3,
+    "source-observation-digest-mismatch": 7,
     "source-observation-missing": 7
   },
   "sourceDispositionOutputPlanRequiredCount": 2,
-  "sourceDispositionRejectedCount": 3091,
+  "sourceDispositionRejectedCount": 3095,
   "sourceDispositionResourceCount": 3218,
-  "sourceObservationResourceCount": 3218,
+  "sourceObservationResourceCount": 3220,
   "sourceOrphanObservationCount": 0,
   "structuralCoverageDistribution": {
-    "complete": 2691,
+    "complete": 2693,
     "not-applicable": 202,
     "partial": 332
   },
   "transitiveLinksRemoved": 0,
   "universeCounts": {
     "repository-output": 3088,
-    "v2-compiler-implementation": 20,
-    "v2-graph-authority": 95,
+    "v2-compiler-implementation": 21,
+    "v2-graph-authority": 96,
     "v2-support-provisioning": 22
   },
   "unresolvedRelationshipFindingCount": 0,
@@ -131,8 +132,8 @@
   "unsupportedEvidenceCount": 0,
   "unsupportedFormatCount": 0,
   "untypedLinkCount": 0,
-  "v2CompilerUniverseDigest": "a8b953076df557adcfd3812a74e4c5f62bd7328117b57ad2023ba8570602a4f7",
-  "v2GraphUniverseDigest": "898ec0cb979f7cc745666a1130ab5c6591205d825609d1c57d6d3e3770676b52",
+  "v2CompilerUniverseDigest": "0e731d5291a2cb0aba9ed116ab46a3e77cef5baa9e989f8a62b49f24507f4f44",
+  "v2GraphUniverseDigest": "6dbfa4058c6da7d85d3a6069cf64e96934401a9f04fb25c3cbfcaa3afe88e789",
   "v2SupportUniverseDigest": "03c5225abc8a70b47088281a8c5347271429e2c58726e184bcff221fde788ddf",
   "waves": [
     [
