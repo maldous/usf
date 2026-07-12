@@ -7,7 +7,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, generateKeyPairSync } from 'node:crypto';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,7 +20,7 @@ import { createClient } from '../src/stardog.js';
 import { loadAuthorityDataset } from '../src/authority-dataset.js';
 import { buildGenerationPlan, requireCompleteGenerationPlan } from '../src/generation-plan.js';
 import { canonicalGraphDigest, canonicalGraphTrig, compareGraphDigests } from '../src/live-attestation.js';
-import { generateAuthority, verifyOutput } from '../src/generate.js';
+import { generateAuthority, generatorInternals, verifyOutput } from '../src/generate.js';
 
 // --- Fixtures --------------------------------------------------------------
 
@@ -534,8 +534,19 @@ test('derived snapshot: canonical TriG is deterministic across blank-node labels
 
 test('generation: real authority validates before replacement and reuses deterministic incremental outputs', () => {
   const graphDir = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'graph');
+  const repositoryRoot = join(graphDir, '..', '..', '..');
   const manifest = loadManifest(graphDir);
   const dataset = loadAuthorityDataset(manifest);
+  const webQuery = generatorInternals.componentQuery(dataset.store, 'urn:usf:generator:webui');
+  const mobileQuery = generatorInternals.componentQuery(dataset.store, 'urn:usf:generator:mobileui');
+  assert.deepEqual(webQuery.constraints, [
+    { predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', object: 'urn:usf:ontology:RendererContract' },
+    { predicate: 'urn:usf:ontology:rendererTarget', object: 'urn:usf:renderertarget:web' },
+  ]);
+  assert.deepEqual(mobileQuery.constraints, [
+    { predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', object: 'urn:usf:ontology:RendererContract' },
+    { predicate: 'urn:usf:ontology:rendererTarget', object: 'urn:usf:renderertarget:mobile' },
+  ]);
   const keys = generateKeyPairSync('ed25519');
   const fingerprint = createHash('sha256').update(keys.publicKey.export({ type: 'spki', format: 'der' })).digest('hex');
   const identity = DataFactory.namedNode('urn:usf:signingidentity:foundationrelease');
@@ -546,21 +557,34 @@ test('generation: real authority validates before replacement and reuses determi
   dirs.push(root);
   const keyPath = join(root, 'signing-key.pem');
   writeFileSync(keyPath, keys.privateKey.export({ type: 'pkcs8', format: 'pem' }), { mode: 0o600 });
+  const templateChecksum = DataFactory.namedNode('urn:usf:checksum:proofanchorworkflow');
+  const checksumValue = DataFactory.namedNode('urn:usf:ontology:checksumValue');
+  const expectedChecksum = dataset.store.getObjects(templateChecksum, checksumValue, null)[0];
+  dataset.store.removeQuads(dataset.store.getQuads(templateChecksum, checksumValue, null, null));
+  dataset.store.addQuad(templateChecksum, checksumValue, DataFactory.literal('0'.repeat(64)));
+  assert.throws(
+    () => generateAuthority({ store: dataset.store, outputDir: join(root, 'rejected-output'), mode: 'full', signingKeyPath: keyPath, sourceRoot: repositoryRoot }),
+    (error) => error instanceof CompilerError && error.phase === 'generate:template-integrity',
+  );
+  dataset.store.removeQuads(dataset.store.getQuads(templateChecksum, checksumValue, null, null));
+  dataset.store.addQuad(templateChecksum, checksumValue, expectedChecksum);
   const outputDir = join(root, 'output');
-  const full = generateAuthority({ store: dataset.store, outputDir, mode: 'full', signingKeyPath: keyPath });
+  const full = generateAuthority({ store: dataset.store, outputDir, mode: 'full', signingKeyPath: keyPath, sourceRoot: repositoryRoot });
   assert.ok(full.outputCount > 0);
+  assert.deepEqual(readFileSync(join(outputDir, '.github/workflows/proof-anchor.yml')), readFileSync(join(repositoryRoot, '.github/workflows/proof-anchor.yml')));
+  assert.deepEqual(readFileSync(join(outputDir, '.github/workflows/validate-spec.yml')), readFileSync(join(repositoryRoot, '.github/workflows/validate-spec.yml')));
   assert.equal(verifyOutput(outputDir, true, fingerprint).independent.signingIdentityTrusted, true);
 
   const wrong = generateKeyPairSync('ed25519');
   const wrongPath = join(root, 'wrong-key.pem');
   writeFileSync(wrongPath, wrong.privateKey.export({ type: 'pkcs8', format: 'pem' }), { mode: 0o600 });
   assert.throws(
-    () => generateAuthority({ store: dataset.store, outputDir, mode: 'incremental', signingKeyPath: wrongPath }),
+    () => generateAuthority({ store: dataset.store, outputDir, mode: 'incremental', signingKeyPath: wrongPath, sourceRoot: repositoryRoot }),
     (error) => error instanceof CompilerError && error.phase === 'generate:signing-authority',
   );
   assert.equal(verifyOutput(outputDir, true, fingerprint).ok, true);
 
-  const incremental = generateAuthority({ store: dataset.store, outputDir, mode: 'incremental', signingKeyPath: keyPath });
+  const incremental = generateAuthority({ store: dataset.store, outputDir, mode: 'incremental', signingKeyPath: keyPath, sourceRoot: repositoryRoot });
   assert.equal(incremental.aggregateDigest, full.aggregateDigest);
   assert.equal(incremental.changed, 0);
   assert.ok(incremental.reused > 0);

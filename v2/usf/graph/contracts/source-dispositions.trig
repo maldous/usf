@@ -100,6 +100,30 @@ GRAPH <urn:usf:graph:sourcedispositionpolicies> {
     usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
     usf:decisionRationale "Tracked foundation support is retained as an integrity-bound input until compiler self-hosting and materialisation ownership are complete." .
 
+  policy:proofanchorworkflow a usf:SourceDispositionPolicy ;
+    usf:canonicalName "proofanchorworkflow" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:generateequivalent> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:explicitplanlink>, <urn:usf:dispositionbasis:declaredretainedinput>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:canonicaloutput> ;
+    usf:policyArtefactPlan <urn:usf:artefactplan:proofanchorworkflow> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:template> ;
+    usf:policyMatchesSourceIdentityDigest "3315cce936d85fffe2615254daf2093fffa0b1bd6b3769956db20584af8d630e" ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "The exact observed workflow is admitted as a checksum-bound template for its source-specific semantic contract and generation plan." .
+
+  policy:specvalidationworkflow a usf:SourceDispositionPolicy ;
+    usf:canonicalName "specvalidationworkflow" ;
+    usf:policyDispositionKind <urn:usf:dispositionkind:generateequivalent> ;
+    usf:policyDispositionBasis <urn:usf:dispositionbasis:explicitplanlink>, <urn:usf:dispositionbasis:declaredretainedinput>, <urn:usf:dispositionbasis:independentintegrityobservation> ;
+    usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
+    usf:policyOutputMode <urn:usf:dispositionoutputmode:canonicaloutput> ;
+    usf:policyArtefactPlan <urn:usf:artefactplan:specvalidationworkflow> ;
+    usf:policyGenerationInputRole <urn:usf:generationinputrole:template> ;
+    usf:policyMatchesSourceIdentityDigest "abe4a2acc696145384b1ddfa1953aa7577ebdd476f0b0477b846fc136c37e1dc" ;
+    usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
+    usf:decisionRationale "The exact observed workflow is admitted as a checksum-bound template for its source-specific semantic contract and generation plan." .
+
   policy:placeholder a usf:SourceDispositionPolicy ;
     usf:canonicalName "placeholder" ;
     usf:policyDispositionKind <urn:usf:dispositionkind:excludenoncanonical> ;

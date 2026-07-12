@@ -47,6 +47,7 @@ export function buildGenerationPlan(store) {
       const pathRule = requiredOne(store, artefact, p('governedByPathRule'), 'missing-path-rule', obligations);
       const component = requiredOne(store, artefact, p('generatedByComponent'), 'missing-generator-owner', obligations);
       const path = literalValue(pathTerm);
+      let template = null;
       validatePath(path, artefact.value, obligations);
       if (pathRule) requiredOne(store, pathRule, p('pathPattern'), 'missing-path-pattern', obligations);
       if (component) {
@@ -57,8 +58,21 @@ export function buildGenerationPlan(store) {
         requiredOne(store, component, p('normalisationPolicy'), 'missing-normalisation-policy', obligations);
         if (!objects(store, component, p('missingSemanticsConstraint')).length) obligations.push({ subject: component.value, predicate: `${USF}missingSemanticsConstraint`, expected: 'one-or-more', observed: 0, kind: 'missing-fail-closed-constraint' });
         if (!objects(store, component, p('requiresEquivalenceKind')).length) obligations.push({ subject: component.value, predicate: `${USF}requiresEquivalenceKind`, expected: 'one-or-more', observed: 0, kind: 'missing-equivalence-contract' });
+        const templates = objects(store, component, p('usesTemplate'));
+        if (templates.length > 1) obligations.push({ subject: component.value, predicate: `${USF}usesTemplate`, expected: 'zero-or-one', observed: templates.length, kind: 'ambiguous-template-input' });
+        if (templates.length === 1) {
+          const templatePath = literalValue(requiredOne(store, templates[0], p('canonicalPath'), 'missing-template-path', obligations));
+          const checksum = requiredOne(store, templates[0], p('canonicalChecksum'), 'missing-template-checksum', obligations);
+          const role = requiredOne(store, templates[0], p('generationInputRole'), 'missing-template-role', obligations);
+          const algorithm = checksum ? requiredOne(store, checksum, p('checksumAlgorithm'), 'missing-template-checksum-algorithm', obligations) : null;
+          const digest = checksum ? literalValue(requiredOne(store, checksum, p('checksumValue'), 'missing-template-checksum-value', obligations)) : null;
+          if (iriValue(role) !== 'urn:usf:generationinputrole:template') obligations.push({ subject: templates[0].value, predicate: `${USF}generationInputRole`, expected: 'urn:usf:generationinputrole:template', observed: iriValue(role), kind: 'invalid-template-role' });
+          if (iriValue(algorithm) !== 'urn:usf:checksumalgorithm:sha256') obligations.push({ subject: checksum?.value ?? templates[0].value, predicate: `${USF}checksumAlgorithm`, expected: 'urn:usf:checksumalgorithm:sha256', observed: iriValue(algorithm), kind: 'unsupported-template-checksum' });
+          if (!digest || !/^[0-9a-f]{64}$/.test(digest)) obligations.push({ subject: checksum?.value ?? templates[0].value, predicate: `${USF}checksumValue`, expected: 'lowercase-sha256', observed: digest, kind: 'invalid-template-checksum' });
+          if (templatePath && digest) template = { artefact: templates[0].value, path: templatePath, sha256: digest };
+        }
       }
-      if (path && kindTerm && component) outputs.push({ plan: plan.value, artefact: artefact.value, path, artefactKind: iriValue(kindTerm), component: component.value });
+      if (path && kindTerm && component) outputs.push({ plan: plan.value, artefact: artefact.value, path, artefactKind: iriValue(kindTerm), component: component.value, ...(template ? { template } : {}) });
     }
   }
   const byPath = new Map();

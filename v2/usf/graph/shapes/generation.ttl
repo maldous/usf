@@ -21,6 +21,12 @@ shp:ArtefactPlanShape a sh:NodeShape ; usf:canonicalName "artefactplanshape" ; s
   sh:property [ sh:path usf:ownedByRepository ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Repository ] ;
   sh:property [ sh:path usf:plansArtefact ; sh:minCount 1 ; sh:class usf:Artefact ] .
 
+shp:AutomationWorkflowContractShape a sh:NodeShape ; usf:canonicalName "automationworkflowcontractshape" ; sh:targetClass usf:AutomationWorkflowContract ;
+  sh:property [ sh:path usf:workflowTemplate ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Template ] ;
+  sh:property [ sh:path usf:requiredWorkflowTrigger ; sh:minCount 1 ; sh:class usf:AutomationTrigger ] ;
+  sh:property [ sh:path usf:requiredAutomationPermission ; sh:minCount 1 ; sh:class usf:AutomationPermission ] ;
+  sh:property [ sh:path usf:requiredValidatorRule ; sh:minCount 1 ; sh:class usf:ValidatorRule ] .
+
 shp:CompilerComponentShape a sh:NodeShape ; usf:canonicalName "compilercomponentshape" ; sh:targetClass usf:CompilerComponent ;
   sh:property [ sh:path usf:semanticInputQuery ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
   sh:property [ sh:path usf:outputSchema ; sh:minCount 1 ; sh:class usf:Artefact ] ;

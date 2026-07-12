@@ -68,11 +68,12 @@ async function main() {
     const outputAt = process.argv.indexOf('--output');
     const modeAt = process.argv.indexOf('--mode');
     const signingAt = process.argv.indexOf('--signing-key');
+    const sourceRootAt = process.argv.indexOf('--source-root');
     if (outputAt < 0 || !process.argv[outputAt + 1]) throw new CompilerError('generate requires --output <directory>', { phase: 'generate:configuration' });
     const manifest = loadManifest(GRAPH_DIR);
     checkLocal(manifest);
     const dataset = loadAuthorityDataset(manifest);
-    emit({ command, ...generateAuthority({ store: dataset.store, outputDir: process.argv[outputAt + 1], mode: modeAt >= 0 ? process.argv[modeAt + 1] : 'full', signingKeyPath: signingAt >= 0 ? process.argv[signingAt + 1] : null }) });
+    emit({ command, ...generateAuthority({ store: dataset.store, outputDir: process.argv[outputAt + 1], mode: modeAt >= 0 ? process.argv[modeAt + 1] : 'full', signingKeyPath: signingAt >= 0 ? process.argv[signingAt + 1] : null, sourceRoot: sourceRootAt >= 0 ? process.argv[sourceRootAt + 1] : join(GRAPH_DIR, '..', '..', '..') }) });
     return 0;
   }
 

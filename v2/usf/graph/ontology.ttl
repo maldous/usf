@@ -806,6 +806,19 @@ usf:Template a owl:Class ;
   rdfs:label "Template" ;
   rdfs:comment "A declared generation input that supplies structure but does not define missing semantics." .
 
+usf:AutomationWorkflowContract a owl:Class ;
+  rdfs:subClassOf usf:SemanticContract ;
+  rdfs:label "Automation workflow contract" ;
+  rdfs:comment "A semantic contract for a generated automation workflow whose exact implementation may be supplied by an integrity-bound template." .
+
+usf:AutomationTrigger a owl:Class ;
+  rdfs:subClassOf usf:ControlledValue ;
+  rdfs:label "Automation trigger" .
+
+usf:AutomationPermission a owl:Class ;
+  rdfs:subClassOf usf:ControlledValue ;
+  rdfs:label "Automation permission" .
+
 usf:ArtefactPlan a owl:Class ;
   rdfs:subClassOf usf:SemanticContract ;
   rdfs:label "Artefact plan" ;
@@ -1005,6 +1018,10 @@ usf:consumesArtefact a owl:ObjectProperty ; rdfs:domain usf:CompilerRun ; rdfs:r
 usf:producesArtefact a owl:ObjectProperty ; rdfs:domain usf:CompilerRun ; rdfs:range usf:Artefact .
 usf:generatedByComponent a owl:ObjectProperty ; rdfs:domain usf:Artefact ; rdfs:range usf:CompilerComponent .
 usf:usesTemplate a owl:ObjectProperty ; rdfs:domain usf:Generator ; rdfs:range usf:Template .
+usf:workflowTemplate a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:AutomationWorkflowContract ; rdfs:range usf:Template .
+usf:requiredWorkflowTrigger a owl:ObjectProperty ; rdfs:domain usf:AutomationWorkflowContract ; rdfs:range usf:AutomationTrigger .
+usf:requiredAutomationPermission a owl:ObjectProperty ; rdfs:domain usf:AutomationWorkflowContract ; rdfs:range usf:AutomationPermission .
+usf:requiredValidatorRule a owl:ObjectProperty ; rdfs:domain usf:AutomationWorkflowContract ; rdfs:range usf:ValidatorRule .
 usf:semanticInputQuery a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CompilerComponent ; rdfs:range xsd:string .
 usf:outputSchema a owl:ObjectProperty ; rdfs:domain usf:CompilerComponent ; rdfs:range usf:Artefact .
 usf:outputPathRule a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:CompilerComponent ; rdfs:range usf:PathRule .

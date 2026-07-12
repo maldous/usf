@@ -3,6 +3,7 @@
 @prefix art: <urn:usf:artefact:> .
 @prefix cap: <urn:usf:capability:> .
 @prefix component: <urn:usf:component:> .
+@prefix checksum: <urn:usf:checksum:> .
 @prefix compiler: <urn:usf:compiler:> .
 @prefix generator: <urn:usf:generator:> .
 @prefix phase: <urn:usf:compilerphase:> .
@@ -29,11 +30,14 @@
 @prefix route: <urn:usf:route:> .
 @prefix state: <urn:usf:state:> .
 @prefix surf: <urn:usf:surface:> .
+@prefix template: <urn:usf:template:> .
 @prefix uim: <urn:usf:uisemanticmodel:> .
 @prefix usf: <urn:usf:ontology:> .
 @prefix validation: <urn:usf:validationbinding:> .
+@prefix val: <urn:usf:validatorrule:> .
 @prefix version: <urn:usf:version:> .
 @prefix vm: <urn:usf:viewmodel:> .
+@prefix workflowcontract: <urn:usf:automationworkflowcontract:> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <urn:usf:graph:generation> {
@@ -116,7 +120,7 @@ repo:foundation a usf:Repository ; usf:canonicalName "foundation" ;
     phase:derive a usf:CompilerPhase ; usf:canonicalName "derive" ; usf:phaseKind <urn:usf:compilerphasekind:derive> ; usf:phaseOrder "2"^^xsd:integer ; usf:usesComponent generator:contractprojection ; usf:precedesPhase phase:validatederived .
     phase:validatederived a usf:CompilerPhase ; usf:canonicalName "validatederived" ; usf:phaseKind <urn:usf:compilerphasekind:validatederived> ; usf:phaseOrder "3"^^xsd:integer ; usf:usesComponent generator:validation ; usf:precedesPhase phase:plan .
     phase:plan a usf:CompilerPhase ; usf:canonicalName "plan" ; usf:phaseKind <urn:usf:compilerphasekind:plan> ; usf:phaseOrder "4"^^xsd:integer ; usf:usesComponent generator:contractprojection ; usf:precedesPhase phase:generate .
-    phase:generate a usf:CompilerPhase ; usf:canonicalName "generate" ; usf:phaseKind <urn:usf:compilerphasekind:generate> ; usf:phaseOrder "5"^^xsd:integer ; usf:usesComponent generator:contractprojection , generator:scaffold , generator:validation , generator:proof , generator:ui , generator:webui , generator:mobileui , generator:runtime , generator:automation , generator:documentation , generator:assurance ; usf:precedesPhase phase:materialise .
+    phase:generate a usf:CompilerPhase ; usf:canonicalName "generate" ; usf:phaseKind <urn:usf:compilerphasekind:generate> ; usf:phaseOrder "5"^^xsd:integer ; usf:usesComponent generator:contractprojection , generator:scaffold , generator:validation , generator:proof , generator:ui , generator:webui , generator:mobileui , generator:runtime , generator:proofanchorworkflow , generator:specvalidationworkflow , generator:documentation , generator:assurance ; usf:precedesPhase phase:materialise .
     phase:materialise a usf:CompilerPhase ; usf:canonicalName "materialise" ; usf:phaseKind <urn:usf:compilerphasekind:materialise> ; usf:phaseOrder "6"^^xsd:integer ; usf:usesComponent generator:scaffold ; usf:precedesPhase phase:collect .
     phase:collect a usf:CompilerPhase ; usf:canonicalName "collect" ; usf:phaseKind <urn:usf:compilerphasekind:collect> ; usf:phaseOrder "7"^^xsd:integer ; usf:usesComponent generator:proof ; usf:precedesPhase phase:normalise .
     phase:normalise a usf:CompilerPhase ; usf:canonicalName "normalise" ; usf:phaseKind <urn:usf:compilerphasekind:normalise> ; usf:phaseOrder "8"^^xsd:integer ; usf:usesComponent generator:proof ; usf:precedesPhase phase:ingest .
@@ -134,7 +138,8 @@ repo:foundation a usf:Repository ; usf:canonicalName "foundation" ;
     generator:webui a usf:Generator ; usf:canonicalName "webui" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:RendererContract> ; <urn:usf:ontology:rendererTarget> <urn:usf:renderertarget:web> . }" ; usf:outputSchema art:rendererinputschema ; usf:outputPathRule path:webrendererinput ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:structural> .
     generator:mobileui a usf:Generator ; usf:canonicalName "mobileui" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:RendererContract> ; <urn:usf:ontology:rendererTarget> <urn:usf:renderertarget:mobile> . }" ; usf:outputSchema art:rendererinputschema ; usf:outputPathRule path:mobilerendererinput ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:structural> .
     generator:runtime a usf:Generator ; usf:canonicalName "runtime" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:Service> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:runtimecompose ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:behavioural> .
-    generator:automation a usf:Generator ; usf:canonicalName "automation" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:Command> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:automationworkflow ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:behavioural> .
+    generator:proofanchorworkflow a usf:Generator ; usf:canonicalName "proofanchorworkflow" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:AutomationWorkflowContract> ; <urn:usf:ontology:workflowTemplate> <urn:usf:template:proofanchorworkflow> . }" ; usf:usesTemplate template:proofanchorworkflow ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:proofanchorworkflow ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:behavioural> , <urn:usf:equivalencekind:structural> , <urn:usf:equivalencekind:fullincremental> .
+    generator:specvalidationworkflow a usf:Generator ; usf:canonicalName "specvalidationworkflow" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:AutomationWorkflowContract> ; <urn:usf:ontology:workflowTemplate> <urn:usf:template:specvalidationworkflow> . }" ; usf:usesTemplate template:specvalidationworkflow ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:specvalidationworkflow ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:behavioural> , <urn:usf:equivalencekind:structural> , <urn:usf:equivalencekind:fullincremental> .
     generator:documentation a usf:Generator ; usf:canonicalName "documentation" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:Capability> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:architectureguide ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:structural> .
     generator:assurance a usf:Generator ; usf:canonicalName "assurance" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:ApplicabilityDecision> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:statementofapplicability ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:evidential> .
     generator:release a usf:Generator ; usf:canonicalName "release" ; usf:semanticInputQuery "SELECT ?resource WHERE { ?resource a <urn:usf:ontology:ArtefactPlan> . }" ; usf:outputSchema art:compileroutputschema ; usf:outputPathRule path:releasemanifest ; usf:integrityPolicy policy:deterministicgenerationintegrity ; usf:normalisationPolicy policy:canonicaloutputnormalisation ; usf:missingSemanticsConstraint constraint:failonmissingsemantics ; usf:requiresEquivalenceKind <urn:usf:equivalencekind:fullincremental> , <urn:usf:equivalencekind:evidential> ; usf:authorisedSigningIdentity identity:foundationrelease .
@@ -188,9 +193,40 @@ repo:foundation a usf:Repository ; usf:canonicalName "foundation" ;
     art:runtimecompose a usf:Artefact ; usf:canonicalName "runtimecompose" ; usf:artefactKind <urn:usf:artefactkind:configuration> ; usf:canonicalPath "runtime/compose.json" ; usf:governedByPathRule path:runtimecompose ; usf:generatedByComponent generator:runtime .
     path:runtimecompose a usf:PathRule ; usf:canonicalName "runtimecompose" ; usf:pathPattern "runtime/compose.json" .
 
-    plan:automationworkflow a usf:ArtefactPlan ; usf:canonicalName "automationworkflow" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:automationworkflow .
-    art:automationworkflow a usf:Artefact ; usf:canonicalName "automationworkflow" ; usf:artefactKind <urn:usf:artefactkind:configuration> ; usf:canonicalPath ".github/workflows/validate.yml" ; usf:governedByPathRule path:automationworkflow ; usf:generatedByComponent generator:automation .
-    path:automationworkflow a usf:PathRule ; usf:canonicalName "automationworkflow" ; usf:pathPattern ".github/workflows/validate.yml" .
+    # These two current workflows are admitted only as exact checksum-bound
+    # templates. The authored contracts below define the required semantics;
+    # template bytes supply reviewed structure and cannot invent obligations.
+    template:proofanchorworkflow a usf:Template, usf:Artefact ; usf:canonicalName "proofanchorworkflow" ;
+      usf:artefactKind <urn:usf:artefactkind:template> ; usf:canonicalPath ".github/workflows/proof-anchor.yml" ;
+      usf:governedByPathRule path:proofanchorworkflow ; usf:generationInputRole <urn:usf:generationinputrole:template> ;
+      usf:canonicalChecksum checksum:proofanchorworkflow .
+    checksum:proofanchorworkflow a usf:Checksum ; usf:canonicalName "proofanchorworkflow" ;
+      usf:checksumAlgorithm <urn:usf:checksumalgorithm:sha256> ;
+      usf:checksumValue "5972d7de78a99ac60a45e7c98a9d98b9abc1be02fc0a22693493a9c440bfed1f" .
+    workflowcontract:proofanchor a usf:AutomationWorkflowContract ; usf:canonicalName "proofanchor" ;
+      usf:workflowTemplate template:proofanchorworkflow ;
+      usf:requiredWorkflowTrigger <urn:usf:automationtrigger:pushmain> ;
+      usf:requiredAutomationPermission <urn:usf:automationpermission:contentswrite>, <urn:usf:automationpermission:idtokenwrite>, <urn:usf:automationpermission:attestationswrite> ;
+      usf:requiredValidatorRule val:validatebootstrap, val:validatespec .
+    plan:proofanchorworkflow a usf:ArtefactPlan ; usf:canonicalName "proofanchorworkflow" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:proofanchorworkflow .
+    art:proofanchorworkflow a usf:Artefact ; usf:canonicalName "proofanchorworkflow" ; usf:artefactKind <urn:usf:artefactkind:configuration> ; usf:canonicalPath ".github/workflows/proof-anchor.yml" ; usf:governedByPathRule path:proofanchorworkflow ; usf:generatedByComponent generator:proofanchorworkflow .
+    path:proofanchorworkflow a usf:PathRule ; usf:canonicalName "proofanchorworkflow" ; usf:pathPattern ".github/workflows/proof-anchor.yml" .
+
+    template:specvalidationworkflow a usf:Template, usf:Artefact ; usf:canonicalName "specvalidationworkflow" ;
+      usf:artefactKind <urn:usf:artefactkind:template> ; usf:canonicalPath ".github/workflows/validate-spec.yml" ;
+      usf:governedByPathRule path:specvalidationworkflow ; usf:generationInputRole <urn:usf:generationinputrole:template> ;
+      usf:canonicalChecksum checksum:specvalidationworkflow .
+    checksum:specvalidationworkflow a usf:Checksum ; usf:canonicalName "specvalidationworkflow" ;
+      usf:checksumAlgorithm <urn:usf:checksumalgorithm:sha256> ;
+      usf:checksumValue "6a430fa0cb5ade04cf548863b5c67184c38b1ed4b052c317b5bbd3a24e616cc9" .
+    workflowcontract:specvalidation a usf:AutomationWorkflowContract ; usf:canonicalName "specvalidation" ;
+      usf:workflowTemplate template:specvalidationworkflow ;
+      usf:requiredWorkflowTrigger <urn:usf:automationtrigger:pushmain>, <urn:usf:automationtrigger:pullrequest>, <urn:usf:automationtrigger:workflowdispatch> ;
+      usf:requiredAutomationPermission <urn:usf:automationpermission:contentsread> ;
+      usf:requiredValidatorRule val:validatespec, val:validateaggregate, val:validateparitymatrix, val:validatefoundationsubstrateclosure, val:validateproofcockpitacceptance .
+    plan:specvalidationworkflow a usf:ArtefactPlan ; usf:canonicalName "specvalidationworkflow" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:specvalidationworkflow .
+    art:specvalidationworkflow a usf:Artefact ; usf:canonicalName "specvalidationworkflow" ; usf:artefactKind <urn:usf:artefactkind:configuration> ; usf:canonicalPath ".github/workflows/validate-spec.yml" ; usf:governedByPathRule path:specvalidationworkflow ; usf:generatedByComponent generator:specvalidationworkflow .
+    path:specvalidationworkflow a usf:PathRule ; usf:canonicalName "specvalidationworkflow" ; usf:pathPattern ".github/workflows/validate-spec.yml" .
 
     plan:architectureguide a usf:ArtefactPlan ; usf:canonicalName "architectureguide" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:architectureguide .
     art:architectureguide a usf:Artefact ; usf:canonicalName "architectureguide" ; usf:artefactKind <urn:usf:artefactkind:report> ; usf:canonicalPath "docs/architecture/index.md" ; usf:governedByPathRule path:architectureguide ; usf:generatedByComponent generator:documentation .

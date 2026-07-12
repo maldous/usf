@@ -567,6 +567,15 @@ rr:unsignedevidence          a usf:ReadinessReason ; usf:canonicalName "unsigned
 <urn:usf:dispositiondecisionstate:accepted> a usf:DispositionDecisionState ; usf:canonicalName "accepted" .
 <urn:usf:dispositiondecisionstate:rejected> a usf:DispositionDecisionState ; usf:canonicalName "rejected" .
 <urn:usf:dispositiondecisionstate:superseded> a usf:DispositionDecisionState ; usf:canonicalName "superseded" .
+
+<urn:usf:automationtrigger:pushmain> a usf:AutomationTrigger ; usf:canonicalName "pushmain" .
+<urn:usf:automationtrigger:pullrequest> a usf:AutomationTrigger ; usf:canonicalName "pullrequest" .
+<urn:usf:automationtrigger:workflowdispatch> a usf:AutomationTrigger ; usf:canonicalName "workflowdispatch" .
+
+<urn:usf:automationpermission:contentsread> a usf:AutomationPermission ; usf:canonicalName "contentsread" .
+<urn:usf:automationpermission:contentswrite> a usf:AutomationPermission ; usf:canonicalName "contentswrite" .
+<urn:usf:automationpermission:idtokenwrite> a usf:AutomationPermission ; usf:canonicalName "idtokenwrite" .
+<urn:usf:automationpermission:attestationswrite> a usf:AutomationPermission ; usf:canonicalName "attestationswrite" .
 rr:integrityunverified       a usf:ReadinessReason ; usf:canonicalName "integrityunverified" .
 
 # Enterprise assurance and applicability state.

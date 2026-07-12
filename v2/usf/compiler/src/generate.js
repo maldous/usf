@@ -18,6 +18,7 @@ import { CompilerError } from './compiler.js';
 import { validateGeneratedOutput } from './validators/index.js';
 
 const { namedNode } = DataFactory;
+const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 const stableJson = (value) => `${JSON.stringify(value, null, 2)}\n`;
 
@@ -30,14 +31,30 @@ function authorityDigest(store) {
 
 function componentQuery(store, component) {
   const query = literalValue(oneObject(store, namedNode(component), namedNode(`${USF}semanticInputQuery`)));
-  const match = query?.match(/\?resource\s+a\s+<([^>]+)>/);
+  const match = query?.match(/^\s*SELECT\s+\?resource\s+WHERE\s*\{([\s\S]*)\}\s*$/i);
   if (!match) throw new CompilerError(`unsupported semantic input query for ${component}`, { phase: 'generate:query', component, query });
-  return { query, classIri: match[1] };
+  const statements = match[1].split('.').map((item) => item.trim()).filter(Boolean);
+  const constraints = [];
+  for (const statement of statements) {
+    if (!statement.startsWith('?resource ')) throw new CompilerError(`unsupported semantic input query for ${component}`, { phase: 'generate:query', component, query, statement });
+    const clauses = statement.slice('?resource '.length).split(';').map((item) => item.trim()).filter(Boolean);
+    for (const clause of clauses) {
+      const triple = clause.match(/^(a|<([^>]+)>)\s+<([^>]+)>$/);
+      if (!triple) throw new CompilerError(`unsupported semantic input query for ${component}`, { phase: 'generate:query', component, query, clause });
+      constraints.push({ predicate: triple[1] === 'a' ? RDF_TYPE : triple[2], object: triple[3] });
+    }
+  }
+  const type = constraints.find((item) => item.predicate === RDF_TYPE);
+  if (!type || !constraints.length) throw new CompilerError(`unsupported semantic input query for ${component}`, { phase: 'generate:query', component, query });
+  return { query, classIri: type.object, constraints };
 }
 
 function projection(store, output, sourceDigest) {
   const selected = componentQuery(store, output.component);
   const resources = subjectsOfType(store, selected.classIri)
+    .filter((subject) => selected.constraints.every((constraint) =>
+      store.countQuads(subject, namedNode(constraint.predicate), namedNode(constraint.object), null) > 0
+    ))
     .sort((a, b) => a.value.localeCompare(b.value))
     .map((subject) => canonicalResource(store, subject));
   if (!resources.length) throw new CompilerError(`semantic input query produced no resources for ${output.component}`, {
@@ -163,7 +180,28 @@ function write(root, relativePath, content, reuseRoot = null) {
   return { path: relativePath, bytes: Buffer.byteLength(content), sha256: digest, reused: false };
 }
 
-export function generateAuthority({ store, outputDir, mode = 'full', signingKeyPath }) {
+function materialiseTemplate(output, sourceRoot) {
+  if (!sourceRoot) throw new CompilerError('template-backed generation requires an explicit source root', {
+    phase: 'generate:template', component: output.component, template: output.template?.artefact,
+  });
+  const root = resolve(sourceRoot);
+  const source = resolve(root, output.template.path);
+  if (source !== root && !source.startsWith(`${root}/`)) throw new CompilerError('template path escapes the declared source root', {
+    phase: 'generate:template', template: output.template.artefact, path: output.template.path,
+  });
+  if (!existsSync(source)) throw new CompilerError('declared template is missing', {
+    phase: 'generate:template', template: output.template.artefact, path: output.template.path,
+  });
+  const content = readFileSync(source);
+  const observed = sha256(content);
+  if (observed !== output.template.sha256) throw new CompilerError('declared template checksum does not match source bytes', {
+    phase: 'generate:template-integrity', template: output.template.artefact, path: output.template.path,
+    expected: output.template.sha256, observed,
+  });
+  return content;
+}
+
+export function generateAuthority({ store, outputDir, mode = 'full', signingKeyPath, sourceRoot = null }) {
   if (!['full', 'incremental'].includes(mode)) throw new CompilerError(`unsupported generation mode: ${mode}`, { phase: 'generate:configuration' });
   const target = resolve(outputDir);
   if (mode === 'full' && existsSync(target)) throw new CompilerError('full generation requires an absent output directory', { phase: 'generate:clean-room', outputDir: target });
@@ -177,7 +215,11 @@ export function generateAuthority({ store, outputDir, mode = 'full', signingKeyP
   const release = plan.outputs.filter((item) => item.path.startsWith('release/'));
   const files = [];
   try {
-    for (const output of ordinary) files.push(write(staging, output.path, render(output, projection(store, output, sourceDigest)), reuseRoot));
+    for (const output of ordinary) {
+      const data = projection(store, output, sourceDigest);
+      const content = output.template ? materialiseTemplate(output, sourceRoot) : render(output, data);
+      files.push(write(staging, output.path, content, reuseRoot));
+    }
     const generatedRelease = release.filter((item) => !/(?:manifest|checksums|signature|attestation)\.json$/.test(item.path));
     for (const output of generatedRelease) {
       const base = projection(store, output, sourceDigest);
@@ -275,3 +317,5 @@ export function verifyOutput(outputDir, required = true, expectedPublicKeyFinger
   });
   return { ok: true, manifest, checked: manifest.files.length, independent };
 }
+
+export const generatorInternals = { componentQuery };
