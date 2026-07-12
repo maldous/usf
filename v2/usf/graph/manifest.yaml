@@ -135,54 +135,65 @@ authoredGraphs:
     graph: "urn:usf:graph:semanticdepth"
     loadOrder: 32
     validationOrder: 36
+  - file: contracts/repository-structure-policy.trig
+    graph: "urn:usf:graph:repositorystructurepolicy"
+    loadOrder: 34
+    validationOrder: 38
 observedGraphs:
   - file: observed/source-artefacts.trig
     collector: repositorysourceobserver
     graph: "urn:usf:graph:observed:sourceartefacts"
-    loadOrder: 35
-    validationOrder: 38
+    loadOrder: 36
+    validationOrder: 39
 shapeGraphs:
   - file: shapes.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
     validationOrder: 6
   - file: shapes/contracts.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
     validationOrder: 6
   - file: shapes/assurance.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
     validationOrder: 6
   - file: shapes/realisation.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
     validationOrder: 6
   - file: shapes/execution.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
     validationOrder: 6
   - file: shapes/derivation.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
     validationOrder: 6
   - file: shapes/generation.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
     validationOrder: 6
   - file: shapes/readiness.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
     validationOrder: 6
   - file: shapes/experience.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
     validationOrder: 6
   - file: shapes/source-disposition.ttl
     graph: "urn:usf:graph:shapes"
-    loadOrder: 34
+    loadOrder: 35
+    validationOrder: 6
+  - file: shapes/repository-structure.ttl
+    graph: "urn:usf:graph:shapes"
+    loadOrder: 35
     validationOrder: 6
 rules:
+  - file: rules/repository-structure.rq
+    output: "urn:usf:graph:derived:repositorystructure"
+    kind: derivation
   - file: rules/source-dispositions.rq
     output: "urn:usf:graph:derived:sourcedispositions"
     kind: derivation
@@ -204,30 +215,34 @@ rules:
   - file: rules/integrity.rq
     kind: integrity
 derivedGraphs:
-  - file: derived/source-dispositions.trig
-    graph: "urn:usf:graph:derived:sourcedispositions"
+  - file: derived/repository-structure.trig
+    graph: "urn:usf:graph:derived:repositorystructure"
     loadOrder: 40
     validationOrder: 40
-  - file: derived/obligations.trig
-    graph: "urn:usf:graph:derived:obligations"
+  - file: derived/source-dispositions.trig
+    graph: "urn:usf:graph:derived:sourcedispositions"
     loadOrder: 41
     validationOrder: 41
-  - file: derived/evidence.trig
-    graph: "urn:usf:graph:derived:evidence"
+  - file: derived/obligations.trig
+    graph: "urn:usf:graph:derived:obligations"
     loadOrder: 42
     validationOrder: 42
-  - file: derived/surfaces.trig
-    graph: "urn:usf:graph:derived:surfaces"
+  - file: derived/evidence.trig
+    graph: "urn:usf:graph:derived:evidence"
     loadOrder: 43
     validationOrder: 43
-  - file: derived/coverage.trig
-    graph: "urn:usf:graph:derived:coverage"
+  - file: derived/surfaces.trig
+    graph: "urn:usf:graph:derived:surfaces"
     loadOrder: 44
     validationOrder: 44
-  - file: derived/readiness.trig
-    graph: "urn:usf:graph:derived:readiness"
+  - file: derived/coverage.trig
+    graph: "urn:usf:graph:derived:coverage"
     loadOrder: 45
     validationOrder: 45
+  - file: derived/readiness.trig
+    graph: "urn:usf:graph:derived:readiness"
+    loadOrder: 46
+    validationOrder: 46
 fixtures:
   conforming: fixtures/conforming
   defects: fixtures/defects

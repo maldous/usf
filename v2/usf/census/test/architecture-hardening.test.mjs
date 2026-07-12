@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildArtifactPlan, validateReplacementGroup } from '../src/artifact-plan.mjs';
-import { dependencyGraphInternals } from '../src/dependency-graph.mjs';
+import { buildDependencyGraph, dependencyGraphInternals } from '../src/dependency-graph.mjs';
+import { dependencyKeyFor } from '../src/dependency-resolution.mjs';
 import { applySourceDispositionMappings, buildMappings, buildMissingEntirely } from '../src/mapping.mjs';
 import { buildRelationships } from '../src/relationships.mjs';
 import { buildSourcePlanOwnership } from '../src/source-plan-ownership.mjs';
@@ -123,7 +124,8 @@ test('accepted no-output source disposition needs no artifact plan while output 
     dispositionDataset({ kind: 'urn:usf:dispositionkind:generateequivalent', planCount: 2 }),
     [{ planIri: 'urn:usf:artefactplan:a' }, { planIri: 'urn:usf:artefactplan:b' }]
   );
-  assert.equal(outputWithManyPlans.acceptedDispositionCount, 1);
+  assert.equal(outputWithManyPlans.acceptedDispositionCount, 0);
+  assert.ok(outputWithManyPlans.assessments[0].findings.includes('source-disposition-plan-cardinality-invalid'));
   assert.deepEqual(outputWithManyPlans.assessments[0].planIris, ['urn:usf:artefactplan:a', 'urn:usf:artefactplan:b']);
   const noOutputWithPlan = buildSourcePlanOwnership([sourceArtifact], dispositionDataset({ planCount: 1 }), [{ planIri: 'urn:usf:artefactplan:a' }]);
   assert.ok(noOutputWithPlan.assessments[0].findings.includes('source-disposition-plan-cardinality-invalid'));
@@ -179,7 +181,7 @@ test('replacement cardinalities are closed and mismatches fail', () => {
   assert.throws(() => validateReplacementGroup({ groupKey: 'bad', cardinality: 'many-to-one', currentArtifacts: ['a'], canonicalArtifacts: ['x'] }, current, canonical), /cardinality mismatch/);
 });
 
-test('blocking graph algorithms detect cycles and remove transitive edges', () => {
+test('required-prerequisite graph algorithms detect cycles and remove transitive edges', () => {
   const edge = (source, prerequisite) => ({ source, prerequisite });
   assert.equal(dependencyGraphInternals.hasCycle([edge('a', 'b'), edge('b', 'a')]), true);
   const reduced = dependencyGraphInternals.transitiveReduction([edge('a', 'b'), edge('b', 'c'), edge('a', 'c')]);
@@ -192,8 +194,8 @@ test('dependency status is derived from structural relationship context rather t
   assert.equal(classify({ extractionMethod: 'json-pointer', attributes: { keyPath: 'include.0' } }), 'coordination');
   assert.equal(classify({ extractionMethod: 'json-pointer', attributes: { keyPath: 'exclude.2' } }), 'coordination');
   assert.equal(classify({ extractionMethod: 'json-pointer', attributes: { keyPath: 'compilerOptions.paths.alias.0' } }), 'coordination');
-  assert.equal(classify({ extractionMethod: 'json-pointer', attributes: { keyPath: 'extends' } }), 'blocking');
-  assert.equal(classify({ extractionMethod: 'babel-import-declaration', attributes: {} }), 'blocking');
+  assert.equal(classify({ extractionMethod: 'json-pointer', attributes: { keyPath: 'extends' } }), 'required-prerequisite');
+  assert.equal(classify({ extractionMethod: 'babel-import-declaration', attributes: {} }), 'required-prerequisite');
   assert.equal(classify({ relationshipType: 'references', extractionMethod: 'json-pointer', attributes: { keyPath: 'authorityInputs.0.path' } }, { artifactFamily: 'documentation-assets' }), 'coordination');
   assert.equal(classify({ relationshipType: 'references', extractionMethod: 'markdown-inline-link', attributes: {} }, { artifactFamily: 'repository-governance' }), 'coordination');
 });
@@ -210,6 +212,40 @@ test('dependency ownership uses the canonical semantic-layer owner, not the firs
   );
 });
 
+test('dependency graph persists only independently resolvable retained edges', () => {
+  const packages = [
+    { key: 'work.a', artifactKeys: ['a'], canonicalArtifactKeys: [], ownedSemanticLayers: [], requiredSemanticLayers: [], equivalenceGates: [] },
+    { key: 'work.b', artifactKeys: ['b'], canonicalArtifactKeys: [], ownedSemanticLayers: [], requiredSemanticLayers: [], equivalenceGates: [] },
+  ];
+  const artifacts = [artifact('a', 'src/a.ts'), artifact('b', 'src/b.ts')];
+  const relation = { source: 'src/a.ts', target: 'src/b.ts', relationshipType: 'imports', targetKind: 'artifact', resolved: true, extractionMethod: 'babel-import-declaration', evidenceKind: 'structurally-proven', attributes: {} };
+  const result = buildDependencyGraph(packages, artifacts, [], [], [relation], []);
+  assert.equal(result.dependencies.length, 1);
+  const dependency = result.dependencies[0];
+  assert.equal(dependency.dependencyKey, dependencyKeyFor(dependency));
+  assert.equal(dependency.resolutionStatus, 'resolved-retained');
+  assert.deepEqual(dependency.resolutionBasis.evidenceFamilies, ['repository-relationship']);
+  assert.equal(dependency.resolutionBasis.evidenceCounts['repository-relationship'], 1);
+  assert.equal(dependency.resolutionBasis.cycleCheck, 'required-prerequisite-dag-verified');
+  assert.equal(dependency.resolutionBasis.transitiveReduction, 'retained-direct-edge');
+  assert.equal(dependency.satisfactionStatus, 'satisfied');
+  assert.deepEqual(dependency.satisfactionBasis, {
+    exactEvidenceHashCount: 1, currentRelationshipHashCount: 1, structurallyProvenRelationshipHashCount: 1,
+    directionMatchedRelationshipHashCount: 1, currentPrerequisiteArtifactHashCount: 1, currentPrerequisiteArtifactCount: 1,
+    sourceEndpointExists: true, prerequisiteEndpointExists: true, edgeSurvivedTransitiveReduction: true, requiredPrerequisiteGraphAcyclic: true,
+  });
+  assert.equal(result.metrics.requiredPrerequisiteRelationshipCount, 1);
+  assert.equal(result.metrics.resolvedPrerequisiteRelationshipCount, 1);
+  assert.equal(result.metrics.satisfiedPrerequisiteRelationshipCount, 1);
+  assert.equal(result.metrics.blockingRelationshipCount, 0);
+  assert.equal(result.metrics.activeBlockingRelationshipCount, 0);
+  assert.throws(() => buildDependencyGraph(packages, artifacts, [], [], [{ ...relation, evidenceKind: 'heuristic' }], []), /does not prove direction and ownership/);
+  assert.throws(() => buildDependencyGraph(packages, [artifacts[0], { ...artifacts[1], sourceState: 'deleted' }], [], [], [relation], []), /not satisfied/);
+  assert.throws(() => buildDependencyGraph(packages, artifacts, [], [], [relation, { ...relation, extractionMethod: 'second-structural-parser' }], []), /not satisfied/);
+  const reverse = { ...relation, source: 'src/b.ts', target: 'src/a.ts' };
+  assert.throws(() => buildDependencyGraph(packages, artifacts, [], [], [relation, reverse], []), /acyclic required-prerequisite graph/);
+});
+
 test('relationship closure distinguishes allowlisted external references from unresolved internal targets', () => {
   const raw = parsed('src/example.mjs', [], 'repository-output');
   raw.relationships = [
@@ -224,6 +260,24 @@ test('relationship closure distinguishes allowlisted external references from un
   assert.equal(internal.resolved, false);
   assert.equal(result.relationshipFindings.length, 1);
   assert.equal(result.relationshipFindings[0].resolutionStatus, 'open');
+});
+
+test('observation carrier references resolve without admitting carriers to the source universe', () => {
+  const manifest = parsed('v2/usf/graph/manifest.yaml', [], 'v2-graph-authority');
+  manifest.relationships = [{
+    relationshipType: 'references', target: 'v2/usf/graph/derived/coverage.trig', targetKind: 'artifact',
+    extractionMethod: 'yaml-graph-manifest', evidenceKind: 'structurally-proven', confidence
+  }];
+  const result = buildRelationships(
+    [{ path: manifest.path, universe: manifest.universe }],
+    [manifest],
+    new Set(['v2/usf/graph/derived/coverage.trig'])
+  );
+  assert.equal(result.relationshipFindings.length, 0);
+  assert.deepEqual(result.relationships.map((record) => ({ target: record.target, targetKind: record.targetKind, resolved: record.resolved, reasonCodes: record.reasonCodes })), [{
+    target: 'v2/usf/graph/derived/coverage.trig', targetKind: 'semantic-entity', resolved: true,
+    reasonCodes: ['structural-parser-evidence', 'generated-observation-carrier']
+  }]);
 });
 
 test('relationship closure resolves structural bases and classifies proven non-file references', () => {

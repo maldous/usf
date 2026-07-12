@@ -1,5 +1,7 @@
 import path from 'node:path';
+import { canonicalJson } from './canonical.mjs';
 import { classifications, forbiddenFinalTokens, mandatoryArtifactFields, assertClassification } from './constants.mjs';
+import { prerequisiteDependencySatisfactionStatus, dependencyEvidenceFamilies, dependencyKeyFor, dependencyResolutionBasis } from './dependency-resolution.mjs';
 
 const digestPattern = /^[a-f0-9]{64}$/;
 const modePattern = /^[0-7]{6}$/;
@@ -137,14 +139,26 @@ export function validateCanonicalArtifact(record) {
 }
 
 export function validateDependency(record) {
-  requireFields(record, ['source', 'prerequisite', 'dependencyType', 'status', 'reasonCode', 'semanticEvidence', 'artifactEvidence', 'repositoryRelationshipEvidence', 'proofEquivalenceEvidence', 'migrationEvidence', 'confidence', 'reviewStatus'], 'dependency');
+  requireFields(record, ['dependencyKey', 'source', 'prerequisite', 'dependencyType', 'status', 'reasonCode', 'semanticEvidence', 'artifactEvidence', 'repositoryRelationshipEvidence', 'proofEquivalenceEvidence', 'migrationEvidence', 'confidence', 'reviewStatus', 'resolutionStatus', 'resolutionBasis'], 'dependency');
   if (record.source === record.prerequisite) throw new Error(`self dependency: ${record.source}`);
   assertClassification('dependencyTypes', record.dependencyType);
   assertClassification('dependencyStatuses', record.status);
   assertClassification('reviewStatuses', record.reviewStatus);
+  if (record.reviewStatus !== 'machine-reviewed') throw new Error(`dependency resolution is not machine reviewed: ${record.source}`);
   validateConfidence(record.confidence);
-  const evidenceCount = record.semanticEvidence.length + record.artifactEvidence.length + record.repositoryRelationshipEvidence.length + record.proofEquivalenceEvidence.length + record.migrationEvidence.length;
-  if (evidenceCount === 0) throw new Error(`dependency lacks evidence: ${record.source}`);
+  for (const field of ['semanticEvidence', 'artifactEvidence', 'repositoryRelationshipEvidence', 'proofEquivalenceEvidence', 'migrationEvidence']) {
+    if (!Array.isArray(record[field]) || record[field].some((value) => typeof value !== 'string' || value.length === 0)) throw new Error(`dependency has invalid ${field}: ${record.source}`);
+    if (new Set(record[field]).size !== record[field].length) throw new Error(`dependency has duplicate ${field}: ${record.source}`);
+  }
+  if (dependencyEvidenceFamilies(record).length === 0) throw new Error(`dependency lacks evidence: ${record.source}`);
+  if (record.dependencyKey !== dependencyKeyFor(record)) throw new Error(`dependency key mismatch: ${record.source}`);
+  if (record.resolutionStatus !== 'resolved-retained') throw new Error(`dependency is not resolved-retained: ${record.source}`);
+  if (canonicalJson(record.resolutionBasis) !== canonicalJson(dependencyResolutionBasis(record))) throw new Error(`dependency resolution basis mismatch: ${record.source}`);
+  if (record.status === 'required-prerequisite') {
+    requireFields(record, ['satisfactionStatus', 'satisfactionBasis'], 'required prerequisite');
+    if (!['satisfied', 'unsatisfied'].includes(record.satisfactionStatus)) throw new Error(`required prerequisite satisfaction status invalid: ${record.source}`);
+    if (record.satisfactionStatus !== prerequisiteDependencySatisfactionStatus(record.satisfactionBasis)) throw new Error(`required prerequisite satisfaction basis mismatch: ${record.source}`);
+  } else if ('satisfactionStatus' in record || 'satisfactionBasis' in record) throw new Error(`coordination dependency has satisfaction state: ${record.source}`);
 }
 
 export function rejectFinalFallback(value) {

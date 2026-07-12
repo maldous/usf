@@ -8,11 +8,15 @@ const REPOSITORY_BINDING_EXCLUSIONS = Object.freeze([
   'v2/usf/census/audit.json',
   'v2/usf/census/closure.json',
 ]);
+const isRepositoryBindingExcluded = (item) =>
+  REPOSITORY_BINDING_EXCLUSIONS.includes(item) || item.startsWith('v2/usf/.work/');
 const REQUIRED_ROLLBACK_FAULTS = Object.freeze([
+  'clear-graph',
   'collect-observed',
   'commit',
   'contamination',
   'derive',
+  'derived-insert',
   'integrity',
   'invalid-observed-rdf',
   'load',
@@ -42,7 +46,7 @@ export function repositoryState(repositoryRoot) {
   const root = fs.realpathSync(repositoryRoot);
   const paths = git(root, ['ls-files', '-co', '--exclude-standard', '-z'])
     .toString('utf8').split('\0').filter(Boolean)
-    .filter((item) => !REPOSITORY_BINDING_EXCLUSIONS.includes(item)).sort();
+    .filter((item) => !isRepositoryBindingExcluded(item)).sort();
   const accumulator = createHash('sha256');
   for (const relative of paths) {
     const absolute = path.resolve(root, relative);
@@ -61,7 +65,7 @@ export function repositoryState(repositoryRoot) {
     const status = entry.slice(0, 2);
     const firstPath = entry.slice(3);
     const secondPath = status.includes('R') || status.includes('C') ? statusEntries[++index] : null;
-    if (REPOSITORY_BINDING_EXCLUSIONS.includes(firstPath) || (secondPath && REPOSITORY_BINDING_EXCLUSIONS.includes(secondPath))) continue;
+    if (isRepositoryBindingExcluded(firstPath) || (secondPath && isRepositoryBindingExcluded(secondPath))) continue;
     includedStatus.push(entry);
     if (secondPath) includedStatus.push(secondPath);
   }
@@ -72,7 +76,7 @@ export function repositoryState(repositoryRoot) {
     contentRootSha256: accumulator.digest('hex'),
     statusSha256: sha256(status),
     clean: status.length === 0,
-    excludedPaths: [...REPOSITORY_BINDING_EXCLUSIONS],
+    excludedPaths: [...REPOSITORY_BINDING_EXCLUSIONS, 'v2/usf/.work/'],
   };
 }
 
@@ -105,7 +109,11 @@ export function verifyStardogObservation(target, expectedFingerprint, repository
     const verification = payload.verification;
     if (verification?.reachable !== true || verification?.validationConforms !== true ||
         verification?.integrityConforms !== true || verification?.contaminationCount !== 0 ||
-        verification?.missingGraphs?.length !== 0 || verification?.unexpectedGraphs?.length !== 0) {
+        verification?.missingGraphs?.length !== 0 || verification?.unexpectedGraphs?.length !== 0 ||
+        verification?.countScope !== 'registered-usf-graphs' ||
+        !Number.isSafeInteger(verification?.graphCount) || verification.graphCount < 0 ||
+        !Number.isSafeInteger(verification?.tripleCount) || verification.tripleCount < 0 ||
+        !Number.isFinite(verification?.readinessCount) || verification.readinessCount <= 0) {
       return invalid('independent-stardog-validation-invalid');
     }
     if (payload.comparison?.missingGraphs?.length !== 0 || payload.comparison?.unexpectedGraphs?.length !== 0 ||
@@ -121,9 +129,14 @@ export function verifyStardogObservation(target, expectedFingerprint, repository
       return invalid('independent-stardog-digest-invalid');
     }
     const rollback = payload.rollback;
-    if (rollback?.ok !== true || rollback?.digestsUnchanged !== true || rollback?.faultCount !== REQUIRED_ROLLBACK_FAULTS.length ||
+    if (rollback?.ok !== true || rollback?.digestsUnchanged !== true || !Array.isArray(rollback?.faults) ||
+        rollback?.faultCount !== REQUIRED_ROLLBACK_FAULTS.length ||
         stableJson((rollback?.faults ?? []).map((item) => item.name).sort()) !== stableJson(REQUIRED_ROLLBACK_FAULTS) ||
-        rollback.faults.some((item) => item.rollbackCount !== 1 || typeof item.errorPhase !== 'string')) {
+        rollback.faults.some((item) => item.rollbackCount !== 1 || !Number.isSafeInteger(item.activationCount) || item.activationCount <= 0 ||
+          typeof item.injectionPoint !== 'string' || item.injectionPoint.length === 0 || typeof item.errorPhase !== 'string' || item.errorPhase.length === 0) ||
+        rollback?.commitOutcomeCoverage?.mode !== 'pre-dispatch-only' ||
+        rollback?.commitOutcomeCoverage?.ambiguousPostDispatchOutcomeProven !== false ||
+        typeof rollback?.commitOutcomeCoverage?.limitation !== 'string' || rollback.commitOutcomeCoverage.limitation.length === 0) {
       return invalid('independent-stardog-rollback-invalid');
     }
     if (stableJson(repositoryState(repositoryRoot)) !== stableJson(payload.repository)) {
@@ -136,8 +149,10 @@ export function verifyStardogObservation(target, expectedFingerprint, repository
         accessMethod: payload.accessMethod,
         connectionAttempted: payload.connectionAttempted,
         observedAt: payload.observedAt,
+        countScope: verification.countScope,
         graphCount: verification.graphCount,
         tripleCount: verification.tripleCount,
+        readinessCount: verification.readinessCount,
         validationConforms: true,
         integrityConforms: true,
         contaminationCount: 0,

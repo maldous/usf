@@ -4,7 +4,7 @@ import {
   auditArtifactDispositions, auditCanonicalArtifacts, auditDependencies, auditDeterminism, auditFamilyOwnership,
   auditFindingClassifications, auditMappingsCoverage, auditMutationBoundary, auditParserRelationships, auditUniverses, auditWorkPackages,
   auditSourceDispositionOwnership,
-  canonicalJson, framedDigest
+  canonicalJson, framedDigest, sha256
 } from '../audit/index.mjs';
 
 const digest = 'a'.repeat(64);
@@ -15,7 +15,7 @@ const canonical = { canonicalArtifactKey: 'artifact.a', targetPath: 'a.json', pa
 const work = { key: 'work.a', architecturalOutcome: 'Produce one canonical outcome.', canonicalArtifactKeys: ['artifact.a'], ownedSemanticLayers: [], acceptanceCriteria: ['a'], complexityEvidence: [{}], equivalenceGates: [{}], dependencies: [] };
 const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
 const auditTriple = (graph, subject, predicate, object) => ({ kind: 'semantic-triple', attributes: { graph, subject, predicate, object } });
-function auditDispositionFixture({ state = 'urn:usf:dispositiondecisionstate:accepted', digestValue = digest, kind = 'urn:usf:dispositionkind:retainedasset', includePlan = false, graph = 'urn:usf:graph:source-dispositions' } = {}) {
+function auditDispositionFixture({ state = 'urn:usf:dispositiondecisionstate:accepted', digestValue = digest, kind = 'urn:usf:dispositionkind:retainedasset', includePlan = false, planCount = includePlan ? 1 : 0, graph = 'urn:usf:graph:source-dispositions' } = {}) {
   const declarations = [
     auditTriple(null, 'urn:usf:namedgraph:source-dispositions', RDF_TYPE, 'urn:usf:ontology:NamedGraph'),
     auditTriple(null, 'urn:usf:namedgraph:source-dispositions', 'urn:usf:ontology:graphIri', '"urn:usf:graph:source-dispositions"^^http://www.w3.org/2001/XMLSchema#anyURI'),
@@ -33,9 +33,10 @@ function auditDispositionFixture({ state = 'urn:usf:dispositiondecisionstate:acc
     auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:hasDispositionKind', kind),
     auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:hasDispositionDecisionState', state)
   ];
-  if (includePlan) {
-    declarations.push(auditTriple(graph, 'urn:usf:artefactplan:a', RDF_TYPE, 'urn:usf:ontology:ArtefactPlan'));
-    declarations.push(auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:assignedToArtefactPlan', 'urn:usf:artefactplan:a'));
+  for (let index = 0; index < planCount; index += 1) {
+    const suffix = String.fromCharCode(97 + index);
+    declarations.push(auditTriple(graph, `urn:usf:artefactplan:${suffix}`, RDF_TYPE, 'urn:usf:ontology:ArtefactPlan'));
+    declarations.push(auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:assignedToArtefactPlan', `urn:usf:artefactplan:${suffix}`));
   }
   return [{ path: 'v2/usf/graph/source-dispositions.trig', universe: 'v2-graph-authority', declarations }];
 }
@@ -98,10 +99,36 @@ test('semantic layers require one explicit canonical artifact owner and its prim
 });
 
 test('dependency audit catches cycles, transitive edges, missing endpoints, and missing evidence', () => {
-  const packages = ['a', 'b', 'c'].map((key) => ({ key }));
-  const edge = (source, prerequisite) => ({ source, prerequisite, dependencyType: 'blocking', semanticEvidence: [`${source}:${prerequisite}`] });
-  assert.equal(auditDependencies(packages, [edge('a', 'b'), edge('b', 'c')]).status, 'pass');
-  assert.equal(auditDependencies(packages, [edge('a', 'b'), edge('b', 'c'), edge('a', 'c'), edge('c', 'a'), { ...edge('a', 'missing'), semanticEvidence: [] }]).status, 'fail');
+  const packages = ['a', 'b', 'c'].map((key) => ({ key, artifactKeys: [`artifact.${key}`], canonicalArtifactKeys: [], ownedSemanticLayers: [], requiredSemanticLayers: [], equivalenceGates: [] }));
+  const artifacts = ['a', 'b', 'c'].map((key) => ({ artifactKey: `artifact.${key}`, path: `${key}.json`, sourceState: 'tracked', contentDigest: key.repeat(64) }));
+  const relationship = (source, prerequisite) => ({ source: `${source}.json`, target: `${prerequisite}.json`, relationshipType: 'references', resolved: true, targetKind: 'artifact', evidenceKind: 'structurally-proven' });
+  const edge = (source, prerequisite) => {
+    const relation = relationship(source, prerequisite);
+    const record = {
+      source, prerequisite, dependencyType: 'canonical-artifact-input', status: 'required-prerequisite', reasonCode: 'canonical-artifact-input', semanticEvidence: [], artifactEvidence: [],
+      repositoryRelationshipEvidence: [sha256(`${relation.source}\0${relation.relationshipType}\0${relation.target}`)], proofEquivalenceEvidence: [], migrationEvidence: [], reviewStatus: 'machine-reviewed'
+    };
+    record.dependencyKey = `dependency-${sha256(`${source}\0${prerequisite}\0${record.dependencyType}`)}`;
+    record.resolutionStatus = 'resolved-retained';
+    record.resolutionBasis = { direction: 'source-requires-prerequisite', endpointOwnership: 'primary-work-package', evidenceFamilies: ['repository-relationship'], evidenceCounts: { artifact: 0, migration: 0, 'proof-equivalence': 0, 'repository-relationship': 1, semantic: 0 }, cycleCheck: 'required-prerequisite-dag-verified', transitiveReduction: 'retained-direct-edge', reviewBasis: 'machine-reviewed' };
+    record.satisfactionStatus = 'satisfied';
+    record.satisfactionBasis = { exactEvidenceHashCount: 1, currentRelationshipHashCount: 1, structurallyProvenRelationshipHashCount: 1, directionMatchedRelationshipHashCount: 1, currentPrerequisiteArtifactHashCount: 1, currentPrerequisiteArtifactCount: 1, sourceEndpointExists: true, prerequisiteEndpointExists: true, edgeSurvivedTransitiveReduction: true, requiredPrerequisiteGraphAcyclic: true };
+    return { record, relation };
+  };
+  const ab = edge('a', 'b'); const bc = edge('b', 'c');
+  const context = { artifacts, relationships: [ab.relation, bc.relation], canonicalArtifacts: [], replacementGroups: [], summary: { requiredPrerequisiteRelationshipCount: 2, resolvedPrerequisiteRelationshipCount: 2, satisfiedPrerequisiteRelationshipCount: 2, blockingRelationshipCount: 0, activeBlockingRelationshipCount: 0 } };
+  assert.equal(auditDependencies(packages, [ab.record, bc.record], context).status, 'pass');
+  const stale = structuredClone(ab.record); stale.repositoryRelationshipEvidence = ['f'.repeat(64)];
+  assert.equal(auditDependencies(packages, [stale], context).status, 'fail');
+  const missingResolution = structuredClone(ab.record); delete missingResolution.resolutionStatus;
+  assert.equal(auditDependencies(packages, [missingResolution], context).status, 'fail');
+  const forgedSatisfaction = structuredClone(ab.record); forgedSatisfaction.satisfactionBasis.currentRelationshipHashCount = 0;
+  assert.equal(auditDependencies(packages, [forgedSatisfaction], { ...context, summary: null }).status, 'fail');
+  const stalePrerequisite = structuredClone(artifacts); stalePrerequisite[1].sourceState = 'deleted';
+  assert.equal(auditDependencies(packages, [ab.record], { ...context, artifacts: stalePrerequisite, summary: null }).status, 'fail');
+  assert.equal(auditDependencies(packages, [ab.record], { ...context, summary: { requiredPrerequisiteRelationshipCount: 1, resolvedPrerequisiteRelationshipCount: 1, satisfiedPrerequisiteRelationshipCount: 0, blockingRelationshipCount: 0, activeBlockingRelationshipCount: 1 } }).status, 'fail');
+  const ac = edge('a', 'c'); const ca = edge('c', 'a'); const missing = edge('a', 'missing'); missing.record.repositoryRelationshipEvidence = [];
+  assert.equal(auditDependencies(packages, [ab.record, bc.record, ac.record, ca.record, missing.record], { ...context, relationships: [ab.relation, bc.relation, ac.relation, ca.relation] }).status, 'fail');
 });
 
 test('canonical serialization is key-stable and record order is independently checked', () => {
@@ -153,6 +180,7 @@ test('independent source disposition audit accepts no-output and planned output,
     auditDispositionFixture({ state: 'urn:usf:dispositiondecisionstate:rejected' }),
     auditDispositionFixture({ digestValue: 'b'.repeat(64) }),
     auditDispositionFixture({ kind: 'urn:usf:dispositionkind:generateequivalent' }),
+    auditDispositionFixture({ kind: 'urn:usf:dispositionkind:generateequivalent', planCount: 2 }),
     auditDispositionFixture({ graph: 'urn:usf:graph:not-registered' })
   ]) assert.equal(auditSourceDispositionOwnership([sourceArtifact], fixture, [dispositionGroup('missing-accepted-source-disposition')]).status, 'fail');
 });

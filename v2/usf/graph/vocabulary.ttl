@@ -630,3 +630,36 @@ action:open a usf:ActionStatus ; usf:canonicalName "open" .
 action:inprogress a usf:ActionStatus ; usf:canonicalName "inprogress" .
 action:complete a usf:ActionStatus ; usf:canonicalName "complete" .
 action:cancelled a usf:ActionStatus ; usf:canonicalName "cancelled" .
+
+# Repository census observation and policy-controlled structure values.
+<urn:usf:sourcerelationshiptype:declares> a usf:SourceRelationshipType ; usf:canonicalName "declares" .
+<urn:usf:sourcerelationshiptype:dependson> a usf:SourceRelationshipType ; usf:canonicalName "dependson" .
+<urn:usf:sourcerelationshiptype:exports> a usf:SourceRelationshipType ; usf:canonicalName "exports" .
+<urn:usf:sourcerelationshiptype:healthchecks> a usf:SourceRelationshipType ; usf:canonicalName "healthchecks" .
+<urn:usf:sourcerelationshiptype:imports> a usf:SourceRelationshipType ; usf:canonicalName "imports" .
+<urn:usf:sourcerelationshiptype:invokes> a usf:SourceRelationshipType ; usf:canonicalName "invokes" .
+<urn:usf:sourcerelationshiptype:materialises> a usf:SourceRelationshipType ; usf:canonicalName "materialises" .
+<urn:usf:sourcerelationshiptype:references> a usf:SourceRelationshipType ; usf:canonicalName "references" .
+<urn:usf:sourcerelationshiptype:usesaction> a usf:SourceRelationshipType ; usf:canonicalName "usesaction" .
+
+<urn:usf:sourcerelationshiptargetkind:artifact> a usf:SourceRelationshipTargetKind ; usf:canonicalName "artifact" .
+<urn:usf:sourcerelationshiptargetkind:command> a usf:SourceRelationshipTargetKind ; usf:canonicalName "command" .
+<urn:usf:sourcerelationshiptargetkind:externalresource> a usf:SourceRelationshipTargetKind ; usf:canonicalName "externalresource" .
+<urn:usf:sourcerelationshiptargetkind:package> a usf:SourceRelationshipTargetKind ; usf:canonicalName "package" .
+<urn:usf:sourcerelationshiptargetkind:runtimeservice> a usf:SourceRelationshipTargetKind ; usf:canonicalName "runtimeservice" .
+<urn:usf:sourcerelationshiptargetkind:semanticentity> a usf:SourceRelationshipTargetKind ; usf:canonicalName "semanticentity" .
+
+<urn:usf:sourcerelationshipevidencekind:inventorydeclared> a usf:SourceRelationshipEvidenceKind ; usf:canonicalName "inventorydeclared" .
+<urn:usf:sourcerelationshipevidencekind:structurallyproven> a usf:SourceRelationshipEvidenceKind ; usf:canonicalName "structurallyproven" .
+
+<urn:usf:workpackagedependencytype:canonicalartifactinput> a usf:WorkPackageDependencyType ; usf:canonicalName "canonicalartifactinput" .
+<urn:usf:workpackagedependencystatus:requiredprerequisite> a usf:WorkPackageDependencyStatus ; usf:canonicalName "requiredprerequisite" .
+<urn:usf:workpackagedependencystatus:coordination> a usf:WorkPackageDependencyStatus ; usf:canonicalName "coordination" .
+<urn:usf:workpackagedependencyresolutionstatus:resolvedretained> a usf:WorkPackageDependencyResolutionStatus ; usf:canonicalName "resolvedretained" .
+<urn:usf:repositorydependencydirection:sourcerequiresprerequisite> a usf:RepositoryDependencyDirection ; usf:canonicalName "sourcerequiresprerequisite" .
+<urn:usf:dependencylineagedisposition:retainedwithevidence> a usf:DependencyLineageDisposition ; usf:canonicalName "retainedwithevidence" .
+<urn:usf:observationdisclosurestatus:disclosed> a usf:ObservationDisclosureStatus ; usf:canonicalName "disclosed" .
+<urn:usf:observationdisclosurestatus:withheldprohibitedmetadata> a usf:ObservationDisclosureStatus ; usf:canonicalName "withheldprohibitedmetadata" .
+<urn:usf:dependencysatisfactionstatus:satisfied> a usf:DependencySatisfactionStatus ; usf:canonicalName "satisfied" .
+<urn:usf:dependencysatisfactionstatus:unsatisfied> a usf:DependencySatisfactionStatus ; usf:canonicalName "unsatisfied" .
+<urn:usf:dependencysatisfactionbasiskind:resolveddirectrelationshipevidence> a usf:DependencySatisfactionBasisKind ; usf:canonicalName "resolveddirectrelationshipevidence" .

@@ -220,7 +220,7 @@ repo:foundation a usf:Repository ; usf:canonicalName "foundation" ;
       usf:requiredWorkflowTrigger <urn:usf:automationtrigger:pushmain> ;
       usf:requiredAutomationPermission <urn:usf:automationpermission:contentswrite>, <urn:usf:automationpermission:idtokenwrite>, <urn:usf:automationpermission:attestationswrite> ;
       usf:requiredValidatorRule val:validatebootstrap, val:validatespec .
-    plan:proofanchorworkflow a usf:ArtefactPlan ; usf:canonicalName "proofanchorworkflow" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:proofanchorworkflow .
+    plan:proofanchorworkflow a usf:ArtefactPlan ; usf:canonicalName "proofanchorworkflow" ; usf:ownedByRepository repo:foundation ; usf:plansSemanticResource workflowcontract:proofanchor ; usf:plansArtefact art:proofanchorworkflow .
     art:proofanchorworkflow a usf:Artefact ; usf:canonicalName "proofanchorworkflow" ; usf:artefactKind <urn:usf:artefactkind:configuration> ; usf:canonicalPath ".github/workflows/proof-anchor.yml" ; usf:governedByPathRule path:proofanchorworkflow ; usf:generatedByComponent generator:proofanchorworkflow .
     path:proofanchorworkflow a usf:PathRule ; usf:canonicalName "proofanchorworkflow" ; usf:pathPattern ".github/workflows/proof-anchor.yml" .
 
@@ -236,7 +236,7 @@ repo:foundation a usf:Repository ; usf:canonicalName "foundation" ;
       usf:requiredWorkflowTrigger <urn:usf:automationtrigger:pushmain>, <urn:usf:automationtrigger:pullrequest>, <urn:usf:automationtrigger:workflowdispatch> ;
       usf:requiredAutomationPermission <urn:usf:automationpermission:contentsread> ;
       usf:requiredValidatorRule val:validatespec, val:validateaggregate, val:validateparitymatrix, val:validatefoundationsubstrateclosure, val:validateproofcockpitacceptance .
-    plan:specvalidationworkflow a usf:ArtefactPlan ; usf:canonicalName "specvalidationworkflow" ; usf:ownedByRepository repo:foundation ; usf:plansArtefact art:specvalidationworkflow .
+    plan:specvalidationworkflow a usf:ArtefactPlan ; usf:canonicalName "specvalidationworkflow" ; usf:ownedByRepository repo:foundation ; usf:plansSemanticResource workflowcontract:specvalidation ; usf:plansArtefact art:specvalidationworkflow .
     art:specvalidationworkflow a usf:Artefact ; usf:canonicalName "specvalidationworkflow" ; usf:artefactKind <urn:usf:artefactkind:configuration> ; usf:canonicalPath ".github/workflows/validate-spec.yml" ; usf:governedByPathRule path:specvalidationworkflow ; usf:generatedByComponent generator:specvalidationworkflow .
     path:specvalidationworkflow a usf:PathRule ; usf:canonicalName "specvalidationworkflow" ; usf:pathPattern ".github/workflows/validate-spec.yml" .
 

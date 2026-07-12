@@ -1040,7 +1040,7 @@ usf:runMode a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:Compi
 usf:runState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:CompilerRun ; rdfs:range usf:CompilerRunState .
 usf:consumesArtefact a owl:ObjectProperty ; rdfs:domain usf:CompilerRun ; rdfs:range usf:Artefact .
 usf:producesArtefact a owl:ObjectProperty ; rdfs:domain usf:CompilerRun ; rdfs:range usf:Artefact .
-usf:generatedByComponent a owl:ObjectProperty ; rdfs:domain usf:Artefact ; rdfs:range usf:CompilerComponent .
+usf:generatedByComponent a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:Artefact ; rdfs:range usf:CompilerComponent .
 usf:usesTemplate a owl:ObjectProperty ; rdfs:domain usf:Generator ; rdfs:range usf:Template .
 usf:workflowTemplate a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:AutomationWorkflowContract ; rdfs:range usf:Template .
 usf:requiredWorkflowTrigger a owl:ObjectProperty ; rdfs:domain usf:AutomationWorkflowContract ; rdfs:range usf:AutomationTrigger .
@@ -1739,11 +1739,11 @@ usf:hasSourceDisposition a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:dom
 usf:dispositionOfSourceArtefact a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:SourceArtefact .
 usf:decidedAgainstObservation a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:SourceArtefactObservation .
 usf:derivedFromDispositionPolicy a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:SourceDispositionPolicy .
-usf:assignedToArtefactPlan a owl:ObjectProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:ArtefactPlan .
+usf:assignedToArtefactPlan a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:ArtefactPlan .
 usf:hasDispositionKind a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:DispositionKind .
 usf:hasDispositionBasis a owl:ObjectProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:DispositionBasis .
 usf:hasDispositionDecisionState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:DispositionDecisionState .
-usf:hasDispositionOutputMode a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:range usf:DispositionOutputMode .
+usf:hasDispositionOutputMode a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:DispositionOutputMode .
 usf:permittedGenerationInputRole a owl:ObjectProperty ; rdfs:range usf:GenerationInputRole .
 usf:decisionRationale a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:range xsd:string .
 
@@ -1751,7 +1751,8 @@ usf:policyDispositionKind a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:do
 usf:policyDispositionBasis a owl:ObjectProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:DispositionBasis .
 usf:policyDecisionState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:DispositionDecisionState .
 usf:policyOutputMode a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:DispositionOutputMode .
-usf:policyArtefactPlan a owl:ObjectProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:ArtefactPlan .
+usf:policyPrecedence a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range xsd:integer .
+usf:policyArtefactPlan a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:ArtefactPlan .
 usf:policyGenerationInputRole a owl:ObjectProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:GenerationInputRole .
 usf:policyMatchesSourceIdentityDigest a owl:DatatypeProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range xsd:string .
 usf:policyMatchesUniverse a owl:ObjectProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range usf:SourceUniverse .
@@ -1771,5 +1772,170 @@ usf:permitsDispositionOutputMode a owl:ObjectProperty ; rdfs:domain usf:Disposit
 usf:loadedForValidation a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:GraphClass ; rdfs:range xsd:boolean .
 usf:loadedForDerivation a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:GraphClass ; rdfs:range xsd:boolean .
 
+usf:policyPrecedence rdfs:label "policy precedence" ;
+  rdfs:comment "Records the non-negative priority used to select the unique highest-precedence matching source disposition policy; equally highest matches are ambiguous." .
+
+########################################################################
+# Repository census observation and derived repository structure
+########################################################################
+
+usf:CensusObservationRun a owl:Class ; rdfs:subClassOf usf:ObservedEntity ; rdfs:label "Census observation run" .
+usf:CensusObservationInput a owl:Class ; rdfs:subClassOf usf:ObservedEntity ; rdfs:label "Census observation input" .
+usf:CensusParserShardObservation a owl:Class ; rdfs:subClassOf usf:ObservedEntity ; rdfs:label "Census parser shard observation" .
+usf:SourceRelationshipTargetObservation a owl:Class ; rdfs:subClassOf usf:ObservedEntity ; rdfs:label "Source relationship target observation" .
+usf:SourceRelationshipObservation a owl:Class ; rdfs:subClassOf usf:ObservedEntity ; rdfs:label "Source relationship observation" ; rdfs:comment "A structurally parsed, digest-bound repository relationship observation; it is evidence and does not define USF meaning." .
+usf:WorkPackageObservation a owl:Class ; rdfs:subClassOf usf:ObservedEntity ; rdfs:label "Work package observation" ; rdfs:comment "A non-authoritative observation of one deterministic census work partition and its exact current ownership." .
+usf:WorkPackageDependencyObservation a owl:Class ; rdfs:subClassOf usf:ObservedEntity ; rdfs:label "Work package dependency observation" .
+usf:WorkPackageDependencyLineageObservation a owl:Class ; rdfs:subClassOf usf:ObservedEntity ; rdfs:label "Work package dependency lineage observation" .
+usf:RepositoryDependencyResolutionPolicy a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Repository dependency resolution policy" ; rdfs:comment "An authored policy governing provenance, evidence, endpoint ownership, direction and cycle closure for repository structure." .
+usf:RepositoryWorkPackage a owl:Class ; rdfs:subClassOf usf:DerivedEntity ; rdfs:label "Repository work package" .
+usf:RepositoryDependency a owl:Class ; rdfs:subClassOf usf:DerivedEntity ; rdfs:label "Repository dependency" .
+usf:ResolvedWorkPackageDependency a owl:Class ; rdfs:subClassOf usf:RepositoryDependency ; rdfs:label "Resolved work package dependency" .
+usf:RetainedWorkPackageDependencyLineage a owl:Class ; rdfs:subClassOf usf:DerivedEntity ; rdfs:label "Retained work package dependency lineage" .
+
+usf:SourceRelationshipType a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Source relationship type" .
+usf:SourceRelationshipTargetKind a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Source relationship target kind" .
+usf:SourceRelationshipEvidenceKind a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Source relationship evidence kind" .
+usf:WorkPackageDependencyType a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Work package dependency type" .
+usf:WorkPackageDependencyStatus a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Work package dependency status" .
+usf:WorkPackageDependencyResolutionStatus a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Work package dependency resolution status" .
+usf:RepositoryDependencyDirection a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Repository dependency direction" .
+usf:DependencyLineageDisposition a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Dependency lineage disposition" .
+usf:ObservationDisclosureStatus a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Observation disclosure status" ; rdfs:comment "Whether a raw observed value is safe to disclose in the semantic dataset or is retained only by digest because it contains prohibited external metadata." .
+usf:DependencySatisfactionStatus a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Dependency satisfaction status" ; rdfs:comment "The current satisfaction result for a retained work-package dependency constraint, independent of its required-prerequisite or coordination role." .
+usf:DependencySatisfactionBasisKind a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Dependency satisfaction basis kind" .
+usf:WorkPackageDependencySatisfactionBasisObservation a owl:Class ; rdfs:subClassOf usf:ObservedEntity ; rdfs:label "Work package dependency satisfaction basis observation" ; rdfs:comment "A digest-bound observation of the exact current evidence used to assess one retained dependency constraint." .
+usf:RepositoryDependencySatisfactionPolicy a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Repository dependency satisfaction policy" ; rdfs:comment "A generic authored policy defining fail-closed promotion of observed dependency satisfaction." .
+usf:ActiveRepositoryDependencyBlocker a owl:Class ; rdfs:subClassOf usf:DerivedEntity ; rdfs:label "Active repository dependency blocker" ; rdfs:comment "A derived blocker proving that a retained required-prerequisite dependency is currently unsatisfied." .
+
+usf:observedInCensusRun a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:range usf:CensusObservationRun .
+usf:observedByCollector a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:string .
+usf:observedSourceArtefactCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:observedSourceRelationshipCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:observedWorkPackageCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:observedWorkPackageDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:observedRetainedDependencyLineageCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:observedRequiredPrerequisiteDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:observedResolvedPrerequisiteDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:observedSatisfiedPrerequisiteDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:observedActiveBlockingDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:hasCensusObservationInput a owl:ObjectProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range usf:CensusObservationInput .
+usf:hasCensusParserShardObservation a owl:ObjectProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range usf:CensusParserShardObservation .
+usf:observedInputPath a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationInput ; rdfs:range xsd:string .
+usf:observedInputContentDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationInput ; rdfs:range xsd:string .
+usf:observedInputByteCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationInput ; rdfs:range xsd:nonNegativeInteger .
+usf:observedInputRecordCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationInput ; rdfs:range xsd:nonNegativeInteger .
+usf:observedParserShardPath a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusParserShardObservation ; rdfs:range xsd:string .
+usf:observedParserUniverse a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusParserShardObservation ; rdfs:range usf:SourceUniverse .
+usf:observedParserRecordCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusParserShardObservation ; rdfs:range xsd:nonNegativeInteger .
+usf:observedCompressedContentDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusParserShardObservation ; rdfs:range xsd:string .
+usf:observedUncompressedContentDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusParserShardObservation ; rdfs:range xsd:string .
+usf:observedParserImplementation a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactObservation ; rdfs:range xsd:string .
+usf:observedSyntaxKind a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactObservation ; rdfs:range xsd:string .
+usf:observedFormatKind a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactObservation ; rdfs:range xsd:string .
+
+usf:observedRelationshipTarget a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipTargetObservation ; rdfs:range xsd:string .
+usf:observedRelationshipTargetDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipTargetObservation ; rdfs:range xsd:string .
+usf:observedRelationshipTargetDisclosureStatus a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipTargetObservation ; rdfs:range usf:ObservationDisclosureStatus .
+usf:observedRelationshipTargetKind a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipTargetObservation ; rdfs:range usf:SourceRelationshipTargetKind .
+usf:resolvesToSourceArtefact a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipTargetObservation ; rdfs:range usf:SourceArtefact .
+usf:sourceRelationshipSource a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range usf:SourceArtefact .
+usf:sourceRelationshipTarget a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range usf:SourceRelationshipTargetObservation .
+usf:sourceRelationshipType a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range usf:SourceRelationshipType .
+usf:sourceRelationshipResolved a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range xsd:boolean .
+usf:sourceRelationshipEvidenceKind a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range usf:SourceRelationshipEvidenceKind .
+usf:sourceRelationshipExtractionMethod a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range xsd:string .
+usf:sourceRelationshipAttributes a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range xsd:string .
+usf:sourceRelationshipAttributesDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range xsd:string .
+usf:sourceRelationshipAttributesDisclosureStatus a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range usf:ObservationDisclosureStatus .
+usf:sourceRelationshipConfidence a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range xsd:string .
+usf:sourceRelationshipReasonCode a owl:DatatypeProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range xsd:string .
+usf:sourceRelationshipRecordDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range xsd:string .
+usf:relationshipEvidenceDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceRelationshipObservation ; rdfs:range xsd:string .
+
+usf:workPackageKey a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageObservation ; rdfs:range xsd:string .
+usf:workPackageTitle a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageObservation ; rdfs:range xsd:string .
+usf:workPackageOutcomeClass a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageObservation ; rdfs:range xsd:string .
+usf:workPackageRecordDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageObservation ; rdfs:range xsd:string .
+usf:observedOwnedSourceArtefact a owl:ObjectProperty ; rdfs:domain usf:WorkPackageObservation ; rdfs:range usf:SourceArtefact .
+usf:observedOwnedCanonicalArtefact a owl:ObjectProperty ; rdfs:domain usf:WorkPackageObservation ; rdfs:range usf:Artefact .
+
+usf:workPackageDependencyKey a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range xsd:string .
+usf:workPackageDependencySource a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range usf:WorkPackageObservation .
+usf:workPackageDependencyPrerequisite a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range usf:WorkPackageObservation .
+usf:workPackageDependencyType a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range usf:WorkPackageDependencyType .
+usf:workPackageDependencyStatus a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range usf:WorkPackageDependencyStatus .
+usf:workPackageDependencyResolutionStatus a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range usf:WorkPackageDependencyResolutionStatus .
+usf:workPackageDependencyReasonCode a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range xsd:string .
+usf:workPackageDependencyResolutionBasis a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range xsd:string .
+usf:workPackageDependencyRecordDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range xsd:string .
+usf:workPackageDependencyEvidenceDigest a owl:DatatypeProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range xsd:string .
+usf:supportedBySourceRelationshipObservation a owl:ObjectProperty ; rdfs:range usf:SourceRelationshipObservation .
+usf:workPackageDependencySatisfactionSeed a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range usf:DependencySatisfactionStatus .
+usf:hasWorkPackageDependencySatisfactionBasis a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyObservation ; rdfs:range usf:WorkPackageDependencySatisfactionBasisObservation .
+usf:satisfactionBasisForWorkPackageDependency a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range usf:WorkPackageDependencyObservation .
+usf:observedDependencySatisfactionStatus a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range usf:DependencySatisfactionStatus .
+usf:dependencySatisfactionBasisKind a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range usf:DependencySatisfactionBasisKind .
+usf:satisfactionBasisRelationshipObservation a owl:ObjectProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range usf:SourceRelationshipObservation .
+usf:satisfactionBasisRecordDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:string .
+usf:satisfactionBasisExactEvidenceHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
+usf:satisfactionBasisCurrentRelationshipHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
+usf:satisfactionBasisStructurallyProvenRelationshipHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
+usf:satisfactionBasisDirectionMatchedRelationshipHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
+usf:satisfactionBasisCurrentPrerequisiteArtifactHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
+usf:satisfactionBasisCurrentPrerequisiteArtifactCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
+usf:satisfactionBasisSourceEndpointExists a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:boolean .
+usf:satisfactionBasisPrerequisiteEndpointExists a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:boolean .
+usf:satisfactionBasisEdgeSurvivedTransitiveReduction a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:boolean .
+usf:satisfactionBasisRequiredPrerequisiteGraphAcyclic a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:boolean .
+
+usf:baselineDependencySourceKey a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyLineageObservation ; rdfs:range xsd:string .
+usf:baselineDependencyPrerequisiteKey a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyLineageObservation ; rdfs:range xsd:string .
+usf:dependencyLineageDisposition a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:range usf:DependencyLineageDisposition .
+usf:dependencyLineageReason a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyLineageObservation ; rdfs:range xsd:string .
+usf:dependencyLineageRecordDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencyLineageObservation ; rdfs:range xsd:string .
+usf:successorDependencySource a owl:ObjectProperty ; rdfs:domain usf:WorkPackageDependencyLineageObservation ; rdfs:range usf:WorkPackageObservation .
+usf:successorDependencyPrerequisite a owl:ObjectProperty ; rdfs:domain usf:WorkPackageDependencyLineageObservation ; rdfs:range usf:WorkPackageObservation .
+
+usf:requiredRelationshipEvidenceMinimum a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range xsd:nonNegativeInteger .
+usf:allowsDependencySatisfactionStatus a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range usf:DependencySatisfactionStatus .
+usf:allowsDependencySatisfactionBasisKind a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range usf:DependencySatisfactionBasisKind .
+usf:requiresResolvedRetainedDependency a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range xsd:boolean .
+usf:requiresRequiredPrerequisiteDependencyStatus a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range xsd:boolean .
+usf:requiresExactSatisfactionEvidenceClosure a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range xsd:boolean .
+usf:requiresSatisfactionEndpointOwnership a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range xsd:boolean .
+usf:requiresSameSatisfactionObservationRun a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range xsd:boolean .
+usf:requiresSatisfactionBasisDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range xsd:boolean .
+usf:allowsWorkPackageDependencyType a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range usf:WorkPackageDependencyType .
+usf:allowsWorkPackageDependencyStatus a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range usf:WorkPackageDependencyStatus .
+usf:allowsSourceRelationshipType a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range usf:SourceRelationshipType .
+usf:allowsRepositoryDependencyDirection a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range usf:RepositoryDependencyDirection .
+usf:allowsWorkPackageDependencyResolutionStatus a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range usf:WorkPackageDependencyResolutionStatus .
+usf:allowsDependencyLineageDisposition a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range usf:DependencyLineageDisposition .
+usf:requiresRegisteredObservationRun a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range xsd:boolean .
+usf:requiresExactEvidenceEndpointOwnership a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range xsd:boolean .
+usf:requiresAcyclicRequiredPrerequisiteDependencies a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range xsd:boolean .
+
+usf:promotedFromWorkPackageObservation a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryWorkPackage ; rdfs:range usf:WorkPackageObservation .
+usf:ownsObservedSourceArtefact a owl:ObjectProperty ; rdfs:domain usf:RepositoryWorkPackage ; rdfs:range usf:SourceArtefact .
+usf:ownsCanonicalArtefact a owl:ObjectProperty ; rdfs:domain usf:RepositoryWorkPackage ; rdfs:range usf:Artefact .
+usf:promotedByRepositoryStructurePolicy a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:range usf:RepositoryDependencyResolutionPolicy .
+usf:resolvedDependencySource a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependency ; rdfs:range usf:RepositoryWorkPackage .
+usf:resolvedDependencyPrerequisite a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependency ; rdfs:range usf:RepositoryWorkPackage .
+usf:resolvedDependencyType a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependency ; rdfs:range usf:WorkPackageDependencyType .
+usf:resolvedDependencyStatus a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependency ; rdfs:range usf:WorkPackageDependencyStatus .
+usf:dependencyDirection a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependency ; rdfs:range usf:RepositoryDependencyDirection .
+usf:dependencyResolutionState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependency ; rdfs:range usf:WorkPackageDependencyResolutionStatus .
+usf:derivedFromWorkPackageDependencyObservation a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependency ; rdfs:range usf:WorkPackageDependencyObservation .
+usf:dependencySatisfactionStatus a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ResolvedWorkPackageDependency ; rdfs:range usf:DependencySatisfactionStatus .
+usf:derivedFromDependencySatisfactionBasis a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ResolvedWorkPackageDependency ; rdfs:range usf:WorkPackageDependencySatisfactionBasisObservation .
+usf:promotedByDependencySatisfactionPolicy a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ResolvedWorkPackageDependency ; rdfs:range usf:RepositoryDependencySatisfactionPolicy .
+usf:activeBlockerForResolvedDependency a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ActiveRepositoryDependencyBlocker ; rdfs:range usf:ResolvedWorkPackageDependency .
+usf:activeBlockerFromSatisfactionBasis a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ActiveRepositoryDependencyBlocker ; rdfs:range usf:WorkPackageDependencySatisfactionBasisObservation .
+usf:derivedFromWorkPackageDependencyLineageObservation a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RetainedWorkPackageDependencyLineage ; rdfs:range usf:WorkPackageDependencyLineageObservation .
+usf:retainedLineageSuccessorSource a owl:ObjectProperty ; rdfs:domain usf:RetainedWorkPackageDependencyLineage ; rdfs:range usf:RepositoryWorkPackage .
+usf:retainedLineageSuccessorPrerequisite a owl:ObjectProperty ; rdfs:domain usf:RetainedWorkPackageDependencyLineage ; rdfs:range usf:RepositoryWorkPackage .
+
 [] a owl:AllDisjointClasses ; owl:members ( usf:SourceArtefact usf:Artefact ) .
 [] a owl:AllDisjointClasses ; owl:members ( usf:SourceArtefactObservation usf:SourceArtefactDisposition ) .
+[] a owl:AllDisjointClasses ; owl:members ( usf:SourceRelationshipObservation usf:RepositoryDependency ) .

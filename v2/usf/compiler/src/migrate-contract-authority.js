@@ -19,14 +19,13 @@ const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 const canonical = (value) => value.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 const reviewedOverrides = new Map([
-  ['semantic-contract.authentication-platform#uiSemanticDefinition', {
-    status: 'complete',
-    statement: 'Authentication UI semantics require a public login route, a framework-neutral login view model, explicit unauthenticated, authenticating, authenticated, and denied states, a login form bound to the authentication operation, explicit inline, forbidden, banner, and summary errors, and governed accessibility and localisation requirements.',
-  }],
-  ['semantic-contract.user-identity-and-tenant-membership#uiSemanticDefinition', {
-    status: 'notapplicable',
-    statement: 'User identity and tenant membership is explicitly not exposed as a UI capability. Profile list and detail surfaces are governed by the end-user profile and preferences capability, so this contract must not invent a duplicate membership UI.',
-  }],
+]);
+
+const REQUIRED_UI_NONCLAIMS = Object.freeze([
+  'urn:usf:nonclaim:nohumanacceptance',
+  'urn:usf:nonclaim:nouiproductparity',
+  'urn:usf:nonclaim:noaccessibilitycompliance',
+  'urn:usf:nonclaim:nolaunchi18n',
 ]);
 
 const lifecycleOverrides = new Map([
@@ -59,6 +58,60 @@ function sanitiseStatement(value) {
 const capabilityStore = new Store(new Parser({ format: 'application/trig' }).parse(
   readFileSync(join(GRAPH_DIR, 'contracts/capabilities.trig'), 'utf8'),
 ));
+const uiAuthorityStore = new Store();
+for (const relative of [
+  'claims.ttl', 'contracts/interfaces.trig', 'contracts/policies.trig', 'contracts/experience.trig',
+  'contracts/ui.trig', 'realisation/renderers.trig',
+]) {
+  const format = relative.endsWith('.ttl') ? 'text/turtle' : 'application/trig';
+  uiAuthorityStore.addQuads(new Parser({ format }).parse(readFileSync(join(GRAPH_DIR, relative), 'utf8')));
+}
+
+function uiFacetAuthority(contract, facet) {
+  const capabilities = capabilityStore.getSubjects(p('hasContract'), contract, null);
+  if (capabilities.length !== 1) throw new Error(`UI facet requires exactly one capability for ${contract.value}`);
+  const capability = capabilities[0];
+  const exposure = one(uiAuthorityStore, capability, p('uiExposure'), 'capability UI exposure').value;
+  const models = uiAuthorityStore.getObjects(capability, p('hasUISemanticModel'), null);
+  const capabilityName = one(capabilityStore, capability, p('canonicalName'), 'capability canonicalName').value;
+  if (exposure !== 'urn:usf:uiexposureclass:uiexposed') {
+    if (models.length !== 0) throw new Error(`non-UI-exposed capability has a UI semantic model: ${capability.value}`);
+    const posture = exposure.split(':').at(-1);
+    const rationale = posture === 'apionly'
+      ? `The ${capabilityName} capability is explicitly API-only; no human-rendered surface, component, action, journey, consent prompt, or renderer input is authorised. Any UI requires a deliberate exposure amendment.`
+      : posture === 'internal'
+        ? `The ${capabilityName} capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.`
+        : `The ${capabilityName} capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.`;
+    return { status: 'notapplicable', statement: rationale, nonclaims: REQUIRED_UI_NONCLAIMS };
+  }
+  if (models.length !== 1) throw new Error(`UI-exposed capability requires exactly one UI semantic model: ${capability.value}`);
+  const model = models[0];
+  for (const [property, label] of [
+    ['hasJourney', 'journey'], ['hasViewModel', 'view model'], ['hasSurface', 'surface'],
+    ['hasAccessibilityProfile', 'accessibility profile'], ['hasLocalisationProfile', 'localisation profile'],
+    ['rendererContract', 'renderer contract'],
+  ]) if (uiAuthorityStore.getObjects(model, p(property), null).length === 0) {
+    throw new Error(`UI semantic model lacks ${label}: ${model.value}`);
+  }
+  for (const surface of uiAuthorityStore.getObjects(model, p('hasSurface'), null)) {
+    if (uiAuthorityStore.getObjects(surface, p('uiRequiresPermission'), null).length === 0) throw new Error(`UI surface lacks permission authority: ${surface.value}`);
+    const kinds = uiAuthorityStore.getObjects(surface, p('surfaceKind'), null).map((term) => term.value);
+    if (uiAuthorityStore.getQuads(surface, RDF_TYPE, namedNode(`${USF}Form`), null).length > 0 && uiAuthorityStore.getObjects(surface, p('submitsOperation'), null).length !== 1) {
+      throw new Error(`UI form requires exactly one submit operation: ${surface.value}`);
+    }
+    if (kinds.includes('urn:usf:surfacekind:queryview')) {
+      const viewModel = one(uiAuthorityStore, surface, p('rendersViewModel'), 'query surface view model');
+      if (uiAuthorityStore.getObjects(viewModel, p('loadsOperation'), null).length === 0 || uiAuthorityStore.getObjects(viewModel, p('bindsInterface'), null).length === 0) {
+        throw new Error(`UI query view lacks exact operation or interface authority: ${surface.value}`);
+      }
+    }
+  }
+  return {
+    status: 'complete',
+    statement: `The ${capabilityName} capability has one framework-neutral UI semantic model with explicit surfaces, view models, components, journeys, permissions, accessibility, localisation, and target-specific renderer contracts. This semantic closure disclaims product parity, human acceptance, accessibility compliance, and launch-language readiness.`,
+    nonclaims: REQUIRED_UI_NONCLAIMS,
+  };
+}
 const contractsByName = new Map();
 for (const row of capabilityStore.getQuads(null, RDF_TYPE, namedNode(`${USF}SemanticContract`), null)) {
   contractsByName.set(one(capabilityStore, row.subject, p('canonicalName'), 'contract canonicalName').value, row.subject);
@@ -152,8 +205,14 @@ for (const { sourcePath, document } of documents) {
     const facet = facetsByKind.get(kind);
     if (!facet) throw new Error(`no explicit target facet selected for ${sourcePath}#${sourceKind}`);
     const override = lifecycleOverride
-      ? { status: 'notapplicable', statement: lifecycleOverride.statement }
-      : reviewedOverrides.get(`${document.id}#${sourceKind}`);
+      ? {
+          status: 'notapplicable',
+          statement: lifecycleOverride.statement,
+          nonclaims: sourceKind === 'uiSemanticDefinition' ? REQUIRED_UI_NONCLAIMS : [],
+        }
+      : sourceKind === 'uiSemanticDefinition'
+        ? uiFacetAuthority(contract, facet)
+        : reviewedOverrides.get(`${document.id}#${sourceKind}`);
     if (override) { overridden = true; overrideCount += 1; }
     const status = override?.status ?? canonical(sourceFacet.status);
     const statement = sanitiseStatement(override?.statement ?? sourceFacet.description ?? '');
@@ -164,6 +223,7 @@ for (const { sourcePath, document } of documents) {
       quad(facet, p('facetStatus'), namedNode(`urn:usf:facetstatus:${status}`), GRAPH),
       quad(facet, p('facetStatement'), literal(statement), GRAPH),
     );
+    for (const nonclaim of override?.nonclaims ?? []) quads.push(quad(contract, p('disclaims'), namedNode(nonclaim), GRAPH));
     facetCount += 1;
   }
   if (!overridden) {
@@ -182,6 +242,7 @@ quads.push(
   quad(policy, p('policyDispositionBasis'), namedNode('urn:usf:dispositionbasis:independentintegrityobservation'), GRAPH),
   quad(policy, p('policyDecisionState'), namedNode('urn:usf:dispositiondecisionstate:accepted'), GRAPH),
   quad(policy, p('policyOutputMode'), namedNode('urn:usf:dispositionoutputmode:canonicaloutput'), GRAPH),
+  quad(policy, p('policyPrecedence'), literal(40), GRAPH),
   quad(policy, p('policyGenerationInputRole'), namedNode('urn:usf:generationinputrole:equivalencesubject'), GRAPH),
   quad(policy, p('isDefaultDispositionPolicy'), literal(false), GRAPH),
   quad(policy, p('isActiveDispositionPolicy'), literal(true), GRAPH),
@@ -201,6 +262,7 @@ quads.push(
   quad(deprecatedPolicy, p('policyDispositionBasis'), namedNode('urn:usf:dispositionbasis:independentintegrityobservation'), GRAPH),
   quad(deprecatedPolicy, p('policyDecisionState'), namedNode('urn:usf:dispositiondecisionstate:accepted'), GRAPH),
   quad(deprecatedPolicy, p('policyOutputMode'), namedNode('urn:usf:dispositionoutputmode:nooutput'), GRAPH),
+  quad(deprecatedPolicy, p('policyPrecedence'), literal(40), GRAPH),
   quad(deprecatedPolicy, p('policyGenerationInputRole'), namedNode('urn:usf:generationinputrole:equivalencesubject'), GRAPH),
   quad(deprecatedPolicy, p('isDefaultDispositionPolicy'), literal(false), GRAPH),
   quad(deprecatedPolicy, p('isActiveDispositionPolicy'), literal(true), GRAPH),

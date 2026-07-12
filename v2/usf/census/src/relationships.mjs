@@ -111,8 +111,8 @@ function classifyFinding(record, overrides = {}) {
   };
 }
 
-export function buildRelationships(members, parserResults) {
-  const pathSet = new Set(members.map((member) => member.path));
+export function buildRelationships(members, parserResults, knownGeneratedPaths = new Set()) {
+  const pathSet = new Set([...members.map((member) => member.path), ...knownGeneratedPaths]);
   const directorySet = directorySetFor(pathSet);
   const relationships = [];
   const findings = [];
@@ -121,8 +121,10 @@ export function buildRelationships(members, parserResults) {
       const nonInternalClass = raw.targetKind === 'artifact'
         ? nonInternalReferenceClass(parsed.path, raw.target, raw.extractionMethod, raw.attributes ?? {}, pathSet, directorySet)
         : null;
-      const targetKind = nonInternalTargetKind(nonInternalClass) ?? raw.targetKind;
-      const resolvedTarget = targetKind === 'artifact' ? resolveArtifactTarget(parsed.path, raw.target, pathSet, raw.attributes ?? {}) : { target: raw.target, resolved: true };
+      const initiallyTargetKind = nonInternalTargetKind(nonInternalClass) ?? raw.targetKind;
+      const resolvedTarget = initiallyTargetKind === 'artifact' ? resolveArtifactTarget(parsed.path, raw.target, pathSet, raw.attributes ?? {}) : { target: raw.target, resolved: true };
+      const generatedCarrier = initiallyTargetKind === 'artifact' && resolvedTarget.resolved && knownGeneratedPaths.has(resolvedTarget.target);
+      const targetKind = generatedCarrier ? 'semantic-entity' : initiallyTargetKind;
       const record = {
         source: parsed.path,
         relationshipType: raw.relationshipType,
@@ -133,7 +135,9 @@ export function buildRelationships(members, parserResults) {
         evidenceKind: raw.evidenceKind,
         confidence: raw.confidence,
         resolved: resolvedTarget.resolved,
-        reasonCodes: nonInternalClass
+        reasonCodes: generatedCarrier
+          ? ['structural-parser-evidence', 'generated-observation-carrier']
+          : nonInternalClass
           ? targetKind === 'external-resource'
             ? ['structural-parser-evidence', 'expected-external-reference', `non-internal-reference-class:${nonInternalClass}`]
             : ['structural-parser-evidence', `non-internal-reference-class:${nonInternalClass}`]
@@ -169,8 +173,8 @@ function declarationsWithIdentityScope(parsed, scope) {
     .map((entry) => `${entry.kind}\0${entry.identifier}`);
 }
 
-export function reconcileInventories(members, parserResults, relationships, relationshipFindings = []) {
-  const pathSet = new Set(members.map((member) => member.path));
+export function reconcileInventories(members, parserResults, relationships, relationshipFindings = [], knownGeneratedPaths = new Set()) {
+  const pathSet = new Set([...members.map((member) => member.path), ...knownGeneratedPaths]);
   const directorySet = directorySetFor(pathSet);
   const memberByPath = new Map(members.map((member) => [member.path, member]));
   const inventoryParsers = parserResults.filter((parsed) => parsed.inventory !== null);

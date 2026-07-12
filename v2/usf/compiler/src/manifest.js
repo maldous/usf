@@ -32,10 +32,12 @@ export const ROLES = Object.freeze([
   'derived',
 ]);
 
-// The one required derivation order. Repository observations are classified
-// first, then obligations → evidence → surfaces → coverage → readiness; whole-
+// The one required derivation order. Repository structure is promoted from
+// validated observations first, source dispositions are then classified, and
+// obligations → evidence → surfaces → coverage → readiness follow; whole-
 // dataset integrity is checked last.
 export const DERIVATION_ORDER = Object.freeze([
+  'repository-structure',
   'source-dispositions',
   'obligations',
   'evidence',

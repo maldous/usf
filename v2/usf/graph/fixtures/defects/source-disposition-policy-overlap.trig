@@ -8,6 +8,7 @@ GRAPH <urn:usf:graph:fixture:sourcedispositionpolicyoverlap> {
     usf:policyDispositionBasis <urn:usf:dispositionbasis:declaredretainedinput> ;
     usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
     usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyPrecedence 10 ;
     usf:policyMatchesContentRole <urn:usf:sourcecontentrole:fixture> ;
     usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
     usf:decisionRationale "First active policy deliberately overlaps the second policy." .
@@ -17,6 +18,7 @@ GRAPH <urn:usf:graph:fixture:sourcedispositionpolicyoverlap> {
     usf:policyDispositionBasis <urn:usf:dispositionbasis:declaredretainedinput> ;
     usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
     usf:policyOutputMode <urn:usf:dispositionoutputmode:nooutput> ;
+    usf:policyPrecedence 10 ;
     usf:policyMatchesContentRole <urn:usf:sourcecontentrole:fixture> ;
     usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy true ;
     usf:decisionRationale "Second active policy deliberately overlaps the first policy." .

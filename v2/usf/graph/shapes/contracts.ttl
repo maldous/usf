@@ -35,6 +35,28 @@ shp:ContractFacetShape a sh:NodeShape ;
     sh:property [ sh:path usf:facetStatement ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
         sh:message "facetstatement: identity-only facets are forbidden" ] .
 
+shp:UIContractFacetClosureShape a sh:NodeShape ;
+    usf:canonicalName "uicontractfacetclosureshape" ;
+    sh:target [ a sh:SPARQLTarget ; sh:prefixes usf:prefixes ;
+        sh:select "SELECT ?this WHERE { ?this a usf:ContractFacet ; usf:facetKind <urn:usf:facetkind:uisemantics> . }" ] ;
+    sh:sparql [ sh:prefixes usf:prefixes ;
+        sh:message "UI facet status must agree with exact capability exposure and UI semantic-model authority" ;
+        sh:select """SELECT $this WHERE {
+          ?contract usf:declaresFacet $this . ?capability usf:hasContract ?contract ; usf:uiExposure ?exposure .
+          $this usf:facetStatus ?status .
+          BIND(EXISTS { ?capability usf:hasUISemanticModel ?model } AS ?hasModel)
+          FILTER((?status = <urn:usf:facetstatus:complete> && (?exposure != <urn:usf:uiexposureclass:uiexposed> || !?hasModel)) ||
+                 (?status = <urn:usf:facetstatus:notapplicable> && (?exposure = <urn:usf:uiexposureclass:uiexposed> || ?hasModel)) ||
+                 ?status = <urn:usf:facetstatus:gap>)
+        }""" ] ;
+    sh:sparql [ sh:prefixes usf:prefixes ;
+        sh:message "Every closed UI facet contract must preserve explicit product and acceptance nonclaims" ;
+        sh:select """SELECT $this WHERE {
+          ?contract usf:declaresFacet $this .
+          VALUES ?required { <urn:usf:nonclaim:nohumanacceptance> <urn:usf:nonclaim:nouiproductparity> <urn:usf:nonclaim:noaccessibilitycompliance> <urn:usf:nonclaim:nolaunchi18n> }
+          FILTER NOT EXISTS { ?contract usf:disclaims ?required }
+        }""" ] .
+
 shp:SourceSemanticBindingShape a sh:NodeShape ;
     usf:canonicalName "sourcesemanticbindingshape" ;
     sh:targetClass usf:SourceSemanticBinding ;

@@ -8,6 +8,7 @@ GRAPH <urn:usf:graph:fixture:sourcedispositionmissingplan> {
     usf:policyDispositionBasis <urn:usf:dispositionbasis:explicitplanlink> ;
     usf:policyDecisionState <urn:usf:dispositiondecisionstate:accepted> ;
     usf:policyOutputMode <urn:usf:dispositionoutputmode:canonicaloutput> ;
+    usf:policyPrecedence 10 ;
     usf:policyArtefactPlan <urn:usf:artefactplan:runtimecompose> ;
     usf:policyMatchesContentRole <urn:usf:sourcecontentrole:fixture> ;
     usf:isDefaultDispositionPolicy false ; usf:isActiveDispositionPolicy false ;

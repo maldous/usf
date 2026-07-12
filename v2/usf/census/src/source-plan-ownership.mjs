@@ -114,7 +114,7 @@ function dispositionFor(triples, registeredGraphs, sourceIri, observationIri, pl
   const planRequired = kinds.length === 1 && OUTPUT_DISPOSITION_KINDS.has(kinds[0]);
   if (!registeredResource(triples, registeredGraphs, dispositionIri)) findings.push('source-disposition-unregistered-graph');
   if (states.length !== 1 || states[0] !== ACCEPTED) findings.push(states.includes('urn:usf:dispositiondecisionstate:reviewrequired') ? 'source-disposition-review-required' : 'source-disposition-not-accepted');
-  if ((planRequired && plans.length < 1) || (!planRequired && plans.length > 0)) findings.push('source-disposition-plan-cardinality-invalid');
+  if ((planRequired && plans.length !== 1) || (!planRequired && plans.length !== 0)) findings.push('source-disposition-plan-cardinality-invalid');
   if (plans.some((plan) => !planIris.has(plan))) findings.push('source-disposition-plan-missing');
   if (kinds.length !== 1 || !typedSubjects(triples, TERMS.dispositionKind).includes(kinds[0])) findings.push('source-disposition-kind-invalid');
   return { accepted: findings.length === 0, findings, observationIri, dispositionIri, planRequired, planIris: plans, planIri: plans[0] ?? null, dispositionKindIri: kinds[0] ?? null, decisionStateIri: states[0] ?? null };
@@ -190,7 +190,7 @@ export function buildSourcePlanOwnership(artifacts, parserResults, observedPlans
     const planRequired = kinds.length === 1 && OUTPUT_DISPOSITION_KINDS.has(kinds[0]);
     if (!registered(dispositionIri)) findings.push('source-disposition-unregistered-graph');
     if (states.length !== 1 || states[0] !== ACCEPTED) findings.push(states.includes('urn:usf:dispositiondecisionstate:reviewrequired') ? 'source-disposition-review-required' : 'source-disposition-not-accepted');
-    if ((planRequired && plans.length < 1) || (!planRequired && plans.length > 0)) findings.push('source-disposition-plan-cardinality-invalid');
+    if ((planRequired && plans.length !== 1) || (!planRequired && plans.length !== 0)) findings.push('source-disposition-plan-cardinality-invalid');
     if (plans.some((plan) => !planIris.has(plan))) findings.push('source-disposition-plan-missing');
     if (kinds.length !== 1 || !dispositionKinds.has(kinds[0])) findings.push('source-disposition-kind-invalid');
     return { accepted: findings.length === 0, findings, observationIri, dispositionIri, planRequired, planIris: plans, planIri: plans[0] ?? null, dispositionKindIri: kinds[0] ?? null, decisionStateIri: states[0] ?? null };

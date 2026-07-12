@@ -12,7 +12,7 @@ import { parseMembers } from './parsers/registry.mjs';
 import { sourceSemanticParsers } from './parsers/source-semantic.mjs';
 import { structuredParsers } from './parsers/structured.mjs';
 import { buildRelationships, reconcileInventories } from './relationships.mjs';
-import { enumerateUniverses, universeSummary } from './universe.mjs';
+import { enumerateObservationCarrierMembers, enumerateUniverses, universeSummary } from './universe.mjs';
 import { buildWorkPackages } from './work-packages.mjs';
 
 const universeFiles = {
@@ -63,14 +63,18 @@ export function buildHardenedCensus() {
   const members = Object.values(enumeration.universes).flat().sort(compareBy(['universe', 'path']));
   const materialisations = discoverMaterialisationContracts();
   const parserResults = parseMembers(members, [...structuredParsers, ...sourceSemanticParsers]);
-  const relationshipResult = buildRelationships(members, parserResults);
-  const inventoryResult = reconcileInventories(members, parserResults, relationshipResult.relationships, relationshipResult.relationshipFindings);
+  const carrierMembers = enumerateObservationCarrierMembers();
+  const carrierPaths = new Set(carrierMembers.map((member) => member.path));
+  const carrierParserResults = parseMembers(carrierMembers, [...structuredParsers, ...sourceSemanticParsers]);
+  const graphEvidenceParserResults = [...parserResults, ...carrierParserResults];
+  const relationshipResult = buildRelationships(members, parserResults, carrierPaths);
+  const inventoryResult = reconcileInventories(members, parserResults, relationshipResult.relationships, relationshipResult.relationshipFindings, carrierPaths);
   const artifacts = classifyArtifacts(members, parserResults, relationshipResult.relationships, inventoryResult.inventories);
   const preliminaryMappingResult = buildMappings(artifacts, parserResults, relationshipResult.relationships);
-  const preliminaryArtifactPlan = buildArtifactPlan(artifacts, parserResults, preliminaryMappingResult.mappings, [], relationshipResult.relationships);
+  const preliminaryArtifactPlan = buildArtifactPlan(artifacts, graphEvidenceParserResults, preliminaryMappingResult.mappings, [], relationshipResult.relationships);
   const mappingResult = { ...preliminaryMappingResult, mappings: applySourceDispositionMappings(preliminaryMappingResult.mappings, preliminaryArtifactPlan.sourcePlanOwnership) };
   const identityCandidates = rankIdentityCandidates(artifacts, mappingResult.mappings, relationshipResult.relationships);
-  const artifactPlan = buildArtifactPlan(artifacts, parserResults, mappingResult.mappings, [], relationshipResult.relationships);
+  const artifactPlan = buildArtifactPlan(artifacts, graphEvidenceParserResults, mappingResult.mappings, [], relationshipResult.relationships);
   const missingEntirely = buildMissingEntirely(mappingResult.mappings, artifactPlan.sourcePlanOwnership);
   const packageResult = buildWorkPackages({
     artifacts,
@@ -193,5 +197,13 @@ export function writeHardenedCensus(result) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const result = buildHardenedCensus();
   writeHardenedCensus(result);
-  process.stdout.write(`${JSON.stringify({ stage: 'build', artifactCount: result.artifacts.length, workPackageCount: result.workPackages.length, blockingRelationships: result.summary.blockingRelationshipCount })}\n`);
+  process.stdout.write(`${JSON.stringify({
+    stage: 'build',
+    artifactCount: result.artifacts.length,
+    workPackageCount: result.workPackages.length,
+    requiredPrerequisiteRelationships: result.summary.requiredPrerequisiteRelationshipCount,
+    resolvedPrerequisiteRelationships: result.summary.resolvedPrerequisiteRelationshipCount,
+    satisfiedPrerequisiteRelationships: result.summary.satisfiedPrerequisiteRelationshipCount,
+    activeBlockers: result.summary.activeBlockingRelationshipCount,
+  })}\n`);
 }

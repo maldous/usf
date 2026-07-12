@@ -31,9 +31,9 @@ test('work packages own every hardened entity exactly once', () => {
   assert.equal(work.ownership.missingEntirely.length, readJsonl(path.join(censusRoot, 'missing-entirely.jsonl')).length);
 });
 
-test('work-package boundaries co-own mutually dependent unresolved path families without softening edges', () => {
+test('work-package boundaries preserve required prerequisites while proving point-in-time satisfaction', () => {
   const packages = JSON.parse(fs.readFileSync(path.join(censusRoot, 'workpackages.json'), 'utf8')).workPackages;
-  const dependencies = readJsonl(path.join(censusRoot, 'dependencies.jsonl')).filter((item) => item.status === 'blocking');
+  const dependencies = readJsonl(path.join(censusRoot, 'dependencies.jsonl')).filter((item) => item.status === 'required-prerequisite');
   const keys = new Set(packages.map((item) => item.key));
   for (const dependency of dependencies) {
     assert.ok(keys.has(dependency.source));
@@ -42,7 +42,16 @@ test('work-package boundaries co-own mutually dependent unresolved path families
     assert.notEqual(dependency.reasonCode, 'cycle-softened-by-runtime-reference');
   }
   const summary = JSON.parse(fs.readFileSync(path.join(censusRoot, 'summary.json'), 'utf8'));
-  assert.equal(summary.blockingCycleCount, 0);
+  const resolved = dependencies.filter((dependency) => dependency.resolutionStatus === 'resolved-retained');
+  const satisfied = dependencies.filter((dependency) => dependency.satisfactionStatus === 'satisfied');
+  assert.equal(summary.requiredPrerequisiteRelationshipCount, dependencies.length);
+  assert.equal(summary.resolvedPrerequisiteRelationshipCount, resolved.length);
+  assert.equal(summary.satisfiedPrerequisiteRelationshipCount, satisfied.length);
+  assert.equal(summary.blockingRelationshipCount, 0);
+  assert.equal(summary.activeBlockingRelationshipCount, dependencies.length - satisfied.length);
+  assert.ok(dependencies.every((dependency) => dependency.satisfactionBasis && dependency.satisfactionStatus === 'satisfied'));
+  assert.equal(summary.activeBlockingRelationshipCount, 0);
+  assert.equal(summary.requiredPrerequisiteCycleCount, 0);
   assert.equal(summary.unreviewedParallelismReductionCount, 0);
   assert.equal(summary.closureEvaluation, 'deferred-to-closure-command');
   assert.ok(!Object.hasOwn(summary, 'closureStatus'));

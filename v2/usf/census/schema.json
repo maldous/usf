@@ -370,6 +370,26 @@
     },
     "dependency": {
       "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "required-prerequisite"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "satisfactionStatus",
+              "satisfactionBasis"
+            ]
+          }
+        }
+      ],
       "properties": {
         "artifactEvidence": {
           "items": {
@@ -380,6 +400,10 @@
         },
         "confidence": {
           "$ref": "#/$defs/confidence"
+        },
+        "dependencyKey": {
+          "pattern": "^dependency-[a-f0-9]{64}$",
+          "type": "string"
         },
         "dependencyType": {
           "type": "string"
@@ -413,8 +437,74 @@
           "type": "array",
           "uniqueItems": true
         },
+        "resolutionBasis": {
+          "type": "object"
+        },
+        "resolutionStatus": {
+          "const": "resolved-retained"
+        },
         "reviewStatus": {
           "type": "string"
+        },
+        "satisfactionBasis": {
+          "additionalProperties": false,
+          "properties": {
+            "currentPrerequisiteArtifactCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "currentPrerequisiteArtifactHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "currentRelationshipHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "directionMatchedRelationshipHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "edgeSurvivedTransitiveReduction": {
+              "type": "boolean"
+            },
+            "exactEvidenceHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "prerequisiteEndpointExists": {
+              "type": "boolean"
+            },
+            "requiredPrerequisiteGraphAcyclic": {
+              "type": "boolean"
+            },
+            "sourceEndpointExists": {
+              "type": "boolean"
+            },
+            "structurallyProvenRelationshipHashCount": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "exactEvidenceHashCount",
+            "currentRelationshipHashCount",
+            "structurallyProvenRelationshipHashCount",
+            "directionMatchedRelationshipHashCount",
+            "currentPrerequisiteArtifactHashCount",
+            "currentPrerequisiteArtifactCount",
+            "sourceEndpointExists",
+            "prerequisiteEndpointExists",
+            "edgeSurvivedTransitiveReduction",
+            "requiredPrerequisiteGraphAcyclic"
+          ],
+          "type": "object"
+        },
+        "satisfactionStatus": {
+          "enum": [
+            "satisfied",
+            "unsatisfied"
+          ]
         },
         "semanticEvidence": {
           "items": {
@@ -432,6 +522,7 @@
         }
       },
       "required": [
+        "dependencyKey",
         "source",
         "prerequisite",
         "dependencyType",
@@ -443,7 +534,9 @@
         "proofEquivalenceEvidence",
         "migrationEvidence",
         "confidence",
-        "reviewStatus"
+        "reviewStatus",
+        "resolutionStatus",
+        "resolutionBasis"
       ],
       "type": "object"
     },

@@ -15,21 +15,48 @@ WHERE {
   ?policy a usf:SourceDispositionPolicy ; usf:isActiveDispositionPolicy true ;
       usf:isDefaultDispositionPolicy false ; usf:policyDispositionKind ?kind ;
       usf:policyDispositionBasis ?basis ; usf:policyDecisionState ?state ;
-      usf:policyOutputMode ?outputMode ; usf:decisionRationale ?rationale .
+      usf:policyOutputMode ?outputMode ; usf:policyPrecedence ?selectedPrecedence ;
+      usf:decisionRationale ?rationale .
+  FILTER(
+    EXISTS {
+      ?policy usf:policyMatchesSourceBinding ?matchedBinding .
+      ?matchedBinding usf:sourceBindingSource ?source .
+    }
+    || (
+      NOT EXISTS { ?policy usf:policyMatchesSourceBinding ?anyBinding }
+      && NOT EXISTS { ?policy usf:policyMatchesSourceIdentityDigest ?required . FILTER NOT EXISTS { ?source usf:sourceIdentityDigest ?required } }
+      && NOT EXISTS { ?policy usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
+      && NOT EXISTS { ?policy usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
+      && NOT EXISTS { ?policy usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+    )
+  )
+  FILTER NOT EXISTS {
+    ?higherPolicy a usf:SourceDispositionPolicy ;
+      usf:isActiveDispositionPolicy true ;
+      usf:isDefaultDispositionPolicy false ;
+      usf:policyPrecedence ?higherPrecedence .
+    FILTER(?higherPrecedence > ?selectedPrecedence)
+    FILTER(
+      EXISTS {
+        ?higherPolicy usf:policyMatchesSourceBinding ?higherBinding .
+        ?higherBinding usf:sourceBindingSource ?source .
+      }
+      || (
+        NOT EXISTS { ?higherPolicy usf:policyMatchesSourceBinding ?anyHigherBinding }
+        && NOT EXISTS { ?higherPolicy usf:policyMatchesSourceIdentityDigest ?required . FILTER NOT EXISTS { ?source usf:sourceIdentityDigest ?required } }
+        && NOT EXISTS { ?higherPolicy usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
+        && NOT EXISTS { ?higherPolicy usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
+        && NOT EXISTS { ?higherPolicy usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+      )
+    )
+  }
   OPTIONAL { ?policy usf:policyArtefactPlan ?policyPlan }
   OPTIONAL { ?policy usf:policyGenerationInputRole ?inputRole }
-  {
-    ?policy usf:policyMatchesSourceBinding ?binding .
+  OPTIONAL {
+    ?policy usf:policyMatchesSourceBinding ?binding ;
+      usf:policyPrecedence ?selectedPrecedence .
     ?binding usf:sourceBindingSource ?source .
     OPTIONAL { ?binding usf:sourceBindingArtefactPlan ?bindingPlan }
-  }
-  UNION
-  {
-    FILTER NOT EXISTS { ?policy usf:policyMatchesSourceBinding ?binding }
-    FILTER NOT EXISTS { ?policy usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
-    FILTER NOT EXISTS { ?policy usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
-    FILTER NOT EXISTS { ?policy usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
-    FILTER NOT EXISTS { ?policy usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
   }
   BIND(COALESCE(?bindingPlan, ?policyPlan) AS ?plan)
   BIND(SHA256(CONCAT(STR(?source), "|", STR(?observation), "|", STR(?policy))) AS ?digest)
@@ -57,18 +84,19 @@ WHERE {
       usf:decisionRationale ?rationale .
   FILTER NOT EXISTS {
     ?policy a usf:SourceDispositionPolicy ; usf:isActiveDispositionPolicy true ; usf:isDefaultDispositionPolicy false .
-    {
-      ?policy usf:policyMatchesSourceBinding ?binding .
-      ?binding usf:sourceBindingSource ?source .
-    }
-    UNION
-    {
-      FILTER NOT EXISTS { ?policy usf:policyMatchesSourceBinding ?binding }
-      FILTER NOT EXISTS { ?policy usf:policyMatchesSourceIdentityDigest ?required . ?source usf:sourceIdentityDigest ?actual . FILTER(?required != ?actual) }
-      FILTER NOT EXISTS { ?policy usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
-      FILTER NOT EXISTS { ?policy usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
-      FILTER NOT EXISTS { ?policy usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
-    }
+    FILTER(
+      EXISTS {
+        ?policy usf:policyMatchesSourceBinding ?binding .
+        ?binding usf:sourceBindingSource ?source .
+      }
+      || (
+        NOT EXISTS { ?policy usf:policyMatchesSourceBinding ?anyBinding }
+        && NOT EXISTS { ?policy usf:policyMatchesSourceIdentityDigest ?required . FILTER NOT EXISTS { ?source usf:sourceIdentityDigest ?required } }
+        && NOT EXISTS { ?policy usf:policyMatchesUniverse ?required . FILTER NOT EXISTS { ?observation usf:observedUniverse ?required } }
+        && NOT EXISTS { ?policy usf:policyMatchesContentRole ?required . FILTER NOT EXISTS { ?observation usf:observedContentRole ?required } }
+        && NOT EXISTS { ?policy usf:policyMatchesExactSemanticReference ?required . FILTER NOT EXISTS { ?observation usf:hasExactSemanticReference ?required } }
+      )
+    )
   }
   BIND(SHA256(CONCAT(STR(?source), "|", STR(?observation), "|", STR(?defaultPolicy))) AS ?digest)
   BIND(CONCAT("d", ?digest) AS ?name)

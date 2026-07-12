@@ -15,7 +15,7 @@ import { DataFactory, Parser, Writer } from 'n3';
 import * as rdfCanonize from 'rdf-canonize';
 
 import { authoredLoadList, managedGraphs } from './manifest.js';
-import { compile, CompilerError, verify as verifyDatabase } from './compiler.js';
+import { compile, CompilerError, verificationConforms, verify as verifyDatabase } from './compiler.js';
 
 const { blankNode, defaultGraph, quad } = DataFactory;
 const NQUADS = 'application/n-quads';
@@ -23,11 +23,15 @@ const REPOSITORY_BINDING_EXCLUSIONS = Object.freeze([
   'v2/usf/census/audit.json',
   'v2/usf/census/closure.json',
 ]);
+const isRepositoryBindingExcluded = (item) =>
+  REPOSITORY_BINDING_EXCLUSIONS.includes(item) || item.startsWith('v2/usf/.work/');
 const REQUIRED_ROLLBACK_FAULTS = Object.freeze([
+  'clear-graph',
   'collect-observed',
   'commit',
   'contamination',
   'derive',
+  'derived-insert',
   'integrity',
   'invalid-observed-rdf',
   'load',
@@ -201,7 +205,7 @@ export function repositoryState(repoRoot) {
   const root = realpathSync(repoRoot);
   const paths = git(root, ['ls-files', '-co', '--exclude-standard', '-z'])
     .toString('utf8').split('\0').filter(Boolean)
-    .filter((item) => !REPOSITORY_BINDING_EXCLUSIONS.includes(item)).sort();
+    .filter((item) => !isRepositoryBindingExcluded(item)).sort();
   const accumulator = createHash('sha256');
   for (const path of paths) {
     const absolute = resolve(root, path);
@@ -220,7 +224,7 @@ export function repositoryState(repoRoot) {
     const status = entry.slice(0, 2);
     const firstPath = entry.slice(3);
     const secondPath = status.includes('R') || status.includes('C') ? statusEntries[++index] : null;
-    if (REPOSITORY_BINDING_EXCLUSIONS.includes(firstPath) || (secondPath && REPOSITORY_BINDING_EXCLUSIONS.includes(secondPath))) continue;
+    if (isRepositoryBindingExcluded(firstPath) || (secondPath && isRepositoryBindingExcluded(secondPath))) continue;
     includedStatus.push(entry);
     if (secondPath) includedStatus.push(secondPath);
   }
@@ -231,7 +235,7 @@ export function repositoryState(repoRoot) {
     contentRootSha256: accumulator.digest('hex'),
     statusSha256: sha256(status),
     clean: status.length === 0,
-    excludedPaths: [...REPOSITORY_BINDING_EXCLUSIONS],
+    excludedPaths: [...REPOSITORY_BINDING_EXCLUSIONS, 'v2/usf/.work/'],
   };
 }
 
@@ -268,80 +272,144 @@ export async function observeLiveDrift({ manifest, client }) {
 function verificationProjection(report) {
   return {
     reachable: report.reachable,
-    graphCount: report.graphCount,
-    tripleCount: report.tripleCount,
+    // These compatibility field names are consumed by the independent census
+    // verifier. Their scope is explicit and is intentionally narrower than
+    // the whole-database diagnostics returned by compiler `verify`.
+    countScope: 'registered-usf-graphs',
+    graphCount: report.registeredGraphCount,
+    tripleCount: report.registeredTripleCount,
     missingGraphs: report.missingGraphs,
     unexpectedGraphs: report.unexpectedGraphs,
     validationConforms: report.validationConforms,
     integrityConforms: report.integrityConforms,
     contaminationCount: report.contaminationCount,
+    readinessCount: report.readinessCount,
   };
 }
 
 function verificationPasses(report) {
-  return report.reachable === true && report.validationConforms === true &&
-    report.integrityConforms === true && report.contaminationCount === 0 &&
-    report.missingGraphs.length === 0 && report.unexpectedGraphs.length === 0;
+  return report.countScope === 'registered-usf-graphs' && verificationConforms(report);
 }
 
 export async function proveLiveRollback({ manifest, client }) {
   const before = await liveGraphDigests(manifest, client);
   const firstAuthored = authoredLoadList(manifest)[0].graph;
+  const derivedGraphs = new Set(manifest.derived.map((entry) => entry.graph));
   const faults = [
-    ['load', () => ({ async addData() { throw new Error('injected load failure'); } })],
-    ['collect-observed', () => ({}), {
-      observedCollector: async () => { throw new Error('injected observed collection failure'); },
-    }],
-    ['invalid-observed-rdf', () => ({}), {
-      observedCollector: async ({ entry }) => ({
-        graph: entry.graph,
-        contentType: 'text/turtle',
-        content: '<urn:usf:invalid',
-        sourceCount: 1,
-        tripleCount: 1,
-        observationSetDigest: '0'.repeat(64),
-        excludedCarrierPaths: [],
-      }),
-    }],
-    ['validate-authored', () => {
-      let calls = 0;
-      return { async validateInTx(...args) { calls += 1; return calls === 1 ? false : client.validateInTx(...args); } };
-    }],
-    ['validate-observed', () => {
-      let calls = 0;
-      return { async validateInTx(...args) { calls += 1; return calls === 2 ? false : client.validateInTx(...args); } };
-    }],
-    ['derive', () => ({ async constructInTx() { throw new Error('injected derivation failure'); } })],
-    ['wrong-rule-output', () => ({ async constructInTx() { return ''; } })],
-    ['validate-derived', () => {
-      let calls = 0;
-      return { async validateInTx(...args) { calls += 1; return calls === 3 ? false : client.validateInTx(...args); } };
-    }],
-    ['integrity', () => ({
-      async selectInTx(tx, query) {
-        if (query.includes('?violation')) return [{ violation: { value: 'injected' }, subject: { value: 'urn:usf:injected' } }];
-        return client.selectInTx(tx, query);
-      },
+    ['clear-graph', (activate) => ({
+      overrides: { async clearGraph() { activate(); throw new Error('injected graph-clear failure'); } },
+      injectionPoint: 'registered-graph-clear',
     })],
-    ['contamination', () => ({
-      async selectInTx(tx, query) {
-        if (query.includes('REGEX(CONCAT')) return [{ c: { value: '1' } }];
-        return client.selectInTx(tx, query);
-      },
+    ['load', (activate) => ({
+      overrides: { async addData() { activate(); throw new Error('injected authored-load failure'); } },
+      injectionPoint: 'authored-add-data',
     })],
-    ['verify-counts', () => ({
-      async selectInTx(tx, query) {
-        if (query.includes(`GRAPH <${firstAuthored}>`) && query.includes('COUNT(*)')) return [{ c: { value: '0' } }];
-        return client.selectInTx(tx, query);
+    ['collect-observed', (activate) => ({
+      compileOptions: {
+        observedCollector: async () => { activate(); throw new Error('injected observed collection failure'); },
       },
+      injectionPoint: 'observed-collector',
     })],
-    ['commit', () => ({ async commit() { throw new Error('injected commit failure'); } })],
-    ['rollback-response', () => ({
-      async addData() { throw new Error('injected pre-commit failure'); },
-      async rollback(tx) {
-        await client.rollback(tx);
-        throw new Error('injected ambiguous rollback response');
+    ['invalid-observed-rdf', (activate) => ({
+      compileOptions: {
+        observedCollector: async ({ entry }) => {
+          activate();
+          return {
+            graph: entry.graph,
+            contentType: 'text/turtle',
+            content: '<urn:usf:invalid',
+            sourceCount: 1,
+            tripleCount: 1,
+            observationSetDigest: '0'.repeat(64),
+            excludedCarrierPaths: [],
+          };
+        },
       },
+      injectionPoint: 'observed-invalid-rdf',
+    })],
+    ['validate-authored', (activate) => {
+      let calls = 0;
+      return {
+        overrides: { async validateInTx(...args) { calls += 1; if (calls === 1) { activate(); return false; } return client.validateInTx(...args); } },
+        injectionPoint: 'authored-validation-result',
+      };
+    }],
+    ['validate-observed', (activate) => {
+      let calls = 0;
+      return {
+        overrides: { async validateInTx(...args) { calls += 1; if (calls === 2) { activate(); return false; } return client.validateInTx(...args); } },
+        injectionPoint: 'observed-validation-result',
+      };
+    }],
+    ['derive', (activate) => ({
+      overrides: { async constructInTx() { activate(); throw new Error('injected derivation failure'); } },
+      injectionPoint: 'rule-construct',
+    })],
+    ['wrong-rule-output', (activate) => ({
+      overrides: { async constructInTx() { activate(); return ''; } },
+      injectionPoint: 'rule-construct-output',
+    })],
+    ['derived-insert', (activate) => ({
+      overrides: {
+        async addData(tx, content, contentType, graph) {
+          if (derivedGraphs.has(graph)) { activate(); throw new Error('injected derived-insert failure'); }
+          return client.addData(tx, content, contentType, graph);
+        },
+      },
+      injectionPoint: 'derived-add-data',
+    })],
+    ['validate-derived', (activate) => {
+      let calls = 0;
+      return {
+        overrides: { async validateInTx(...args) { calls += 1; if (calls === 3) { activate(); return false; } return client.validateInTx(...args); } },
+        injectionPoint: 'derived-validation-result',
+      };
+    }],
+    ['integrity', (activate) => ({
+      overrides: {
+        async selectInTx(tx, query) {
+          if (query.includes('?violation')) { activate(); return [{ violation: { value: 'injected' }, subject: { value: 'urn:usf:injected' } }]; }
+          return client.selectInTx(tx, query);
+        },
+      },
+      injectionPoint: 'integrity-query-result',
+    })],
+    ['contamination', (activate) => ({
+      overrides: {
+        async selectInTx(tx, query) {
+          if (query.includes('REGEX(CONCAT')) { activate(); return [{ c: { value: '1' } }]; }
+          return client.selectInTx(tx, query);
+        },
+      },
+      injectionPoint: 'contamination-query-result',
+    })],
+    ['verify-counts', (activate) => ({
+      overrides: {
+        async selectInTx(tx, query) {
+          if (query.includes(`GRAPH <${firstAuthored}>`) && query.includes('COUNT(*)')) { activate(); return [{ c: { value: '0' } }]; }
+          return client.selectInTx(tx, query);
+        },
+      },
+      injectionPoint: 'required-resource-count',
+    })],
+    ['commit', (activate) => ({
+      // The official SDK exposes commit as one promise. Safely proving an
+      // error after server commit would risk committing the fault run, so this
+      // injection is deliberately before SDK dispatch and the limitation is
+      // retained in the signed machine output below.
+      overrides: { async commit() { activate(); throw new Error('injected pre-dispatch commit failure'); } },
+      injectionPoint: 'before-official-sdk-commit-dispatch',
+    })],
+    ['rollback-response', (activate) => ({
+      overrides: {
+        async addData() { throw new Error('injected pre-commit failure'); },
+        async rollback(tx) {
+          activate();
+          await client.rollback(tx);
+          throw new Error('injected ambiguous rollback response');
+        },
+      },
+      injectionPoint: 'after-official-sdk-rollback-dispatch',
     })],
   ];
   const configuredFaults = faults.map(([name]) => name).sort();
@@ -352,13 +420,14 @@ export async function proveLiveRollback({ manifest, client }) {
     });
   }
   const results = [];
-  for (const [name, buildFault, compileOptions = {}] of faults) {
+  for (const [name, buildFault] of faults) {
     let rollbacks = 0;
-    const injected = buildFault();
-    const injectedRollback = injected.rollback;
+    let activationCount = 0;
+    const injected = buildFault(() => { activationCount += 1; });
+    const injectedRollback = injected.overrides?.rollback;
     const faultClient = {
       ...client,
-      ...injected,
+      ...injected.overrides,
       async rollback(tx) {
         rollbacks += 1;
         if (injectedRollback) return injectedRollback(tx);
@@ -367,21 +436,39 @@ export async function proveLiveRollback({ manifest, client }) {
     };
     let observedError = null;
     try {
-      await compile({ manifest, client: faultClient, ...compileOptions });
+      await compile({ manifest, client: faultClient, ...(injected.compileOptions ?? {}) });
     } catch (error) {
       observedError = error;
     }
-    if (!observedError || rollbacks !== 1) {
-      throw new CompilerError(`rollback fault was not proven: ${name}`, { phase: 'attest:rollback', failures: [{ name, rollbacks }] });
+    if (!observedError || rollbacks !== 1 || activationCount < 1) {
+      throw new CompilerError(`rollback fault was not proven: ${name}`, {
+        phase: 'attest:rollback', failures: [{ name, rollbacks, activationCount }],
+      });
     }
-    results.push({ name, rollbackCount: rollbacks, errorPhase: observedError.phase ?? 'compile' });
+    results.push({
+      name,
+      injectionPoint: injected.injectionPoint,
+      activationCount,
+      rollbackCount: rollbacks,
+      errorPhase: observedError.phase ?? 'compile',
+    });
   }
   const after = await liveGraphDigests(manifest, client);
   const digestsUnchanged = stableJson(before) === stableJson(after);
   if (!digestsUnchanged) throw new CompilerError('live graph drift followed rollback fault proof', {
     phase: 'attest:rollback', failures: compareGraphDigests(before, after),
   });
-  return { ok: true, faultCount: results.length, faults: results, digestsUnchanged };
+  return {
+    ok: true,
+    faultCount: results.length,
+    faults: results,
+    digestsUnchanged,
+    commitOutcomeCoverage: {
+      mode: 'pre-dispatch-only',
+      ambiguousPostDispatchOutcomeProven: false,
+      limitation: 'official SDK commit is a single promise; simulating a lost response after server commit would risk persisting the fault transaction',
+    },
+  };
 }
 
 export async function createLiveAttestation({
@@ -484,7 +571,11 @@ export async function verifyLiveAttestation({
   const rollbackVerified = rollback?.ok === true && rollback?.digestsUnchanged === true &&
     rollback?.faultCount === REQUIRED_ROLLBACK_FAULTS.length &&
     stableJson((rollback?.faults ?? []).map((item) => item.name).sort()) === stableJson(REQUIRED_ROLLBACK_FAULTS) &&
-    (rollback?.faults ?? []).every((item) => item.rollbackCount === 1 && typeof item.errorPhase === 'string');
+    (rollback?.faults ?? []).every((item) => item.rollbackCount === 1 && item.activationCount > 0 &&
+      typeof item.injectionPoint === 'string' && item.injectionPoint.length > 0 && typeof item.errorPhase === 'string') &&
+    rollback?.commitOutcomeCoverage?.mode === 'pre-dispatch-only' &&
+    rollback?.commitOutcomeCoverage?.ambiguousPostDispatchOutcomeProven === false &&
+    typeof rollback?.commitOutcomeCoverage?.limitation === 'string';
   const ok = signatureVerified && trustVerified && repositoryVerified && sourceVerified &&
     databaseVerified && validationVerified && rollbackVerified && drift.conforms;
   return {
@@ -500,3 +591,9 @@ export async function verifyLiveAttestation({
     comparison: drift.comparison,
   };
 }
+
+export const liveAttestationInternals = Object.freeze({
+  verificationProjection,
+  verificationPasses,
+  requiredRollbackFaults: REQUIRED_ROLLBACK_FAULTS,
+});

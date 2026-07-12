@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { canonicalJson, framedDigest } from '../src/canonical.mjs';
+import { prerequisiteDependencySatisfactionStatus, dependencyKeyFor, dependencyResolutionBasis } from '../src/dependency-resolution.mjs';
 import {
   assertUnique,
   rejectFinalFallback,
   validateArtifact,
   validateClassificationContract,
+  validateDependency,
   validateInventory,
   validateRelationship,
   validateRelativePath,
@@ -76,6 +78,32 @@ test('malformed relationships are rejected', () => {
 
 test('unsupported inventory records are rejected', () => {
   assert.throws(() => validateInventory({ path: 'a.json', inventoryKind: 'mystery', declarations: [], relationships: [], findings: [], confidence }), /invalid inventoryKinds/);
+});
+
+test('dependencies require deterministic resolved-retained evidence persistence', () => {
+  const record = {
+    source: 'work.a', prerequisite: 'work.b', dependencyType: 'canonical-artifact-input', status: 'required-prerequisite', reasonCode: 'canonical-artifact-input',
+    semanticEvidence: [], artifactEvidence: [], repositoryRelationshipEvidence: ['a'.repeat(64)], proofEquivalenceEvidence: [], migrationEvidence: [],
+    confidence, reviewStatus: 'machine-reviewed', resolutionStatus: 'resolved-retained',
+  };
+  record.dependencyKey = dependencyKeyFor(record);
+  record.resolutionBasis = dependencyResolutionBasis(record);
+  record.satisfactionBasis = {
+    exactEvidenceHashCount: 1, currentRelationshipHashCount: 1, structurallyProvenRelationshipHashCount: 1,
+    directionMatchedRelationshipHashCount: 1, currentPrerequisiteArtifactHashCount: 1, currentPrerequisiteArtifactCount: 1,
+    sourceEndpointExists: true, prerequisiteEndpointExists: true, edgeSurvivedTransitiveReduction: true, requiredPrerequisiteGraphAcyclic: true,
+  };
+  record.satisfactionStatus = prerequisiteDependencySatisfactionStatus(record.satisfactionBasis);
+  validateDependency(record);
+  validateDependency(JSON.parse(canonicalJson(record)));
+  record.dependencyKey = 'dependency-invalid';
+  assert.throws(() => validateDependency(record), /dependency key mismatch/);
+  record.dependencyKey = dependencyKeyFor(record);
+  delete record.resolutionStatus;
+  assert.throws(() => validateDependency(record), /missing resolutionStatus/);
+  record.resolutionStatus = 'resolved-retained';
+  record.satisfactionBasis.currentRelationshipHashCount = 0;
+  assert.throws(() => validateDependency(record), /satisfaction basis mismatch/);
 });
 
 test('canonical ordering and framed hashing are deterministic and unambiguous', () => {

@@ -13,7 +13,7 @@ import { writeFileSync } from 'node:fs';
 import { loadConfig, describeConfig } from './config.js';
 import { loadManifest } from './manifest.js';
 import { createClient } from './stardog.js';
-import { checkLocal, compile, verify, CompilerError } from './compiler.js';
+import { checkLocal, compile, verify, verificationConforms, CompilerError } from './compiler.js';
 import { loadAuthorityDataset } from './authority-dataset.js';
 import { buildGenerationPlan } from './generation-plan.js';
 import { collectObservedEntry } from './source-observer.js';
@@ -159,14 +159,7 @@ async function main() {
     const client = createClient(config);
     const report = await verify({ manifest, client });
     emit({ command, target: describeConfig(config), ...report });
-    const conformant =
-      report.reachable &&
-      report.validationConforms === true &&
-      report.integrityConforms === true &&
-      report.contaminationCount === 0 &&
-      report.missingGraphs.length === 0 &&
-      report.unexpectedGraphs.length === 0;
-    return conformant ? 0 : 1;
+    return verificationConforms(report) ? 0 : 1;
   }
 
   process.stderr.write('usage: cli.js <check|plan|snapshot-observed|snapshot-derived|generate|verify-output|compile|verify|drift-live|attest-live|verify-live-attestation>\n');

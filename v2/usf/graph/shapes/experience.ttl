@@ -52,6 +52,7 @@ shape:SurfaceShape a sh:NodeShape ;
         <urn:usf:surfacekind:e2ejourney> <urn:usf:surfacekind:documentation>
     ) ] ;
     sh:property [ sh:path usf:rendersViewModel ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:ViewModel ] ;
+    sh:property [ sh:path usf:uiRequiresPermission ; sh:minCount 1 ; sh:class usf:Permission ] ;
     sh:sparql [
         sh:message "Web-route and query-view surfaces require one route." ;
         sh:prefixes usf:prefixes ;
@@ -60,6 +61,16 @@ shape:SurfaceShape a sh:NodeShape ;
               $this usf:surfaceKind ?kind .
               FILTER(?kind IN (<urn:usf:surfacekind:webroute>, <urn:usf:surfacekind:queryview>))
               FILTER NOT EXISTS { $this usf:surfaceRoute ?route }
+            }
+        """
+    ] ;
+    sh:sparql [
+        sh:message "Query-view surfaces require exact load-operation and interface bindings on their view model." ;
+        sh:prefixes usf:prefixes ;
+        sh:select """
+            SELECT $this WHERE {
+              $this usf:surfaceKind <urn:usf:surfacekind:queryview> ; usf:rendersViewModel ?model .
+              FILTER NOT EXISTS { ?model usf:loadsOperation ?operation ; usf:bindsInterface ?interface . ?interface usf:hasOperation ?operation }
             }
         """
     ] .
@@ -86,6 +97,7 @@ shape:RouteShape a sh:NodeShape ;
 shape:FormShape a sh:NodeShape ;
     sh:targetClass usf:Form ;
     sh:property [ sh:path usf:hasField ; sh:minCount 1 ; sh:class usf:FormField ] ;
+    sh:property [ sh:path usf:submitsOperation ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Operation ] ;
     sh:sparql [
         sh:message "Field names and field order must be unique within a form." ;
         sh:prefixes usf:prefixes ;
@@ -96,6 +108,16 @@ shape:FormShape a sh:NodeShape ;
               { ?left usf:fieldName ?v . ?right usf:fieldName ?v }
               UNION
               { ?left usf:fieldOrder ?v . ?right usf:fieldOrder ?v }
+            }
+        """
+    ] ;
+    sh:sparql [
+        sh:message "Each form requires a framework-neutral action component in its rendered view model." ;
+        sh:prefixes usf:prefixes ;
+        sh:select """
+            SELECT $this WHERE {
+              $this usf:rendersViewModel ?model .
+              FILTER NOT EXISTS { ?model usf:hasComponent ?component . ?component usf:componentKind <urn:usf:componentkind:action> }
             }
         """
     ] .

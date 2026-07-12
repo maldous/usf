@@ -135,7 +135,18 @@ export async function validateHardenedOutputs() {
   if (lineage.length === 0 || new Set(lineage.map((record) => record.baselinePackageKey)).size !== lineage.length) throw new Error('baseline package lineage incomplete');
   const dependencies = parsedJsonl['dependencies.jsonl'];
   dependencies.forEach(validateDependency);
+  assertUnique(dependencies, 'dependencyKey');
   if (dependencies.some((record) => !packageKeys.has(record.source) || !packageKeys.has(record.prerequisite))) throw new Error('dependency endpoint missing');
+  const requiredPrerequisites = dependencies.filter((record) => record.status === 'required-prerequisite');
+  const dependencyCounts = {
+    requiredPrerequisiteRelationshipCount: requiredPrerequisites.length,
+    resolvedPrerequisiteRelationshipCount: requiredPrerequisites.filter((record) => record.resolutionStatus === 'resolved-retained').length,
+    satisfiedPrerequisiteRelationshipCount: requiredPrerequisites.filter((record) => record.satisfactionStatus === 'satisfied').length,
+    blockingRelationshipCount: 0,
+    activeBlockingRelationshipCount: requiredPrerequisites.filter((record) => record.satisfactionStatus !== 'satisfied').length,
+  };
+  for (const [field, count] of Object.entries(dependencyCounts)) if (parsedJson['summary.json'][field] !== count) throw new Error(`dependency summary count mismatch: ${field}`);
+  if (dependencyCounts.activeBlockingRelationshipCount !== 0) throw new Error('an unsatisfied required prerequisite remains active as a blocker');
   const dependencyLineage = parsedJsonl['dependency-lineage.jsonl'];
   if (new Set(dependencyLineage.map((record) => `${record.baselineSource}\0${record.baselinePrerequisite}`)).size !== dependencyLineage.length) throw new Error('baseline dependency lineage contains duplicates');
   return {

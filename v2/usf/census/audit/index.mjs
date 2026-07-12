@@ -3,11 +3,26 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Parser as N3Parser } from 'n3';
+import { parse as parseYaml } from 'yaml';
 import { readIndependentParserEvidence } from './parser-evidence.mjs';
+import { auditRepositoryStructureMaterialization } from './repository-structure.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CENSUS_ROOT = path.resolve(HERE, '..');
 const REPOSITORY_ROOT = path.resolve(CENSUS_ROOT, '../../..');
+
+function independentCarrierPaths(repositoryRoot = REPOSITORY_ROOT) {
+  const manifest = parseYaml(fs.readFileSync(path.join(repositoryRoot, 'v2/usf/graph/manifest.yaml'), 'utf8'));
+  const rows = [...(manifest?.observedGraphs ?? []), ...(manifest?.derivedGraphs ?? [])];
+  const paths = rows.map((row) => {
+    if (!row || typeof row.file !== 'string' || !row.file || path.posix.isAbsolute(row.file) || row.file.includes('\\') || row.file.split('/').includes('..') || path.posix.normalize(row.file) !== row.file) throw new Error('invalid independent graph carrier path');
+    return `v2/usf/graph/${row.file}`;
+  });
+  if (new Set(paths).size !== paths.length) throw new Error('duplicate independent graph carrier path');
+  return new Set(paths);
+}
+
 const universeFiles = {
   'repository-output': 'repository-universe.jsonl',
   'v2-graph-authority': 'v2-graph-universe.jsonl',
@@ -53,21 +68,47 @@ function exists(root, relative) { return fs.existsSync(path.join(root, relative)
 function loadJson(root, relative) { return exists(root, relative) ? readJson(path.join(root, relative)) : null; }
 function loadJsonl(root, relative) { return exists(root, relative) ? readJsonl(path.join(root, relative)) : null; }
 
-function universeFor(relative) {
+function universeFor(relative, carrierPaths = new Set()) {
   if (relative.startsWith('v2/usf/census/')) return null;
+  if (relative.startsWith('v2/usf/.work/')) return null;
+  if (carrierPaths.has(relative)) return null;
   if (relative.startsWith('v2/usf/graph/')) return 'v2-graph-authority';
   if (relative.startsWith('v2/usf/compiler/')) return 'v2-compiler-implementation';
   if (relative.startsWith('v2/')) return 'v2-support-provisioning';
   return 'repository-output';
 }
 
-function listGitVisible(root) {
+function listGitVisible(root, carrierPaths = independentCarrierPaths(root)) {
   const run = (args) => execFileSync('git', args, { cwd: root, encoding: 'buffer', maxBuffer: 128 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }).toString('utf8').split('\0').filter(Boolean);
   const tracked = run(['ls-files', '--cached', '-z']);
   const untracked = run(['ls-files', '--others', '--exclude-standard', '-z']);
-  const visibleUntracked = untracked.filter((item) => universeFor(item) !== 'v2-support-provisioning');
+  const visibleUntracked = untracked.filter((item) => universeFor(item, carrierPaths) !== 'v2-support-provisioning');
   return [...new Set([...tracked, ...visibleUntracked])]
-    .filter((item) => !item.startsWith('.git/') && universeFor(item) !== null).sort();
+    .filter((item) => !item.startsWith('.git/') && universeFor(item, carrierPaths) !== null).sort();
+}
+
+function independentRdfTerm(term) {
+  if (!term) return null;
+  if (term.termType === 'NamedNode') return term.value;
+  if (term.termType === 'BlankNode') return `_:${term.value}`;
+  if (term.termType === 'DefaultGraph') return null;
+  if (term.termType === 'Literal') {
+    const suffix = term.language ? `@${term.language}` : term.datatype?.value ? `^^${term.datatype.value}` : '';
+    return `${JSON.stringify(term.value)}${suffix}`;
+  }
+  return String(term.value ?? term.id ?? term);
+}
+
+function readIndependentCarrierTriples(repositoryRoot = REPOSITORY_ROOT) {
+  return [...independentCarrierPaths(repositoryRoot)].sort().flatMap((relative) => {
+    const format = relative.endsWith('.ttl') ? 'text/turtle' : 'application/trig';
+    const quads = new N3Parser({ format }).parse(fs.readFileSync(path.join(repositoryRoot, relative), 'utf8'));
+    return quads.map((quad) => ({
+      sourcePath: relative,
+      subject: independentRdfTerm(quad.subject), predicate: independentRdfTerm(quad.predicate),
+      object: independentRdfTerm(quad.object), graph: independentRdfTerm(quad.graph),
+    }));
+  });
 }
 
 function physicalDigest(root, relative) {
@@ -78,7 +119,7 @@ function physicalDigest(root, relative) {
   return sha256(fs.readFileSync(absolute));
 }
 
-export function auditUniverses({ recordsByUniverse, summary, repositoryRoot, physicalPaths = null }) {
+export function auditUniverses({ recordsByUniverse, summary, repositoryRoot, physicalPaths = null, carrierPaths = new Set() }) {
   const findings = [];
   const all = [];
   for (const universe of Object.keys(universeFiles)) {
@@ -88,7 +129,7 @@ export function auditUniverses({ recordsByUniverse, summary, repositoryRoot, phy
     if (JSON.stringify(records.map((entry) => entry.path)) !== JSON.stringify(sorted.map((entry) => entry.path))) findings.push(`nondeterministic-order:${universe}`);
     for (const record of records) {
       if (record.universe !== universe) findings.push(`wrong-universe-field:${record.path}`);
-      if (universeFor(record.path) !== universe) findings.push(`wrong-membership:${record.path}`);
+      if (universeFor(record.path, carrierPaths) !== universe) findings.push(`wrong-membership:${record.path}`);
       if (all.some((entry) => entry.path === record.path)) findings.push(`overlapping-path:${record.path}`);
       all.push(record);
       if (repositoryRoot && fs.existsSync(path.join(repositoryRoot, record.path))) {
@@ -258,9 +299,9 @@ function sourceTyped(triples, classIri) {
   return [...new Set(triples.filter((triple) => triple.predicate === SOURCE_RDF_TYPE && triple.object === classIri && !triple.subject.startsWith('_:')).map((triple) => triple.subject))].sort();
 }
 
-export function auditSourceDispositionOwnership(artifacts, parserResults, replacementGroups) {
+export function auditSourceDispositionOwnership(artifacts, parserResults, replacementGroups, carrierTriples = []) {
   if (![artifacts, parserResults, replacementGroups].every(Array.isArray)) return incomplete('source-disposition-ownership', 'missing-source-disposition-input');
-  const triples = sourceTriples(parserResults);
+  const triples = [...sourceTriples(parserResults), ...carrierTriples];
   const objectIndex = new Map(); const resourceGraphIndex = new Map();
   for (const triple of triples) {
     const key = `${triple.subject}\0${triple.predicate}`;
@@ -334,7 +375,7 @@ export function auditSourceDispositionOwnership(artifacts, parserResults, replac
     if (states.length !== 1 || states[0] !== ACCEPTED_DISPOSITION) artifactFindings.push(states.includes('urn:usf:dispositiondecisionstate:reviewrequired') ? 'source-disposition-review-required' : 'source-disposition-not-accepted');
     if (kinds.length !== 1 || !typed.kind.has(kinds[0])) artifactFindings.push('source-disposition-kind-invalid');
     const planRequired = kinds.length === 1 && OUTPUT_KINDS.has(kinds[0]);
-    if ((planRequired && assignedPlans.length < 1) || (!planRequired && assignedPlans.length > 0)) artifactFindings.push('source-disposition-plan-cardinality-invalid');
+    if ((planRequired && assignedPlans.length !== 1) || (!planRequired && assignedPlans.length !== 0)) artifactFindings.push('source-disposition-plan-cardinality-invalid');
     if (assignedPlans.some((plan) => !plans.has(plan))) artifactFindings.push('source-disposition-plan-missing');
     if (artifactFindings.length === 0) {
       acceptedCount += 1;
@@ -414,9 +455,99 @@ export function auditWorkPackages(canonicalArtifacts, workPackages) {
   return outcome('work-packages', findings, { workPackageCount: workPackages.length, semanticLayerPackageOwnerCount: semanticLayerPackageOwners.size });
 }
 
-export function auditDependencies(workPackages, dependencies) {
+const DEPENDENCY_EVIDENCE_FAMILIES = Object.freeze([
+  ['artifact', 'artifactEvidence'], ['migration', 'migrationEvidence'], ['proof-equivalence', 'proofEquivalenceEvidence'],
+  ['repository-relationship', 'repositoryRelationshipEvidence'], ['semantic', 'semanticEvidence']
+]);
+
+function independentDependencyKey(edge) {
+  return `dependency-${sha256(`${edge.source}\0${edge.prerequisite}\0${edge.dependencyType}`)}`;
+}
+
+function independentDependencyBasis(edge) {
+  return {
+    direction: 'source-requires-prerequisite',
+    endpointOwnership: 'primary-work-package',
+    evidenceFamilies: DEPENDENCY_EVIDENCE_FAMILIES.filter(([, field]) => Array.isArray(edge[field]) && edge[field].length).map(([family]) => family),
+    evidenceCounts: Object.fromEntries(DEPENDENCY_EVIDENCE_FAMILIES.map(([family, field]) => [family, Array.isArray(edge[field]) ? edge[field].length : 0])),
+    cycleCheck: edge.status === 'required-prerequisite' ? 'required-prerequisite-dag-verified' : 'not-applicable-coordination',
+    transitiveReduction: edge.status === 'required-prerequisite' ? 'retained-direct-edge' : 'not-applicable-coordination',
+    reviewBasis: 'machine-reviewed',
+  };
+}
+
+function independentPrerequisiteSatisfactionBasis(edge, { keys, artifactByPath, artifactOwners, relationshipByHash, retained, acyclic }) {
+  let currentRelationshipHashCount = 0;
+  let structurallyProvenRelationshipHashCount = 0;
+  let directionMatchedRelationshipHashCount = 0;
+  let currentPrerequisiteArtifactHashCount = 0;
+  const currentPrerequisiteArtifacts = new Set();
+  for (const evidenceId of edge.repositoryRelationshipEvidence ?? []) {
+    const matches = relationshipByHash.get(evidenceId) ?? [];
+    if (matches.length !== 1) continue;
+    currentRelationshipHashCount += 1;
+    const relation = matches[0];
+    const resolvedStructural = relation.resolved === true && relation.targetKind === 'artifact' && relation.evidenceKind === 'structurally-proven';
+    if (resolvedStructural) structurallyProvenRelationshipHashCount += 1;
+    const sourceArtifact = artifactByPath.get(relation.source);
+    const prerequisiteArtifact = artifactByPath.get(relation.target);
+    if (resolvedStructural && artifactOwners.get(sourceArtifact?.artifactKey) === edge.source && artifactOwners.get(prerequisiteArtifact?.artifactKey) === edge.prerequisite) directionMatchedRelationshipHashCount += 1;
+    if (prerequisiteArtifact && prerequisiteArtifact.sourceState !== 'deleted' && /^[a-f0-9]{64}$/.test(prerequisiteArtifact.contentDigest ?? '')) {
+      currentPrerequisiteArtifactHashCount += 1;
+      currentPrerequisiteArtifacts.add(prerequisiteArtifact.artifactKey);
+    }
+  }
+  return {
+    exactEvidenceHashCount: (edge.repositoryRelationshipEvidence ?? []).length,
+    currentRelationshipHashCount,
+    structurallyProvenRelationshipHashCount,
+    directionMatchedRelationshipHashCount,
+    currentPrerequisiteArtifactHashCount,
+    currentPrerequisiteArtifactCount: currentPrerequisiteArtifacts.size,
+    sourceEndpointExists: keys.has(edge.source),
+    prerequisiteEndpointExists: keys.has(edge.prerequisite),
+    edgeSurvivedTransitiveReduction: retained,
+    requiredPrerequisiteGraphAcyclic: acyclic,
+  };
+}
+
+function independentSatisfactionStatus(basis) {
+  const exact = basis.exactEvidenceHashCount;
+  return exact > 0 && basis.currentRelationshipHashCount === exact && basis.structurallyProvenRelationshipHashCount === exact &&
+    basis.directionMatchedRelationshipHashCount === exact && basis.currentPrerequisiteArtifactHashCount === exact &&
+    basis.currentPrerequisiteArtifactCount > 0 && basis.sourceEndpointExists && basis.prerequisiteEndpointExists &&
+    basis.edgeSurvivedTransitiveReduction && basis.requiredPrerequisiteGraphAcyclic ? 'satisfied' : 'unsatisfied';
+}
+
+function hasAlternativePrerequisitePath(edges, excluded) {
+  const queue = [excluded.source]; const seen = new Set();
+  while (queue.length) {
+    const node = queue.shift();
+    if (node === excluded.prerequisite) return true;
+    if (seen.has(node)) continue;
+    seen.add(node);
+    for (const edge of edges) if (edge !== excluded && edge.source === node && !seen.has(edge.prerequisite)) queue.push(edge.prerequisite);
+  }
+  return false;
+}
+
+export function auditDependencies(workPackages, dependencies, { artifacts = null, relationships = null, canonicalArtifacts = null, replacementGroups = null, summary = null } = {}) {
   if (![workPackages, dependencies].every(Array.isArray)) return incomplete('dependencies', 'missing-dependency-input');
   const findings = []; const keys = new Set(workPackages.map((entry) => entry.key)); const graph = new Map([...keys].map((key) => [key, []])); const seen = new Set();
+  const packageByKey = new Map(workPackages.map((entry) => [entry.key, entry]));
+  const artifactByPath = new Map((artifacts ?? []).map((entry) => [entry.path, entry]));
+  const artifactOwners = new Map(workPackages.flatMap((entry) => (entry.artifactKeys ?? []).map((key) => [key, entry.key])));
+  const canonicalOwners = new Map(workPackages.flatMap((entry) => (entry.canonicalArtifactKeys ?? []).map((key) => [key, entry.key])));
+  const layerOwners = new Map(workPackages.flatMap((entry) => (entry.ownedSemanticLayers ?? []).map((key) => [key, entry.key])));
+  const gateOwners = new Map(workPackages.flatMap((entry) => (entry.equivalenceGates ?? []).map((gate) => [gate.gateKey ?? gate, entry.key])));
+  const canonicalByKey = new Map((canonicalArtifacts ?? []).map((entry) => [entry.canonicalArtifactKey, entry]));
+  const replacementByKey = new Map((replacementGroups ?? []).map((entry) => [entry.groupKey, entry]));
+  const relationshipByHash = new Map();
+  for (const relation of relationships ?? []) {
+    const key = sha256(`${relation.source}\0${relation.relationshipType}\0${relation.target}`);
+    if (!relationshipByHash.has(key)) relationshipByHash.set(key, []);
+    relationshipByHash.get(key).push(relation);
+  }
   for (const edge of dependencies) {
     const edgeKey = `${edge.source}\0${edge.prerequisite}\0${edge.dependencyType}`;
     if (seen.has(edgeKey)) findings.push(`duplicate-edge:${edge.source}:${edge.prerequisite}`); seen.add(edgeKey);
@@ -424,15 +555,62 @@ export function auditDependencies(workPackages, dependencies) {
     if (edge.source === edge.prerequisite) findings.push(`self-cycle:${edge.source}`);
     const evidence = ['semanticEvidence', 'artifactEvidence', 'repositoryRelationshipEvidence', 'proofEquivalenceEvidence', 'migrationEvidence'].flatMap((field) => edge[field] ?? []);
     if (!evidence.length) findings.push(`edge-without-evidence:${edge.source}:${edge.prerequisite}`);
-    if (edge.status === 'blocking') graph.get(edge.source)?.push(edge.prerequisite);
+    if (edge.dependencyKey !== independentDependencyKey(edge)) findings.push(`dependency-key-invalid:${edge.source}:${edge.prerequisite}`);
+    if (edge.resolutionStatus !== 'resolved-retained' || edge.reviewStatus !== 'machine-reviewed') findings.push(`dependency-not-resolved-retained:${edge.source}:${edge.prerequisite}`);
+    if (canonicalJson(edge.resolutionBasis) !== canonicalJson(independentDependencyBasis(edge))) findings.push(`dependency-resolution-basis-invalid:${edge.source}:${edge.prerequisite}`);
+    for (const evidenceId of edge.repositoryRelationshipEvidence ?? []) {
+      const matches = relationshipByHash.get(evidenceId) ?? [];
+      const valid = matches.some((relation) => {
+        const sourceArtifact = artifactByPath.get(relation.source);
+        const prerequisiteArtifact = artifactByPath.get(relation.target);
+        return relation.resolved === true && relation.targetKind === 'artifact' && relation.evidenceKind === 'structurally-proven' &&
+          artifactOwners.get(sourceArtifact?.artifactKey) === edge.source && artifactOwners.get(prerequisiteArtifact?.artifactKey) === edge.prerequisite;
+      });
+      if (!valid) findings.push(`dependency-relationship-evidence-invalid:${evidenceId}`);
+    }
+    for (const layer of edge.semanticEvidence ?? []) if (!packageByKey.get(edge.source)?.requiredSemanticLayers?.includes(layer) || layerOwners.get(layer) !== edge.prerequisite) findings.push(`dependency-semantic-evidence-invalid:${layer}`);
+    for (const evidenceId of edge.artifactEvidence ?? []) {
+      const canonicalKey = [...canonicalByKey.keys()].find((key) => evidenceId.startsWith(`${key}:`));
+      const dependencyPath = canonicalKey ? evidenceId.slice(canonicalKey.length + 1) : null;
+      const dependencyArtifact = dependencyPath ? artifactByPath.get(dependencyPath) : null;
+      if (!canonicalKey || canonicalOwners.get(canonicalKey) !== edge.source || !canonicalByKey.get(canonicalKey)?.artifactDependencies?.includes(dependencyPath) || artifactOwners.get(dependencyArtifact?.artifactKey) !== edge.prerequisite) findings.push(`dependency-artifact-evidence-invalid:${evidenceId}`);
+    }
+    for (const evidenceId of edge.proofEquivalenceEvidence ?? []) if (gateOwners.get(evidenceId) !== edge.prerequisite) findings.push(`dependency-proof-evidence-invalid:${evidenceId}`);
+    for (const evidenceId of edge.migrationEvidence ?? []) {
+      const group = replacementByKey.get(evidenceId);
+      const groupPackages = [...new Set([...(group?.currentArtifacts ?? []).map((key) => artifactOwners.get(key)), ...(group?.canonicalArtifacts ?? []).map((key) => canonicalOwners.get(key))].filter(Boolean))].sort();
+      if (!group || groupPackages[0] !== edge.prerequisite || !groupPackages.slice(1).includes(edge.source)) findings.push(`dependency-migration-evidence-invalid:${evidenceId}`);
+    }
+    if (edge.status === 'required-prerequisite') graph.get(edge.source)?.push(edge.prerequisite);
   }
-  const visiting = new Set(); const visited = new Set();
-  const visit = (node) => { if (visiting.has(node)) { findings.push(`dependency-cycle:${node}`); return; } if (visited.has(node)) return; visiting.add(node); for (const next of graph.get(node) ?? []) visit(next); visiting.delete(node); visited.add(node); };
+  const visiting = new Set(); const visited = new Set(); let cyclic = false;
+  const visit = (node) => { if (visiting.has(node)) { cyclic = true; findings.push(`dependency-cycle:${node}`); return; } if (visited.has(node)) return; visiting.add(node); for (const next of graph.get(node) ?? []) visit(next); visiting.delete(node); visited.add(node); };
   for (const key of keys) visit(key);
-  if (!findings.some((finding) => finding.startsWith('dependency-cycle:'))) {
+  if (!cyclic) {
     for (const [source, direct] of graph) for (const intermediate of direct) for (const target of graph.get(intermediate) ?? []) if (direct.includes(target)) findings.push(`transitive-edge-not-reduced:${source}:${target}`);
   }
-  return outcome('dependencies', findings, { dependencyCount: dependencies.length });
+  const prerequisites = dependencies.filter((edge) => edge.status === 'required-prerequisite');
+  let independentlySatisfied = 0;
+  for (const edge of prerequisites) {
+    const basis = independentPrerequisiteSatisfactionBasis(edge, {
+      keys, artifactByPath, artifactOwners, relationshipByHash,
+      retained: !hasAlternativePrerequisitePath(prerequisites, edge), acyclic: !cyclic,
+    });
+    const status = independentSatisfactionStatus(basis);
+    if (canonicalJson(edge.satisfactionBasis) !== canonicalJson(basis)) findings.push(`dependency-satisfaction-basis-invalid:${edge.source}:${edge.prerequisite}`);
+    if (edge.satisfactionStatus !== status) findings.push(`dependency-satisfaction-status-invalid:${edge.source}:${edge.prerequisite}`);
+    if (status === 'satisfied') independentlySatisfied += 1;
+    else findings.push(`active-unsatisfied-required-prerequisite:${edge.source}:${edge.prerequisite}`);
+  }
+  const counts = {
+    requiredPrerequisiteRelationshipCount: prerequisites.length,
+    resolvedPrerequisiteRelationshipCount: prerequisites.filter((edge) => edge.resolutionStatus === 'resolved-retained').length,
+    satisfiedPrerequisiteRelationshipCount: independentlySatisfied,
+    blockingRelationshipCount: 0,
+    activeBlockingRelationshipCount: prerequisites.length - independentlySatisfied,
+  };
+  if (summary) for (const [field, count] of Object.entries(counts)) if (summary[field] !== count) findings.push(`dependency-summary-count-invalid:${field}:${summary[field]}/${count}`);
+  return outcome('dependencies', findings, { dependencyCount: dependencies.length, ...counts });
 }
 
 export function auditDeterminism(outputs) {
@@ -484,8 +662,9 @@ function snapshot(root, paths) {
 }
 
 export async function runAudit({ censusRoot = CENSUS_ROOT, repositoryRoot = REPOSITORY_ROOT } = {}) {
+  const carrierPaths = independentCarrierPaths(repositoryRoot);
   let physicalPaths;
-  try { physicalPaths = listGitVisible(repositoryRoot); } catch { physicalPaths = null; }
+  try { physicalPaths = listGitVisible(repositoryRoot, carrierPaths); } catch { physicalPaths = null; }
   const outside = (physicalPaths ?? []).filter((item) => !item.startsWith('v2/usf/census/'));
   const before = snapshot(repositoryRoot, outside);
   const recordsByUniverse = Object.fromEntries(Object.entries(universeFiles).map(([key, file]) => [key, loadJsonl(censusRoot, file)]));
@@ -498,20 +677,24 @@ export async function runAudit({ censusRoot = CENSUS_ROOT, repositoryRoot = REPO
     canonicalArtifacts: loadJsonl(censusRoot, 'canonical-artifacts.jsonl'), replacementGroups: loadJsonl(censusRoot, 'replacement-groups.jsonl'),
     identityReview: loadJsonl(censusRoot, 'identity-review.jsonl'), missingEntirely: loadJsonl(censusRoot, 'missing-entirely.jsonl'),
     workPackages: loadJson(censusRoot, 'workpackages.json'), dependencies: loadJsonl(censusRoot, 'dependencies.jsonl'),
-    inventoryFindings: loadJsonl(censusRoot, 'inventory-findings.jsonl')
+    inventoryFindings: loadJsonl(censusRoot, 'inventory-findings.jsonl'), summary: loadJson(censusRoot, 'summary.json')
   };
   const workPackages = Array.isArray(outputs.workPackages) ? outputs.workPackages : outputs.workPackages?.workPackages;
+  const repositoryStructureMaterialization = auditRepositoryStructureMaterialization({ censusRoot, repositoryRoot });
   const checks = [
     parserEvidenceFailure
       ? incomplete('parser-evidence-storage', parserEvidenceFailure)
       : check('parser-evidence-storage', 'pass', [], { recordCount: parserEvidence.manifest.aggregate.recordCount, shardCount: parserEvidence.manifest.shards.length, uncompressedBytes: parserEvidence.manifest.aggregate.uncompressedBytes }),
-    auditUniverses({ recordsByUniverse, summary: loadJson(censusRoot, 'universes.json'), repositoryRoot, physicalPaths }),
+    auditUniverses({ recordsByUniverse, summary: loadJson(censusRoot, 'universes.json'), repositoryRoot, physicalPaths, carrierPaths }),
     auditParserRelationships(members, outputs.parserResults, outputs.relationships, outputs.inventories),
     auditFamilyOwnership(members, outputs.artifacts), auditMappingsCoverage(outputs.artifacts, outputs.mappings, outputs.coverage, outputs.identityReview, outputs.missingEntirely, outputs.replacementGroups),
     auditCanonicalArtifacts(outputs.canonicalArtifacts, outputs.replacementGroups),
     auditArtifactDispositions(outputs.artifacts, outputs.canonicalArtifacts, outputs.replacementGroups),
-    auditSourceDispositionOwnership(outputs.artifacts, outputs.parserResults, outputs.replacementGroups),
-    auditWorkPackages(outputs.canonicalArtifacts, workPackages), auditDependencies(workPackages, outputs.dependencies),
+    auditSourceDispositionOwnership(outputs.artifacts, outputs.parserResults, outputs.replacementGroups, readIndependentCarrierTriples(repositoryRoot)),
+    auditWorkPackages(outputs.canonicalArtifacts, workPackages), auditDependencies(workPackages, outputs.dependencies, {
+      artifacts: outputs.artifacts, relationships: outputs.relationships, canonicalArtifacts: outputs.canonicalArtifacts, replacementGroups: outputs.replacementGroups, summary: outputs.summary
+    }),
+    repositoryStructureMaterialization,
     auditFindingClassifications(outputs.inventoryFindings),
     auditDeterminism(Object.fromEntries(Object.entries(outputs).filter(([name, value]) => value !== null && name !== 'parserResults')))
   ];

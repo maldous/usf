@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { compareBy, readJsonl, sha256, sortUnique } from './canonical.mjs';
 import { validateDependency } from './contract.mjs';
 import { censusRoot } from './constants.mjs';
+import { prerequisiteDependencySatisfactionStatus, dependencyEvidenceFamilies, dependencyKeyFor, dependencyResolutionBasis } from './dependency-resolution.mjs';
 
 function ownerMaps(packages) {
   const maps = { artifacts: new Map(), canonical: new Map(), layers: new Map(), gates: new Map() };
@@ -17,7 +18,7 @@ function ownerMaps(packages) {
   return maps;
 }
 
-function addCandidate(candidates, source, prerequisite, dependencyType, evidence, status = 'blocking') {
+function addCandidate(candidates, source, prerequisite, dependencyType, evidence, status = 'required-prerequisite') {
   if (!source || !prerequisite || source === prerequisite) return;
   const key = `${source}\0${prerequisite}`;
   const candidate = candidates.get(key) ?? {
@@ -28,7 +29,7 @@ function addCandidate(candidates, source, prerequisite, dependencyType, evidence
     confidence: { level: 'medium', score: 0.7, reasons: ['machine-observed-direct-evidence'] },
     reviewStatus: 'machine-reviewed'
   };
-  if (candidate.status === 'coordination' && status === 'blocking') candidate.status = 'blocking';
+  if (candidate.status === 'coordination' && status === 'required-prerequisite') candidate.status = 'required-prerequisite';
   if (evidence.semantic) candidate.semanticEvidence.push(evidence.semantic);
   if (evidence.artifact) candidate.artifactEvidence.push(evidence.artifact);
   if (evidence.relationship) candidate.repositoryRelationshipEvidence.push(evidence.relationship);
@@ -43,7 +44,7 @@ function relationshipDependencyStatus(relation, sourceArtifact) {
   // resolution. They coordinate the configuration with the selected artefact;
   // they do not make the selected implementation a prerequisite for authoring
   // the configuration. Inheritance (`extends`) and executable imports remain
-  // blocking. This classification comes from the structural JSON pointer and
+  // required prerequisites. This classification comes from the structural JSON pointer and
   // is therefore not cycle-driven dependency softening.
   if (relation.extractionMethod === 'json-pointer' &&
       /^(?:include|exclude)(?:\.|$)|^compilerOptions[.]paths(?:\.|$)/.test(keyPath)) {
@@ -54,7 +55,7 @@ function relationshipDependencyStatus(relation, sourceArtifact) {
       ['documentation-assets', 'repository-governance'].includes(sourceArtifact?.artifactFamily)) {
     return 'coordination';
   }
-  return 'blocking';
+  return 'required-prerequisite';
 }
 
 function reachable(edges, start, goal, excluded) {
@@ -136,10 +137,10 @@ function transitiveReduction(edges) {
   return { kept, removed };
 }
 
-function graphMetrics(packages, blocking) {
+function graphMetrics(packages, prerequisites) {
   const incoming = new Map(packages.map((pkg) => [pkg.key, []]));
   const outgoing = new Map(packages.map((pkg) => [pkg.key, []]));
-  for (const edge of blocking) {
+  for (const edge of prerequisites) {
     incoming.get(edge.source).push(edge.prerequisite);
     outgoing.get(edge.prerequisite).push(edge.source);
   }
@@ -185,6 +186,98 @@ function baselineLineage(packages, dependencies, workPackageLineage) {
   }).sort(compareBy(['baselineSource', 'baselinePrerequisite']));
 }
 
+function evaluatePrerequisiteSatisfaction(record, { packageByKey, owners, artifactByPath, relationshipByHash, retainedPrerequisiteKeys, prerequisiteCycleCount }) {
+  const exactEvidence = record.repositoryRelationshipEvidence ?? [];
+  let currentRelationshipHashCount = 0;
+  let structurallyProvenRelationshipHashCount = 0;
+  let directionMatchedRelationshipHashCount = 0;
+  let currentPrerequisiteArtifactHashCount = 0;
+  const currentPrerequisiteArtifacts = new Set();
+  for (const evidence of exactEvidence) {
+    const matches = relationshipByHash.get(evidence) ?? [];
+    if (matches.length !== 1) continue;
+    currentRelationshipHashCount += 1;
+    const relation = matches[0];
+    const resolvedStructural = relation.resolved === true && relation.targetKind === 'artifact' && relation.evidenceKind === 'structurally-proven';
+    if (resolvedStructural) structurallyProvenRelationshipHashCount += 1;
+    const sourceArtifact = artifactByPath.get(relation.source);
+    const prerequisiteArtifact = artifactByPath.get(relation.target);
+    if (resolvedStructural && owners.artifacts.get(sourceArtifact?.artifactKey) === record.source && owners.artifacts.get(prerequisiteArtifact?.artifactKey) === record.prerequisite) directionMatchedRelationshipHashCount += 1;
+    if (prerequisiteArtifact && prerequisiteArtifact.sourceState !== 'deleted' && /^[a-f0-9]{64}$/.test(prerequisiteArtifact.contentDigest ?? '')) {
+      currentPrerequisiteArtifactHashCount += 1;
+      currentPrerequisiteArtifacts.add(prerequisiteArtifact.artifactKey);
+    }
+  }
+  const edgeKey = `${record.source}\0${record.prerequisite}`;
+  const basis = {
+    exactEvidenceHashCount: exactEvidence.length,
+    currentRelationshipHashCount,
+    structurallyProvenRelationshipHashCount,
+    directionMatchedRelationshipHashCount,
+    currentPrerequisiteArtifactHashCount,
+    currentPrerequisiteArtifactCount: currentPrerequisiteArtifacts.size,
+    sourceEndpointExists: packageByKey.has(record.source),
+    prerequisiteEndpointExists: packageByKey.has(record.prerequisite),
+    edgeSurvivedTransitiveReduction: retainedPrerequisiteKeys.has(edgeKey),
+    requiredPrerequisiteGraphAcyclic: prerequisiteCycleCount === 0,
+  };
+  return { satisfactionBasis: basis, satisfactionStatus: prerequisiteDependencySatisfactionStatus(basis) };
+}
+
+function resolveRetainedDependencies({ dependencies, packages, artifacts, canonicalArtifacts, replacementGroups, relationships, prerequisiteCycleCount, retainedPrerequisiteKeys }) {
+  if (prerequisiteCycleCount !== 0) throw new Error('dependency resolution requires an acyclic required-prerequisite graph');
+  const packageByKey = new Map(packages.map((record) => [record.key, record]));
+  const owners = ownerMaps(packages);
+  const artifactByPath = new Map(artifacts.map((record) => [record.path, record]));
+  const relationshipByHash = new Map();
+  for (const relation of relationships) {
+    const key = sha256(`${relation.source}\0${relation.relationshipType}\0${relation.target}`);
+    if (!relationshipByHash.has(key)) relationshipByHash.set(key, []);
+    relationshipByHash.get(key).push(relation);
+  }
+  const canonicalByKey = new Map(canonicalArtifacts.map((record) => [record.canonicalArtifactKey, record]));
+  const replacementByKey = new Map(replacementGroups.map((record) => [record.groupKey, record]));
+  for (const record of dependencies) {
+    if (!packageByKey.has(record.source) || !packageByKey.has(record.prerequisite) || record.source === record.prerequisite) throw new Error(`dependency resolution endpoint invalid: ${record.source}:${record.prerequisite}`);
+    if (record.reviewStatus !== 'machine-reviewed' || dependencyEvidenceFamilies(record).length === 0) throw new Error(`dependency resolution evidence invalid: ${record.source}:${record.prerequisite}`);
+    for (const evidence of record.repositoryRelationshipEvidence) {
+      const matches = relationshipByHash.get(evidence) ?? [];
+      const valid = matches.some((relation) => {
+        const sourceArtifact = artifactByPath.get(relation.source);
+        const prerequisiteArtifact = artifactByPath.get(relation.target);
+        return relation.resolved === true && relation.targetKind === 'artifact' && relation.evidenceKind === 'structurally-proven' &&
+          owners.artifacts.get(sourceArtifact?.artifactKey) === record.source && owners.artifacts.get(prerequisiteArtifact?.artifactKey) === record.prerequisite;
+      });
+      if (!valid) throw new Error(`dependency relationship evidence does not prove direction and ownership: ${evidence}`);
+    }
+    for (const layer of record.semanticEvidence) {
+      if (!packageByKey.get(record.source).requiredSemanticLayers?.includes(layer) || owners.layers.get(layer) !== record.prerequisite) throw new Error(`dependency semantic evidence does not prove direction and ownership: ${layer}`);
+    }
+    for (const evidence of record.artifactEvidence) {
+      const canonicalKey = [...canonicalByKey.keys()].find((key) => evidence.startsWith(`${key}:`));
+      const dependencyPath = canonicalKey ? evidence.slice(canonicalKey.length + 1) : null;
+      const dependencyArtifact = dependencyPath ? artifactByPath.get(dependencyPath) : null;
+      if (!canonicalKey || owners.canonical.get(canonicalKey) !== record.source || !canonicalByKey.get(canonicalKey).artifactDependencies.includes(dependencyPath) || owners.artifacts.get(dependencyArtifact?.artifactKey) !== record.prerequisite) throw new Error(`dependency artifact evidence does not prove direction and ownership: ${evidence}`);
+    }
+    for (const evidence of record.proofEquivalenceEvidence) if (owners.gates.get(evidence) !== record.prerequisite) throw new Error(`dependency proof evidence does not prove prerequisite ownership: ${evidence}`);
+    for (const evidence of record.migrationEvidence) {
+      const group = replacementByKey.get(evidence);
+      const groupPackages = sortUnique([...(group?.currentArtifacts ?? []).map((key) => owners.artifacts.get(key)), ...(group?.canonicalArtifacts ?? []).map((key) => owners.canonical.get(key))].filter(Boolean));
+      if (!group || groupPackages[0] !== record.prerequisite || !groupPackages.slice(1).includes(record.source)) throw new Error(`dependency migration evidence does not prove ordering: ${evidence}`);
+    }
+  }
+  return dependencies.map((record) => {
+    const resolved = { ...record, dependencyKey: dependencyKeyFor(record), resolutionStatus: 'resolved-retained' };
+    resolved.resolutionBasis = dependencyResolutionBasis(resolved);
+    if (resolved.status === 'required-prerequisite') {
+      Object.assign(resolved, evaluatePrerequisiteSatisfaction(resolved, { packageByKey, owners, artifactByPath, relationshipByHash, retainedPrerequisiteKeys, prerequisiteCycleCount }));
+      if (resolved.satisfactionStatus !== 'satisfied') throw new Error(`required prerequisite is not satisfied: ${resolved.source}:${resolved.prerequisite}`);
+    }
+    validateDependency(resolved);
+    return resolved;
+  });
+}
+
 export function buildDependencyGraph(packages, artifacts, canonicalArtifacts, replacementGroups, relationships, workPackageLineage = []) {
   const owners = ownerMaps(packages);
   const artifactByPath = new Map(artifacts.map((artifact) => [artifact.path, artifact]));
@@ -217,29 +310,36 @@ export function buildDependencyGraph(packages, artifacts, canonicalArtifacts, re
     repositoryRelationshipEvidence: sortUnique(record.repositoryRelationshipEvidence), proofEquivalenceEvidence: sortUnique(record.proofEquivalenceEvidence),
     migrationEvidence: sortUnique(record.migrationEvidence)
   }));
-  for (const record of dependencies) validateDependency(record);
-  const blocking = dependencies.filter((record) => record.status === 'blocking');
-  const cycles = cycleComponents(blocking);
-  const reduced = cycles.length ? { kept: blocking, removed: [] } : transitiveReduction(blocking);
+  const prerequisites = dependencies.filter((record) => record.status === 'required-prerequisite');
+  const cycles = cycleComponents(prerequisites);
+  const reduced = cycles.length ? { kept: prerequisites, removed: [] } : transitiveReduction(prerequisites);
   const keptKeys = new Set(reduced.kept.map((edge) => `${edge.source}\0${edge.prerequisite}`));
   dependencies = dependencies.filter((edge) => edge.status === 'coordination' || keptKeys.has(`${edge.source}\0${edge.prerequisite}`)).sort(compareBy(['status', 'source', 'prerequisite']));
-  const metrics = graphMetrics(packages, dependencies.filter((edge) => edge.status === 'blocking'));
+  dependencies = resolveRetainedDependencies({ dependencies, packages, artifacts, canonicalArtifacts, replacementGroups, relationships, prerequisiteCycleCount: cycles.length, retainedPrerequisiteKeys: keptKeys });
+  const requiredPrerequisites = dependencies.filter((edge) => edge.status === 'required-prerequisite');
+  const metrics = graphMetrics(packages, requiredPrerequisites);
+  const resolvedPrerequisiteRelationshipCount = requiredPrerequisites.filter((edge) => edge.resolutionStatus === 'resolved-retained').length;
+  const satisfiedPrerequisiteRelationshipCount = requiredPrerequisites.filter((edge) => edge.satisfactionStatus === 'satisfied').length;
   return {
     dependencies,
     lineage: baselineLineage(packages, dependencies, workPackageLineage),
     metrics: {
       ...metrics,
-      blockingRelationshipCount: dependencies.filter((edge) => edge.status === 'blocking').length,
+      requiredPrerequisiteRelationshipCount: requiredPrerequisites.length,
+      resolvedPrerequisiteRelationshipCount,
+      satisfiedPrerequisiteRelationshipCount,
+      blockingRelationshipCount: 0,
+      activeBlockingRelationshipCount: requiredPrerequisites.length - satisfiedPrerequisiteRelationshipCount,
       coordinationRelationshipCount: dependencies.filter((edge) => edge.status === 'coordination').length,
       transitiveLinksRemoved: reduced.removed.length,
       familyOnlyLinkCount: 0,
       untypedLinkCount: 0,
       unsupportedEvidenceCount: 0,
-      blockingCycleCount: cycles.length,
-      blockingCycleComponents: cycles,
+      requiredPrerequisiteCycleCount: cycles.length,
+      requiredPrerequisiteCycleComponents: cycles,
       unreviewedParallelismReductionCount: cycles.length
     }
   };
 }
 
-export const dependencyGraphInternals = { cycleComponents, graphMetrics, hasCycle, ownerMaps, relationshipDependencyStatus, transitiveReduction };
+export const dependencyGraphInternals = { cycleComponents, evaluatePrerequisiteSatisfaction, graphMetrics, hasCycle, ownerMaps, relationshipDependencyStatus, transitiveReduction };

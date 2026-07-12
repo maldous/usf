@@ -23,6 +23,10 @@
         usf:canonicalName "interfaceauthenticationloginapi" ;
         usf:hasOperation op:authloginpost ;
         usf:interfaceForContract sc:authenticationplatform .
+    iface:interfaceapikeycreateapi a usf:Interface ;
+        usf:canonicalName "interfaceapikeycreateapi" ;
+        usf:hasOperation op:apikeycreate ;
+        usf:interfaceForContract sc:apikeyspersonalaccesstokens .
     iface:interfaceauthzcheckpostapi a usf:Interface ;
         usf:canonicalName "interfaceauthzcheckpostapi" ;
         usf:hasOperation op:authzcheckpost ;
@@ -107,6 +111,14 @@
         usf:canonicalName "interfacenotificationtemplatescreateapi" ;
         usf:hasOperation op:notificationtemplatescreate ;
         usf:interfaceForContract sc:notificationdeliveryandpreferencesandchannels .
+    iface:interfaceprofiledetailgetapi a usf:Interface ;
+        usf:canonicalName "interfaceprofiledetailgetapi" ;
+        usf:hasOperation op:profiledetailget ;
+        usf:interfaceForContract sc:enduserprofileandpreferencesselfservice .
+    iface:interfaceprofilelistgetapi a usf:Interface ;
+        usf:canonicalName "interfaceprofilelistgetapi" ;
+        usf:hasOperation op:profilelistget ;
+        usf:interfaceForContract sc:enduserprofileandpreferencesselfservice .
     iface:interfaceobservabilityreadinessgetapi a usf:Interface ;
         usf:canonicalName "interfaceobservabilityreadinessgetapi" ;
         usf:hasOperation op:observabilityreadinessget ;
@@ -148,6 +160,10 @@
         usf:canonicalName "authloginpost" ;
         usf:emitsAuditEvent aud:authloginpostcmd ;
         usf:requiresPermission perm:authlogin .
+    op:apikeycreate a usf:Command ;
+        usf:canonicalName "apikeycreate" ;
+        usf:emitsAuditEvent aud:apikeycreatecmd ;
+        usf:requiresPermission perm:apikeycreate .
     op:authzcheckpost a usf:Query ;
         usf:canonicalName "authzcheckpost" ;
         usf:requiresPermission perm:authorizationcheck .
@@ -214,6 +230,12 @@
         usf:canonicalName "notificationssend" ;
         usf:emitsAuditEvent aud:notificationssendcmd ;
         usf:requiresPermission perm:notificationsend .
+    op:profiledetailget a usf:Query ;
+        usf:canonicalName "profiledetailget" ;
+        usf:requiresPermission perm:tenantmembersread .
+    op:profilelistget a usf:Query ;
+        usf:canonicalName "profilelistget" ;
+        usf:requiresPermission perm:tenantmembersread .
     op:notificationtemplatescreate a usf:Command ;
         usf:canonicalName "notificationtemplatescreate" ;
         usf:emitsAuditEvent aud:notificationtemplatescreatecmd ;

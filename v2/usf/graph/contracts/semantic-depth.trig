@@ -52,9 +52,9 @@
 <urn:usf:contractfacet:abacpolicydecisionpointproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Unit proofs cover the decision logic and resource-policy administration and a runtime proof covers permission-before-entitlement policy ordering, demonstrated in source lineage via hermetic state/policy-chain validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:abacpolicydecisionpointsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:abacpolicydecisionpointuisemantics>.
-<urn:usf:contractfacet:abacpolicydecisionpointuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:abacpolicydecisionpointsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:abacpolicydecisionpointuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The abacpolicydecisionpoint capability is explicitly API-only; no human-rendered surface, component, action, journey, consent prompt, or renderer input is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:abacpolicydecisionpoint> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:accessibilitya11ygatesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "accessibilitya11ygatesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sf7269e96a73cea1a4f3ebd78ebdcdcde08c9102ac8d77b6be60eb0ca5c0c5c4b>;
@@ -109,8 +109,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the e2e accessibility spec, demonstrating the landmark, role, ARIA, and axe expectations as a gate over UI capabilities. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:accessibilitya11ygatesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:accessibilitya11ygateuisemantics>.
 <urn:usf:contractfacet:accessibilitya11ygateuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:accessibilitya11ygatesemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The accessibilitya11ygate capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:accessibilitya11ygate> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:alertingincidentmanagementoncallstatuspagesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "alertingincidentmanagementoncallstatuspagesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sd6f7e9c6d1659ed0469d2b0749afd246b33b33af2dd4aae38a210ce0ba8c2dc0>;
@@ -150,6 +150,7 @@
 <urn:usf:sourcesemanticbinding:alertingincidentmanagementoncallstatuspagesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:alertingincidentmanagementoncallstatuspageuisemantics>.
 <urn:usf:contractfacet:alertingincidentmanagementoncallstatuspageuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
     <urn:usf:ontology:facetStatement> "This deprecated contract is retained as source-lineage identity only. Its canonical successor is the observability built-in alerting and incidents contract, so none of its facets is a generation obligation.".
+<urn:usf:semanticcontract:alertingincidentmanagementoncallstatuspage> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:apidocsdeveloperportalsdksratelimitssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "apidocsdeveloperportalsdksratelimitssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s10731e1f4ad04d26ee4b407749b221d783ee003d7aea464037de736686ed52e2>;
@@ -203,9 +204,9 @@
 <urn:usf:contractfacet:apidocsdeveloperportalsdksratelimitsproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by API-key, API-key-route, and rate-limit runtime proofs plus OpenAPI drift and GraphQL runtime contract checks against live key/rate-limit substrate. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:apidocsdeveloperportalsdksratelimitssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:apidocsdeveloperportalsdksratelimitsuisemantics>.
-<urn:usf:contractfacet:apidocsdeveloperportalsdksratelimitsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:apidocsdeveloperportalsdksratelimitssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:apidocsdeveloperportalsdksratelimitsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
+    <urn:usf:ontology:facetStatement> "The apidocsdeveloperportalsdksratelimits capability has one framework-neutral UI semantic model with explicit surfaces, view models, components, journeys, permissions, accessibility, localisation, and target-specific renderer contracts. This semantic closure disclaims product parity, human acceptance, accessibility compliance, and launch-language readiness.".
+<urn:usf:semanticcontract:apidocsdeveloperportalsdksratelimits> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:apikeyspersonalaccesstokenssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "apikeyspersonalaccesstokenssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s9f9c25512d01150580a42c277b3827686387d2266cc5512ddbd056feb5468edd>;
@@ -259,9 +260,9 @@
 <urn:usf:contractfacet:apikeyspersonalaccesstokensproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "A unit proof covers key lifecycle and authentication, and runtime proofs validate the live repository, crypto, and row-level isolation plus live route-handler behaviour including entitlement gating, demonstrated in source lineage via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:apikeyspersonalaccesstokenssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:apikeyspersonalaccesstokensuisemantics>.
-<urn:usf:contractfacet:apikeyspersonalaccesstokensuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model or import the UI source row before generation.".
-<urn:usf:sourcesemanticbinding:apikeyspersonalaccesstokenssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:apikeyspersonalaccesstokensuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
+    <urn:usf:ontology:facetStatement> "The apikeyspersonalaccesstokens capability has one framework-neutral UI semantic model with explicit surfaces, view models, components, journeys, permissions, accessibility, localisation, and target-specific renderer contracts. This semantic closure disclaims product parity, human acceptance, accessibility compliance, and launch-language readiness.".
+<urn:usf:semanticcontract:apikeyspersonalaccesstokens> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:auditofprivilegedaccesssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "auditofprivilegedaccesssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s4cac2d7bde6b2c0fafa5495120da9ec89d732dadc4c6127e6c193c4be2a62a3a>;
@@ -315,9 +316,9 @@
 <urn:usf:contractfacet:auditofprivilegedaccessproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "A unit proof covers the contextual audit semantics and an adjacent runtime history proof validates live read-only audit/history projection, demonstrated in source lineage via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:auditofprivilegedaccesssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:auditofprivilegedaccessuisemantics>.
-<urn:usf:contractfacet:auditofprivilegedaccessuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
-    <urn:usf:ontology:facetStatement> "Audit panels with logical-resource, action, actor, and time filters, pagination, forbidden/invalid states, and redacted metadata.".
-<urn:usf:sourcesemanticbinding:auditofprivilegedaccesssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:auditofprivilegedaccessuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The auditofprivilegedaccess capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:auditofprivilegedaccess> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:authenticationplatformsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "authenticationplatformsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s13db61201940aab2b534753d82fb27bf66fae900d47f631dd8b2153364d94490>;
@@ -372,7 +373,8 @@
     <urn:usf:ontology:facetStatement> "Substrate and unit proofs cover login routes, the auth usecase, session fixtures, cookie security, token crypto, role/permission resolution, and audit-first ordering, while runtime proofs validate live identity-provider settings round-trips, IdP CRUD with secret rotation and redaction, OIDC discovery/JWKS/callback/test-connection, MFA and session policy write/read-back/restore, the claim-mapping semantic journey, and custom-domain callback derivation against local substrate. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:authenticationplatformsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:authenticationplatformuisemantics>.
 <urn:usf:contractfacet:authenticationplatformuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
-    <urn:usf:ontology:facetStatement> "Authentication UI semantics require a public login route, a framework-neutral login view model, explicit unauthenticated, authenticating, authenticated, and denied states, a login form bound to the authentication operation, explicit inline, forbidden, banner, and summary errors, and governed accessibility and localisation requirements.".
+    <urn:usf:ontology:facetStatement> "The authenticationplatform capability has one framework-neutral UI semantic model with explicit surfaces, view models, components, journeys, permissions, accessibility, localisation, and target-specific renderer contracts. This semantic closure disclaims product parity, human acceptance, accessibility compliance, and launch-language readiness.".
+<urn:usf:semanticcontract:authenticationplatform> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:backgroundworkersjobrunnersemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "backgroundworkersjobrunnersemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s0690349d8d30f17a43ec8f980edbfd6944da371207d0ab1d8a1dfab15e6ce5d7>;
@@ -427,8 +429,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is grounded in the event-worker runtime proof, which validates live Postgres claim, process, idempotent skip, retry, dead-letter, and heartbeat (level-4 live substrate validation), captured here as informational semantic lineage from the USF coverage record and equivalence audit with no source import and an open implementation language. The proof expectation is the lineage evidence, not a current USF readiness verdict. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:backgroundworkersjobrunnersemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:backgroundworkersjobrunneruisemantics>.
 <urn:usf:contractfacet:backgroundworkersjobrunneruisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:backgroundworkersjobrunnersemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The backgroundworkersjobrunner capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:backgroundworkersjobrunner> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:backupandrestoresemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "backupandrestoresemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s877986c3ca3cde44c20745e7d9cb3ff5c476bca2f83887fe6b4496dd59f8c802>;
@@ -482,9 +484,9 @@
 <urn:usf:contractfacet:backupandrestoreproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the local backup proof, which demonstrates the guarded dump path end to end against the canonical store. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:backupandrestoresemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:backupandrestoreuisemantics>.
-<urn:usf:contractfacet:backupandrestoreuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:backupandrestoresemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:backupandrestoreuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The backupandrestore capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:backupandrestore> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:brandingandthemingsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "brandingandthemingsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sfd19a3923236a2d4337726193cbc6444cd7d9b64dca8b80001f40cf03b3a1a36>;
@@ -538,9 +540,9 @@
 <urn:usf:contractfacet:brandingandthemingproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by configuration unit proofs covering branding definitions, override source, validation, and audit-first writes, together with route-level coverage of the theme bootstrap response and its default fallback. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:brandingandthemingsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:brandingandtheminguisemantics>.
-<urn:usf:contractfacet:brandingandtheminguisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
-    <urn:usf:ontology:facetStatement> "UI semantics recovered from cited UI source.".
-<urn:usf:sourcesemanticbinding:brandingandthemingsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:brandingandtheminguisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The brandingandtheming capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:brandingandtheming> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:browsertelemetrygrafanafarorumandbrowsertobfftracingsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "browsertelemetrygrafanafarorumandbrowsertobfftracingsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sfedd4830511fd818c1e965254a6409be1456a5a7b12baec2800cac71db9f07b3>;
@@ -595,8 +597,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the cited browser-to-BFF tracing end-to-end proof, which force-flushes a single Tempo trace spanning the browser app and the platform API along the observability-correlation ladder, demonstrating client-to-server trace joining as hermetic/runtime lineage rather than a current-readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:browsertelemetrygrafanafarorumandbrowsertobfftracingsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:browsertelemetrygrafanafarorumandbrowsertobfftracinguisemantics>.
 <urn:usf:contractfacet:browsertelemetrygrafanafarorumandbrowsertobfftracinguisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:browsertelemetrygrafanafarorumandbrowsertobfftracingsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The browsertelemetrygrafanafarorumandbrowsertobfftracing capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:browsertelemetrygrafanafarorumandbrowsertobfftracing> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:buildversuscomposedecisionframeworksemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "buildversuscomposedecisionframeworksemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s7643a2ca1dfb7baeae745e4ec915b33e826a076e143ee43782a66f3605d8dc1f>;
@@ -651,8 +653,8 @@
     <urn:usf:ontology:facetStatement> "Proof is the build-versus-compose decision framework document and its associated checks, demonstrating the criteria are applied consistently across the capability set; it is a foundation-document proof rather than a runtime probe. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:buildversuscomposedecisionframeworksemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:buildversuscomposedecisionframeworkuisemantics>.
 <urn:usf:contractfacet:buildversuscomposedecisionframeworkuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:buildversuscomposedecisionframeworksemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The buildversuscomposedecisionframework capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:buildversuscomposedecisionframework> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:codequalityandsecretanddependencyscanningsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "codequalityandsecretanddependencyscanningsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s72d6be15baac329ac4c94451c349d372812629a9d47d3d3b566695a6599ad027>;
@@ -707,8 +709,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by static-analysis, SBOM verify/policy, code-scanning validate, security-test, and security-control-route checks asserting fail-closed gate state and route registration. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:codequalityandsecretanddependencyscanningsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:codequalityandsecretanddependencyscanninguisemantics>.
 <urn:usf:contractfacet:codequalityandsecretanddependencyscanninguisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:codequalityandsecretanddependencyscanningsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The codequalityandsecretanddependencyscanning capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:codequalityandsecretanddependencyscanning> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:compliancereportsaccessreviewsevidencepackssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "compliancereportsaccessreviewsevidencepackssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s684a5335b75ec48c4adea88dee210c79200b311fd7c145d19d47d0d89c74baf4>;
@@ -763,8 +765,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by a compliance-report composition runtime proof and an admin route-registration proof validating deterministic assembly from foundation sources. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:compliancereportsaccessreviewsevidencepackssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:compliancereportsaccessreviewsevidencepacksuisemantics>.
 <urn:usf:contractfacet:compliancereportsaccessreviewsevidencepacksuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:compliancereportsaccessreviewsevidencepackssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The compliancereportsaccessreviewsevidencepacks capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:compliancereportsaccessreviewsevidencepacks> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:composedproviderreadinessspinesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "composedproviderreadinessspinesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s265a87dbbf4701e772be26b4a6e7c953ab27b44c3775ba62dc795590dddcdca1>;
@@ -818,9 +820,9 @@
 <urn:usf:contractfacet:composedproviderreadinessspineproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by proof:composed-provider-readiness, demonstrating that the aggregated readiness honestly reflects the underlying composed providers. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:composedproviderreadinessspinesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:composedproviderreadinessspineuisemantics>.
-<urn:usf:contractfacet:composedproviderreadinessspineuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:composedproviderreadinessspinesemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:composedproviderreadinessspineuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The composedproviderreadinessspine capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:composedproviderreadinessspine> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:configurationregistryandhistorysemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "configurationregistryandhistorysemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s84f6d37a45a4f1e448e5257ca4e626632287fafe9cc8fe13a8e8d801869808f9>;
@@ -874,9 +876,9 @@
 <urn:usf:contractfacet:configurationregistryandhistoryproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by unit proofs over the configuration use case and contract validation (definition resolution, override source, validation rules, and audit-first writes) and by an adjacent live history projection proof that validates the audit/history record of configuration changes against a real substrate. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:configurationregistryandhistorysemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:configurationregistryandhistoryuisemantics>.
-<urn:usf:contractfacet:configurationregistryandhistoryuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:configurationregistryandhistorysemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:configurationregistryandhistoryuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The configurationregistryandhistory capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:configurationregistryandhistory> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:customdomainsdnsownershiptlscanonicalsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "customdomainsdnsownershiptlscanonicalsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s81359ad14e8263129b39c9742d33a4c850dbff0b463de99ec6ce66e86201d475>;
@@ -930,9 +932,9 @@
 <urn:usf:contractfacet:customdomainsdnsownershiptlscanonicalproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by runtime proofs covering domain challenge and verification, local routing, canonical cutover, claim lifecycle, custom-domain resolution, and custom-domain auth origin against a live substrate with injected ports. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:customdomainsdnsownershiptlscanonicalsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:customdomainsdnsownershiptlscanonicaluisemantics>.
-<urn:usf:contractfacet:customdomainsdnsownershiptlscanonicaluisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:customdomainsdnsownershiptlscanonicalsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:customdomainsdnsownershiptlscanonicaluisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The customdomainsdnsownershiptlscanonical capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:customdomainsdnsownershiptlscanonical> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:datagovernancecataloglineageclassificationpiidsrgdprsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "datagovernancecataloglineageclassificationpiidsrgdprsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:se6bae4529ff8b649310794a1a47493a0b8801d9ddde792f61c13163debfc5a17>;
@@ -987,8 +989,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the data-governance proof and governance unit tests covering classification constraints and data-subject-request fulfilment evidence. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:datagovernancecataloglineageclassificationpiidsrgdprsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:datagovernancecataloglineageclassificationpiidsrgdpruisemantics>.
 <urn:usf:contractfacet:datagovernancecataloglineageclassificationpiidsrgdpruisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:datagovernancecataloglineageclassificationpiidsrgdprsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The datagovernancecataloglineageclassificationpiidsrgdpr capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:datagovernancecataloglineageclassificationpiidsrgdpr> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:delegatedadministrationrolessemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "delegatedadministrationrolessemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:saaf13982d0d20d6f10bb12387320d44a7981797ab69c9f3e02889a8817b1c045>;
@@ -1043,8 +1045,8 @@
     <urn:usf:ontology:facetStatement> "Unit proofs cover the delegation state machine and the storage adapter and a runtime proof covers the local composition, demonstrated in source lineage via hermetic state-machine and audit-order validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:delegatedadministrationrolessemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:delegatedadministrationrolesuisemantics>.
 <urn:usf:contractfacet:delegatedadministrationrolesuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:delegatedadministrationrolessemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The delegatedadministrationroles capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:delegatedadministrationroles> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:e2econfidenceladderstageawaresemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "e2econfidenceladderstageawaresemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s0015538a78256ff2df8299f3aef790fd7f05790f4d850798574d64052783db66>;
@@ -1099,8 +1101,8 @@
     <urn:usf:ontology:facetStatement> "Proof is the verify-ladder and aggregate-confidence test suites that demonstrate the ladder gates promotion per stage without inflating proof posture. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:e2econfidenceladderstageawaresemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:e2econfidenceladderstageawareuisemantics>.
 <urn:usf:contractfacet:e2econfidenceladderstageawareuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:e2econfidenceladderstageawaresemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The e2econfidenceladderstageaware capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:e2econfidenceladderstageaware> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:enduserprofileandpreferencesselfservicesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "enduserprofileandpreferencesselfservicesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:scc0b8959542e483604656bc9821a18062b0c9af00552fddb8cb5ba86dbc76345>;
@@ -1154,9 +1156,9 @@
 <urn:usf:contractfacet:enduserprofileandpreferencesselfserviceproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Unit proofs cover the profile and notification usecases, and runtime proofs validate live profile self-service, notification preferences, and dispatch against the data substrate with row-level tenant isolation, demonstrated in source lineage via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:enduserprofileandpreferencesselfservicesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:enduserprofileandpreferencesselfserviceuisemantics>.
-<urn:usf:contractfacet:enduserprofileandpreferencesselfserviceuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model or import the UI source row before generation.".
-<urn:usf:sourcesemanticbinding:enduserprofileandpreferencesselfservicesemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:enduserprofileandpreferencesselfserviceuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
+    <urn:usf:ontology:facetStatement> "The enduserprofileandpreferencesselfservice capability has one framework-neutral UI semantic model with explicit surfaces, view models, components, journeys, permissions, accessibility, localisation, and target-specific renderer contracts. This semantic closure disclaims product parity, human acceptance, accessibility compliance, and launch-language readiness.".
+<urn:usf:semanticcontract:enduserprofileandpreferencesselfservice> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:entitlementenginesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "entitlementenginesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sc8adc11e1c53c66e8f9c543bba8fc5d6a77d1c2af14d1974f9eb87f83641c1da>;
@@ -1210,9 +1212,9 @@
 <urn:usf:contractfacet:entitlementengineproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "A unit proof covers the deny-by-default state machine and runtime proofs cover the entitlement seam, permission-before-entitlement ordering, the live data substrate, and the routes, demonstrated in source lineage via hermetic and live-substrate validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:entitlementenginesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:entitlementengineuisemantics>.
-<urn:usf:contractfacet:entitlementengineuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:entitlementenginesemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:entitlementengineuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The entitlementengine capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:entitlementengine> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:environmentregistryandbootstrapsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "environmentregistryandbootstrapsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:scabe8786522a927dcefeea5b1e997d42d22c0ab2875fcfdee5225b172de5f5e8>;
@@ -1266,9 +1268,9 @@
 <urn:usf:contractfacet:environmentregistryandbootstrapproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by proof:environment-registry, proof:environment-admin-bootstrap, and proof:environment-operations, demonstrating registration, bootstrap, and operational semantics. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:environmentregistryandbootstrapsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:environmentregistryandbootstrapuisemantics>.
-<urn:usf:contractfacet:environmentregistryandbootstrapuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:environmentregistryandbootstrapsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:environmentregistryandbootstrapuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The environmentregistryandbootstrap capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:environmentregistryandbootstrap> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:environmentspecificvssharedservicemodelsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "environmentspecificvssharedservicemodelsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s06ec103b7e2425a9aef387dc586963ca76ba7778540f56293883ddd0b58fb59f>;
@@ -1323,8 +1325,8 @@
     <urn:usf:ontology:facetStatement> "Proof is the environment-service-classification document and associated checks demonstrating consistent shared-versus-environment-specific classification; it is a foundation-document proof rather than a live runtime probe. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:environmentspecificvssharedservicemodelsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:environmentspecificvssharedservicemodeluisemantics>.
 <urn:usf:contractfacet:environmentspecificvssharedservicemodeluisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:environmentspecificvssharedservicemodelsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The environmentspecificvssharedservicemodel capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:environmentspecificvssharedservicemodel> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:eventbusdurablequeuesdlqredrivesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "eventbusdurablequeuesdlqredrivesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s74aeb32e397a0eadfb7b8d0f9c541c7d834840439dbcd3e2a53743c98f186fb6>;
@@ -1378,9 +1380,9 @@
 <urn:usf:contractfacet:eventbusdurablequeuesdlqredriveproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by three runtime proofs: event-bus validates live Postgres outbox persistence, row-level security, and secret-payload rejection; event-worker validates processing, retry, dead-letter, and heartbeat; event-redrive validates the live admin routes and requeue, with the corpus describing this as level-4 live substrate and route validation. The proofs are the lineage evidence, not a USF readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:eventbusdurablequeuesdlqredrivesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:eventbusdurablequeuesdlqredriveuisemantics>.
-<urn:usf:contractfacet:eventbusdurablequeuesdlqredriveuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:eventbusdurablequeuesdlqredrivesemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:eventbusdurablequeuesdlqredriveuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The eventbusdurablequeuesdlqredrive capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:eventbusdurablequeuesdlqredrive> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:historyreadmodelreadonlyprojectionsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "historyreadmodelreadonlyprojectionsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s717a4196386fca43cfc09361ff4e435af40f29129d30f82a137401cc9414af48>;
@@ -1434,9 +1436,9 @@
 <urn:usf:contractfacet:historyreadmodelreadonlyprojectionproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the history proof against the history repository projection, asserting the safe summarised shape and tenant scoping. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:historyreadmodelreadonlyprojectionsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:historyreadmodelreadonlyprojectionuisemantics>.
-<urn:usf:contractfacet:historyreadmodelreadonlyprojectionuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:historyreadmodelreadonlyprojectionsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:historyreadmodelreadonlyprojectionuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The historyreadmodelreadonlyprojection capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:historyreadmodelreadonlyprojection> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:i18nruntimeandvalidationsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "i18nruntimeandvalidationsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s12502805027b73209f328094c68746b4d83ec795c7cab02d164b6eadda227220>;
@@ -1491,8 +1493,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by validate-i18n and the i18n-runtime tests, demonstrating locale resolution and the key/raw-literal/interpolation validation gate. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:i18nruntimeandvalidationsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:i18nruntimeandvalidationuisemantics>.
 <urn:usf:contractfacet:i18nruntimeandvalidationuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:i18nruntimeandvalidationsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The i18nruntimeandvalidation capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:i18nruntimeandvalidation> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:internalservicecatalogandreadinesssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "internalservicecatalogandreadinesssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s215239e593f27a86a49745466d624b96404e06fdb040c68b08e0385f7365d069>;
@@ -1546,9 +1548,9 @@
 <urn:usf:contractfacet:internalservicecatalogandreadinessproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the cited platform-services and service-catalog-registry runtime proofs (and the composed-provider readiness proof), demonstrating catalog aggregation and tenant-scoped readiness reporting as hermetic/runtime lineage rather than a current-readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:internalservicecatalogandreadinesssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:internalservicecatalogandreadinessuisemantics>.
-<urn:usf:contractfacet:internalservicecatalogandreadinessuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:internalservicecatalogandreadinesssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:internalservicecatalogandreadinessuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The internalservicecatalogandreadiness capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:internalservicecatalogandreadiness> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:logsaggregationandtenantscopedsearchsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "logsaggregationandtenantscopedsearchsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s5ab9ad99c3138be826c7ec952db20f9bae996aaa13914b80f1471d071cd3003f>;
@@ -1602,9 +1604,9 @@
 <urn:usf:contractfacet:logsaggregationandtenantscopedsearchproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the cited tenant-observability runtime proof plus logs use-case tests, demonstrating tenant-scoped search, readiness reporting, and fail-closed isolation as hermetic/runtime lineage rather than a current-readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:logsaggregationandtenantscopedsearchsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:logsaggregationandtenantscopedsearchuisemantics>.
-<urn:usf:contractfacet:logsaggregationandtenantscopedsearchuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:logsaggregationandtenantscopedsearchsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:logsaggregationandtenantscopedsearchuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The logsaggregationandtenantscopedsearch capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:logsaggregationandtenantscopedsearch> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:metricsandtracessemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "metricsandtracessemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sd379c91d09e4e22370e60da10bfd092731acf0e3d99f688232e75dd18497481b>;
@@ -1658,9 +1660,9 @@
 <urn:usf:contractfacet:metricsandtracesproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the cited metrics (Prometheus) and dashboards runtime proofs plus observability tests, demonstrating metric exposure, trace correlation, and readiness reporting as hermetic/runtime lineage rather than a current-readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:metricsandtracessemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:metricsandtracesuisemantics>.
-<urn:usf:contractfacet:metricsandtracesuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:metricsandtracessemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:metricsandtracesuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The metricsandtraces capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:metricsandtraces> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:mockprovidersdevtestsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "mockprovidersdevtestsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s259215ec58064b7898310e6ffa9bb48bce2cdf46274bd66d8b939d8a584aaf8f>;
@@ -1715,8 +1717,8 @@
     <urn:usf:ontology:facetStatement> "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target.".
 <urn:usf:sourcesemanticbinding:mockprovidersdevtestsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:mockprovidersdevtestuisemantics>.
 <urn:usf:contractfacet:mockprovidersdevtestuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target.".
-<urn:usf:sourcesemanticbinding:mockprovidersdevtestsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The mockprovidersdevtest capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:mockprovidersdevtest> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:notificationdeliveryandpreferencesandchannelssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "notificationdeliveryandpreferencesandchannelssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sd509c9a76f59beb8890f166d3637e43d94a77ec8be68b2ebf709b6bb0dda8070>;
@@ -1770,9 +1772,9 @@
 <urn:usf:contractfacet:notificationdeliveryandpreferencesandchannelsproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the notification-preferences, notification-dispatch, notification-email-transport, notification-webhook-transport, and notification-transport-routes runtime proofs, described in the corpus as level-4 live Postgres, Mailpit, and webhook route validation. The proofs are the lineage evidence, not a USF readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:notificationdeliveryandpreferencesandchannelssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:notificationdeliveryandpreferencesandchannelsuisemantics>.
-<urn:usf:contractfacet:notificationdeliveryandpreferencesandchannelsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:notificationdeliveryandpreferencesandchannelssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:notificationdeliveryandpreferencesandchannelsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
+    <urn:usf:ontology:facetStatement> "The notificationdeliveryandpreferencesandchannels capability has one framework-neutral UI semantic model with explicit surfaces, view models, components, journeys, permissions, accessibility, localisation, and target-specific renderer contracts. This semantic closure disclaims product parity, human acceptance, accessibility compliance, and launch-language readiness.".
+<urn:usf:semanticcontract:notificationdeliveryandpreferencesandchannels> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:objectstorageandtenantprefixesandsignedurlssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "objectstorageandtenantprefixesandsignedurlssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s61c1a241c3c9b107e8cdfc328eb20cade3b285e3a9a6c7a99dacf4e773a77ea2>;
@@ -1826,9 +1828,9 @@
 <urn:usf:contractfacet:objectstorageandtenantprefixesandsignedurlsproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the tenant-storage-objects proof plus object-storage adapter and storage-runtime contract tests covering prefix isolation and the scan lifecycle. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:objectstorageandtenantprefixesandsignedurlssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:objectstorageandtenantprefixesandsignedurlsuisemantics>.
-<urn:usf:contractfacet:objectstorageandtenantprefixesandsignedurlsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:objectstorageandtenantprefixesandsignedurlssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:objectstorageandtenantprefixesandsignedurlsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The objectstorageandtenantprefixesandsignedurls capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:objectstorageandtenantprefixesandsignedurls> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:observabilitybuiltinalertingandincidentssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "observabilitybuiltinalertingandincidentssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s604def72cf9ddcfb1f050fcd85af780ca21c5a54b5e11996ec22a0c451c9cbfd>;
@@ -1882,9 +1884,9 @@
 <urn:usf:contractfacet:observabilitybuiltinalertingandincidentsproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the cited observability-signals, alerting, incident-foundation, and alert-notification-bridge runtime proofs plus alerting tests, demonstrating rule evaluation, incident transitions, and notification bridging as hermetic/runtime lineage rather than a current-readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:observabilitybuiltinalertingandincidentssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:observabilitybuiltinalertingandincidentsuisemantics>.
-<urn:usf:contractfacet:observabilitybuiltinalertingandincidentsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:observabilitybuiltinalertingandincidentssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:observabilitybuiltinalertingandincidentsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The observabilitybuiltinalertingandincidents capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:observabilitybuiltinalertingandincidents> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:openapidrifthardgatesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "openapidrifthardgatesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s13013ead670c21af37b38e868614930df02211633e42c75533a0dd247d838920>;
@@ -1939,8 +1941,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the OpenAPI drift validation tests and the architecture test target asserting strict-mode exit and drift detection. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:openapidrifthardgatesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:openapidrifthardgateuisemantics>.
 <urn:usf:contractfacet:openapidrifthardgateuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:openapidrifthardgatesemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The openapidrifthardgate capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:openapidrifthardgate> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:pitrretentionlegalholddataresidencysemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "pitrretentionlegalholddataresidencysemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s5ea94cbdaee6502e040e614628b656abda0d4756660f6d066883e10306254e6c>;
@@ -1995,8 +1997,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by point-in-time restore-drill, retention, legal-hold, and data-residency proofs, including the retention tick worker proven to honour active holds. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:pitrretentionlegalholddataresidencysemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:pitrretentionlegalholddataresidencyuisemantics>.
 <urn:usf:contractfacet:pitrretentionlegalholddataresidencyuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:pitrretentionlegalholddataresidencysemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The pitrretentionlegalholddataresidency capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:pitrretentionlegalholddataresidency> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:productcatalogplanspricessemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "productcatalogplanspricessemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sbb3817290bd4f86f32469882ede5ef307c8f5f6d6bc16aa09ef0e1c42356d40d>;
@@ -2051,8 +2053,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by catalog unit tests and a catalog route-registration runtime proof, with live HTTP-backed plan synchronisation validated separately through the external billing provider adapter. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:productcatalogplanspricessemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:productcatalogplanspricesuisemantics>.
 <urn:usf:contractfacet:productcatalogplanspricesuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:productcatalogplanspricessemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The productcatalogplansprices capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:productcatalogplansprices> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:providerconfigurationplanesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "providerconfigurationplanesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s835e433b2c6ea1e00b868b1dfddbcae1d7c67d4fffa9b38c91932199be733ad9>;
@@ -2106,9 +2108,9 @@
 <urn:usf:contractfacet:providerconfigurationplaneproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by proof:provider-config and proof:provider-readiness-contract together with the cited auth-provider-config unit tests, demonstrating configuration, credential, lifecycle, and readiness semantics. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:providerconfigurationplanesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:providerconfigurationplaneuisemantics>.
-<urn:usf:contractfacet:providerconfigurationplaneuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:providerconfigurationplanesemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:providerconfigurationplaneuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The providerconfigurationplane capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:providerconfigurationplane> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:providerenvironmentclassificationsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "providerenvironmentclassificationsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s421c21856f45f888431e028871ba6849de088b890fbbb7a89bc576e6d360e51f>;
@@ -2163,8 +2165,8 @@
     <urn:usf:ontology:facetStatement> "Proof is proof:provider-environment-classification, demonstrating that the matrix keeps provider mode and environment as separate, honestly classified dimensions. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:providerenvironmentclassificationsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:providerenvironmentclassificationuisemantics>.
 <urn:usf:contractfacet:providerenvironmentclassificationuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:providerenvironmentclassificationsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The providerenvironmentclassification capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:providerenvironmentclassification> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:quotaenforcementsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "quotaenforcementsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sc7c1cadf168794a2c571089d71b1c6f552fb42b6813967a0efe8ab35373710f2>;
@@ -2218,9 +2220,9 @@
 <urn:usf:contractfacet:quotaenforcementproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by quota unit tests and runtime proofs validating live entitlement-before-quota ordering, exceeded state, typed denial, revoke denial, and route handlers. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:quotaenforcementsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:quotaenforcementuisemantics>.
-<urn:usf:contractfacet:quotaenforcementuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:quotaenforcementsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:quotaenforcementuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The quotaenforcement capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:quotaenforcement> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:ratelimitingapisemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "ratelimitingapisemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s4e1f1a3280ed63b35a41839d7177064108ff4cb2fff7b3d3a63cff9d574dc1b9>;
@@ -2274,9 +2276,9 @@
 <urn:usf:contractfacet:ratelimitingapiproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by rate-limit unit tests and runtime proofs validating live relational and cache counting plus operator route behaviour and degraded fallback. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:ratelimitingapisemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:ratelimitingapiuisemantics>.
-<urn:usf:contractfacet:ratelimitingapiuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:ratelimitingapisemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:ratelimitingapiuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The ratelimitingapi capability is explicitly API-only; no human-rendered surface, component, action, journey, consent prompt, or renderer input is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:ratelimitingapi> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:rbacrolesandpermissionssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "rbacrolesandpermissionssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s9fda7d10e40e82cd95c0fcf68c8bff8d477c4e15df4d0701f511bfd8b9ca54ee>;
@@ -2330,9 +2332,9 @@
 <urn:usf:contractfacet:rbacrolesandpermissionsproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Unit proofs cover the role/permission domain, member role mutations, and contract drift between the domain vocabulary and the admin contract, demonstrated in source lineage via hermetic role/permission state validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:rbacrolesandpermissionssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:rbacrolesandpermissionsuisemantics>.
-<urn:usf:contractfacet:rbacrolesandpermissionsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
-    <urn:usf:ontology:facetStatement> "UI permission gating renders an accessible forbidden state when the actor lacks the required permission and must not duplicate authentication semantics.".
-<urn:usf:sourcesemanticbinding:rbacrolesandpermissionssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:rbacrolesandpermissionsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The rbacrolesandpermissions capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:rbacrolesandpermissions> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:relationalstorageandmigrationsandrlssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "relationalstorageandmigrationsandrlssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s16fce726b140c51e6c5f2528d99c5d8597c16c52b3eaa22e142fcab0f5f5effc>;
@@ -2386,9 +2388,9 @@
 <urn:usf:contractfacet:relationalstorageandmigrationsandrlsproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by repository substrate tests and live isolation proofs that assert RLS denies cross-tenant reads and that the checksum and migrated-state gates hold; these caught a real naive-predicate leak before promotion. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:relationalstorageandmigrationsandrlssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:relationalstorageandmigrationsandrlsuisemantics>.
-<urn:usf:contractfacet:relationalstorageandmigrationsandrlsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:relationalstorageandmigrationsandrlssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:relationalstorageandmigrationsandrlsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The relationalstorageandmigrationsandrls capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:relationalstorageandmigrationsandrls> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:runtimesecretsmanagementsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "runtimesecretsmanagementsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s80ff8130bf3f760984e7cf4a96d902425e6105071b594b3965fe2675d69b0ee1>;
@@ -2442,9 +2444,9 @@
 <urn:usf:contractfacet:runtimesecretsmanagementproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by three runtime proofs: secret-store-contract validates the live Postgres store contract, encryption, row-level security, and audit; secrets-openbao validates the live OpenBao provider; and provider-secrets-readiness validates the ready versus degraded classification, described in the corpus as level-4 live provider and storage validation. The proofs are the lineage evidence, not a USF readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:runtimesecretsmanagementsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:runtimesecretsmanagementuisemantics>.
-<urn:usf:contractfacet:runtimesecretsmanagementuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:runtimesecretsmanagementsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:runtimesecretsmanagementuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The runtimesecretsmanagement capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:runtimesecretsmanagement> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:scheduledjobsbuiltinontheeventsubstratesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "scheduledjobsbuiltinontheeventsubstratesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s1942bb091c25935d3b697345ee1c8cbfd5332d0a24d74264916a1cbddcadb770>;
@@ -2498,9 +2500,9 @@
 <urn:usf:contractfacet:scheduledjobsbuiltinontheeventsubstrateproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by two runtime proofs: scheduled-jobs validates live Postgres schedule persistence, due and run-now enqueue, row-level security, and the no-secret schema, and scheduled-job-routes validates the route handlers and access metadata, described in the corpus as level-4 live substrate and route validation. The proofs are the lineage evidence, not a USF readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:scheduledjobsbuiltinontheeventsubstratesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:scheduledjobsbuiltinontheeventsubstrateuisemantics>.
-<urn:usf:contractfacet:scheduledjobsbuiltinontheeventsubstrateuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:scheduledjobsbuiltinontheeventsubstratesemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:scheduledjobsbuiltinontheeventsubstrateuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The scheduledjobsbuiltinontheeventsubstrate capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:scheduledjobsbuiltinontheeventsubstrate> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:searchandindexingproductsearchsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "searchandindexingproductsearchsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s384c372c2f1fb4474938dbc56c7755577795eafdaaac9a525d262bc06bd6432b>;
@@ -2554,9 +2556,9 @@
 <urn:usf:contractfacet:searchandindexingproductsearchproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the search, search-isolation, and search-routes proofs, including a cross-tenant isolation assertion that a foreign-tenant query returns zero rows. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:searchandindexingproductsearchsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:searchandindexingproductsearchuisemantics>.
-<urn:usf:contractfacet:searchandindexingproductsearchuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
-    <urn:usf:ontology:facetStatement> "UI semantics recovered from cited UI source.".
-<urn:usf:sourcesemanticbinding:searchandindexingproductsearchsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:searchandindexingproductsearchuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The searchandindexingproductsearch capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:searchandindexingproductsearch> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:serverlessfunctionruntimesemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "serverlessfunctionruntimesemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s44c1ca0ee9f1711f24136d3ebb44a756771fb4e2db7c2e6136435fd5d5b3b012>;
@@ -2611,8 +2613,8 @@
     <urn:usf:ontology:facetStatement> "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target.".
 <urn:usf:sourcesemanticbinding:serverlessfunctionruntimesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:serverlessfunctionruntimeuisemantics>.
 <urn:usf:contractfacet:serverlessfunctionruntimeuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "Excluded as not-applicable-final (capability matrix); retained as lineage only, not an implementation extraction target.".
-<urn:usf:sourcesemanticbinding:serverlessfunctionruntimesemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The serverlessfunctionruntime capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:serverlessfunctionruntime> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:servicecatalogandproviderintegrationmodelsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "servicecatalogandproviderintegrationmodelsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s96b2b7263d3e91fa88ac57d26ef36f9a6621b074d8eae40f507b211694ea112f>;
@@ -2666,9 +2668,9 @@
 <urn:usf:contractfacet:servicecatalogandproviderintegrationmodelproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by proof:platform-services, proof:service-clickthrough-policy, proof:service-catalog-registry, and proof:entitlements-routes together with the cited unit tests, demonstrating catalog, visibility, entitlement, and readiness semantics. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:servicecatalogandproviderintegrationmodelsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:servicecatalogandproviderintegrationmodeluisemantics>.
-<urn:usf:contractfacet:servicecatalogandproviderintegrationmodeluisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:servicecatalogandproviderintegrationmodelsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:servicecatalogandproviderintegrationmodeluisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The servicecatalogandproviderintegrationmodel capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:servicecatalogandproviderintegrationmodel> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:suborganisationssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "suborganisationssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:se63234afde063dcf0661213158d8d08ecbad8de26fc95346f6d41d21d2b98a00>;
@@ -2722,9 +2724,9 @@
 <urn:usf:contractfacet:suborganisationsproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "A unit proof covers the state machine and validation and a UI semantic harness proves the headless journey, demonstrated in source lineage via hermetic state/validation proof plus a semantic harness for future UI generation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:suborganisationssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:suborganisationsuisemantics>.
-<urn:usf:contractfacet:suborganisationsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; the source-lineage headless sub-organisation journey is lineage only. Author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:suborganisationssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:suborganisationsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The suborganisations capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:suborganisations> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:subscriptionsinvoicespaymentmethodsdunningsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "subscriptionsinvoicespaymentmethodsdunningsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s6fe8fe4842f456c0c6cc78ab301aa771405101f75add2f0c19ce093ffe6c8091>;
@@ -2779,8 +2781,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by billing-provider port tests and external billing-provider adapter tests, including idempotent capture, refund, and live plan synchronisation against the provider. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:subscriptionsinvoicespaymentmethodsdunningsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:subscriptionsinvoicespaymentmethodsdunninguisemantics>.
 <urn:usf:contractfacet:subscriptionsinvoicespaymentmethodsdunninguisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:subscriptionsinvoicespaymentmethodsdunningsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The subscriptionsinvoicespaymentmethodsdunning capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:subscriptionsinvoicespaymentmethodsdunning> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:supportmodebreakglassaccesssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "supportmodebreakglassaccesssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s93b11df9da1f5f4badf611a16aabb914a3d32d1b877444074080e939db2b6c2b>;
@@ -2834,9 +2836,9 @@
 <urn:usf:contractfacet:supportmodebreakglassaccessproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "A unit proof covers the workflow and session state machine and a runtime proof covers the approval flow, demonstrated in source lineage via hermetic local workflow/session state-machine validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:supportmodebreakglassaccesssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:supportmodebreakglassaccessuisemantics>.
-<urn:usf:contractfacet:supportmodebreakglassaccessuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:supportmodebreakglassaccesssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:supportmodebreakglassaccessuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The supportmodebreakglassaccess capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:supportmodebreakglassaccess> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:supportticketscustomerhealthannouncementssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "supportticketscustomerhealthannouncementssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s2476b7e78189ae00be33f29b4fd5d10be97ae65399bc44c4e0c1b6bc8e625f8b>;
@@ -2891,8 +2893,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by support-ticket and announcement unit tests plus a support-approval runtime proof validating the approval waiting/completed workflow and the support-session audit lifecycle. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:supportticketscustomerhealthannouncementssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:supportticketscustomerhealthannouncementsuisemantics>.
 <urn:usf:contractfacet:supportticketscustomerhealthannouncementsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:supportticketscustomerhealthannouncementssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The supportticketscustomerhealthannouncements capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:supportticketscustomerhealthannouncements> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:tenantcanonicaldomainsetunsetsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "tenantcanonicaldomainsetunsetsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:saded4fa87ed9b4ff549e3319f59fe99ffda9540045621a09a3c42ffb393dcde7>;
@@ -2946,9 +2948,9 @@
 <urn:usf:contractfacet:tenantcanonicaldomainsetunsetproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by a canonical-domain runtime proof that validates live registry guards, redirect-policy transition, atomic replacement, unset, and clearing on deactivation against a real substrate. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:tenantcanonicaldomainsetunsetsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:tenantcanonicaldomainsetunsetuisemantics>.
-<urn:usf:contractfacet:tenantcanonicaldomainsetunsetuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:tenantcanonicaldomainsetunsetsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:tenantcanonicaldomainsetunsetuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The tenantcanonicaldomainsetunset capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:tenantcanonicaldomainsetunset> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:tenantdataimportexportsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "tenantdataimportexportsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s6109bfa939fffdf87155f5b4bf7189ee521ce394cc2187f9052ba9c8ba083e5b>;
@@ -3003,8 +3005,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the data-portability proof and portability unit tests covering resumable, idempotent import progress and no-silent-loss semantics. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:tenantdataimportexportsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:tenantdataimportexportuisemantics>.
 <urn:usf:contractfacet:tenantdataimportexportuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:tenantdataimportexportsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The tenantdataimportexport capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:tenantdataimportexport> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:tenantdomainactivationauthclientsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "tenantdomainactivationauthclientsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s40209da5a8dbb6a554d73b4a31b7ab78dfd70c7d244950bd378911915f56efb8>;
@@ -3058,9 +3060,9 @@
 <urn:usf:contractfacet:tenantdomainactivationauthclientproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by unit proofs over the domain lifecycle guards and by a canonical-domain runtime proof that validates live registry behaviour with an injected auth-client port. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:tenantdomainactivationauthclientsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:tenantdomainactivationauthclientuisemantics>.
-<urn:usf:contractfacet:tenantdomainactivationauthclientuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:tenantdomainactivationauthclientsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:tenantdomainactivationauthclientuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The tenantdomainactivationauthclient capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:tenantdomainactivationauthclient> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:tenantgroupssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "tenantgroupssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s254d30906c8facb151be516cb10f189f248a0133b2c65daed343ab04a4135ae5>;
@@ -3114,9 +3116,9 @@
 <urn:usf:contractfacet:tenantgroupsproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "A unit proof covers group lifecycle and validation and a UI semantic harness proves the headless journey, demonstrated in source lineage via hermetic behaviour/state validation plus a semantic harness for future UI generation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:tenantgroupssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:tenantgroupsuisemantics>.
-<urn:usf:contractfacet:tenantgroupsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; the source-lineage headless group journey is lineage only. Author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:tenantgroupssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:tenantgroupsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The tenantgroups capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:tenantgroups> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:tenanthostidentityresolutionsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "tenanthostidentityresolutionsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s99fda846177298be25c2c89dcc52256262de4eec0c48795785b623b860dd6d71>;
@@ -3171,8 +3173,8 @@
     <urn:usf:ontology:facetStatement> "Runtime domain-identity matrix and custom-domain resolution proofs validate live local resolver behaviour across all host classes, demonstrated in source lineage via hermetic/runtime substrate validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:tenanthostidentityresolutionsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:tenanthostidentityresolutionuisemantics>.
 <urn:usf:contractfacet:tenanthostidentityresolutionuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "Host identity resolution is request-context semantics, not a direct UI surface in the first slice.".
-<urn:usf:sourcesemanticbinding:tenanthostidentityresolutionsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The tenanthostidentityresolution capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:tenanthostidentityresolution> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:tenantidentityrecordandfqdnsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "tenantidentityrecordandfqdnsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s16d245ab9d82765212e5a2e56871407f60d3c214ebea5819c9a5a6d284caa96d>;
@@ -3227,8 +3229,8 @@
     <urn:usf:ontology:facetStatement> "A runtime domain-identity matrix proof validates host classification plus live slug resolution, and a custom-domain resolution proof validates live registry resolution with rejection of inactive, pending, and disabled domains and a unique-enabled-domain guard. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:tenantidentityrecordandfqdnsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:tenantidentityrecordandfqdnuisemantics>.
 <urn:usf:contractfacet:tenantidentityrecordandfqdnuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "Tenant identity resolution is a request-context contract for this slice, not a user-facing UI journey.".
-<urn:usf:sourcesemanticbinding:tenantidentityrecordandfqdnsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The tenantidentityrecordandfqdn capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:tenantidentityrecordandfqdn> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:tenantisolationproofsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "tenantisolationproofsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:safe7ba9f71db4b18e17f4e5db3ec6fc5164f23911f3149003333648f9dde5cdf>;
@@ -3282,9 +3284,9 @@
 <urn:usf:contractfacet:tenantisolationproofproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by domain-identity-matrix and tenant-storage isolation runtime proofs plus live row-level-security isolation checks across metering, search, observability, webhooks, events, and secret-store proofs. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:tenantisolationproofsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:tenantisolationproofuisemantics>.
-<urn:usf:contractfacet:tenantisolationproofuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:tenantisolationproofsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:tenantisolationproofuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The tenantisolationproof capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:tenantisolationproof> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:tenantlifecycleprovisionsuspenddeleteexportsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "tenantlifecycleprovisionsuspenddeleteexportsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s0ecfb63f40c59369fcad6cb41358f4012ceea774c4bfb19fa202f5c5c7e18f1c>;
@@ -3338,9 +3340,9 @@
 <urn:usf:contractfacet:tenantlifecycleprovisionsuspenddeleteexportproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by tenant-lifecycle unit tests and a runtime proof asserting audit-first invocation and ordered subsystem coordination with export-before-delete. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:tenantlifecycleprovisionsuspenddeleteexportsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:tenantlifecycleprovisionsuspenddeleteexportuisemantics>.
-<urn:usf:contractfacet:tenantlifecycleprovisionsuspenddeleteexportuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:tenantlifecycleprovisionsuspenddeleteexportsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:tenantlifecycleprovisionsuspenddeleteexportuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The tenantlifecycleprovisionsuspenddeleteexport capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:tenantlifecycleprovisionsuspenddeleteexport> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:tenantserviceclickthroughpolicysemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "tenantserviceclickthroughpolicysemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sbd8ba60cfc6fb6fca2853c81e127553f4508b277c023da3a2c56df45ec7a51f8>;
@@ -3394,9 +3396,9 @@
 <urn:usf:contractfacet:tenantserviceclickthroughpolicyproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by the cited service-clickthrough-policy and clickthrough runtime proofs plus service-clickthrough tests, demonstrating per-tenant access decisions and forward-auth/reconciliation derivation as hermetic/runtime lineage rather than a current-readiness claim. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:tenantserviceclickthroughpolicysemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:tenantserviceclickthroughpolicyuisemantics>.
-<urn:usf:contractfacet:tenantserviceclickthroughpolicyuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:tenantserviceclickthroughpolicysemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:tenantserviceclickthroughpolicyuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The tenantserviceclickthroughpolicy capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:tenantserviceclickthroughpolicy> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:universalservicefoundationscopeandprinciplessemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "universalservicefoundationscopeandprinciplessemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sa99d7cbd561d28b9bae0a23276d26a715640257983e1d56cad6d434bae6a1c7a>;
@@ -3451,8 +3453,8 @@
     <urn:usf:ontology:facetStatement> "Proof for this capability is the foundation matrix plus the registry and validation test that demonstrate the corpus is internally consistent and that each capability's claims are backed by evidence, not assertion. Historical demonstration is via that hermetic foundation tooling rather than live external runtime. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:universalservicefoundationscopeandprinciplessemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:universalservicefoundationscopeandprinciplesuisemantics>.
 <urn:usf:contractfacet:universalservicefoundationscopeandprinciplesuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:universalservicefoundationscopeandprinciplessemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The universalservicefoundationscopeandprinciples capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:universalservicefoundationscopeandprinciples> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:usagemeteringandmetereventingestionsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "usagemeteringandmetereventingestionsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s80312b86457f924f105a1c1d9447ac51628ba4e28a79ffc24351b3a6cdd951f2>;
@@ -3506,9 +3508,9 @@
 <urn:usf:contractfacet:usagemeteringandmetereventingestionproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by metering unit tests and runtime proofs validating live idempotency, the entitlement gate, aggregation, isolation, and route handlers. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:usagemeteringandmetereventingestionsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:usagemeteringandmetereventingestionuisemantics>.
-<urn:usf:contractfacet:usagemeteringandmetereventingestionuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:usagemeteringandmetereventingestionsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:usagemeteringandmetereventingestionuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The usagemeteringandmetereventingestion capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:usagemeteringandmetereventingestion> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:useridentityandtenantmembershipsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "useridentityandtenantmembershipsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s08250c176c6170325b8fb1a0a2ecd6f8f3d132c679958229e00d9e4da0e5beb7>;
@@ -3563,7 +3565,8 @@
     <urn:usf:ontology:facetStatement> "Unit and substrate proofs cover the membership usecase and its v2 variant, the identity domain, the identity repository, and organisation profile and member route coverage, demonstrated in source lineage via hermetic state-machine and permission validation. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:useridentityandtenantmembershipsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:useridentityandtenantmembershipuisemantics>.
 <urn:usf:contractfacet:useridentityandtenantmembershipuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "User identity and tenant membership is explicitly not exposed as a UI capability. Profile list and detail surfaces are governed by the end-user profile and preferences capability, so this contract must not invent a duplicate membership UI.".
+    <urn:usf:ontology:facetStatement> "The useridentityandtenantmembership capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:useridentityandtenantmembership> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:webhooksdeveloperfacingsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "webhooksdeveloperfacingsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s338725e919fd6ca98a6f2fc6e440067341e3f1c8b66cdc9364752dbad7ee88c4>;
@@ -3617,9 +3620,9 @@
 <urn:usf:contractfacet:webhooksdeveloperfacingproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by webhook unit tests and runtime proofs validating signed test delivery, fan-out/retry/dead-letter, and dead-letter metrics with redrive against live storage and HTTP delivery. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:webhooksdeveloperfacingsemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:webhooksdeveloperfacinguisemantics>.
-<urn:usf:contractfacet:webhooksdeveloperfacinguisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
-    <urn:usf:ontology:facetStatement> "UI semantics recovered from cited UI source.".
-<urn:usf:sourcesemanticbinding:webhooksdeveloperfacingsemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:webhooksdeveloperfacinguisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The webhooksdeveloperfacing capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:webhooksdeveloperfacing> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:workflowenginescheduledjobsapprovalssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "workflowenginescheduledjobsapprovalssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s4f79bf8141427338785037419bde37e729874a9a4eee4afab85970abffdc2290>;
@@ -3674,8 +3677,8 @@
     <urn:usf:ontology:facetStatement> "Behaviour is grounded in workflow-closure, workflow-engine, approval-workflow, workflow-adapters, temporal-workflow-provider, and workflow-provider-live proofs, captured here as informational semantic lineage from the USF coverage record and equivalence audit with no source import and an open implementation language. The proof expectation is the lineage evidence, not a current USF readiness verdict. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:workflowenginescheduledjobsapprovalssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:workflowenginescheduledjobsapprovalsuisemantics>.
 <urn:usf:contractfacet:workflowenginescheduledjobsapprovalsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
-    <urn:usf:ontology:facetStatement> "No distinct UI capability at the contract level (coverage matrix ui=0); UI is modelled separately and remains a future AI-customised deliverable.".
-<urn:usf:sourcesemanticbinding:workflowenginescheduledjobsapprovalssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+    <urn:usf:ontology:facetStatement> "The workflowenginescheduledjobsapprovals capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:workflowenginescheduledjobsapprovals> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:writeonlysecretsettingssemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "writeonlysecretsettingssemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:sbbc1a2417b8d5ca8db0a4fb9a462b0bdc040d6c2ac4a967da7b3e0f45ba3f194>;
@@ -3729,15 +3732,16 @@
 <urn:usf:contractfacet:writeonlysecretsettingsproof> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:complete>;
     <urn:usf:ontology:facetStatement> "Behaviour is exercised by unit proofs over token cryptography and audit-redaction plus runtime proofs of the secret-store contract and a provider-backed secret store against a live substrate, validating that only metadata is exposed and audited. Proof is hermetic/runtime lineage; fresh proof remains pending.".
 <urn:usf:sourcesemanticbinding:writeonlysecretsettingssemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:writeonlysecretsettingsuisemantics>.
-<urn:usf:contractfacet:writeonlysecretsettingsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:gap>;
-    <urn:usf:ontology:facetStatement> "No verified UI source path in the manifest yet; author the UI semantic model before generation.".
-<urn:usf:sourcesemanticbinding:writeonlysecretsettingssemanticsource> <urn:usf:ontology:sourceBindingEquivalenceKind> <urn:usf:equivalencekind:semantic>.
+<urn:usf:contractfacet:writeonlysecretsettingsuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
+    <urn:usf:ontology:facetStatement> "The writeonlysecretsettings capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
+<urn:usf:semanticcontract:writeonlysecretsettings> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcedispositionpolicy:semanticcontractsource> a <urn:usf:ontology:SourceDispositionPolicy>;
     <urn:usf:ontology:canonicalName> "semanticcontractsource";
     <urn:usf:ontology:policyDispositionKind> <urn:usf:dispositionkind:retireafterequivalence>;
     <urn:usf:ontology:policyDispositionBasis> <urn:usf:dispositionbasis:explicitplanlink>, <urn:usf:dispositionbasis:exactsemanticbinding>, <urn:usf:dispositionbasis:independentintegrityobservation>;
     <urn:usf:ontology:policyDecisionState> <urn:usf:dispositiondecisionstate:accepted>;
     <urn:usf:ontology:policyOutputMode> <urn:usf:dispositionoutputmode:canonicaloutput>;
+    <urn:usf:ontology:policyPrecedence> 40;
     <urn:usf:ontology:policyGenerationInputRole> <urn:usf:generationinputrole:equivalencesubject>;
     <urn:usf:ontology:isDefaultDispositionPolicy> false;
     <urn:usf:ontology:isActiveDispositionPolicy> true;
@@ -3749,6 +3753,7 @@
     <urn:usf:ontology:policyDispositionBasis> <urn:usf:dispositionbasis:exactsemanticbinding>, <urn:usf:dispositionbasis:independentintegrityobservation>;
     <urn:usf:ontology:policyDecisionState> <urn:usf:dispositiondecisionstate:accepted>;
     <urn:usf:ontology:policyOutputMode> <urn:usf:dispositionoutputmode:nooutput>;
+    <urn:usf:ontology:policyPrecedence> 40;
     <urn:usf:ontology:policyGenerationInputRole> <urn:usf:generationinputrole:equivalencesubject>;
     <urn:usf:ontology:isDefaultDispositionPolicy> false;
     <urn:usf:ontology:isActiveDispositionPolicy> true;

@@ -7,6 +7,8 @@ import { canonicalJson, canonicalLine, writeJsonAtomic } from './canonical.mjs';
 import { censusRoot, repositoryRoot } from './constants.mjs';
 import { createParserEvidence, parserEvidenceMismatches } from './parser-evidence.mjs';
 import { validateHardenedOutputs } from './validate.mjs';
+import { dependencyKeyFor, dependencyResolutionBasis } from './dependency-resolution.mjs';
+import { runAudit } from '../audit/index.mjs';
 import { verifyStardogObservation } from '../audit/live-observation.mjs';
 
 const outputProjection = {
@@ -112,10 +114,18 @@ function prohibitedStardogAccessPaths() {
   }).map((target) => path.relative(repositoryRoot, target).split(path.sep).join('/')).sort();
 }
 
+export async function recomputeIndependentAudit({
+  auditRunner = runAudit,
+  censusDirectory = censusRoot,
+  repositoryDirectory = repositoryRoot,
+} = {}) {
+  return auditRunner({ censusRoot: censusDirectory, repositoryRoot: repositoryDirectory });
+}
+
 export async function computeClosure() {
   const validation = await validateHardenedOutputs();
   const rebuilt = buildHardenedCensus();
-  const audit = JSON.parse(fs.readFileSync(path.join(censusRoot, 'audit.json'), 'utf8'));
+  const audit = await recomputeIndependentAudit();
   const stardogObservation = independentStardogObservation();
   const prohibitedAccessPaths = prohibitedStardogAccessPaths();
   const mappings = rebuilt.mappings;
@@ -161,8 +171,16 @@ export async function computeClosure() {
     familyOnlyDependencyRelationships: rebuilt.dependencies.filter((record) => record.reasonCode === 'artifact-family-membership').length,
     untypedDependencyRelationships: rebuilt.dependencies.filter((record) => !record.dependencyType).length,
     dependencyRelationshipsWithoutEvidence: rebuilt.dependencies.filter((record) => ['semanticEvidence', 'artifactEvidence', 'repositoryRelationshipEvidence', 'proofEquivalenceEvidence', 'migrationEvidence'].every((field) => record[field].length === 0)).length,
-    blockingCycles: rebuilt.summary.blockingCycleCount,
-    avoidableTransitiveBlockingRelationships: rebuilt.summary.transitiveLinksRemoved < 0 ? 1 : 0,
+    unresolvedOrInvalidDependencyEdges: rebuilt.dependencies.filter((record) =>
+      record.resolutionStatus !== 'resolved-retained' || record.dependencyKey !== dependencyKeyFor(record) ||
+      canonicalJson(record.resolutionBasis) !== canonicalJson(dependencyResolutionBasis(record)) ||
+      !packages.some((pkg) => pkg.key === record.source) || !packages.some((pkg) => pkg.key === record.prerequisite) || record.source === record.prerequisite
+    ).length,
+    unresolvedRequiredPrerequisiteRelationships: rebuilt.summary.requiredPrerequisiteRelationshipCount - rebuilt.summary.resolvedPrerequisiteRelationshipCount,
+    unsatisfiedRequiredPrerequisiteRelationships: rebuilt.summary.requiredPrerequisiteRelationshipCount - rebuilt.summary.satisfiedPrerequisiteRelationshipCount,
+    activeBlockingRelationships: rebuilt.summary.activeBlockingRelationshipCount,
+    requiredPrerequisiteCycles: rebuilt.summary.requiredPrerequisiteCycleCount,
+    avoidableTransitivePrerequisiteRelationships: rebuilt.summary.transitiveLinksRemoved < 0 ? 1 : 0,
     unreviewedParallelismReductions: rebuilt.summary.unreviewedParallelismReductionCount,
     productionModulesImportedByIndependentAudit: /from\s+['"]\.\.\/src\//.test(fs.readFileSync(path.join(censusRoot, 'audit', 'index.mjs'), 'utf8')) ? 1 : 0,
     independentAuditFailures: audit.status === 'pass' ? 0 : audit.checks.filter((record) => record.status !== 'pass').length,
@@ -184,7 +202,7 @@ export async function computeClosure() {
     canonicalMismatchFiles: mismatches,
     regeneratedOutputDigest: regeneratedOutputDigest(rebuilt),
     outsideBoundaryPaths: outsideBoundary,
-    independentlyRecomputed: false,
+    independentlyRecomputed: true,
     productionRecomputed: true,
     stardogObservation: stardogObservation.status === 'observed' ? stardogObservation.observation : { status: stardogObservation.status, reasonCode: stardogObservation.reasonCode },
     validation,

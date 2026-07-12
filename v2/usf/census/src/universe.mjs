@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { parse as parseYaml } from 'yaml';
 import { compareBy, framedDigest, sha256 } from './canonical.mjs';
 
 export const DEFAULT_REPOSITORY_ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
@@ -12,6 +13,24 @@ export const UNIVERSES = Object.freeze([
   'v2-compiler-implementation',
   'v2-support-provisioning'
 ]);
+
+export const NONCANONICAL_SCRATCH_PREFIX = 'v2/usf/.work/';
+
+export function observationCarrierPaths(repositoryRoot = DEFAULT_REPOSITORY_ROOT) {
+  const manifestPath = path.join(repositoryRoot, 'v2/usf/graph/manifest.yaml');
+  const manifest = parseYaml(fs.readFileSync(manifestPath, 'utf8'));
+  if (!manifest || typeof manifest !== 'object') throw new Error('graph manifest is empty or invalid');
+  const rows = [...(manifest.observedGraphs ?? []), ...(manifest.derivedGraphs ?? [])];
+  const carriers = new Set();
+  for (const row of rows) {
+    if (!row || typeof row.file !== 'string' || !row.file || path.posix.isAbsolute(row.file) || row.file.includes('\\') || row.file.split('/').includes('..') || path.posix.normalize(row.file) !== row.file) {
+      throw new Error('graph manifest carrier path must be a contained relative POSIX path');
+    }
+    carriers.add(`v2/usf/graph/${row.file}`);
+  }
+  if (carriers.size !== rows.length) throw new Error('graph manifest carrier paths must be unique');
+  return carriers;
+}
 
 function runGit(repositoryRoot, args, options = {}) {
   return execFileSync('git', args, {
@@ -57,8 +76,10 @@ export function workingStates(repositoryRoot = DEFAULT_REPOSITORY_ROOT) {
   return states;
 }
 
-export function universeForPath(repoPath) {
+export function universeForPath(repoPath, carrierPaths = new Set()) {
   if (repoPath.startsWith('v2/usf/census/')) return null;
+  if (repoPath.startsWith(NONCANONICAL_SCRATCH_PREFIX)) return null;
+  if (carrierPaths.has(repoPath)) return null;
   if (!repoPath.startsWith('v2/')) return 'repository-output';
   if (repoPath.startsWith('v2/usf/graph/')) return 'v2-graph-authority';
   if (repoPath.startsWith('v2/usf/compiler/')) return 'v2-compiler-implementation';
@@ -212,9 +233,10 @@ export function enumerateUniverses({ repositoryRoot = DEFAULT_REPOSITORY_ROOT } 
   const entries = trackedEntries(repositoryRoot);
   const states = workingStates(repositoryRoot);
   const paths = [...entries.keys(), ...nonignoredUntracked(repositoryRoot)].sort();
+  const carrierPaths = observationCarrierPaths(repositoryRoot);
   const universes = Object.fromEntries(UNIVERSES.map((universe) => [universe, []]));
   for (const repoPath of paths) {
-    const universe = universeForPath(repoPath);
+    const universe = universeForPath(repoPath, carrierPaths);
     if (universe === null) continue;
     const isTracked = entries.has(repoPath);
     if (!isTracked && universe === 'v2-support-provisioning') continue;
@@ -226,6 +248,15 @@ export function enumerateUniverses({ repositoryRoot = DEFAULT_REPOSITORY_ROOT } 
     if (unique.size !== members.length) throw new Error('duplicate universe path');
   }
   return { universes, ignoreAudit: auditIgnoreRules({ repositoryRoot, entries }) };
+}
+
+export function enumerateObservationCarrierMembers({ repositoryRoot = DEFAULT_REPOSITORY_ROOT } = {}) {
+  const entries = trackedEntries(repositoryRoot);
+  const states = workingStates(repositoryRoot);
+  return [...observationCarrierPaths(repositoryRoot)].sort().map((repoPath) => {
+    if (!fs.existsSync(path.join(repositoryRoot, repoPath))) throw new Error(`graph observation carrier is missing: ${repoPath}`);
+    return createMember(repositoryRoot, repoPath, 'v2-graph-authority', entries, states);
+  });
 }
 
 export const enumerateCurrent = enumerateUniverses;
