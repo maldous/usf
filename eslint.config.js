@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["node_modules/**", "coverage/**", "dist/**", "evidence/**"],
+    ignores: ["node_modules/**", "coverage/**", "dist/**", "evidence/**", "v2/*", "!v2/usf/", "v2/usf/.venv/**", "v2/usf/.work/**"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -14,6 +14,15 @@ export default tseslint.config(
       ecmaVersion: "latest",
       sourceType: "module",
       globals: globals.node,
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
   {

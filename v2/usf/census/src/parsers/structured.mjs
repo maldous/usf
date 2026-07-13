@@ -1,5 +1,4 @@
 import { X509Certificate } from 'node:crypto';
-import path from 'node:path';
 import { SaxesParser } from 'saxes';
 import { parse as parseSqlCst } from 'sql-parser-cst';
 import { parse as parseToml } from 'smol-toml';
@@ -342,7 +341,7 @@ function parseMake({ text, member }) {
   for (const [index, rawLine] of text.split(/\r?\n/).entries()) {
     if (/^\t/.test(rawLine)) {
       recipeIndex += 1;
-      for (const target of targets) addCommand(declarations, rawLine.slice(1).replace(/^[@+\-]+/, ''), { kind: 'make-recipe', owner: target, field: `recipe-${recipeIndex}`, interpreter: 'make-shell' });
+      for (const target of targets) addCommand(declarations, rawLine.slice(1).replace(/^[@+-]+/, ''), { kind: 'make-recipe', owner: target, field: `recipe-${recipeIndex}`, interpreter: 'make-shell' });
       continue;
     }
     const include = rawLine.match(/^\s*-?include\s+(.+?)\s*$/);

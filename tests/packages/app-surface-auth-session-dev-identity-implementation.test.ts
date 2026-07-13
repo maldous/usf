@@ -53,6 +53,7 @@ const semanticAuthority: LocalAuthSessionDevIdentityAuthority = {
   ],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the clone is deliberately untyped so tests can plant arbitrary defects
 const cloneRegistry = (): any => JSON.parse(JSON.stringify(LOCAL_AUTH_SESSION_DEV_IDENTITY_REGISTRY));
 
 describe("app-surface auth session dev identity implementation", () => {

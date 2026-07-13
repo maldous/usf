@@ -145,6 +145,8 @@ shp:RepositoryWorkPackageShape a sh:NodeShape ; usf:canonicalName "repositorywor
   sh:property [ sh:path usf:canonicalName ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^w[0-9a-f]{20}$" ] ;
   sh:property [ sh:path usf:promotedFromWorkPackageObservation ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:WorkPackageObservation ] ;
   sh:property [ sh:path usf:ownsObservedSourceArtefact ; sh:minCount 1 ; sh:class usf:SourceArtefact ] ;
+  sh:property [ sh:path usf:ownsCanonicalArtefact ; sh:class usf:Artefact ;
+    sh:message "workpackagecanonicalartefact: an owned canonical artefact must be a declared artefact" ] ;
   sh:property [ sh:path usf:promotedByRepositoryStructurePolicy ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:RepositoryDependencyResolutionPolicy ] .
 
 shp:RepositoryDependencyShape a sh:NodeShape ; usf:canonicalName "repositorydependencyshape" ; sh:targetClass usf:RepositoryDependency ;

@@ -76,12 +76,12 @@ function readJsonl(path) {
   if (lines.at(-1) === '') lines.pop();
   if (lines.some((line) => line.length === 0)) throw new Error(`JSONL contains an empty record: ${path}`);
   return lines.map((line, index) => {
-    try { return JSON.parse(line); } catch (error) { throw new Error(`invalid JSONL record ${index + 1} in ${path}: ${error.message}`); }
+    try { return JSON.parse(line); } catch (error) { throw new Error(`invalid JSONL record ${index + 1} in ${path}: ${error.message}`, { cause: error }); }
   });
 }
 
 function readJson(path) {
-  try { return JSON.parse(readFileSync(path, 'utf8')); } catch (error) { throw new Error(`invalid JSON in ${path}: ${error.message}`); }
+  try { return JSON.parse(readFileSync(path, 'utf8')); } catch (error) { throw new Error(`invalid JSON in ${path}: ${error.message}`, { cause: error }); }
 }
 
 function stableJson(value) {
@@ -660,10 +660,15 @@ export async function collectRepositorySourceObservations({ manifest, entry }) {
   for (const artifactKey of bindings.keys()) if (!artifacts.some((artifact) => artifact.artifactKey === artifactKey)) {
     throw new Error(`source semantic binding has no current census artifact: ${artifactKey}`);
   }
-  const { rows, carrierPaths } = observationRows(artifacts, mappings, manifest, bindings);
+  const { rows, carrierPaths, setDigest: rowSetDigest } = observationRows(artifacts, mappings, manifest, bindings);
   const parserShards = validateParserProvenance(censusRoot, parserManifest, artifacts, universes);
   const model = censusObservationModel({ rows, relationships, workPackageDocument, dependencies, dependencyLineage, parserManifest, summary, universes, inputs, parserShards, authoredArtefacts });
-  const { setDigest } = model;
+  // The observation set identity binds the observed source rows only. The
+  // full census state hash (model.setDigest) covers outputs that themselves
+  // embed the previous run's observation IRIs, so using it as the identity
+  // digest can never reach a fixpoint across regeneration rounds. It is kept
+  // as run-level provenance below (censusStateDigest).
+  const setDigest = rowSetDigest;
   const quads = [];
   const runName = `r${setDigest}`;
   const run = namedNode(`urn:usf:censusobservationrun:${runName}`);
@@ -671,6 +676,7 @@ export async function collectRepositorySourceObservations({ manifest, entry }) {
     quad(run, RDF_TYPE, namedNode(`${USF}CensusObservationRun`)),
     quad(run, p('canonicalName'), literal(runName)),
     quad(run, p('observationSetDigest'), literal(setDigest)),
+    quad(run, p('censusStateDigest'), literal(model.setDigest)),
     quad(run, p('observedByCollector'), literal(entry.collector)),
     quad(run, p('observedSourceArtefactCount'), literal(String(model.rows.length), XSD_INTEGER)),
     quad(run, p('observedSourceRelationshipCount'), literal(String(model.relationshipRecords.length), XSD_INTEGER)),

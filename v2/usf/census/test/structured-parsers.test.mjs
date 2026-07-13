@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
+import path from 'node:path';
 import test from 'node:test';
+import { repositoryRoot } from '../src/constants.mjs';
 import { createParserRegistry, parseMembers, parserInternals } from '../src/parsers/registry.mjs';
 import { structuredParsers } from '../src/parsers/structured.mjs';
 
@@ -22,18 +25,27 @@ test('parser objects satisfy registry contracts and cover every assigned syntax'
 });
 
 test('identical content at distinct paths retains member-specific cached projections', () => {
-  const paths = [
-    'artifacts/proof-cockpit/machine-runs/2026-07-11T03-59-53-440Z/adapter-manifest.json',
-    'artifacts/proof-cockpit/machine-runs/2026-07-11T03-59-53-440Z/external-review-bundle/adapter-manifest.json'
-  ];
-  const members = fs.readFileSync(new URL('../repository-universe.jsonl', import.meta.url), 'utf8')
-    .trim().split('\n').map(JSON.parse).filter((member) => paths.includes(member.path));
-  assert.equal(members.length, 2);
-  assert.equal(members[0].contentDigest, members[1].contentDigest);
-  const parsed = parseMembers(members, structuredParsers);
-  assert.notEqual(parsed[0].cacheKey, parsed[1].cacheKey);
-  assert.deepEqual(parsed.map((entry) => entry.inventory.scope).sort(), paths.sort());
-  assert.deepEqual(parsed.map((entry) => entry.declarations[0].identifier).sort(), paths.sort());
+  const scratchParent = path.join(repositoryRoot, 'v2/usf/.work');
+  fs.mkdirSync(scratchParent, { recursive: true });
+  const scratch = fs.mkdtempSync(path.join(scratchParent, 'parser-cache-test-'));
+  try {
+    const content = JSON.stringify({ manifestKind: 'adapter-manifest', adapters: [] });
+    const digest = createHash('sha256').update(content).digest('hex');
+    const relativeScratch = path.relative(repositoryRoot, scratch).split(path.sep).join('/');
+    const paths = [`${relativeScratch}/adapter-manifest.json`, `${relativeScratch}/external-review-bundle/adapter-manifest.json`];
+    fs.mkdirSync(path.join(scratch, 'external-review-bundle'));
+    for (const relative of paths) fs.writeFileSync(path.join(repositoryRoot, relative), content);
+    const members = paths.map((memberPath) => ({
+      path: memberPath, contentDigest: digest, universe: 'repository-output', sourceState: 'tracked',
+      fileMode: '100644', formatKind: 'structured-json'
+    }));
+    const parsed = parseMembers(members, structuredParsers);
+    assert.notEqual(parsed[0].cacheKey, parsed[1].cacheKey);
+    assert.deepEqual(parsed.map((entry) => entry.inventory.scope).sort(), paths.sort());
+    assert.deepEqual(parsed.map((entry) => entry.declarations[0].identifier).sort(), paths.sort());
+  } finally {
+    fs.rmSync(scratch, { recursive: true, force: true });
+  }
 });
 
 test('graph census evidence retains exact observed paths that resemble coordination metadata', () => {

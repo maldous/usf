@@ -91,6 +91,7 @@ const semanticAuthority: LocalStateCacheQueryClientAuthority = {
   ],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the clone is deliberately untyped so tests can plant arbitrary defects
 const cloneRegistry = (): any => JSON.parse(JSON.stringify(LOCAL_STATE_CACHE_QUERY_CLIENT_REGISTRY));
 
 describe("app-surface state cache and query client setup", () => {

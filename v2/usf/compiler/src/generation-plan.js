@@ -4,7 +4,6 @@ import {
   iriValue,
   literalValue,
   objects,
-  oneObject,
   subjectsOfType,
 } from './authority-dataset.js';
 import { CompilerError } from './compiler.js';

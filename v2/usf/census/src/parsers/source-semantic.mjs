@@ -568,10 +568,6 @@ function quadKey(term) {
   return `${term.termType}\0${term.value ?? rdfTerm(term)}`;
 }
 
-function sameTerm(left, right) {
-  return left?.equals ? left.equals(right) : quadKey(left) === quadKey(right);
-}
-
 function parseRdf({ syntaxKind, text }) {
   let quads;
   try {

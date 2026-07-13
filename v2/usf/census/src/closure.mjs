@@ -154,6 +154,7 @@ export async function computeClosure() {
     outputDispositionsWithoutAcceptedArtefactPlan: rebuilt.sourceDispositionOwnership.assessments.filter((record) => record.planRequired && (!record.accepted || !record.planIri)).length,
     invalidOrStaleSourceDispositionOwnership: rebuilt.sourceDispositionOwnership.rejectedDispositionCount,
     orphanSourceObservations: rebuilt.sourceDispositionOwnership.orphanObservationCount,
+    incoherentObservationSetDigests: Math.max(0, rebuilt.sourceDispositionOwnership.observationSetDigests.length - 1),
     inventedArtifactPlans: rebuilt.replacementGroups.filter((record) => record.dispositionStatus === 'missing-accepted-source-disposition' && (record.canonicalArtifacts.length || record.requiredGenerationProjections.length || record.removedDuplication.length)).length,
     unclassifiedRelationshipAndInventoryFindings: rebuilt.inventoryFindings.filter((record) => !record.findingCategory || !record.findingClass || !record.ownerClass || !record.requiredAction).length,
     unresolvedInternalLookingRelationships: rebuilt.relationships.filter((record) => record.targetKind === 'artifact' && !record.resolved).length,

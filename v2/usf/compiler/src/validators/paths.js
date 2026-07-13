@@ -3,6 +3,7 @@ import { isAbsolute, relative, resolve, sep } from 'node:path';
 
 export function resolveContainedPath(root, path) {
   if (typeof path !== 'string' || path.length === 0) return { ok: false, reason: 'path must be a non-empty string' };
+  // eslint-disable-next-line no-control-regex -- control characters are exactly what this guard rejects
   if (path.includes('\\') || path.includes('\0') || /[\x00-\x1f]/.test(path)) {
     return { ok: false, reason: 'path contains a forbidden separator or control character' };
   }

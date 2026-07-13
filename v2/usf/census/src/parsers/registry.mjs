@@ -72,11 +72,11 @@ function sniffSyntax(member, text) {
   if (member.formatKind === 'source-css') return 'css';
   if (member.formatKind === 'certificate') return 'certificate';
   if (member.formatKind === 'git-lfs-pointer') return 'git-lfs-pointer';
-  if (text && /^\s*[\[{]/.test(text)) {
+  if (text && /^\s*[[{]/.test(text)) {
     try {
       JSON.parse(text);
       return 'structured-json';
-    } catch {}
+    } catch { /* not JSON: fall through to plain text */ }
   }
   return 'plain-text';
 }

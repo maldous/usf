@@ -125,7 +125,7 @@ function extractText(text, member) {
   addMatches(/^\s*(?:COPY|ADD)\s+(?:--\S+\s+)*([^\s]+)\s+/gmi, 'copies', 'artifact', 'container-copy');
   addMatches(/^\s*FROM\s+([^\s]+)/gmi, 'depends-on', 'external-resource', 'container-base-image');
   addMatches(/^\s*uses:\s*['"]?([^'"\s]+)['"]?/gmi, 'uses-action', 'external-resource', 'workflow-uses');
-  addMatches(/^\s*needs:\s*['"]?([^'"\s\[\],]+)['"]?/gmi, 'needs', 'command', 'workflow-needs', 1, 'medium');
+  addMatches(/^\s*needs:\s*['"]?([^'"\s[\],]+)['"]?/gmi, 'needs', 'command', 'workflow-needs', 1, 'medium');
   addMatches(/^\s*(?:-\s*)?file:\s*['"]?([^'"\s]+)['"]?/gmi, 'references', 'artifact', 'structured-file-field');
   addMatches(/^\s*(?:-\s*)?(?:input|source):\s*['"]?([^'"\s]+)['"]?/gmi, 'consumes', 'artifact', 'structured-input-field');
   addMatches(/^\s*(?:-\s*)?output:\s*['"]?([^'"\s]+)['"]?/gmi, 'produces', 'semantic-entity', 'structured-output-field');

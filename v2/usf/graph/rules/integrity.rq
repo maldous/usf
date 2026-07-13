@@ -439,5 +439,103 @@ SELECT DISTINCT ?violation ?subject WHERE {
     BIND(COALESCE(?actualCount, 0) AS ?actual)
     FILTER(?expected != ?actual)
     BIND("observedactiveblockingdependencycountmismatch" AS ?violation)
+  } UNION {
+    # exact assertion duplicated across two definition/authored graphs
+    GRAPH ?duplicateGraphA { ?subject ?duplicatePredicate ?duplicateObject }
+    GRAPH ?duplicateGraphB { ?subject ?duplicatePredicate ?duplicateObject }
+    FILTER(STR(?duplicateGraphA) < STR(?duplicateGraphB))
+    FILTER(?duplicateGraphA != <urn:usf:graph:shapes> && ?duplicateGraphB != <urn:usf:graph:shapes>)
+    FILTER(!STRSTARTS(STR(?duplicateGraphA), "urn:usf:graph:observed") && !STRSTARTS(STR(?duplicateGraphA), "urn:usf:graph:derived"))
+    FILTER(!STRSTARTS(STR(?duplicateGraphB), "urn:usf:graph:observed") && !STRSTARTS(STR(?duplicateGraphB), "urn:usf:graph:derived"))
+    BIND("crossgraphduplicate" AS ?violation)
+  } UNION {
+    # declared ontology term with no usage anywhere and no explicit usage disposition
+    GRAPH <urn:usf:graph:ontology> { ?subject a ?declaredTermKind }
+    VALUES ?declaredTermKind { owl:Class owl:ObjectProperty owl:DatatypeProperty owl:AnnotationProperty }
+    FILTER(isIRI(?subject) && STRSTARTS(STR(?subject), "urn:usf:ontology:"))
+    FILTER NOT EXISTS { ?usageSubject ?subject ?usageObject }
+    FILTER NOT EXISTS { ?usageInstance a ?subject }
+    FILTER NOT EXISTS { ?usageChild rdfs:subClassOf ?subject }
+    FILTER NOT EXISTS { ?usageChildProperty rdfs:subPropertyOf ?subject }
+    FILTER NOT EXISTS { ?usageInverse owl:inverseOf ?subject }
+    FILTER NOT EXISTS { ?usageDomainProperty rdfs:domain ?subject }
+    FILTER NOT EXISTS { ?usageRangeProperty rdfs:range ?subject }
+    FILTER NOT EXISTS { ?usageShape <http://www.w3.org/ns/shacl#targetClass> ?subject }
+    FILTER NOT EXISTS { ?usagePath <http://www.w3.org/ns/shacl#path> ?subject }
+    # non-assertional class references: OWL axiom membership (disjointness/union
+    # RDF lists, equivalence) is genuine use, not an unexplained-unused term.
+    FILTER NOT EXISTS { ?usageList rdf:rest*/rdf:first ?subject }
+    FILTER NOT EXISTS { ?usageEquivalent owl:equivalentClass ?subject }
+    FILTER NOT EXISTS { ?subject owl:equivalentClass ?equivalentUsage }
+    FILTER NOT EXISTS { ?subject usf:termUsageState ?usageState }
+    BIND("unexplainedunusedterm" AS ?violation)
+  } UNION {
+    # an intentionally standalone decision requires a recorded rationale
+    ?subject usf:intentionallyStandalone true .
+    FILTER NOT EXISTS { ?subject usf:decisionRationale ?standaloneRationale }
+    BIND("standalonemissingrationale" AS ?violation)
+  } UNION {
+    # capability with no substantive architectural connection and no explicit decision
+    GRAPH <urn:usf:graph:capabilities> { ?subject a usf:Capability }
+    FILTER NOT EXISTS { ?subject usf:dependsOn ?capabilityDependency }
+    FILTER NOT EXISTS { ?dependentCapability usf:dependsOn ?subject }
+    FILTER NOT EXISTS { ?crossingWorkflow usf:crossesCapability ?subject }
+    FILTER NOT EXISTS { ?subject usf:hasUISemanticModel ?uiModel }
+    FILTER NOT EXISTS { ?servingService usf:serves ?subject }
+    FILTER NOT EXISTS { ?governingPolicy usf:appliesToCapability ?subject }
+    FILTER NOT EXISTS { ?mappedJourney usf:mapsToCapability ?subject }
+    FILTER NOT EXISTS { ?subject usf:hasContract ?interfaceContract . ?contractInterface usf:interfaceForContract ?interfaceContract }
+    FILTER NOT EXISTS {
+      ?subject usf:hasContract ?realisedContract .
+      ?contractRealisation usf:realisesContract ?realisedContract ; usf:realisationState ?realisationState .
+      FILTER(?realisationState != <urn:usf:realisationstate:contractonly>)
+    }
+    FILTER NOT EXISTS { ?subject usf:hasContract ?deferredContract . ?deferredContract usf:disclaims <urn:usf:nonclaim:deferredcapabilities> }
+    FILTER NOT EXISTS { ?subject usf:intentionallyStandalone true }
+    BIND("capabilitydisconnected" AS ?violation)
+  } UNION {
+    # service with no capability ownership, dependency or realisation context
+    GRAPH <urn:usf:graph:services> { ?subject a usf:Service }
+    FILTER NOT EXISTS { ?subject usf:serves ?servedCapability }
+    FILTER NOT EXISTS { ?subject usf:dependsOnService ?serviceDependency }
+    FILTER NOT EXISTS { ?dependentService usf:dependsOnService ?subject }
+    FILTER NOT EXISTS { ?serviceRealisation usf:viaService ?subject }
+    FILTER NOT EXISTS { ?subject usf:intentionallyStandalone true }
+    BIND("servicedisconnected" AS ?violation)
+  } UNION {
+    # implementation with no realisation or dependency context
+    GRAPH <urn:usf:graph:implementations> { ?subject a usf:Implementation }
+    FILTER NOT EXISTS { ?implementationRealisation usf:realisingImplementation ?subject }
+    FILTER NOT EXISTS { ?subject usf:dependsOn ?implementationDependency }
+    FILTER NOT EXISTS { ?dependentImplementation usf:dependsOn ?subject }
+    FILTER NOT EXISTS { ?subject usf:intentionallyStandalone true }
+    BIND("implementationdisconnected" AS ?violation)
+  } UNION {
+    # adapter implementing a port that none of its bound providers fulfils:
+    # a binding is incoherent if the provider it binds cannot fulfil the port
+    # the adapter implements.
+    ?subject a usf:Adapter ; usf:implementsPort ?implementedPort .
+    FILTER NOT EXISTS {
+      ?subject usf:bindsProvider ?boundProvider .
+      ?boundProvider usf:fulfilsPort ?implementedPort .
+    }
+    BIND("adapterportnotfulfilled" AS ?violation)
+  } UNION {
+    # port that no provider fulfils, no adapter implements and no binding binds
+    GRAPH <urn:usf:graph:interfaces> { ?subject a usf:Port }
+    FILTER NOT EXISTS { ?fulfillingProvider usf:fulfilsPort ?subject }
+    FILTER NOT EXISTS { ?implementingAdapter usf:implementsPort ?subject }
+    FILTER NOT EXISTS { ?bindingResource usf:bindsPort ?subject }
+    FILTER NOT EXISTS { ?subject usf:intentionallyStandalone true }
+    BIND("portuncovered" AS ?violation)
+  } UNION {
+    # semantic contract without any realisation resource. Invariant: every
+    # semantic contract carries at least a contract-only Realisation node
+    # (deferred/not-claimed contracts still get one, with a non-realising
+    # realisationState), so this fires only on a genuinely missing realisation
+    # and needs no deferred/standalone exemption.
+    GRAPH <urn:usf:graph:capabilities> { ?subject a usf:SemanticContract }
+    FILTER NOT EXISTS { ?anyRealisation usf:realisesContract ?subject }
+    BIND("contractwithoutrealisation" AS ?violation)
   }
 }

@@ -165,13 +165,13 @@
       "adapters/*",
       "packages/*"
     ],
-    "expectedPackageJsonCountIncludingRoot": 39,
-    "expectedWorkspacePackageCount": 38,
+    "expectedPackageJsonCountIncludingRoot": 40,
+    "expectedWorkspacePackageCount": 39,
     "workspacePackageNamePrefix": "@foundation/",
     "workspaceExternalDependencySectionsAllowed": false
   },
   "dependencyVersionPosture": {
-    "expectedDependencyCount": 29,
+    "expectedDependencyCount": 31,
     "expectedDevDependencyCount": 14,
     "exactSpecifierRequired": true,
     "forbiddenSpecifierForms": [
@@ -267,9 +267,11 @@
       {
         "id": "web-framework-runtime",
         "packageNames": [
+          "expo",
           "next",
           "react",
-          "react-dom"
+          "react-dom",
+          "react-native"
         ],
         "owner": "app-surface-web-foundation"
       },

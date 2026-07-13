@@ -131,7 +131,7 @@ export function buildMappings(artifacts, parserResults, relationships) {
   }
   const resourceUse = new Map();
   for (const entry of preliminary) for (const resource of entry.candidates) resourceUse.set(resource.identifier, (resourceUse.get(resource.identifier) ?? 0) + 1);
-  const mappings = preliminary.map(({ artifact, parsed, candidates, evidence, coverage }) => {
+  const mappings = preliminary.map(({ artifact, candidates, evidence, coverage }) => {
     const mappingType = mappingTypeFor(artifact, candidates, coverage);
     const sharedResource = candidates.some((resource) => resourceUse.get(resource.identifier) > 1);
     const mappingCardinality = coverage.state === 'notrequired' ? 'one-to-zero' : candidates.length === 0 ? 'one-to-zero' : candidates.length > 1 ? 'one-to-many' : sharedResource ? 'many-to-one' : 'one-to-one';

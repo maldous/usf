@@ -20,7 +20,7 @@ const parsed = (path, declarations, universe = 'repository-output') => ({ path, 
 const triple = (graph, subject, predicate, object) => ({ kind: 'semantic-triple', identifier: `${subject}:${predicate}`, attributes: { graph, subject, predicate, object } });
 const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
 
-function dispositionDataset({ kind = 'urn:usf:dispositionkind:retainedasset', state = 'urn:usf:dispositiondecisionstate:accepted', digest = 'a'.repeat(64), planCount = 0, includePlan = false, registeredGraph = true } = {}) {
+function dispositionDataset({ kind = 'urn:usf:dispositionkind:retainedasset', state = 'urn:usf:dispositiondecisionstate:accepted', digest = 'a'.repeat(64), planCount = 0, includePlan = false, registeredGraph = true, decidedAgainst = 'urn:usf:observation:a', dispositionSetDigest = 'f'.repeat(64), observationSetDigest = 'f'.repeat(64) } = {}) {
   const authorityGraph = registeredGraph ? 'urn:usf:graph:source-dispositions' : 'urn:usf:graph:not-registered';
   const declarations = [
     triple(null, 'urn:usf:namedgraph:source-dispositions', RDF_TYPE, 'urn:usf:ontology:NamedGraph'),
@@ -34,8 +34,11 @@ function dispositionDataset({ kind = 'urn:usf:dispositionkind:retainedasset', st
     triple(authorityGraph, 'urn:usf:observation:a', 'urn:usf:ontology:observedSourcePath', '"src/example.ts"^^http://www.w3.org/2001/XMLSchema#string'),
     triple(authorityGraph, 'urn:usf:observation:a', 'urn:usf:ontology:observedContentDigest', `"${digest}"^^http://www.w3.org/2001/XMLSchema#string`),
     triple(authorityGraph, 'urn:usf:observation:a', 'urn:usf:ontology:observedUniverse', '"repository-output"^^http://www.w3.org/2001/XMLSchema#string'),
+    triple(authorityGraph, 'urn:usf:observation:a', 'urn:usf:ontology:observationSetDigest', `"${observationSetDigest}"^^http://www.w3.org/2001/XMLSchema#string`),
     triple(authorityGraph, 'urn:usf:source:a', 'urn:usf:ontology:hasSourceDisposition', 'urn:usf:disposition:a'),
     triple(authorityGraph, 'urn:usf:disposition:a', 'urn:usf:ontology:dispositionOfSourceArtefact', 'urn:usf:source:a'),
+    triple(authorityGraph, 'urn:usf:disposition:a', 'urn:usf:ontology:decidedAgainstObservation', decidedAgainst),
+    triple(authorityGraph, 'urn:usf:disposition:a', 'urn:usf:ontology:observationSetDigest', `"${dispositionSetDigest}"^^http://www.w3.org/2001/XMLSchema#string`),
     triple(authorityGraph, 'urn:usf:disposition:a', 'urn:usf:ontology:hasDispositionKind', kind),
     triple(authorityGraph, 'urn:usf:disposition:a', 'urn:usf:ontology:hasDispositionDecisionState', state)
   ];
@@ -138,7 +141,9 @@ test('source disposition ownership fails closed on review, stale digest, missing
     [dispositionDataset({ digest: 'b'.repeat(64) }), 'source-observation-digest-mismatch', []],
     [dispositionDataset({ kind: 'urn:usf:dispositionkind:generateequivalent', includePlan: true }), 'source-disposition-plan-missing', []],
     [dispositionDataset({ registeredGraph: false }), 'source-observation-unregistered-graph', []],
-    [dispositionDataset({ state: 'urn:usf:dispositiondecisionstate:rejected' }), 'source-disposition-not-accepted', []]
+    [dispositionDataset({ state: 'urn:usf:dispositiondecisionstate:rejected' }), 'source-disposition-not-accepted', []],
+    [dispositionDataset({ decidedAgainst: 'urn:usf:observation:stale' }), 'source-disposition-stale-observation', []],
+    [dispositionDataset({ dispositionSetDigest: 'e'.repeat(64) }), 'source-disposition-set-digest-mismatch', []]
   ];
   for (const [dataset, reason, plans] of cases) {
     const result = buildSourcePlanOwnership([sourceArtifact], dataset, plans);

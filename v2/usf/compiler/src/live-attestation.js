@@ -10,7 +10,7 @@ import {
   unlinkSync,
   writeFileSync,
 } from 'node:fs';
-import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
+import { isAbsolute, relative, resolve, sep } from 'node:path';
 import { DataFactory, Parser, Writer } from 'n3';
 import * as rdfCanonize from 'rdf-canonize';
 
@@ -55,10 +55,34 @@ function stable(value) {
 
 export const stableJson = (value) => JSON.stringify(stable(value));
 
+const XSD = 'http://www.w3.org/2001/XMLSchema#';
+const XSD_INTEGER_FAMILY = new Set([
+  'nonNegativeInteger', 'positiveInteger', 'nonPositiveInteger', 'negativeInteger',
+  'long', 'int', 'short', 'byte',
+  'unsignedLong', 'unsignedInt', 'unsignedShort', 'unsignedByte',
+].map((name) => XSD + name));
+
+// Stardog stores literals in canonical form: every xsd:integer-derived
+// datatype is normalised to xsd:integer. The digest contract applies the same
+// normalisation so source files and live graphs hash identically.
+function canonicalLiteralQuad(item) {
+  const object = item.object;
+  if (object.termType !== 'Literal' || !XSD_INTEGER_FAMILY.has(object.datatype.value)) return item;
+  return quad(
+    item.subject,
+    item.predicate,
+    DataFactory.literal(object.value, DataFactory.namedNode(XSD + 'integer')),
+    item.graph,
+  );
+}
+
 async function canonicalNQuads(nquads) {
-  return rdfCanonize.canonize(nquads, {
+  // Parse with N3 and canonize the quad array: rdf-canonize's own string
+  // parser is pathologically slow on large literals (hours vs seconds for the
+  // observed graph), while the canonical output is identical either way.
+  const quads = new Parser({ format: NQUADS }).parse(nquads).map(canonicalLiteralQuad);
+  return rdfCanonize.canonize(quads, {
     algorithm: 'URDNA2015',
-    inputFormat: NQUADS,
     format: NQUADS,
   });
 }
@@ -115,7 +139,9 @@ export async function localGraphDigests(manifest) {
   for (const [index, entry] of graphEntries(manifest).entries()) {
     const parsed = new Parser({ format: entry.contentType, baseIRI: 'urn:usf:' })
       .parse(readFileSync(entry.path, 'utf8'));
-    grouped.get(entry.graph).push(...scopeBlankNodes(parsed, `f${index}`));
+    const bucket = grouped.get(entry.graph);
+    // push one by one: spreading ~500k quads overflows the argument stack
+    for (const scopedQuad of scopeBlankNodes(parsed, `f${index}`)) bucket.push(scopedQuad);
   }
   const records = [];
   for (const graph of [...grouped.keys()].sort()) {
@@ -420,7 +446,8 @@ export async function proveLiveRollback({ manifest, client }) {
     });
   }
   const results = [];
-  for (const [name, buildFault] of faults) {
+  for (const [index, [name, buildFault]] of faults.entries()) {
+    process.stderr.write(`attest: rollback fault ${index + 1}/${faults.length}: ${name}\n`);
     let rollbacks = 0;
     let activationCount = 0;
     const injected = buildFault(() => { activationCount += 1; });
@@ -479,6 +506,7 @@ export async function createLiveAttestation({
   signingKeyPath,
   outputPath,
 }) {
+  const attestStep = (label) => process.stderr.write(`attest: ${label}\n`);
   if (!signingKeyPath) throw new CompilerError('live attestation requires an Ed25519 signing key', { phase: 'attest:configuration' });
   if (!outputPath || !outsideRepository(outputPath, repoRoot)) {
     throw new CompilerError('source-to-database attestation must be written outside the repository', { phase: 'attest:configuration' });
@@ -495,6 +523,7 @@ export async function createLiveAttestation({
   if (!verificationPasses(verification)) {
     throw new CompilerError('live database verification failed before attestation', { phase: 'attest:validation', failures: verification });
   }
+  attestStep('rollback fault matrix');
   const rollback = await proveLiveRollback({ manifest, client });
   const publicKey = createPublicKey(privateKey);
   const payload = {

@@ -68,6 +68,7 @@ const semanticAuthority: LocalNotificationAuthority = {
   proofRefs,
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the clone is deliberately untyped so tests can plant arbitrary defects
 const cloneRegistry = (): any => JSON.parse(JSON.stringify(LOCAL_NOTIFICATION_CONSENT_PERMISSION_REGISTRY));
 
 describe("app-surface notification consent and permission surface", () => {

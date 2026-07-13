@@ -17,7 +17,7 @@ prov:apigatewayfastifylocaltest a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:auditledgerinmemory a usf:Provider ;
     usf:canonicalName "auditledgerinmemory" ;
-    usf:fulfilsPort port:auditeventstore ;
+    usf:fulfilsPort port:auditledger , port:auditeventledger ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:autocompletelivedeferred a usf:Provider ;
     usf:canonicalName "autocompletelivedeferred" ;
@@ -45,11 +45,11 @@ prov:cacheunavailable a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:configinmemory a usf:Provider ;
     usf:canonicalName "configinmemory" ;
-    usf:fulfilsPort port:configlayerprovider ;
+    usf:fulfilsPort port:configlayerprovider , port:featureflagsource ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:databasepostgrescomposedtest a usf:Provider ;
     usf:canonicalName "databasepostgrescomposedtest" ;
-    usf:fulfilsPort port:tenantscopedrepositorytenantmembershipdirectory ;
+    usf:fulfilsPort port:tenantscopedrepository , port:tenantmembershipdirectory ;
     usf:hasProviderMode pmode:composedreal .
 prov:eventbusinmemory a usf:Provider ;
     usf:canonicalName "eventbusinmemory" ;
@@ -77,7 +77,7 @@ prov:fulltextsearchlivedeferred a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:fulltextsearchmeilisearchcomposedtest a usf:Provider ;
     usf:canonicalName "fulltextsearchmeilisearchcomposedtest" ;
-    usf:fulfilsPort port:meilisearchcomposedsearchadapter ;
+    usf:fulfilsPort port:searchindexport ;
     usf:hasProviderMode pmode:composedreal .
 prov:fulltextsearchmeilisearchdeferred a usf:Provider ;
     usf:canonicalName "fulltextsearchmeilisearchdeferred" ;
@@ -85,15 +85,15 @@ prov:fulltextsearchmeilisearchdeferred a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:identityinmemory a usf:Provider ;
     usf:canonicalName "identityinmemory" ;
-    usf:fulfilsPort port:identityprovider ;
+    usf:fulfilsPort port:identityprovider , port:identitydirectory ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:identitykeycloakcomposedtest a usf:Provider ;
     usf:canonicalName "identitykeycloakcomposedtest" ;
-    usf:fulfilsPort port:identityproviderkeycloakverifier ;
+    usf:fulfilsPort port:identityprovider , port:keycloaktokenverifier ;
     usf:hasProviderMode pmode:composedreal .
 prov:notificationdeliveryinmemory a usf:Provider ;
     usf:canonicalName "notificationdeliveryinmemory" ;
-    usf:fulfilsPort port:notificationprovider ;
+    usf:fulfilsPort port:notificationprovider , port:mailprovider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:notificationdeliverylivedeferred a usf:Provider ;
     usf:canonicalName "notificationdeliverylivedeferred" ;
@@ -113,7 +113,7 @@ prov:notificationdeliverywebhooksinkdeferred a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:objectstorageinmemory a usf:Provider ;
     usf:canonicalName "objectstorageinmemory" ;
-    usf:fulfilsPort port:objectstore ;
+    usf:fulfilsPort port:objectstore , port:filemetadatastore ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:objectstorageminiocomposedtest a usf:Provider ;
     usf:canonicalName "objectstorageminiocomposedtest" ;
@@ -121,7 +121,7 @@ prov:objectstorageminiocomposedtest a usf:Provider ;
     usf:hasProviderMode pmode:composedreal .
 prov:observabilitycapturedlocal a usf:Provider ;
     usf:canonicalName "observabilitycapturedlocal" ;
-    usf:fulfilsPort port:observabilitysink ;
+    usf:fulfilsPort port:observabilitysink , port:telemetryport ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:observabilitycomposestack a usf:Provider ;
     usf:canonicalName "observabilitycomposestack" ;
@@ -133,15 +133,15 @@ prov:observabilitysentrysdkenvelopelocal a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:operationaljobengineinmemory a usf:Provider ;
     usf:canonicalName "operationaljobengineinmemory" ;
-    usf:fulfilsPort port:operationaljobstore ;
+    usf:fulfilsPort port:operationaljobport ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:operationaljobenginewindmillcomposedtest a usf:Provider ;
     usf:canonicalName "operationaljobenginewindmillcomposedtest" ;
-    usf:fulfilsPort port:operationaljobengine ;
+    usf:fulfilsPort port:operationaljobport ;
     usf:hasProviderMode pmode:composedreal .
 prov:operationaljobenginewindmilldeferred a usf:Provider ;
     usf:canonicalName "operationaljobenginewindmilldeferred" ;
-    usf:fulfilsPort port:operationaljobengine ;
+    usf:fulfilsPort port:operationaljobport ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:provideremulatorlocalstackcomposedtest a usf:Provider ;
     usf:canonicalName "provideremulatorlocalstackcomposedtest" ;
@@ -165,7 +165,7 @@ prov:qualitygatesonarqubecomposedtest a usf:Provider ;
     usf:hasProviderMode pmode:composedreal .
 prov:searchindexdisabled a usf:Provider ;
     usf:canonicalName "searchindexdisabled" ;
-    usf:fulfilsPort port:searchindexprovider ;
+    usf:fulfilsPort port:searchindexport ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:searchindexinmemory a usf:Provider ;
     usf:canonicalName "searchindexinmemory" ;
@@ -173,11 +173,11 @@ prov:searchindexinmemory a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:secretsinmemory a usf:Provider ;
     usf:canonicalName "secretsinmemory" ;
-    usf:fulfilsPort port:secretresolver ;
+    usf:fulfilsPort port:secretresolver , port:secretstore ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:secretstoreopenbaocomposedtest a usf:Provider ;
     usf:canonicalName "secretstoreopenbaocomposedtest" ;
-    usf:fulfilsPort port:secretresolversecretstore ;
+    usf:fulfilsPort port:secretresolver , port:secretstore ;
     usf:hasProviderMode pmode:composedreal .
 prov:vectorsearchlivedeferred a usf:Provider ;
     usf:canonicalName "vectorsearchlivedeferred" ;
@@ -185,9 +185,34 @@ prov:vectorsearchlivedeferred a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:workflowengineinmemory a usf:Provider ;
     usf:canonicalName "workflowengineinmemory" ;
-    usf:fulfilsPort port:workflowengine ;
+    usf:fulfilsPort port:workflowengine , port:durableworkflowport ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:workflowenginetemporalcomposedtest a usf:Provider ;
     usf:canonicalName "workflowenginetemporalcomposedtest" ;
     usf:fulfilsPort port:workflowengine ;
     usf:hasProviderMode pmode:composedreal .
+
+prov:guardrailinmemory a usf:Provider ;
+    usf:canonicalName "guardrailinmemory" ;
+    usf:fulfilsPort port:guardrailport ;
+    usf:hasProviderMode pmode:hermeticmock .
+
+prov:importexportinmemory a usf:Provider ;
+    usf:canonicalName "importexportinmemory" ;
+    usf:fulfilsPort port:importexportport ;
+    usf:hasProviderMode pmode:hermeticmock .
+
+prov:resourcelifecycleinmemory a usf:Provider ;
+    usf:canonicalName "resourcelifecycleinmemory" ;
+    usf:fulfilsPort port:resourcelifecycleport ;
+    usf:hasProviderMode pmode:hermeticmock .
+
+prov:sessionstoreinmemory a usf:Provider ;
+    usf:canonicalName "sessionstoreinmemory" ;
+    usf:fulfilsPort port:sessionstore ;
+    usf:hasProviderMode pmode:hermeticmock .
+
+prov:tenantmembershipinmemory a usf:Provider ;
+    usf:canonicalName "tenantmembershipinmemory" ;
+    usf:fulfilsPort port:tenantscopedrepository , port:tenantmembershipdirectory ;
+    usf:hasProviderMode pmode:hermeticmock .

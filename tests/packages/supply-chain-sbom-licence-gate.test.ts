@@ -185,9 +185,19 @@ function readJson<T>(path: string): T {
 }
 
 function listPackageJsonFiles(dir = ".", prefix = ""): string[] {
-  const skip = new Set([".git", ".claude", "node_modules"]);
+  // v2 is outside the pnpm workspace governance boundary: its packages are
+  // npm-managed with their own pinned lockfiles and are censused separately.
+  const skip = new Set([".git", ".claude", "node_modules", "v2"]);
   const files: string[] = [];
-  for (const entry of readdirSync(dir, { withFileTypes: true }) as Dirent[]) {
+  let entries: Dirent[];
+  try {
+    entries = readdirSync(dir, { withFileTypes: true }) as Dirent[];
+  } catch {
+    // an unreadable directory (for example a root-owned local chroot under
+    // v2/) cannot hold governed workspace manifests
+    return files;
+  }
+  for (const entry of entries) {
     if (skip.has(entry.name)) {
       continue;
     }

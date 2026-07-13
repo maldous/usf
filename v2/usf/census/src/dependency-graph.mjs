@@ -1,7 +1,5 @@
-import fs from 'node:fs';
 import { compareBy, readJsonl, sha256, sortUnique } from './canonical.mjs';
 import { validateDependency } from './contract.mjs';
-import { censusRoot } from './constants.mjs';
 import { prerequisiteDependencySatisfactionStatus, dependencyEvidenceFamilies, dependencyKeyFor, dependencyResolutionBasis } from './dependency-resolution.mjs';
 
 function ownerMaps(packages) {

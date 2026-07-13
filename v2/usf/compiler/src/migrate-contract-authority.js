@@ -67,7 +67,7 @@ for (const relative of [
   uiAuthorityStore.addQuads(new Parser({ format }).parse(readFileSync(join(GRAPH_DIR, relative), 'utf8')));
 }
 
-function uiFacetAuthority(contract, facet) {
+function uiFacetAuthority(contract, _facet) {
   const capabilities = capabilityStore.getSubjects(p('hasContract'), contract, null);
   if (capabilities.length !== 1) throw new Error(`UI facet requires exactly one capability for ${contract.value}`);
   const capability = capabilities[0];

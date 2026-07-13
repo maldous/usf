@@ -55,7 +55,7 @@ export async function readIndependentParserEvidence(root) {
   const manifestPath = path.join(root, 'parser-results/manifest.json');
   const text = await fs.promises.readFile(manifestPath, 'utf8').catch(() => null);
   if (text === null) throw new Error('independent parser evidence manifest missing');
-  let manifest; try { manifest = JSON.parse(text); validateManifest(manifest); } catch (error) { throw new Error(`independent parser evidence manifest invalid: ${error.message}`); }
+  let manifest; try { manifest = JSON.parse(text); validateManifest(manifest); } catch (error) { throw new Error(`independent parser evidence manifest invalid: ${error.message}`, { cause: error }); }
   if (text !== canonicalJson(manifest)) throw new Error('independent parser evidence manifest is noncanonical');
   const entries = (await fs.promises.readdir(path.join(root, 'parser-results'), { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
   const expected = ['manifest.json', ...manifest.shards.map((shard) => path.basename(shard.path))].sort();
