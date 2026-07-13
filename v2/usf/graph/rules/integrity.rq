@@ -462,6 +462,11 @@ SELECT DISTINCT ?violation ?subject WHERE {
     FILTER NOT EXISTS { ?usageRangeProperty rdfs:range ?subject }
     FILTER NOT EXISTS { ?usageShape <http://www.w3.org/ns/shacl#targetClass> ?subject }
     FILTER NOT EXISTS { ?usagePath <http://www.w3.org/ns/shacl#path> ?subject }
+    # non-assertional class references: OWL axiom membership (disjointness/union
+    # RDF lists, equivalence) is genuine use, not an unexplained-unused term.
+    FILTER NOT EXISTS { ?usageList rdf:rest*/rdf:first ?subject }
+    FILTER NOT EXISTS { ?usageEquivalent owl:equivalentClass ?subject }
+    FILTER NOT EXISTS { ?subject owl:equivalentClass ?equivalentUsage }
     FILTER NOT EXISTS { ?subject usf:termUsageState ?usageState }
     BIND("unexplainedunusedterm" AS ?violation)
   } UNION {
@@ -506,6 +511,16 @@ SELECT DISTINCT ?violation ?subject WHERE {
     FILTER NOT EXISTS { ?subject usf:intentionallyStandalone true }
     BIND("implementationdisconnected" AS ?violation)
   } UNION {
+    # adapter implementing a port that none of its bound providers fulfils:
+    # a binding is incoherent if the provider it binds cannot fulfil the port
+    # the adapter implements.
+    ?subject a usf:Adapter ; usf:implementsPort ?implementedPort .
+    FILTER NOT EXISTS {
+      ?subject usf:bindsProvider ?boundProvider .
+      ?boundProvider usf:fulfilsPort ?implementedPort .
+    }
+    BIND("adapterportnotfulfilled" AS ?violation)
+  } UNION {
     # port that no provider fulfils, no adapter implements and no binding binds
     GRAPH <urn:usf:graph:interfaces> { ?subject a usf:Port }
     FILTER NOT EXISTS { ?fulfillingProvider usf:fulfilsPort ?subject }
@@ -514,7 +529,11 @@ SELECT DISTINCT ?violation ?subject WHERE {
     FILTER NOT EXISTS { ?subject usf:intentionallyStandalone true }
     BIND("portuncovered" AS ?violation)
   } UNION {
-    # semantic contract without any realisation resource
+    # semantic contract without any realisation resource. Invariant: every
+    # semantic contract carries at least a contract-only Realisation node
+    # (deferred/not-claimed contracts still get one, with a non-realising
+    # realisationState), so this fires only on a genuinely missing realisation
+    # and needs no deferred/standalone exemption.
     GRAPH <urn:usf:graph:capabilities> { ?subject a usf:SemanticContract }
     FILTER NOT EXISTS { ?anyRealisation usf:realisesContract ?subject }
     BIND("contractwithoutrealisation" AS ?violation)

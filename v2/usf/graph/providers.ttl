@@ -45,7 +45,7 @@ prov:cacheunavailable a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:configinmemory a usf:Provider ;
     usf:canonicalName "configinmemory" ;
-    usf:fulfilsPort port:configlayerprovider ;
+    usf:fulfilsPort port:configlayerprovider , port:featureflagsource ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:databasepostgrescomposedtest a usf:Provider ;
     usf:canonicalName "databasepostgrescomposedtest" ;
@@ -85,7 +85,7 @@ prov:fulltextsearchmeilisearchdeferred a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:identityinmemory a usf:Provider ;
     usf:canonicalName "identityinmemory" ;
-    usf:fulfilsPort port:identityprovider ;
+    usf:fulfilsPort port:identityprovider , port:identitydirectory ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:identitykeycloakcomposedtest a usf:Provider ;
     usf:canonicalName "identitykeycloakcomposedtest" ;
@@ -93,7 +93,7 @@ prov:identitykeycloakcomposedtest a usf:Provider ;
     usf:hasProviderMode pmode:composedreal .
 prov:notificationdeliveryinmemory a usf:Provider ;
     usf:canonicalName "notificationdeliveryinmemory" ;
-    usf:fulfilsPort port:notificationprovider ;
+    usf:fulfilsPort port:notificationprovider , port:mailprovider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:notificationdeliverylivedeferred a usf:Provider ;
     usf:canonicalName "notificationdeliverylivedeferred" ;
@@ -113,7 +113,7 @@ prov:notificationdeliverywebhooksinkdeferred a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:objectstorageinmemory a usf:Provider ;
     usf:canonicalName "objectstorageinmemory" ;
-    usf:fulfilsPort port:objectstore ;
+    usf:fulfilsPort port:objectstore , port:filemetadatastore ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:objectstorageminiocomposedtest a usf:Provider ;
     usf:canonicalName "objectstorageminiocomposedtest" ;
@@ -185,7 +185,7 @@ prov:vectorsearchlivedeferred a usf:Provider ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:workflowengineinmemory a usf:Provider ;
     usf:canonicalName "workflowengineinmemory" ;
-    usf:fulfilsPort port:workflowengine ;
+    usf:fulfilsPort port:workflowengine , port:durableworkflowport ;
     usf:hasProviderMode pmode:hermeticmock .
 prov:workflowenginetemporalcomposedtest a usf:Provider ;
     usf:canonicalName "workflowenginetemporalcomposedtest" ;

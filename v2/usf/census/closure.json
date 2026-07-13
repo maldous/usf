@@ -1,5 +1,5 @@
 {
-  "artifactCount": 3250,
+  "artifactCount": 3252,
   "canonicalMismatchFiles": [],
   "closureChecks": {
     "absentCandidatesUnexamined": 0,
@@ -21,7 +21,7 @@
     "independentAuditFailures": 0,
     "independentMutationAuditFailures": 0,
     "independentStardogObservationInvalid": 0,
-    "independentStardogObservationMissing": 0,
+    "independentStardogObservationMissing": 1,
     "installedDependenciesAsCanonicalCompilerSource": 0,
     "invalidExpectedExternalReferences": 0,
     "invalidOrStaleSourceDispositionOwnership": 0,
@@ -53,9 +53,11 @@
     "unsupportedFinalParserFormats": 0,
     "untypedDependencyRelationships": 0
   },
-  "closureStatus": "complete",
+  "closureStatus": "incomplete",
   "dependencyCount": 94,
-  "failedChecks": [],
+  "failedChecks": [
+    "independentStardogObservationMissing"
+  ],
   "independentAudit": {
     "checkCount": 14,
     "failedCheckCount": 0,
@@ -66,59 +68,50 @@
     "openClassifiedRelationshipAndInventoryFindings": 0
   },
   "outsideBoundaryPaths": [
+    "v2/usf/compiler/src/fixture-harness.js",
+    "v2/usf/compiler/test/fixture-harness.test.js",
     "v2/usf/graph/derived/repository-structure.trig",
     "v2/usf/graph/derived/source-dispositions.trig",
-    "v2/usf/graph/observed/source-artefacts.trig"
+    "v2/usf/graph/fixtures/conforming/adapter-port-fulfilled.trig",
+    "v2/usf/graph/fixtures/defects/adapter-port-not-fulfilled.trig",
+    "v2/usf/graph/observed/source-artefacts.trig",
+    "v2/usf/graph/providers.ttl",
+    "v2/usf/graph/rules/integrity.rq",
+    "v2/usf/graph/shapes/realisation.ttl"
   ],
   "productionRecomputed": true,
-  "regeneratedOutputDigest": "59e57c20db2eccdda38f1a4cbe228320c7162738077ddc684d6191d8746db2d8",
+  "regeneratedOutputDigest": "d0960900071cc1b7fe48764263f6271d0e9b9b3a1b30bd39b575c53bf96e3c66",
   "stardogObservation": {
-    "accessMethod": "official-sdk",
-    "canonicalizationAlgorithm": "URDNA2015",
-    "connectionAttempted": true,
-    "contaminationCount": 0,
-    "countScope": "registered-usf-graphs",
-    "digestsUnchangedAfterRollback": true,
-    "driftConforms": true,
-    "graphCount": 43,
-    "integrityConforms": true,
-    "observationKind": "stardog-access-boundary",
-    "observedAt": "2026-07-13T06:02:42.797Z",
-    "publicKeyFingerprint": "e943e40fa7650920913fd36b28666e890c6c656c16699301ce704fbf8411d05f",
-    "readinessCount": 67,
-    "repositoryBindingVerified": true,
-    "rollbackFaultCount": 15,
-    "signatureVerified": true,
-    "tripleCount": 577473,
-    "validationConforms": true
+    "reasonCode": "independent-stardog-observation-not-injected",
+    "status": "missing"
   },
   "universeDigests": {
     "repositoryUniverseDigest": "1f4e43b87d494032992904107a6be6d62396f87d2dbe338d0d4297a8af6102e6",
     "universeCounts": {
       "repository-output": 3088,
       "v2-compiler-implementation": 24,
-      "v2-graph-authority": 115,
+      "v2-graph-authority": 117,
       "v2-support-provisioning": 23
     },
-    "v2CompilerUniverseDigest": "2250e510f2a76f2514621cf57b64cfc2bf0043523120f80183c9d40fe1cf15c9",
-    "v2GraphUniverseDigest": "d1fc5413dd9d7b00c355b0af20bf0d595dbdc8575f66fd4bcef06ad365d6dc57",
+    "v2CompilerUniverseDigest": "6c92c8accb25d7865acff303492bd2fd87baeb626034988246f52e49d7bc47a4",
+    "v2GraphUniverseDigest": "69d2bf037d921baf10eadba37f92ed42488a379cf4d6b40f2c7ecb8664799c46",
     "v2SupportUniverseDigest": "3f52e0f874275e6c75d4abc3b80589c9f57f3050b211ad5ef905bc20c4fb3ceb"
   },
   "validation": {
-    "artifacts": 3250,
+    "artifacts": 3252,
     "canonicalArtifacts": 68,
     "dependencies": 94,
     "inventories": 2652,
     "jsonFiles": 7,
     "jsonlFiles": 18,
-    "mappings": 3250,
-    "parserEvidenceCompressedBytes": 3430153,
+    "mappings": 3252,
+    "parserEvidenceCompressedBytes": 3431489,
     "parserEvidenceShards": 4,
-    "parserEvidenceUncompressedBytes": 75827832,
-    "relationships": 19761,
+    "parserEvidenceUncompressedBytes": 75858666,
+    "relationships": 19794,
     "validationStatus": "pass",
     "workPackages": 99
   },
-  "verdict": "CENSUS_SEMANTIC_AUTHORITY_READY",
+  "verdict": "CENSUS_SEMANTIC_AUTHORITY_INCOMPLETE",
   "workPackageCount": 99
 }

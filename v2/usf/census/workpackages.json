@@ -1990,6 +1990,10 @@
         "primaryWorkPackage": "work-package-ad53b111dd53b2d83215"
       },
       {
+        "ownedKey": "2562b664ce86dc7dfdbdc5175fedccdb38c87a59411cc4dc27dec07aea1bc896",
+        "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
+      },
+      {
         "ownedKey": "258f99df2b4c15fbb9a37cbdeb6cc468f3aa2586ae45edfe2c3900ffab5a862f",
         "primaryWorkPackage": "work-package-5fec561767cac1fdfa01"
       },
@@ -6848,6 +6852,10 @@
       {
         "ownedKey": "887f83e412dd7aa38029a17b830bd870ded3846fe7743106de692cfb6bbc1f8c",
         "primaryWorkPackage": "work-package-70b6cf9284064572a4d8"
+      },
+      {
+        "ownedKey": "88862dcd178af409d3317d4be3e2906531eae308670fce6b32e47ea5265d7b85",
+        "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
       },
       {
         "ownedKey": "889678664cc1d80a2767baa75f3fe479568b8cae132c3b3885136cc3023e49ed",
@@ -15206,6 +15214,10 @@
         "primaryWorkPackage": "work-package-ad53b111dd53b2d83215"
       },
       {
+        "ownedKey": "artifact-plan-required-2562b664ce86dc7dfdbdc5175fedccdb38c87a59411cc4dc27dec07aea1bc896",
+        "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
+      },
+      {
         "ownedKey": "artifact-plan-required-258f99df2b4c15fbb9a37cbdeb6cc468f3aa2586ae45edfe2c3900ffab5a862f",
         "primaryWorkPackage": "work-package-5fec561767cac1fdfa01"
       },
@@ -19952,6 +19964,10 @@
       {
         "ownedKey": "artifact-plan-required-887f83e412dd7aa38029a17b830bd870ded3846fe7743106de692cfb6bbc1f8c",
         "primaryWorkPackage": "work-package-70b6cf9284064572a4d8"
+      },
+      {
+        "ownedKey": "artifact-plan-required-88862dcd178af409d3317d4be3e2906531eae308670fce6b32e47ea5265d7b85",
+        "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
       },
       {
         "ownedKey": "artifact-plan-required-889678664cc1d80a2767baa75f3fe479568b8cae132c3b3885136cc3023e49ed",
@@ -34277,6 +34293,10 @@
         "primaryWorkPackage": "work-package-b559276fa2f15cd4f465"
       },
       {
+        "ownedKey": "replacement-9ae737e0712b8e7488fa1c93",
+        "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
+      },
+      {
         "ownedKey": "replacement-9afd4f4f2b2e6851aac5c0b0",
         "primaryWorkPackage": "work-package-7a5888c3dae147d45050"
       },
@@ -35827,6 +35847,10 @@
       {
         "ownedKey": "replacement-bb059ef7d1432631213dd8a2",
         "primaryWorkPackage": "work-package-478649d8c8928091ed4d"
+      },
+      {
+        "ownedKey": "replacement-bb064fb318285c16c38df64b",
+        "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
       },
       {
         "ownedKey": "replacement-bb1fea6bbe889fdc491516fb",
@@ -47279,6 +47303,10 @@
         "primaryWorkPackage": "work-package-b559276fa2f15cd4f465"
       },
       {
+        "ownedKey": "replacement-9ae737e0712b8e7488fa1c93:reuse:0",
+        "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
+      },
+      {
         "ownedKey": "replacement-9afd4f4f2b2e6851aac5c0b0:reuse:0",
         "primaryWorkPackage": "work-package-7a5888c3dae147d45050"
       },
@@ -48829,6 +48857,10 @@
       {
         "ownedKey": "replacement-bb059ef7d1432631213dd8a2:reuse:0",
         "primaryWorkPackage": "work-package-478649d8c8928091ed4d"
+      },
+      {
+        "ownedKey": "replacement-bb064fb318285c16c38df64b:reuse:0",
+        "primaryWorkPackage": "work-package-3b26c3ff6ecc7d7e0d0d"
       },
       {
         "ownedKey": "replacement-bb1fea6bbe889fdc491516fb:reuse:0",
@@ -68021,7 +68053,7 @@
         {
           "criterionKey": "work-package-3b26c3ff6ecc7d7e0d0d:ownership",
           "evidence": [
-            "ownership-index:work-package-3b26c3ff6ecc7d7e0d0d:8d132e53edb5fb0cded2bdbbf2f4206257ce0073cfe346cbbe1eb672829f07bd"
+            "ownership-index:work-package-3b26c3ff6ecc7d7e0d0d:ff32c52b30f384df69f427265752124cca363bf96390dce660417abdb6f36301"
           ],
           "requirement": "Every scoped entity has this package as its sole primary owner."
         },
@@ -68048,6 +68080,7 @@
             "artifact-plan-required-1f20031e80dd39b98cc74e67d81296eaedff5d1e662c3bbe720e7240cb28ded2",
             "artifact-plan-required-231e8f5486592807f309db96b1b9f1e556e096b361d54d27ed2d44f60c8acf82",
             "artifact-plan-required-2544c407526fc6aa1a1582af6d8a804c778379271f73948d31b7e3064b50f2a7",
+            "artifact-plan-required-2562b664ce86dc7dfdbdc5175fedccdb38c87a59411cc4dc27dec07aea1bc896",
             "artifact-plan-required-27f81d22eda9cdb995428564ade4e694c1919a664dcc65ed47b24ef2d3bdeba7",
             "artifact-plan-required-28cef2a8ab170b31619e1149066fde786625164bbc9b601d95f9dce4bc0af9c5",
             "artifact-plan-required-28eaf0b6e4f003bf465a918831dd9ee2e7248a9110b2057f9d7c21b0d07e219a",
@@ -68090,6 +68123,7 @@
             "artifact-plan-required-80ae5e1c24f274edd590e3e6b37cb4ca71544fb9bf8ae1de9477d9c5200cbdd3",
             "artifact-plan-required-84d841eea991431a1256ae25ed3c852f143dba8ea18e7bbd173c6b2606599e28",
             "artifact-plan-required-8850030d5fe63340ca0132e146ba30bbd9905daf28b18c391da93bb07cf73ffb",
+            "artifact-plan-required-88862dcd178af409d3317d4be3e2906531eae308670fce6b32e47ea5265d7b85",
             "artifact-plan-required-949c3cf7bc196450ef77df70f2602c67a3f1ddcf9b450391f62df8eb73036a23",
             "artifact-plan-required-94cb2e41baa8442e9ae59955bebcf0e0002b9a2ad9cf52691d584e86d04e9605",
             "artifact-plan-required-960d6e016f5ac46f0e4de5b692eac30534dbb07e1f07b560d4ad386595f6ca18",
@@ -68213,6 +68247,7 @@
             "replacement-8e70f9ef9499e0d8d908cc71",
             "replacement-9595219d2b3cd2698c2a94f1",
             "replacement-9805475ee1bd4ecd4245c906",
+            "replacement-9ae737e0712b8e7488fa1c93",
             "replacement-9b4ba9b19a82326d27875f99",
             "replacement-9b9f2f11541db4ad6570ee00",
             "replacement-9c74163c414a69e74d5a00e8",
@@ -68229,6 +68264,7 @@
             "replacement-b8f275e34845e246146412da",
             "replacement-b9ba5150af4a1250375d531c",
             "replacement-ba8921f2e2e3395ed7794230",
+            "replacement-bb064fb318285c16c38df64b",
             "replacement-bb1fea6bbe889fdc491516fb",
             "replacement-bd5dd964f9e7f8e9275f6cf1",
             "replacement-be6c9f4cc19da683f505f4ed",
@@ -68290,6 +68326,7 @@
         "1f20031e80dd39b98cc74e67d81296eaedff5d1e662c3bbe720e7240cb28ded2",
         "231e8f5486592807f309db96b1b9f1e556e096b361d54d27ed2d44f60c8acf82",
         "2544c407526fc6aa1a1582af6d8a804c778379271f73948d31b7e3064b50f2a7",
+        "2562b664ce86dc7dfdbdc5175fedccdb38c87a59411cc4dc27dec07aea1bc896",
         "27f81d22eda9cdb995428564ade4e694c1919a664dcc65ed47b24ef2d3bdeba7",
         "28cef2a8ab170b31619e1149066fde786625164bbc9b601d95f9dce4bc0af9c5",
         "28eaf0b6e4f003bf465a918831dd9ee2e7248a9110b2057f9d7c21b0d07e219a",
@@ -68332,6 +68369,7 @@
         "80ae5e1c24f274edd590e3e6b37cb4ca71544fb9bf8ae1de9477d9c5200cbdd3",
         "84d841eea991431a1256ae25ed3c852f143dba8ea18e7bbd173c6b2606599e28",
         "8850030d5fe63340ca0132e146ba30bbd9905daf28b18c391da93bb07cf73ffb",
+        "88862dcd178af409d3317d4be3e2906531eae308670fce6b32e47ea5265d7b85",
         "949c3cf7bc196450ef77df70f2602c67a3f1ddcf9b450391f62df8eb73036a23",
         "94cb2e41baa8442e9ae59955bebcf0e0002b9a2ad9cf52691d584e86d04e9605",
         "960d6e016f5ac46f0e4de5b692eac30534dbb07e1f07b560d4ad386595f6ca18",
@@ -68410,7 +68448,7 @@
           "driver": "proof-equivalence-complexity",
           "measure": "proof-equivalence-gate-count",
           "reason": "Multiple independent gates must pass before replacement closure.",
-          "value": 115
+          "value": 117
         }
       ],
       "confidence": {
@@ -68579,6 +68617,14 @@
           "mechanism": null,
           "sources": [
             "replacement-1deaf7e4a33702668d6d46b1"
+          ]
+        },
+        {
+          "gateClass": "proof",
+          "gateKey": "artifact-plan-required-2562b664ce86dc7dfdbdc5175fedccdb38c87a59411cc4dc27dec07aea1bc896",
+          "mechanism": null,
+          "sources": [
+            "replacement-9ae737e0712b8e7488fa1c93"
           ]
         },
         {
@@ -68915,6 +68961,14 @@
           "mechanism": null,
           "sources": [
             "replacement-69d16c802d91c84b328c2334"
+          ]
+        },
+        {
+          "gateClass": "proof",
+          "gateKey": "artifact-plan-required-88862dcd178af409d3317d4be3e2906531eae308670fce6b32e47ea5265d7b85",
+          "mechanism": null,
+          "sources": [
+            "replacement-bb064fb318285c16c38df64b"
           ]
         },
         {
@@ -69368,6 +69422,7 @@
           "1f20031e80dd39b98cc74e67d81296eaedff5d1e662c3bbe720e7240cb28ded2",
           "231e8f5486592807f309db96b1b9f1e556e096b361d54d27ed2d44f60c8acf82",
           "2544c407526fc6aa1a1582af6d8a804c778379271f73948d31b7e3064b50f2a7",
+          "2562b664ce86dc7dfdbdc5175fedccdb38c87a59411cc4dc27dec07aea1bc896",
           "27f81d22eda9cdb995428564ade4e694c1919a664dcc65ed47b24ef2d3bdeba7",
           "28cef2a8ab170b31619e1149066fde786625164bbc9b601d95f9dce4bc0af9c5",
           "28eaf0b6e4f003bf465a918831dd9ee2e7248a9110b2057f9d7c21b0d07e219a",
@@ -69410,6 +69465,7 @@
           "80ae5e1c24f274edd590e3e6b37cb4ca71544fb9bf8ae1de9477d9c5200cbdd3",
           "84d841eea991431a1256ae25ed3c852f143dba8ea18e7bbd173c6b2606599e28",
           "8850030d5fe63340ca0132e146ba30bbd9905daf28b18c391da93bb07cf73ffb",
+          "88862dcd178af409d3317d4be3e2906531eae308670fce6b32e47ea5265d7b85",
           "949c3cf7bc196450ef77df70f2602c67a3f1ddcf9b450391f62df8eb73036a23",
           "94cb2e41baa8442e9ae59955bebcf0e0002b9a2ad9cf52691d584e86d04e9605",
           "960d6e016f5ac46f0e4de5b692eac30534dbb07e1f07b560d4ad386595f6ca18",
@@ -69486,6 +69542,7 @@
           "artifact-plan-required-1f20031e80dd39b98cc74e67d81296eaedff5d1e662c3bbe720e7240cb28ded2",
           "artifact-plan-required-231e8f5486592807f309db96b1b9f1e556e096b361d54d27ed2d44f60c8acf82",
           "artifact-plan-required-2544c407526fc6aa1a1582af6d8a804c778379271f73948d31b7e3064b50f2a7",
+          "artifact-plan-required-2562b664ce86dc7dfdbdc5175fedccdb38c87a59411cc4dc27dec07aea1bc896",
           "artifact-plan-required-27f81d22eda9cdb995428564ade4e694c1919a664dcc65ed47b24ef2d3bdeba7",
           "artifact-plan-required-28cef2a8ab170b31619e1149066fde786625164bbc9b601d95f9dce4bc0af9c5",
           "artifact-plan-required-28eaf0b6e4f003bf465a918831dd9ee2e7248a9110b2057f9d7c21b0d07e219a",
@@ -69528,6 +69585,7 @@
           "artifact-plan-required-80ae5e1c24f274edd590e3e6b37cb4ca71544fb9bf8ae1de9477d9c5200cbdd3",
           "artifact-plan-required-84d841eea991431a1256ae25ed3c852f143dba8ea18e7bbd173c6b2606599e28",
           "artifact-plan-required-8850030d5fe63340ca0132e146ba30bbd9905daf28b18c391da93bb07cf73ffb",
+          "artifact-plan-required-88862dcd178af409d3317d4be3e2906531eae308670fce6b32e47ea5265d7b85",
           "artifact-plan-required-949c3cf7bc196450ef77df70f2602c67a3f1ddcf9b450391f62df8eb73036a23",
           "artifact-plan-required-94cb2e41baa8442e9ae59955bebcf0e0002b9a2ad9cf52691d584e86d04e9605",
           "artifact-plan-required-960d6e016f5ac46f0e4de5b692eac30534dbb07e1f07b560d4ad386595f6ca18",
@@ -69648,6 +69706,7 @@
           "replacement-8e70f9ef9499e0d8d908cc71",
           "replacement-9595219d2b3cd2698c2a94f1",
           "replacement-9805475ee1bd4ecd4245c906",
+          "replacement-9ae737e0712b8e7488fa1c93",
           "replacement-9b4ba9b19a82326d27875f99",
           "replacement-9b9f2f11541db4ad6570ee00",
           "replacement-9c74163c414a69e74d5a00e8",
@@ -69664,6 +69723,7 @@
           "replacement-b8f275e34845e246146412da",
           "replacement-b9ba5150af4a1250375d531c",
           "replacement-ba8921f2e2e3395ed7794230",
+          "replacement-bb064fb318285c16c38df64b",
           "replacement-bb1fea6bbe889fdc491516fb",
           "replacement-bd5dd964f9e7f8e9275f6cf1",
           "replacement-be6c9f4cc19da683f505f4ed",
@@ -69765,6 +69825,7 @@
           "replacement-8e70f9ef9499e0d8d908cc71:reuse:0",
           "replacement-9595219d2b3cd2698c2a94f1:reuse:0",
           "replacement-9805475ee1bd4ecd4245c906:reuse:0",
+          "replacement-9ae737e0712b8e7488fa1c93:reuse:0",
           "replacement-9b4ba9b19a82326d27875f99:reuse:0",
           "replacement-9b9f2f11541db4ad6570ee00:reuse:0",
           "replacement-9c74163c414a69e74d5a00e8:reuse:0",
@@ -69781,6 +69842,7 @@
           "replacement-b8f275e34845e246146412da:reuse:0",
           "replacement-b9ba5150af4a1250375d531c:reuse:0",
           "replacement-ba8921f2e2e3395ed7794230:reuse:0",
+          "replacement-bb064fb318285c16c38df64b:reuse:0",
           "replacement-bb1fea6bbe889fdc491516fb:reuse:0",
           "replacement-bd5dd964f9e7f8e9275f6cf1:reuse:0",
           "replacement-be6c9f4cc19da683f505f4ed:reuse:0",
@@ -69884,6 +69946,7 @@
         "replacement-8e70f9ef9499e0d8d908cc71",
         "replacement-9595219d2b3cd2698c2a94f1",
         "replacement-9805475ee1bd4ecd4245c906",
+        "replacement-9ae737e0712b8e7488fa1c93",
         "replacement-9b4ba9b19a82326d27875f99",
         "replacement-9b9f2f11541db4ad6570ee00",
         "replacement-9c74163c414a69e74d5a00e8",
@@ -69900,6 +69963,7 @@
         "replacement-b8f275e34845e246146412da",
         "replacement-b9ba5150af4a1250375d531c",
         "replacement-ba8921f2e2e3395ed7794230",
+        "replacement-bb064fb318285c16c38df64b",
         "replacement-bb1fea6bbe889fdc491516fb",
         "replacement-bd5dd964f9e7f8e9275f6cf1",
         "replacement-be6c9f4cc19da683f505f4ed",
@@ -70260,6 +70324,11 @@
         },
         {
           "action": "none",
+          "replacementGroupKey": "replacement-9ae737e0712b8e7488fa1c93",
+          "reuseActionKey": "replacement-9ae737e0712b8e7488fa1c93:reuse:0"
+        },
+        {
+          "action": "none",
           "replacementGroupKey": "replacement-9b4ba9b19a82326d27875f99",
           "reuseActionKey": "replacement-9b4ba9b19a82326d27875f99:reuse:0"
         },
@@ -70337,6 +70406,11 @@
           "action": "none",
           "replacementGroupKey": "replacement-ba8921f2e2e3395ed7794230",
           "reuseActionKey": "replacement-ba8921f2e2e3395ed7794230:reuse:0"
+        },
+        {
+          "action": "none",
+          "replacementGroupKey": "replacement-bb064fb318285c16c38df64b",
+          "reuseActionKey": "replacement-bb064fb318285c16c38df64b:reuse:0"
         },
         {
           "action": "none",

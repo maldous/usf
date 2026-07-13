@@ -1,8 +1,8 @@
 {
   "aggregate": {
-    "recordCount": 3250,
-    "uncompressedBytes": 75827832,
-    "uncompressedSha256": "fef2eac4c0ba4407ef0984005a6772cabfc3f7f6fe7eb592c191cf473dbf3996"
+    "recordCount": 3252,
+    "uncompressedBytes": 75858666,
+    "uncompressedSha256": "6bd5b7ebf37baec7a6f6c70344af33f2fbe293d90b54d1e4484907e0d315337c"
   },
   "encoding": "gzip-jsonl",
   "formatVersion": 1,
@@ -23,25 +23,25 @@
       "universe": "repository-output"
     },
     {
-      "compressedBytes": 50010,
-      "compressedSha256": "d7fc3828ec7dd1c74fb6cbe76fc7aaef92c8ab77a76f1897a327ba3062f4c140",
+      "compressedBytes": 50129,
+      "compressedSha256": "e8c391b44218663eca4d5d66387f50f98b7b0aab8a5d28e5d94604a64fd5df98",
       "firstPath": "v2/usf/compiler/package-lock.json",
       "lastPath": "v2/usf/compiler/test/generation-output.test.js",
       "path": "parser-results/v2-compiler-implementation.jsonl.gz",
       "recordCount": 24,
-      "uncompressedBytes": 767493,
-      "uncompressedSha256": "c2ac0b626c821e2f230f7b9944d71733fec82ebe60deb4cee9c52948ed7ad3d9",
+      "uncompressedBytes": 770563,
+      "uncompressedSha256": "26db35be6b74d779555cf876b62d65bdd5b062583da221cc315e356efe921d7c",
       "universe": "v2-compiler-implementation"
     },
     {
-      "compressedBytes": 886035,
-      "compressedSha256": "a0a3927af293e9a1fc0731e541fb856d27c81c299bb62d17d6d3354987cba597",
+      "compressedBytes": 887252,
+      "compressedSha256": "319174c49b72b9b4bcbc295d1efc2324e853cb75ac9924364e64990bc6ced310",
       "firstPath": "v2/usf/graph/assurance/controls.trig",
       "lastPath": "v2/usf/graph/vocabulary.ttl",
       "path": "parser-results/v2-graph-authority.jsonl.gz",
-      "recordCount": 115,
-      "uncompressedBytes": 24116499,
-      "uncompressedSha256": "3b369d792281c4bf195c4fd959fe3b2b3cda99c90e925ac17e8fbd5895c21bc7",
+      "recordCount": 117,
+      "uncompressedBytes": 24144263,
+      "uncompressedSha256": "96c00105be6f0c220fbd9c45a20330a975ca2ac45771150442fb408cdd47e6f7",
       "universe": "v2-graph-authority"
     },
     {

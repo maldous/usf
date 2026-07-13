@@ -96,6 +96,12 @@ export async function verifyFixtures({ manifest, client }) {
           .map((row) => row.violation?.value);
         outcome = { expected: 'conforming', detected: offending.length === 0, offending };
       } else if (header.expectShacl) {
+        // The base graph is proven SHACL-conforming by the compile before the
+        // harness runs, and each fixture loads in its own rolled-back
+        // transaction whose only delta is the fixture's own triples. So a
+        // non-conforming result here is attributable to the fixture — no
+        // report focus-node join is needed (and Stardog's report
+        // serialisation does not round-trip reliably for that).
         const conforms = await client.validateInTx(tx, shapes);
         outcome = { expected: 'shacl-nonconforming', detected: conforms === false };
       }

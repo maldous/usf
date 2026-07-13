@@ -43,14 +43,14 @@ function harnessWorkspace() {
   return { root, manifest };
 }
 
-function fakeClient(rowsBySubject) {
+function fakeClient(rowsBySubject, { conforms = true } = {}) {
   const loaded = [];
   return {
     loaded,
     async connectivity() { return 1; },
     async begin() { return 'tx'; },
     async rollback() {},
-    async addData(tx, content) { loaded.push(content); },
+    async addData(_tx, content) { loaded.push(content); },
     async selectInTx() {
       const current = loaded[loaded.length - 1] ?? '';
       const rows = [];
@@ -59,7 +59,7 @@ function fakeClient(rowsBySubject) {
       }
       return rows;
     },
-    async validateInTx() { return true; },
+    async validateInTx() { return conforms; },
   };
 }
 
@@ -87,6 +87,34 @@ test('fixture harness detects planted defects, accepts conforming data, reports 
     });
     assert.equal(noisy.ok, false);
     assert.deepEqual(noisy.failures.map((f) => f.expected), ['conforming']);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('expect-shacl fixture is detected when the compiled base graph turns non-conforming', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'usf-fixture-harness-shacl-'));
+  mkdirSync(join(root, 'fixtures/conforming'), { recursive: true });
+  mkdirSync(join(root, 'fixtures/defects'), { recursive: true });
+  writeFileSync(join(root, 'integrity.rq'), 'SELECT ?violation ?subject WHERE { }');
+  writeFileSync(join(root, 'shapes.ttl'), '@prefix sh: <http://www.w3.org/ns/shacl#> .');
+  writeFileSync(join(root, 'fixtures/defects/shacl.trig'),
+    '# graph: urn:usf:graph:realisation\n# expect-shacl: nonconforming\n@prefix usf: <urn:usf:ontology:> .\n<urn:usf:fixturenode:shacldefect> a usf:Realisation .\n');
+  const manifest = {
+    root,
+    fixtures: { conforming: 'fixtures/conforming', defects: 'fixtures/defects' },
+    shapes: [{ path: join(root, 'shapes.ttl') }],
+    rules: [{ kind: 'integrity', path: join(root, 'integrity.rq') }],
+  };
+  try {
+    // Fixture makes the isolated transaction non-conforming -> detected.
+    const nonconforming = await verifyFixtures({ manifest, client: fakeClient({}, { conforms: false }) });
+    assert.equal(nonconforming.ok, true);
+    assert.equal(nonconforming.results[0].expected, 'shacl-nonconforming');
+    // If it stays conforming, the expected SHACL defect was not proven -> fail.
+    const stillConforming = await verifyFixtures({ manifest, client: fakeClient({}, { conforms: true }) });
+    assert.equal(stillConforming.ok, false);
+    assert.equal(stillConforming.failures[0].expected, 'shacl-nonconforming');
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
