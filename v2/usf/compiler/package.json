@@ -20,7 +20,8 @@
     "verify": "node src/cli.js verify",
     "verify:fixtures": "node src/cli.js verify-fixtures",
     "drift": "node src/cli.js drift-live",
-    "test": "node --test test/compiler.test.js test/fixture-harness.test.js test/generation-output.test.js",
+    "mcp": "node src/mcp.js",
+    "test": "node --test test/compiler.test.js test/fixture-harness.test.js test/generation-output.test.js test/mcp.test.js",
     "test:cloud": "node --test test/cloud.test.js"
   },
   "dependencies": {
