@@ -12,3 +12,8 @@ coverage/
 .codex/
 
 .proof-review/
+
+# graph snapshots / derived exports may be large; keep the dir, ignore contents
+/graph/snapshots/*
+!/graph/snapshots/.gitkeep
+/.venv/
