@@ -70,7 +70,7 @@
     iface:interfacehealthzgetapi a usf:Interface ;
         usf:canonicalName "interfacehealthzgetapi" ;
         usf:hasOperation op:healthzget ;
-        usf:interfaceForContract sc:serverlessfunctionruntime .
+        usf:interfaceForContract sc:composedproviderreadinessspine .
     iface:interfacejobscancelapi a usf:Interface ;
         usf:canonicalName "interfacejobscancelapi" ;
         usf:hasOperation op:jobscancel ;
@@ -263,34 +263,30 @@
         usf:requiresPermission perm:tenantcontextread .
     port:analyticseventstore a usf:Port ;
         usf:canonicalName "analyticseventstore" .
-    port:analyticseventstoreregistryportnamenoportsindextsinterface a usf:Port ;
-        usf:canonicalName "analyticseventstoreregistryportnamenoportsindextsinterface" .
     port:apiruntime a usf:Port ;
         usf:canonicalName "apiruntime" .
     port:auditeventledger a usf:Port ;
         usf:canonicalName "auditeventledger" .
-    port:auditeventstore a usf:Port ;
-        usf:canonicalName "auditeventstore" .
     port:auditexporter a usf:Port ;
-        usf:canonicalName "auditexporter" .
+        usf:canonicalName "auditexporter" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Port defined by the ports package and fulfilled in process by the audit capability; no adapter individual is modelled yet." .
     port:auditledger a usf:Port ;
         usf:canonicalName "auditledger" .
     port:auditrecorder a usf:Port ;
-        usf:canonicalName "auditrecorder" .
+        usf:canonicalName "auditrecorder" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Port defined by the ports package and fulfilled in process by the audit capability recorder; no adapter individual is modelled yet." .
     port:auditsigner a usf:Port ;
-        usf:canonicalName "auditsigner" .
+        usf:canonicalName "auditsigner" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Port defined by the ports package for audit chain signing; in process fulfilment, adapter modelling deferred." .
     port:backuprestoreprovider a usf:Port ;
         usf:canonicalName "backuprestoreprovider" .
     port:cacheprovider a usf:Port ;
         usf:canonicalName "cacheprovider" .
-    port:cacheproviderregistryportnamenoportsindextsinterface a usf:Port ;
-        usf:canonicalName "cacheproviderregistryportnamenoportsindextsinterface" .
     port:cloudprovideremulator a usf:Port ;
         usf:canonicalName "cloudprovideremulator" .
-    port:cloudprovideremulatorregistryportname a usf:Port ;
-        usf:canonicalName "cloudprovideremulatorregistryportname" .
-    port:composedsearchproofregistryliststheclassnameasportname a usf:Port ;
-        usf:canonicalName "composedsearchproofregistryliststheclassnameasportname" .
     port:configlayerprovider a usf:Port ;
         usf:canonicalName "configlayerprovider" .
     port:durableworkflowport a usf:Port ;
@@ -298,7 +294,9 @@
     port:eventbus a usf:Port ;
         usf:canonicalName "eventbus" .
     port:externalsecretmanager a usf:Port ;
-        usf:canonicalName "externalsecretmanager" .
+        usf:canonicalName "externalsecretmanager" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Port defined by the ports package for external secret managers; only the composed OpenBao secret store is currently bound." .
     port:featureflagsource a usf:Port ;
         usf:canonicalName "featureflagsource" .
     port:filemetadatastore a usf:Port ;
@@ -307,84 +305,58 @@
         usf:canonicalName "guardrailport" .
     port:httpprovidermock a usf:Port ;
         usf:canonicalName "httpprovidermock" .
-    port:httpprovidermockregistryportname a usf:Port ;
-        usf:canonicalName "httpprovidermockregistryportname" .
     port:identitydirectory a usf:Port ;
         usf:canonicalName "identitydirectory" .
     port:identityprovider a usf:Port ;
         usf:canonicalName "identityprovider" .
-    port:identityproviderkeycloakverifier a usf:Port ;
-        usf:canonicalName "identityproviderkeycloakverifier" .
     port:importexportport a usf:Port ;
         usf:canonicalName "importexportport" .
     port:keycloaktokenverifier a usf:Port ;
         usf:canonicalName "keycloaktokenverifier" .
     port:mailprovider a usf:Port ;
         usf:canonicalName "mailprovider" .
-    port:meilisearchcomposedsearchadapter a usf:Port ;
-        usf:canonicalName "meilisearchcomposedsearchadapter" .
     port:notificationprovider a usf:Port ;
         usf:canonicalName "notificationprovider" .
     port:objectstore a usf:Port ;
         usf:canonicalName "objectstore" .
     port:observabilitysink a usf:Port ;
         usf:canonicalName "observabilitysink" .
-    port:observabilitysinkextendstelemetryport a usf:Port ;
-        usf:canonicalName "observabilitysinkextendstelemetryport" .
-    port:operationaljobengine a usf:Port ;
-        usf:canonicalName "operationaljobengine" .
     port:operationaljobport a usf:Port ;
         usf:canonicalName "operationaljobport" .
-    port:operationaljobstore a usf:Port ;
-        usf:canonicalName "operationaljobstore" .
-    port:platforminternal a usf:Port ;
-        usf:canonicalName "platforminternal" .
     port:policydecisionpoint a usf:Port ;
-        usf:canonicalName "policydecisionpoint" .
-    port:proofsurfacenoport a usf:Port ;
-        usf:canonicalName "proofsurfacenoport" .
+        usf:canonicalName "policydecisionpoint" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Port defined by the ports package and fulfilled in process by the tenant capability policy decision point service." .
     port:qualitygateprovider a usf:Port ;
         usf:canonicalName "qualitygateprovider" .
-    port:qualitygateproviderregistryportname a usf:Port ;
-        usf:canonicalName "qualitygateproviderregistryportname" .
     port:resourcelifecycleport a usf:Port ;
         usf:canonicalName "resourcelifecycleport" .
     port:scanprovider a usf:Port ;
         usf:canonicalName "scanprovider" .
     port:searchindexport a usf:Port ;
         usf:canonicalName "searchindexport" .
-    port:searchindexprovider a usf:Port ;
-        usf:canonicalName "searchindexprovider" .
     port:secretresolver a usf:Port ;
         usf:canonicalName "secretresolver" .
-    port:secretresolversecretstore a usf:Port ;
-        usf:canonicalName "secretresolversecretstore" .
     port:secretstore a usf:Port ;
         usf:canonicalName "secretstore" .
-    port:secretstoresecretresolver a usf:Port ;
-        usf:canonicalName "secretstoresecretresolver" .
     port:sessionstore a usf:Port ;
         usf:canonicalName "sessionstore" .
     port:siemforwarder a usf:Port ;
-        usf:canonicalName "siemforwarder" .
+        usf:canonicalName "siemforwarder" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Port defined by the ports package for SIEM forwarding; composed forwarding is deferred until an external SIEM provider is admitted." .
     port:signedurlissuer a usf:Port ;
-        usf:canonicalName "signedurlissuer" .
+        usf:canonicalName "signedurlissuer" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Port defined by the ports package and fulfilled in process by the object store adapter; a dedicated adapter individual is not modelled." .
     port:telemetryport a usf:Port ;
         usf:canonicalName "telemetryport" .
     port:tenantmembershipdirectory a usf:Port ;
         usf:canonicalName "tenantmembershipdirectory" .
     port:tenantscopedrepository a usf:Port ;
         usf:canonicalName "tenantscopedrepository" .
-    port:tenantscopedrepositorytenantmembership a usf:Port ;
-        usf:canonicalName "tenantscopedrepositorytenantmembership" .
-    port:tenantscopedrepositorytenantmembershipdirectory a usf:Port ;
-        usf:canonicalName "tenantscopedrepositorytenantmembershipdirectory" .
-    port:tokenforgenoport a usf:Port ;
-        usf:canonicalName "tokenforgenoport" .
     port:webhookcaptureprovider a usf:Port ;
         usf:canonicalName "webhookcaptureprovider" .
-    port:webhookcaptureproviderregistryportname a usf:Port ;
-        usf:canonicalName "webhookcaptureproviderregistryportname" .
     port:workflowengine a usf:Port ;
         usf:canonicalName "workflowengine" .
 }

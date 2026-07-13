@@ -15,7 +15,7 @@ const canonical = { canonicalArtifactKey: 'artifact.a', targetPath: 'a.json', pa
 const work = { key: 'work.a', architecturalOutcome: 'Produce one canonical outcome.', canonicalArtifactKeys: ['artifact.a'], ownedSemanticLayers: [], acceptanceCriteria: ['a'], complexityEvidence: [{}], equivalenceGates: [{}], dependencies: [] };
 const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
 const auditTriple = (graph, subject, predicate, object) => ({ kind: 'semantic-triple', attributes: { graph, subject, predicate, object } });
-function auditDispositionFixture({ state = 'urn:usf:dispositiondecisionstate:accepted', digestValue = digest, kind = 'urn:usf:dispositionkind:retainedasset', includePlan = false, planCount = includePlan ? 1 : 0, graph = 'urn:usf:graph:source-dispositions' } = {}) {
+function auditDispositionFixture({ state = 'urn:usf:dispositiondecisionstate:accepted', digestValue = digest, kind = 'urn:usf:dispositionkind:retainedasset', includePlan = false, planCount = includePlan ? 1 : 0, graph = 'urn:usf:graph:source-dispositions', decidedAgainst = 'urn:usf:observation:a', dispositionSetDigest = 'f'.repeat(64), observationSetDigest = 'f'.repeat(64) } = {}) {
   const declarations = [
     auditTriple(null, 'urn:usf:namedgraph:source-dispositions', RDF_TYPE, 'urn:usf:ontology:NamedGraph'),
     auditTriple(null, 'urn:usf:namedgraph:source-dispositions', 'urn:usf:ontology:graphIri', '"urn:usf:graph:source-dispositions"^^http://www.w3.org/2001/XMLSchema#anyURI'),
@@ -28,8 +28,11 @@ function auditDispositionFixture({ state = 'urn:usf:dispositiondecisionstate:acc
     auditTriple(graph, 'urn:usf:observation:a', 'urn:usf:ontology:observedSourcePath', '"a.json"^^http://www.w3.org/2001/XMLSchema#string'),
     auditTriple(graph, 'urn:usf:observation:a', 'urn:usf:ontology:observedContentDigest', `"${digestValue}"^^http://www.w3.org/2001/XMLSchema#string`),
     auditTriple(graph, 'urn:usf:observation:a', 'urn:usf:ontology:observedUniverse', '"repository-output"^^http://www.w3.org/2001/XMLSchema#string'),
+    auditTriple(graph, 'urn:usf:observation:a', 'urn:usf:ontology:observationSetDigest', `"${observationSetDigest}"^^http://www.w3.org/2001/XMLSchema#string`),
     auditTriple(graph, 'urn:usf:source:a', 'urn:usf:ontology:hasSourceDisposition', 'urn:usf:disposition:a'),
     auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:dispositionOfSourceArtefact', 'urn:usf:source:a'),
+    auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:decidedAgainstObservation', decidedAgainst),
+    auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:observationSetDigest', `"${dispositionSetDigest}"^^http://www.w3.org/2001/XMLSchema#string`),
     auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:hasDispositionKind', kind),
     auditTriple(graph, 'urn:usf:disposition:a', 'urn:usf:ontology:hasDispositionDecisionState', state)
   ];
@@ -181,7 +184,9 @@ test('independent source disposition audit accepts no-output and planned output,
     auditDispositionFixture({ digestValue: 'b'.repeat(64) }),
     auditDispositionFixture({ kind: 'urn:usf:dispositionkind:generateequivalent' }),
     auditDispositionFixture({ kind: 'urn:usf:dispositionkind:generateequivalent', planCount: 2 }),
-    auditDispositionFixture({ graph: 'urn:usf:graph:not-registered' })
+    auditDispositionFixture({ graph: 'urn:usf:graph:not-registered' }),
+    auditDispositionFixture({ decidedAgainst: 'urn:usf:observation:stale' }),
+    auditDispositionFixture({ dispositionSetDigest: 'e'.repeat(64) })
   ]) assert.equal(auditSourceDispositionOwnership([sourceArtifact], fixture, [dispositionGroup('missing-accepted-source-disposition')]).status, 'fail');
 });
 

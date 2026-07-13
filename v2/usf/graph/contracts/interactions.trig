@@ -130,6 +130,7 @@
         usf:hasDeliverySemantics del:atleastonce .
     evt:notificationsent a usf:Event ;
         usf:canonicalName "notificationsent" ;
+        usf:carriesMessage msg:notificationdeliverymessage ;
         usf:hasDeliverySemantics del:atleastonce .
     evt:notificationsuppressed a usf:Event ;
         usf:canonicalName "notificationsuppressed" ;
@@ -138,6 +139,7 @@
         usf:canonicalName "providerconfigured" ;
         usf:hasDeliverySemantics del:atleastonce .
     evt:tenantcontextaccepted a usf:Event ;
+        usf:carriesMessage msg:tenantcontextmessage ;
         usf:canonicalName "tenantcontextaccepted" ;
         usf:hasDeliverySemantics del:atleastonce .
     evt:workflowapprovalapproved a usf:Event ;
@@ -159,11 +161,15 @@
         usf:canonicalName "workflowstarted" ;
         usf:hasDeliverySemantics del:atleastonce .
     msg:mailmessage a usf:Message ;
-        usf:canonicalName "mailmessage" .
+        usf:canonicalName "mailmessage" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Captured mail payload evidence for hermetic delivery capture; message flow is modelled through notification events rather than a dedicated mail event." .
     msg:notificationdeliverymessage a usf:Message ;
         usf:canonicalName "notificationdeliverymessage" .
     msg:runtimeproofmessage a usf:Message ;
-        usf:canonicalName "runtimeproofmessage" .
+        usf:canonicalName "runtimeproofmessage" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Captured runtime proof bus payload used by composed event bus proofs; it is capture evidence, not a workflow-carried message." .
     msg:tenantcontextmessage a usf:Message ;
         usf:canonicalName "tenantcontextmessage" .
     stt:apiroutecontractlifecycledeprecated a usf:State ;

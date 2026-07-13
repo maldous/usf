@@ -1046,7 +1046,7 @@
 <urn:usf:sourcesemanticbinding:delegatedadministrationrolessemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:delegatedadministrationrolesuisemantics>.
 <urn:usf:contractfacet:delegatedadministrationrolesuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
     <urn:usf:ontology:facetStatement> "The delegatedadministrationroles capability is explicitly not exposed; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
-<urn:usf:semanticcontract:delegatedadministrationroles> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
+<urn:usf:semanticcontract:delegatedadministrationroles> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>, <urn:usf:nonclaim:deferredcapabilities>.
 <urn:usf:sourcesemanticbinding:e2econfidenceladderstageawaresemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "e2econfidenceladderstageawaresemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s0015538a78256ff2df8299f3aef790fd7f05790f4d850798574d64052783db66>;
@@ -2614,7 +2614,7 @@
 <urn:usf:sourcesemanticbinding:serverlessfunctionruntimesemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:serverlessfunctionruntimeuisemantics>.
 <urn:usf:contractfacet:serverlessfunctionruntimeuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
     <urn:usf:ontology:facetStatement> "The serverlessfunctionruntime capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
-<urn:usf:semanticcontract:serverlessfunctionruntime> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
+<urn:usf:semanticcontract:serverlessfunctionruntime> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>, <urn:usf:nonclaim:deferredcapabilities>.
 <urn:usf:sourcesemanticbinding:servicecatalogandproviderintegrationmodelsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "servicecatalogandproviderintegrationmodelsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s96b2b7263d3e91fa88ac57d26ef36f9a6621b074d8eae40f507b211694ea112f>;
@@ -3454,7 +3454,6 @@
 <urn:usf:sourcesemanticbinding:universalservicefoundationscopeandprinciplessemanticsource> <urn:usf:ontology:sourceBindingTarget> <urn:usf:contractfacet:universalservicefoundationscopeandprinciplesuisemantics>.
 <urn:usf:contractfacet:universalservicefoundationscopeandprinciplesuisemantics> <urn:usf:ontology:facetStatus> <urn:usf:facetstatus:notapplicable>;
     <urn:usf:ontology:facetStatement> "The universalservicefoundationscopeandprinciples capability is explicitly internal; no product or operator UI is authorised. Any UI requires a deliberate exposure amendment.".
-<urn:usf:semanticcontract:universalservicefoundationscopeandprinciples> <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance>, <urn:usf:nonclaim:nouiproductparity>, <urn:usf:nonclaim:noaccessibilitycompliance>, <urn:usf:nonclaim:nolaunchi18n>.
 <urn:usf:sourcesemanticbinding:usagemeteringandmetereventingestionsemanticsource> a <urn:usf:ontology:SourceSemanticBinding>;
     <urn:usf:ontology:canonicalName> "usagemeteringandmetereventingestionsemanticsource";
     <urn:usf:ontology:sourceBindingSource> <urn:usf:sourceartefact:s80312b86457f924f105a1c1d9447ac51628ba4e28a79ffc24351b3a6cdd951f2>;

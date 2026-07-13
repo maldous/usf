@@ -266,7 +266,8 @@ const SOURCE_TERMS = Object.freeze({
   namedGraph: 'urn:usf:ontology:NamedGraph', graphIri: 'urn:usf:ontology:graphIri', graphClass: 'urn:usf:ontology:graphClass',
   source: 'urn:usf:ontology:SourceArtefact', observation: 'urn:usf:ontology:SourceArtefactObservation', disposition: 'urn:usf:ontology:SourceArtefactDisposition', kind: 'urn:usf:ontology:DispositionKind',
   observes: 'urn:usf:ontology:observesSourceArtefact', path: 'urn:usf:ontology:observedSourcePath', digest: 'urn:usf:ontology:observedContentDigest', universe: 'urn:usf:ontology:observedUniverse',
-  hasDisposition: 'urn:usf:ontology:hasSourceDisposition', dispositionOf: 'urn:usf:ontology:dispositionOfSourceArtefact', assignedPlan: 'urn:usf:ontology:assignedToArtefactPlan', dispositionKind: 'urn:usf:ontology:hasDispositionKind', decision: 'urn:usf:ontology:hasDispositionDecisionState'
+  hasDisposition: 'urn:usf:ontology:hasSourceDisposition', dispositionOf: 'urn:usf:ontology:dispositionOfSourceArtefact', assignedPlan: 'urn:usf:ontology:assignedToArtefactPlan', dispositionKind: 'urn:usf:ontology:hasDispositionKind', decision: 'urn:usf:ontology:hasDispositionDecisionState',
+  decidedAgainst: 'urn:usf:ontology:decidedAgainstObservation', setDigest: 'urn:usf:ontology:observationSetDigest'
 });
 const SOURCE_RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
 const ACCEPTED_DISPOSITION = 'urn:usf:dispositiondecisionstate:accepted';
@@ -282,10 +283,6 @@ function sourceTriples(parserResults) {
   return parserResults.filter((record) => record.universe === 'v2-graph-authority' && !record.path.includes('/fixtures/')).flatMap((record) =>
     (record.declarations ?? []).filter((item) => item.kind === 'semantic-triple').map((item) => ({ sourcePath: record.path, ...item.attributes }))
   ).filter((triple) => triple.subject && triple.predicate && triple.object);
-}
-
-function sourceObjects(triples, subject, predicate) {
-  return [...new Set(triples.filter((triple) => triple.subject === subject && triple.predicate === predicate).map((triple) => triple.object))].sort();
 }
 
 function sourceLexical(term) {
@@ -335,7 +332,8 @@ export function auditSourceDispositionOwnership(artifacts, parserResults, replac
     sources: get(iri, SOURCE_TERMS.observes),
     paths: get(iri, SOURCE_TERMS.path).map(sourceLexical),
     digests: get(iri, SOURCE_TERMS.digest).map(sourceLexical),
-    universes: get(iri, SOURCE_TERMS.universe).map(sourceLexical).map((value) => SOURCE_UNIVERSES.get(value) ?? value)
+    universes: get(iri, SOURCE_TERMS.universe).map(sourceLexical).map((value) => SOURCE_UNIVERSES.get(value) ?? value),
+    setDigests: get(iri, SOURCE_TERMS.setDigest).map(sourceLexical)
   }));
   const observationsByPath = new Map();
   for (const observation of observations) {
@@ -371,7 +369,11 @@ export function auditSourceDispositionOwnership(artifacts, parserResults, replac
     const states = get(dispositionIri, SOURCE_TERMS.decision);
     const kinds = get(dispositionIri, SOURCE_TERMS.dispositionKind);
     const assignedPlans = get(dispositionIri, SOURCE_TERMS.assignedPlan);
+    const decidedAgainst = get(dispositionIri, SOURCE_TERMS.decidedAgainst);
+    const dispositionSetDigests = get(dispositionIri, SOURCE_TERMS.setDigest).map(sourceLexical);
     if (!resourceRegistered(dispositionIri)) artifactFindings.push('source-disposition-unregistered-graph');
+    if (decidedAgainst.length !== 1 || decidedAgainst[0] !== observation.iri) artifactFindings.push('source-disposition-stale-observation');
+    if (observation.setDigests.length !== 1 || dispositionSetDigests.length !== 1 || dispositionSetDigests[0] !== observation.setDigests[0]) artifactFindings.push('source-disposition-set-digest-mismatch');
     if (states.length !== 1 || states[0] !== ACCEPTED_DISPOSITION) artifactFindings.push(states.includes('urn:usf:dispositiondecisionstate:reviewrequired') ? 'source-disposition-review-required' : 'source-disposition-not-accepted');
     if (kinds.length !== 1 || !typed.kind.has(kinds[0])) artifactFindings.push('source-disposition-kind-invalid');
     const planRequired = kinds.length === 1 && OUTPUT_KINDS.has(kinds[0]);
@@ -389,7 +391,12 @@ export function auditSourceDispositionOwnership(artifacts, parserResults, replac
   }
   const findings = [...findingCounts].sort(([left], [right]) => left.localeCompare(right)).map(([reason, count]) => `${reason}:${count}`);
   if (artifacts.length - acceptedCount > 0) findings.push(`required-source-disposition-unavailable:${artifacts.length - acceptedCount}`);
-  return outcome('source-disposition-ownership', findings, { artifactCount: artifacts.length, acceptedDispositionCount: acceptedCount, rejectedDispositionCount: artifacts.length - acceptedCount, outputPlanDispositionCount: outputPlanCount, noOutputDispositionCount: noOutputCount, observationCount: observations.length, dispositionCount: typed.disposition.size, findingDistribution: Object.fromEntries([...findingCounts].sort(([left], [right]) => left.localeCompare(right))) });
+  const distinctSetDigests = new Set([
+    ...observations.flatMap((record) => record.setDigests),
+    ...[...typed.disposition].flatMap((iri) => get(iri, SOURCE_TERMS.setDigest).map(sourceLexical))
+  ]);
+  if (distinctSetDigests.size > 1) findings.push(`incoherent-observation-set-digests:${distinctSetDigests.size}`);
+  return outcome('source-disposition-ownership', findings, { artifactCount: artifacts.length, acceptedDispositionCount: acceptedCount, rejectedDispositionCount: artifacts.length - acceptedCount, outputPlanDispositionCount: outputPlanCount, noOutputDispositionCount: noOutputCount, observationCount: observations.length, dispositionCount: typed.disposition.size, observationSetDigestCount: distinctSetDigests.size, findingDistribution: Object.fromEntries([...findingCounts].sort(([left], [right]) => left.localeCompare(right))) });
 }
 
 export function auditFindingClassifications(findingsInput) {
@@ -658,7 +665,7 @@ export function auditMutationBoundary(before, after, mutableRoot = 'v2/usf/censu
 }
 
 function snapshot(root, paths) {
-  const map = new Map(); for (const relative of paths) { try { const digest = physicalDigest(root, relative); if (digest) map.set(relative, digest); } catch {} } return map;
+  const map = new Map(); for (const relative of paths) { try { const digest = physicalDigest(root, relative); if (digest) map.set(relative, digest); } catch { /* an unreadable physical file is an acceptable absence here */ } } return map;
 }
 
 export async function runAudit({ censusRoot = CENSUS_ROOT, repositoryRoot = REPOSITORY_ROOT } = {}) {

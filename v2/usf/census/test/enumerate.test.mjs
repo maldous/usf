@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { identifyFormat, universeSummary } from '../src/enumerate.mjs';
+import { identifyFormat, universeSummary } from '../src/universe.mjs';
 
 test('format discovery represents known text, structured, binary, and LFS forms', () => {
   assert.equal(identifyFormat('a.json', Buffer.from('{}'), '100644').formatKind, 'structured-json');

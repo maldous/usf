@@ -1,4 +1,5 @@
 @prefix usf: <urn:usf:ontology:> .
+@prefix cap: <urn:usf:capability:> .
 @prefix pol: <urn:usf:policy:> .
 @prefix con: <urn:usf:constraint:> .
 @prefix perm: <urn:usf:permission:> .
@@ -55,6 +56,8 @@
         usf:canonicalName "validationfailclosed" .
     con:visibilityexposure a usf:Constraint ;
         usf:canonicalName "visibilityexposure" .
+    con:environmentserviceclassification a usf:Constraint ;
+        usf:canonicalName "environmentserviceclassification" .
     pc:operational a usf:PrivacyClassification ;
         usf:canonicalName "operational" .
     pc:personal a usf:PrivacyClassification ;
@@ -211,6 +214,10 @@
     pol:visibilityexposure a usf:Policy ;
         usf:canonicalName "visibilityexposure" ;
         usf:policyConstrains con:visibilityexposure .
+    pol:environmentserviceclassification a usf:Policy ;
+        usf:canonicalName "environmentserviceclassification" ;
+        usf:appliesToCapability cap:environmentspecificvssharedservicemodel ;
+        usf:policyConstrains con:environmentserviceclassification .
     role:auditor a usf:Role ;
         usf:canonicalName "auditor" ;
         usf:grantsPermission perm:auditread .
@@ -230,6 +237,7 @@
     rp:tenantlifetime a usf:RetentionPolicy ;
         usf:canonicalName "tenantlifetime" .
     sc:universalservicefoundationscopeandprinciples usf:governedByPolicy pol:abacclassification , pol:auditbeforechange , pol:authorizationdefaultdeny , pol:breakglass , pol:consent , pol:destructiveoperations , pol:hexagonalboundary , pol:hostidentityfailclosed , pol:idptokenpolicy , pol:jobsworkflowsexecution , pol:membershiplifecycleguards , pol:permissionbeforeentitlementbeforequota , pol:platformvstenantpermissionnamespaces , pol:privacypii , pol:rbacrolepermissionmodel , pol:readinessdegradation , pol:retentiondeletion , pol:secrets , pol:storageisolation , pol:tenantboundaryrls , pol:tenantcontextneverclient , pol:validationfailclosed , pol:visibilityexposure .
+    sc:environmentspecificvssharedservicemodel usf:governedByPolicy pol:environmentserviceclassification .
     tb:platform a usf:TenantBoundary ;
         usf:canonicalName "platform" .
     tb:tenant a usf:TenantBoundary ;

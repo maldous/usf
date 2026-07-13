@@ -1232,7 +1232,6 @@ usf:FindingStatus a owl:Class ; rdfs:subClassOf usf:ControlledValue .
 usf:CorrectiveAction a owl:Class ; rdfs:subClassOf usf:Entity .
 usf:ActionStatus a owl:Class ; rdfs:subClassOf usf:ControlledValue .
 usf:ControlReview a owl:Class ; rdfs:subClassOf usf:Entity .
-usf:EvidenceCollection a owl:Class .
 usf:EvidenceReview a owl:Class ; rdfs:subClassOf usf:Entity .
 
 usf:AssuranceFramework rdfs:label "Assurance framework" ; rdfs:comment "A governed external or internal control framework represented without implying certification." .
@@ -1734,6 +1733,7 @@ usf:observedUniverse a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain 
 usf:observedContentRole a owl:ObjectProperty ; rdfs:domain usf:SourceArtefactObservation ; rdfs:range usf:SourceContentRole .
 usf:hasExactSemanticReference a owl:ObjectProperty ; rdfs:domain usf:SourceArtefactObservation ; rdfs:range rdfs:Resource .
 usf:observationSetDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:range xsd:string .
+usf:censusStateDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:range xsd:string .
 
 usf:hasSourceDisposition a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefact ; rdfs:range usf:SourceArtefactDisposition ; owl:inverseOf usf:dispositionOfSourceArtefact .
 usf:dispositionOfSourceArtefact a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceArtefactDisposition ; rdfs:range usf:SourceArtefact .
@@ -1939,3 +1939,271 @@ usf:retainedLineageSuccessorPrerequisite a owl:ObjectProperty ; rdfs:domain usf:
 [] a owl:AllDisjointClasses ; owl:members ( usf:SourceArtefact usf:Artefact ) .
 [] a owl:AllDisjointClasses ; owl:members ( usf:SourceArtefactObservation usf:SourceArtefactDisposition ) .
 [] a owl:AllDisjointClasses ; owl:members ( usf:SourceRelationshipObservation usf:RepositoryDependency ) .
+
+# --- term usage governance
+usf:TermUsageState a owl:Class ; rdfs:subClassOf usf:ControlledValue ;
+    rdfs:label "TermUsageState" ;
+    rdfs:comment "Controlled usage disposition for a declared ontology term that currently has no instance level usage." .
+usf:termUsageState a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:TermUsageState ; rdfs:label "termUsageState" ;
+    rdfs:comment "Declares the deliberate usage disposition of a declared but currently uninstantiated term." .
+usf:termUsageRationale a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:range xsd:string ; rdfs:label "termUsageRationale" ;
+    rdfs:comment "Human readable rationale for a term usage disposition." .
+usf:intentionallyStandalone a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:range xsd:boolean ; rdfs:label "intentionallyStandalone" ;
+    rdfs:comment "Marks a resource whose lack of architectural connection is a deliberate, reviewed decision; requires a decision rationale." .
+
+# --- term usage dispositions (declared terms without current instance usage)
+usf:Importer usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:Transform usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:acceptanceExpiresOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:acceptedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:actionDueOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:actionOwner usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:actionStatus usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:approvedByReview usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:assessedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:assessedOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:assessedWithEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:assessmentForImplementation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:assessmentOutcome usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:backsCapability usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:changedByMigration usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for version, migration and compatibility lineage; the graph carries no versioned release lineage yet." .
+usf:childComponent usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:collectedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:collectedEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:collectedOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:collectionForRequirement usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:collectsEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:compensatedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:compensates usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:componentViewModel usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:composedOf usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:configures usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:consumesArtefact usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:consumesEvent usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:containsArtefact usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:containsModule usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:containsPackage usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:containsRepository usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:controlForContract usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:coveredByFixture usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:coveredByValidator usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:deferred usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:detectedDefect usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:effectiveOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:emittedBy usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:enforcesConstraint usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:enforcesTenantBoundary usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for version, migration and compatibility lineage; the graph carries no versioned release lineage yet." .
+usf:evidenceAttestation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:evidenceChecksum usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:evidenceFromProofResult usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for recorded test execution evidence; execution records are produced by proof runs, not authored." .
+usf:evidenceReviewedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:evidenceReviewedOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:evidenceSignature usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:evidenceStage usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:exceptionForImplementation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:expiresOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:exposesInterface usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:findingForAssessment usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:findingSeverity usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:findingStatus usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:fulfilsTestObligation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for recorded test execution evidence; execution records are produced by proof runs, not authored." .
+usf:gateSubject usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:hasAttestation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:hasException usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:hasPrivacyClassification usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for version, migration and compatibility lineage; the graph carries no versioned release lineage yet." .
+usf:hasProvenance usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:hasRetentionPolicy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for version, migration and compatibility lineage; the graph carries no versioned release lineage yet." .
+usf:hasSignature usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:hasSoftwareBillOfMaterials usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:idempotent usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:implementedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for statement of applicability decisions; the draft statement carries no per control implementation decisions yet." .
+usf:implementsContract usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:incrementalBaseline usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:ingestedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:ingestsEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:integrityVerification usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:interfaceAtPort usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:invokesOperation usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:materialisesArtefact usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:maximumEvidenceAge usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:normalisedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:normalisesEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:onEvent usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:partOfWorkflow usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:plantsDefect usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:previewOf usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:producesArtefact usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:producesFinding usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:promotionRequires usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:proofOnly usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:remediatedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:requiredEnvironment usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:requiredProviderMode usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:requiresEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:requiresIndependentReview usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:requiresSignature usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:responsibleOwner usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:reviewedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:reviewedEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:reviewedOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:reviewedSubject usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:satisfiedByEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for recorded test execution evidence; execution records are produced by proof runs, not authored." .
+usf:satisfiedByProofResult usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for recorded test execution evidence; execution records are produced by proof runs, not authored." .
+usf:satisfiedByTestResult usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for recorded test execution evidence; execution records are produced by proof runs, not authored." .
+usf:satisfies usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:shapeForClass usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for statement of applicability decisions; the draft statement carries no per control implementation decisions yet." .
+usf:signedByIdentity usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:soaApprovedByReview usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:sourceDigest usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:testsSubject usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for recorded test execution evidence; execution records are produced by proof runs, not authored." .
+usf:treatmentDueOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:validationOrder usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for statement of applicability decisions; the draft statement carries no per control implementation decisions yet." .
+usf:verifiedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:viaAdapter usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:viaBinding usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:withdrawnOn usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:ArtefactMaterialisation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:AssuranceFinding usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:CompensatingControl usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:ControlAssessment usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:ControlException usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:ControlReview usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:CorrectiveAction usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:EvidenceCollection usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:EvidenceIngestion usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:EvidenceNormalisation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:EvidenceReview usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:Module usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:Package usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ;
+    usf:termUsageRationale "The reified realisation, interface and workflow resources are the canonical carriers of this relationship; the direct shortcut stays declared for future derivation use." .
+usf:Preview usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:RiskAcceptance usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
+usf:Workspace usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
+    usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .

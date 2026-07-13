@@ -14,6 +14,7 @@ import { loadConfig, describeConfig } from './config.js';
 import { loadManifest } from './manifest.js';
 import { createClient } from './stardog.js';
 import { checkLocal, compile, verify, verificationConforms, CompilerError } from './compiler.js';
+import { verifyFixtures } from './fixture-harness.js';
 import { loadAuthorityDataset } from './authority-dataset.js';
 import { buildGenerationPlan } from './generation-plan.js';
 import { collectObservedEntry } from './source-observer.js';
@@ -103,6 +104,16 @@ async function main() {
     return 0;
   }
 
+  if (command === 'verify-fixtures') {
+    const config = loadConfig();
+    const manifest = loadManifest(GRAPH_DIR);
+    checkLocal(manifest);
+    const client = createClient(config);
+    const result = await verifyFixtures({ manifest, client });
+    emit({ command, target: describeConfig(config), ...result });
+    return result.ok ? 0 : 1;
+  }
+
   if (command === 'drift-live') {
     const config = loadConfig();
     const manifest = loadManifest(GRAPH_DIR);
@@ -162,7 +173,7 @@ async function main() {
     return verificationConforms(report) ? 0 : 1;
   }
 
-  process.stderr.write('usage: cli.js <check|plan|snapshot-observed|snapshot-derived|generate|verify-output|compile|verify|drift-live|attest-live|verify-live-attestation>\n');
+  process.stderr.write('usage: cli.js <check|plan|snapshot-observed|snapshot-derived|generate|verify-output|compile|verify|verify-fixtures|drift-live|attest-live|verify-live-attestation>\n');
   return 2;
 }
 

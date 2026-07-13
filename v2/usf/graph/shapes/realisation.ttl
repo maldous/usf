@@ -7,10 +7,23 @@ shp:RealisationShape a sh:NodeShape ;
     sh:targetClass usf:Realisation ;
     sh:property [ sh:path usf:realisesContract ; sh:minCount 1 ; sh:class usf:SemanticContract ;
         sh:message "realisationcontract: realisation must realise at least one semantic contract" ] ;
-    sh:property [ sh:path usf:realisingImplementation ; sh:minCount 1 ; sh:class usf:Implementation ;
-        sh:message "realisationimplementation: realisation must name the realising implementation" ] ;
+    sh:property [ sh:path usf:realisingImplementation ; sh:class usf:Implementation ;
+        sh:message "realisationimplementation: a realising implementation must be a declared implementation" ] ;
+    sh:property [ sh:path usf:viaService ; sh:class usf:Service ;
+        sh:message "realisationservice: a realisation service must be a declared service" ] ;
     sh:property [ sh:path usf:realisationState ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:RealisationState ;
-        sh:message "realisationstate: realisation must declare one state" ] .
+        sh:message "realisationstate: realisation must declare one state" ] ;
+    sh:sparql [ sh:prefixes usf:prefixes ;
+        sh:message "realisationrealiser: a realisation claiming realisation must name an implementation, service, adapter or binding; contract-only, deferred, not-claimed and deprecated states are exempt" ;
+        sh:select """SELECT $this WHERE {
+          $this usf:realisationState ?state .
+          FILTER(?state NOT IN (<urn:usf:realisationstate:contractonly>, <urn:usf:realisationstate:deferred>,
+                                <urn:usf:realisationstate:notclaimed>, <urn:usf:realisationstate:deprecated>))
+          FILTER NOT EXISTS { $this usf:realisingImplementation ?implementation }
+          FILTER NOT EXISTS { $this usf:viaService ?service }
+          FILTER NOT EXISTS { $this usf:viaAdapter ?adapter }
+          FILTER NOT EXISTS { $this usf:viaBinding ?binding }
+        }""" ] .
 
 shp:ImplementationShape a sh:NodeShape ;
     usf:canonicalName "implementationshape" ;

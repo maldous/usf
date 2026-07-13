@@ -663,3 +663,8 @@ action:cancelled a usf:ActionStatus ; usf:canonicalName "cancelled" .
 <urn:usf:dependencysatisfactionstatus:satisfied> a usf:DependencySatisfactionStatus ; usf:canonicalName "satisfied" .
 <urn:usf:dependencysatisfactionstatus:unsatisfied> a usf:DependencySatisfactionStatus ; usf:canonicalName "unsatisfied" .
 <urn:usf:dependencysatisfactionbasiskind:resolveddirectrelationshipevidence> a usf:DependencySatisfactionBasisKind ; usf:canonicalName "resolveddirectrelationshipevidence" .
+
+<urn:usf:termusagestate:reservedfuturescope> a usf:TermUsageState ;
+    usf:canonicalName "reservedfuturescope" .
+<urn:usf:termusagestate:zeroinstancebydesign> a usf:TermUsageState ;
+    usf:canonicalName "zeroinstancebydesign" .

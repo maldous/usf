@@ -13,6 +13,8 @@
         usf:inDomain dom:identityaccess .
     cap:accessibilitya11ygate a usf:Capability ;
         usf:canonicalName "accessibilitya11ygate" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Validation gate capability enforced through the foundation accessibility gate tooling; it acts as a quality gate rather than a runtime architectural dependency." ;
         usf:hasContract sc:accessibilitya11ygate ;
         usf:inDomain dom:foundation .
     cap:alertingincidentmanagementoncallstatuspage a usf:Capability ;
@@ -62,6 +64,8 @@
         usf:inDomain dom:observabilityops .
     cap:buildversuscomposedecisionframework a usf:Capability ;
         usf:canonicalName "buildversuscomposedecisionframework" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Decision framework capability; it is a governing principle applied during design and review rather than a runtime architectural dependency." ;
         usf:hasContract sc:buildversuscomposedecisionframework ;
         usf:inDomain dom:foundation .
     cap:codequalityandsecretanddependencyscanning a usf:Capability ;
@@ -98,6 +102,8 @@
         usf:inDomain dom:identityaccess .
     cap:e2econfidenceladderstageaware a usf:Capability ;
         usf:canonicalName "e2econfidenceladderstageaware" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Stage aware confidence ladder capability realised through the foundation validation and proof gates rather than runtime architecture." ;
         usf:hasContract sc:e2econfidenceladderstageaware ;
         usf:inDomain dom:foundation .
     cap:enduserprofileandpreferencesselfservice a usf:Capability ;
@@ -308,6 +314,7 @@
         usf:inDomain dom:identityaccess .
     cap:webhooksdeveloperfacing a usf:Capability ;
         usf:canonicalName "webhooksdeveloperfacing" ;
+        usf:dependsOn cap:eventbusdurablequeuesdlqredrive , cap:notificationdeliveryandpreferencesandchannels ;
         usf:hasContract sc:webhooksdeveloperfacing ;
         usf:inDomain dom:developerplatform .
     cap:workflowenginescheduledjobsapprovals a usf:Capability ;

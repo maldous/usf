@@ -65,6 +65,7 @@ const semanticAuthority: LocalI18nAuthority = {
   translationKeyRefs: catalogueKeys,
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the clone is deliberately untyped so tests can plant arbitrary defects
 const cloneRegistry = (): any => JSON.parse(JSON.stringify(LOCAL_I18N_REGISTRY));
 
 describe("app-surface i18n baseline implementation", () => {

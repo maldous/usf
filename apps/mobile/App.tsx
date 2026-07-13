@@ -3,7 +3,7 @@ import { getLocalAccessibilitySurfaceById, translateLocalAppSurfaceText } from "
 import { MOBILE_SCREEN_REGISTRY, getMobileScreenById } from "./src/screen-registry";
 
 const homeScreen = getMobileScreenById("mobile-screen-developer-home");
-const accessibility = getLocalAccessibilitySurfaceById(homeScreen.screenId);
+getLocalAccessibilitySurfaceById(homeScreen.screenId);
 const text = {
   kicker: translateLocalAppSurfaceText("mobile.developerHome.kicker"),
   title: translateLocalAppSurfaceText("mobile.developerHome.title"),

@@ -20,7 +20,9 @@ const TERMS = Object.freeze({
   exactSemanticReference: `${NS}hasExactSemanticReference`,
   facetStatus: `${NS}facetStatus`,
   hasDispositionKind: `${NS}hasDispositionKind`,
-  decisionState: `${NS}hasDispositionDecisionState`
+  decisionState: `${NS}hasDispositionDecisionState`,
+  decidedAgainst: `${NS}decidedAgainstObservation`,
+  observationSetDigest: `${NS}observationSetDigest`
 });
 const ACCEPTED = 'urn:usf:dispositiondecisionstate:accepted';
 const DATA_GRAPH_CLASSES = new Set([
@@ -63,61 +65,8 @@ function lexicalValue(term) {
   try { return JSON.parse(match[1]); } catch { return term; }
 }
 
-function lexicalObjects(triples, subject, predicate) {
-  return objects(triples, subject, predicate).map(lexicalValue);
-}
-
 function typedSubjects(triples, classIri) {
   return [...new Set(triples.filter((triple) => triple.predicate === RDF_TYPE && triple.object === classIri && !triple.subject.startsWith('_:')).map((triple) => triple.subject))].sort();
-}
-
-function registeredAuthorityGraphs(triples) {
-  const registered = new Set();
-  for (const subject of typedSubjects(triples, TERMS.namedGraph)) {
-    const graphIris = lexicalObjects(triples, subject, TERMS.graphIri);
-    const graphClasses = objects(triples, subject, TERMS.graphClass);
-    if (graphIris.length === 1 && graphClasses.length === 1 && DATA_GRAPH_CLASSES.has(graphClasses[0])) registered.add(graphIris[0]);
-  }
-  return registered;
-}
-
-function resourceGraphs(triples, subject) {
-  return [...new Set(triples.filter((triple) => triple.subject === subject && triple.graph).map((triple) => triple.graph))].sort();
-}
-
-function registeredResource(triples, registeredGraphs, subject) {
-  const graphs = resourceGraphs(triples, subject);
-  return graphs.length > 0 && graphs.every((graph) => registeredGraphs.has(graph));
-}
-
-function observationRows(triples) {
-  return typedSubjects(triples, TERMS.observation).map((observationIri) => ({
-    observationIri,
-    sourceIris: objects(triples, observationIri, TERMS.observes),
-    paths: lexicalObjects(triples, observationIri, TERMS.observedPath),
-    digests: lexicalObjects(triples, observationIri, TERMS.observedDigest),
-    universes: lexicalObjects(triples, observationIri, TERMS.observedUniverse).map((value) => SOURCE_UNIVERSES.get(value) ?? value)
-  }));
-}
-
-function dispositionFor(triples, registeredGraphs, sourceIri, observationIri, planIris) {
-  const forward = objects(triples, sourceIri, TERMS.hasDisposition);
-  const reverse = typedSubjects(triples, TERMS.disposition).filter((subject) => objects(triples, subject, TERMS.dispositionOf).includes(sourceIri));
-  const dispositions = [...new Set([...forward, ...reverse])].sort();
-  const findings = [];
-  if (forward.length !== 1 || reverse.length !== 1 || dispositions.length !== 1 || forward[0] !== reverse[0]) findings.push('source-disposition-bijection-invalid');
-  if (dispositions.length !== 1) return { accepted: false, findings, observationIri };
-  const dispositionIri = dispositions[0];
-  const states = objects(triples, dispositionIri, TERMS.decisionState);
-  const plans = objects(triples, dispositionIri, TERMS.assignedPlan);
-  const kinds = objects(triples, dispositionIri, TERMS.hasDispositionKind);
-  const planRequired = kinds.length === 1 && OUTPUT_DISPOSITION_KINDS.has(kinds[0]);
-  if (!registeredResource(triples, registeredGraphs, dispositionIri)) findings.push('source-disposition-unregistered-graph');
-  if (states.length !== 1 || states[0] !== ACCEPTED) findings.push(states.includes('urn:usf:dispositiondecisionstate:reviewrequired') ? 'source-disposition-review-required' : 'source-disposition-not-accepted');
-  if ((planRequired && plans.length !== 1) || (!planRequired && plans.length !== 0)) findings.push('source-disposition-plan-cardinality-invalid');
-  if (plans.some((plan) => !planIris.has(plan))) findings.push('source-disposition-plan-missing');
-  if (kinds.length !== 1 || !typedSubjects(triples, TERMS.dispositionKind).includes(kinds[0])) findings.push('source-disposition-kind-invalid');
-  return { accepted: findings.length === 0, findings, observationIri, dispositionIri, planRequired, planIris: plans, planIri: plans[0] ?? null, dispositionKindIri: kinds[0] ?? null, decisionStateIri: states[0] ?? null };
 }
 
 function indexDataset(triples) {
@@ -162,7 +111,8 @@ export function buildSourcePlanOwnership(artifacts, parserResults, observedPlans
     sourceIris: index.get(observationIri, TERMS.observes),
     paths: index.get(observationIri, TERMS.observedPath).map(lexicalValue),
     digests: index.get(observationIri, TERMS.observedDigest).map(lexicalValue),
-    universes: index.get(observationIri, TERMS.observedUniverse).map(lexicalValue).map((value) => SOURCE_UNIVERSES.get(value) ?? value)
+    universes: index.get(observationIri, TERMS.observedUniverse).map(lexicalValue).map((value) => SOURCE_UNIVERSES.get(value) ?? value),
+    setDigests: index.get(observationIri, TERMS.observationSetDigest).map(lexicalValue)
   }));
   const byPathUniverse = new Map();
   for (const observation of observations) {
@@ -176,7 +126,8 @@ export function buildSourcePlanOwnership(artifacts, parserResults, observedPlans
     if (!reverseDispositions.has(sourceIri)) reverseDispositions.set(sourceIri, []);
     reverseDispositions.get(sourceIri).push(dispositionIri);
   }
-  const assessDisposition = (sourceIri, observationIri) => {
+  const assessDisposition = (sourceIri, observation) => {
+    const observationIri = observation.observationIri;
     const forward = index.get(sourceIri, TERMS.hasDisposition);
     const reverse = (reverseDispositions.get(sourceIri) ?? []).sort();
     const dispositions = [...new Set([...forward, ...reverse])].sort();
@@ -187,9 +138,13 @@ export function buildSourcePlanOwnership(artifacts, parserResults, observedPlans
     const states = index.get(dispositionIri, TERMS.decisionState);
     const plans = index.get(dispositionIri, TERMS.assignedPlan);
     const kinds = index.get(dispositionIri, TERMS.hasDispositionKind);
+    const decidedAgainst = index.get(dispositionIri, TERMS.decidedAgainst);
+    const dispositionSetDigests = index.get(dispositionIri, TERMS.observationSetDigest).map(lexicalValue);
     const planRequired = kinds.length === 1 && OUTPUT_DISPOSITION_KINDS.has(kinds[0]);
     if (!registered(dispositionIri)) findings.push('source-disposition-unregistered-graph');
     if (states.length !== 1 || states[0] !== ACCEPTED) findings.push(states.includes('urn:usf:dispositiondecisionstate:reviewrequired') ? 'source-disposition-review-required' : 'source-disposition-not-accepted');
+    if (decidedAgainst.length !== 1 || decidedAgainst[0] !== observationIri) findings.push('source-disposition-stale-observation');
+    if (observation.setDigests.length !== 1 || dispositionSetDigests.length !== 1 || dispositionSetDigests[0] !== observation.setDigests[0]) findings.push('source-disposition-set-digest-mismatch');
     if ((planRequired && plans.length !== 1) || (!planRequired && plans.length !== 0)) findings.push('source-disposition-plan-cardinality-invalid');
     if (plans.some((plan) => !planIris.has(plan))) findings.push('source-disposition-plan-missing');
     if (kinds.length !== 1 || !dispositionKinds.has(kinds[0])) findings.push('source-disposition-kind-invalid');
@@ -207,7 +162,7 @@ export function buildSourcePlanOwnership(artifacts, parserResults, observedPlans
     if (!registered(observation.observationIri)) findings.push('source-observation-unregistered-graph');
     const sourceIri = observation.sourceIris[0];
     if (sourceIri && !registered(sourceIri)) findings.push('source-artefact-unregistered-graph');
-    const disposition = sourceIri ? assessDisposition(sourceIri, observation.observationIri) : { accepted: false, findings: [] };
+    const disposition = sourceIri ? assessDisposition(sourceIri, observation) : { accepted: false, findings: [] };
     findings.push(...disposition.findings);
     return {
       artifactKey: artifact.artifactKey,
@@ -229,6 +184,10 @@ export function buildSourcePlanOwnership(artifacts, parserResults, observedPlans
   }).sort(compareBy(['universe', 'path']));
   const matchedObservations = new Set(assessments.map((record) => record.observationIri).filter(Boolean));
   const orphanObservationCount = observations.filter((record) => !matchedObservations.has(record.observationIri)).length;
+  const observationSetDigests = [...new Set([
+    ...observations.flatMap((record) => record.setDigests),
+    ...[...dispositionIris].flatMap((iri) => index.get(iri, TERMS.observationSetDigest).map(lexicalValue))
+  ])].sort();
   return {
     assessments,
     registeredAuthorityGraphCount: registeredGraphs.size,
@@ -241,8 +200,9 @@ export function buildSourcePlanOwnership(artifacts, parserResults, observedPlans
     acceptedOutputPlanCount: assessments.filter((record) => record.accepted && record.planRequired && record.planIri).length,
     acceptedNoOutputDispositionCount: assessments.filter((record) => record.accepted && !record.planRequired).length,
     orphanObservationCount,
+    observationSetDigests,
     findingDistribution: Object.fromEntries([...new Set(assessments.flatMap((record) => record.findings))].sort().map((reason) => [reason, assessments.filter((record) => record.findings.includes(reason)).length]))
   };
 }
 
-export const sourcePlanOwnershipInternals = { ACCEPTED, DATA_GRAPH_CLASSES, OUTPUT_DISPOSITION_KINDS, SOURCE_UNIVERSES, TERMS, dataset, lexicalValue, objects, registeredAuthorityGraphs, typedSubjects };
+export const sourcePlanOwnershipInternals = { ACCEPTED, DATA_GRAPH_CLASSES, OUTPUT_DISPOSITION_KINDS, SOURCE_UNIVERSES, TERMS, dataset, lexicalValue, objects, typedSubjects };

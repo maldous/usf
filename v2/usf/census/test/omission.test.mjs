@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { framedDigest, sha256 } from '../src/canonical.mjs';
-import { identifyFormat } from '../src/enumerate.mjs';
+import { identifyFormat } from '../src/universe.mjs';
 import { addCrossArtifactFindings, inventoryKind } from '../src/index.mjs';
 import { validateRelationship } from '../src/contract.mjs';
 

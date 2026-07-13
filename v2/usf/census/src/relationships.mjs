@@ -51,7 +51,7 @@ function nonInternalReferenceClass(source, target, extractionMethod, attributes,
   if (/(?:^|\.)observedArtifactSizeSnapshot(?:\.|$)/i.test(keyPath)) return 'historical-size-snapshot';
   if (/(?:^|\.)renderedEndpoints\.\d+\.path$/i.test(keyPath) && value.startsWith('/')) return 'http-route';
   if (/\$\{|\$[A-Za-z_]/.test(value)) return 'dynamic-path-expression';
-  if (/[*?{}\[\]]/.test(value)) return 'path-pattern';
+  if (/[*?{}[\]]/.test(value)) return 'path-pattern';
   if (value.includes(',')) return 'path-list';
   const root = rootCandidate(value);
   if (/^(?:v2\/tmp|tmp|coverage|dist|build|reports)\//.test(root) || /(?:^|\/)\.proof-review(?:\/|$)/.test(root)) return 'generated-or-runtime-output';
@@ -163,10 +163,6 @@ export function buildRelationships(members, parserResults, knownGeneratedPaths =
   return { relationships: unique, relationshipFindings: findings.sort(compareBy(['source', 'findingKind', 'subject'])) };
 }
 
-function declaredIdentifiers(parsed) {
-  return (parsed.inventory?.declarations ?? parsed.declarations).map((entry) => typeof entry === 'string' ? entry : entry.identifier).filter(Boolean);
-}
-
 function declarationsWithIdentityScope(parsed, scope) {
   return (parsed.inventory?.declarations ?? parsed.declarations)
     .filter((entry) => entry && typeof entry === 'object' && entry.attributes?.identityScope === scope)
@@ -190,7 +186,6 @@ export function reconcileInventories(members, parserResults, relationships, rela
   const inventories = [];
   const findings = [...relationshipFindings];
   for (const parsed of inventoryParsers) {
-    const declared = declaredIdentifiers(parsed);
     const locallyUnique = declarationsWithIdentityScope(parsed, 'document-unique');
     const globallyOwned = declarationsWithIdentityScope(parsed, 'global');
     const rawRelations = (parsed.inventory.relationships ?? []).map((entry) => typeof entry === 'string' ? { target: entry, targetKind: 'artifact', extractionMethod: 'inventory-string', attributes: {} } : entry).filter((entry) => entry?.target);

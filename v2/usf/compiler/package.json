@@ -18,8 +18,9 @@
     "generate": "node src/cli.js generate",
     "verify-output": "node src/cli.js verify-output",
     "verify": "node src/cli.js verify",
+    "verify:fixtures": "node src/cli.js verify-fixtures",
     "drift": "node src/cli.js drift-live",
-    "test": "node --test test/compiler.test.js test/generation-output.test.js",
+    "test": "node --test test/compiler.test.js test/fixture-harness.test.js test/generation-output.test.js",
     "test:cloud": "node --test test/cloud.test.js"
   },
   "dependencies": {

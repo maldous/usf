@@ -8,15 +8,23 @@
 
 <urn:usf:graph:data> {
     br:backupevidencerestoreevidence a usf:BackupRestore ;
-        usf:canonicalName "backupevidencerestoreevidence" .
+        usf:canonicalName "backupevidencerestoreevidence" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Recorded backup and restore evidence posture; it is an evidence classification rather than a runtime architectural dependency." .
     br:backuprestoreproviderdispositionmatrix a usf:BackupRestore ;
-        usf:canonicalName "backuprestoreproviderdispositionmatrix" .
+        usf:canonicalName "backuprestoreproviderdispositionmatrix" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Documentation backed provider disposition posture for backup and restore; a classification, not a runtime dependency." .
     br:environmentrecoverypostures a usf:BackupRestore ;
-        usf:canonicalName "environmentrecoverypostures" .
+        usf:canonicalName "environmentrecoverypostures" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Per environment recovery posture classification; a governing posture rather than a runtime dependency." .
     br:pgbackrest a usf:BackupRestore ;
         usf:canonicalName "pgbackrest" .
     br:retentionlegalholddeletion a usf:BackupRestore ;
-        usf:canonicalName "retentionlegalholddeletion" .
+        usf:canonicalName "retentionlegalholddeletion" ;
+        usf:intentionallyStandalone true ;
+        usf:decisionRationale "Retention, legal hold and deletion posture classification; governed through data model retention policies rather than a runtime dependency." .
     dm:appendonlyledger a usf:DataModel ;
         usf:canonicalName "appendonlyledger" ;
         usf:governedByMigrationPolicy mig:relationalforwardonly ;

@@ -168,7 +168,7 @@ export async function readParserEvidence(root, { onRecord } = {}) {
   const manifestText = await fs.promises.readFile(manifestTarget, 'utf8').catch(() => null);
   if (manifestText === null) throw new Error('parser evidence manifest missing');
   let manifest;
-  try { manifest = validateManifest(JSON.parse(manifestText)); } catch (error) { throw new Error(`parser evidence manifest invalid: ${error.message}`); }
+  try { manifest = validateManifest(JSON.parse(manifestText)); } catch (error) { throw new Error(`parser evidence manifest invalid: ${error.message}`, { cause: error }); }
   if (manifestText !== canonicalJson(manifest)) throw new Error('parser evidence manifest is not canonical JSON');
   const directoryEntries = (await fs.promises.readdir(path.join(root, parserEvidenceDirectory), { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
   const expectedEntries = ['manifest.json', ...manifest.shards.map((shard) => path.basename(shard.path))].sort();
