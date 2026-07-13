@@ -5,7 +5,7 @@
       "facts": {
         "recordCount": 3250,
         "shardCount": 4,
-        "uncompressedBytes": 75826656
+        "uncompressedBytes": 75827832
       },
       "findings": [],
       "id": "parser-evidence-storage",
@@ -136,7 +136,7 @@
     },
     {
       "facts": {
-        "canonicalDigest": "7ce04bf0232fdff6c16cd9a0e780854b9e4853c0a6a91d9dead55792afa7eafe",
+        "canonicalDigest": "fddb78c74ee05a62df1b26c4c7cb1ffa801bce6ad7af49ffb5ac257846244b9e",
         "outputCount": 13
       },
       "findings": [],

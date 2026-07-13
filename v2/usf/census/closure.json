@@ -71,7 +71,7 @@
     "v2/usf/graph/observed/source-artefacts.trig"
   ],
   "productionRecomputed": true,
-  "regeneratedOutputDigest": "91121c6a9be37b770e60019a4030651d61ed8ec6065741354fc7fc77e32985cc",
+  "regeneratedOutputDigest": "59e57c20db2eccdda38f1a4cbe228320c7162738077ddc684d6191d8746db2d8",
   "stardogObservation": {
     "accessMethod": "official-sdk",
     "canonicalizationAlgorithm": "URDNA2015",
@@ -83,7 +83,7 @@
     "graphCount": 43,
     "integrityConforms": true,
     "observationKind": "stardog-access-boundary",
-    "observedAt": "2026-07-13T02:46:28.496Z",
+    "observedAt": "2026-07-13T06:02:42.797Z",
     "publicKeyFingerprint": "e943e40fa7650920913fd36b28666e890c6c656c16699301ce704fbf8411d05f",
     "readinessCount": 67,
     "repositoryBindingVerified": true,
@@ -93,7 +93,7 @@
     "validationConforms": true
   },
   "universeDigests": {
-    "repositoryUniverseDigest": "ee918e4cdfd6cc7b38d42f91b14993b02f13be29099ba5b015da518633b2d6b9",
+    "repositoryUniverseDigest": "1f4e43b87d494032992904107a6be6d62396f87d2dbe338d0d4297a8af6102e6",
     "universeCounts": {
       "repository-output": 3088,
       "v2-compiler-implementation": 24,
@@ -112,9 +112,9 @@
     "jsonFiles": 7,
     "jsonlFiles": 18,
     "mappings": 3250,
-    "parserEvidenceCompressedBytes": 3430130,
+    "parserEvidenceCompressedBytes": 3430153,
     "parserEvidenceShards": 4,
-    "parserEvidenceUncompressedBytes": 75826656,
+    "parserEvidenceUncompressedBytes": 75827832,
     "relationships": 19761,
     "validationStatus": "pass",
     "workPackages": 99
