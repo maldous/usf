@@ -7,7 +7,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, generateKeyPairSync } from 'node:crypto';
-import { mkdtempSync, mkdirSync, readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -1133,9 +1133,16 @@ test('UI semantic closure is exact, contract-scoped, and exposure-complete', () 
   }
 });
 
-test('generation: real authority has no semantic gaps and reuses deterministic incremental outputs', () => {
+test('generation: real authority has no semantic gaps and reuses deterministic incremental outputs', (t) => {
   const graphDir = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'graph');
   const repositoryRoot = join(graphDir, '..', '..', '..');
+  // Retained templates are declared with repository-root-relative paths. Inside
+  // the clean-room chroot only /usf exists, so template-backed generation
+  // cannot run there; skip explicitly rather than fail on a missing source root.
+  if (!existsSync(join(repositoryRoot, '.git'))) {
+    t.skip('repository source root not present (clean-room chroot); template-backed generation not testable here');
+    return;
+  }
   const manifest = loadManifest(graphDir);
   const dataset = loadAuthorityDataset(manifest);
   const webQuery = generatorInternals.componentQuery(dataset.store, 'urn:usf:generator:webui');
