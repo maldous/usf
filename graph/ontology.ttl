@@ -8,6 +8,113 @@
     rdfs:label "Universal Service Foundation ontology" .
 
 ########################################################################
+# Semantic-first evidence, proof, contract, realisation and validation lifecycle
+########################################################################
+
+usf:SemanticAuthority a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Semantic authority" ;
+    rdfs:comment "Validated semantic state in Stardog is the sole semantic authority. ADRs, validators, evidence, proof, code, reports, tickets and documentation have distinct non-authoritative roles." .
+usf:EvidenceAdmission a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Evidence admission" .
+usf:EvidenceAdmissionState a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Evidence admission state" .
+usf:EvidenceFreshnessState a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Evidence freshness state" .
+usf:EvidenceIntegrityState a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Evidence integrity state" .
+usf:EvidenceProvenance a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Evidence provenance" .
+usf:EvidenceRetentionPolicy a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Evidence retention policy" .
+usf:EvidenceSupersession a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Evidence supersession" .
+usf:ProofEvaluation a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Proof evaluation" .
+usf:ProofResultState a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Proof result state" .
+usf:ProofAlgorithm a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Proof algorithm" .
+usf:ProofAlgorithmVersion a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Proof algorithm version" .
+usf:ProofConfidenceState a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Proof confidence state" .
+usf:ProofInvalidationCondition a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Proof invalidation condition" .
+usf:ContractActivationState a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Contract activation state" .
+usf:RealisationDecision a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Realisation decision" .
+usf:RealisationOption a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Realisation option" .
+usf:RepresentationDecision a owl:Class ; rdfs:subClassOf usf:RealisationDecision ; rdfs:label "Representation decision" .
+usf:ADRRequirement a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "ADR requirement" .
+usf:ADRRecord a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "ADR record" ; rdfs:comment "Historical rationale that records but cannot establish semantic truth." .
+usf:DecisionState a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Decision state" .
+usf:DecisionSupersession a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Decision supersession" .
+usf:ValidationObligation a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Validation obligation" .
+usf:ValidationExecution a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Validation execution" .
+usf:ValidationResult a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Validation result" .
+usf:ValidationEnvironment a owl:Class ; rdfs:subClassOf usf:Environment ; rdfs:label "Validation environment" .
+usf:ValidationEvidence a owl:Class ; rdfs:subClassOf usf:EvidenceResult ; rdfs:label "Validation evidence" .
+usf:Ticket a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Ticket" ; rdfs:comment "Work-tracking carrier without semantic authority." .
+usf:Report a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Report" ; rdfs:comment "Projection that cannot admit evidence." .
+
+usf:soleSemanticAuthority a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range xsd:boolean .
+usf:validatedInStardog a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range xsd:boolean .
+usf:authorityVerificationState a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range xsd:string .
+usf:governsNamedGraph a owl:ObjectProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range usf:NamedGraph .
+usf:concernsSemanticSubject a owl:ObjectProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:Entity .
+usf:supportsClaim a owl:ObjectProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:Claim .
+usf:contentDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range xsd:string .
+usf:mediaType a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range xsd:string .
+usf:byteSize a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range xsd:nonNegativeInteger .
+usf:storageLocator a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range xsd:anyURI .
+usf:wasProducedBy a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:Entity .
+usf:collectedInEnvironment a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:Environment .
+usf:collectedAt a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range xsd:dateTime .
+usf:validUntil a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range xsd:dateTime .
+usf:hasFreshnessPolicy a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:EvidenceRetentionPolicy .
+usf:hasFreshnessState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:EvidenceFreshnessState .
+usf:hasIntegrityState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:EvidenceIntegrityState .
+usf:hasAdmissionState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:EvidenceAdmissionState .
+usf:admissionForEvidence a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceAdmission ; rdfs:range usf:EvidenceResult .
+usf:admissionDecidedByValidator a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceAdmission ; rdfs:range usf:ValidatorRule .
+usf:hasProvenance a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:EvidenceProvenance .
+usf:applicableToObligation a owl:ObjectProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:ProofObligation .
+usf:withinValidityScope a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range xsd:boolean .
+usf:supersedesEvidence a owl:ObjectProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:EvidenceResult .
+usf:isSupersededByEvidence a owl:ObjectProperty ; owl:inverseOf usf:supersedesEvidence .
+usf:evaluatesObligation a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofEvaluation ; rdfs:range usf:ProofObligation .
+usf:producesProofResult a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofEvaluation ; rdfs:range usf:ProofResult .
+usf:proofResultForObligation a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:ProofObligation .
+usf:usesAdmittedEvidence a owl:ObjectProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:EvidenceResult .
+usf:evidenceSetDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofResult ; rdfs:range xsd:string .
+usf:usesProofAlgorithm a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:ProofAlgorithm .
+usf:usesAlgorithmVersion a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:ProofAlgorithmVersion .
+usf:evaluatedByValidator a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:ValidatorRule .
+usf:proofExecutionEnvironment a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:Environment .
+usf:hasProofResultState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:ProofResultState .
+usf:hasConfidenceState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:ProofConfidenceState .
+usf:confidenceBasis a owl:ObjectProperty ; rdfs:domain usf:Entity ; rdfs:range usf:EvidenceResult .
+usf:uncertaintyStatement a owl:DatatypeProperty ; rdfs:domain usf:ProofResult ; rdfs:range xsd:string .
+usf:proofNonclaim a owl:ObjectProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:NonClaim .
+usf:evaluatedAt a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:ProofResult ; rdfs:range xsd:dateTime .
+usf:hasInvalidationCondition a owl:ObjectProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:ProofInvalidationCondition .
+usf:supersedesProofResult a owl:ObjectProperty ; rdfs:domain usf:ProofResult ; rdfs:range usf:ProofResult .
+usf:hasActivationState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:ContractActivationState .
+usf:activationReason a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SemanticContract ; rdfs:range xsd:string .
+usf:mandatoryProofObligation a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:ProofObligation .
+usf:reliesOnProofResult a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:ProofResult .
+usf:warrantsFeature a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:Feature .
+usf:contractConstraint a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:Constraint .
+usf:permittedRealisationType a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range owl:Class .
+usf:requiredValidation a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:ValidationObligation .
+usf:authorisedByDecision a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:Realisation ; rdfs:range usf:RealisationDecision .
+usf:authorisedSourcePath a owl:DatatypeProperty ; rdfs:domain usf:Realisation ; rdfs:range xsd:string .
+usf:decisionState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range usf:DecisionState .
+usf:considersOption a owl:ObjectProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range usf:RealisationOption .
+usf:requiresADR a owl:ObjectProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range usf:ADRRequirement .
+usf:recordsDecision a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ADRRecord ; rdfs:range usf:RealisationDecision .
+usf:supersedesDecision a owl:ObjectProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range usf:RealisationDecision .
+usf:validationForContract a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ValidationObligation ; rdfs:range usf:SemanticContract .
+usf:executesValidation a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ValidationExecution ; rdfs:range usf:ValidationObligation .
+usf:producesValidationResult a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ValidationExecution ; rdfs:range usf:ValidationResult .
+usf:validationEnvironment a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ValidationExecution ; rdfs:range usf:ValidationEnvironment .
+usf:entersEvidenceLifecycleAs a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ValidationResult ; rdfs:range usf:ValidationEvidence .
+usf:invalidatesEvidence a owl:ObjectProperty ; rdfs:domain usf:ValidationResult ; rdfs:range usf:EvidenceResult .
+usf:invalidatesProofResult a owl:ObjectProperty ; rdfs:domain usf:ValidationResult ; rdfs:range usf:ProofResult .
+usf:reducesConfidenceOf a owl:ObjectProperty ; rdfs:domain usf:ValidationResult ; rdfs:range usf:ProofResult .
+usf:suspendsContract a owl:ObjectProperty ; rdfs:domain usf:ValidationResult ; rdfs:range usf:SemanticContract .
+usf:reopensADR a owl:ObjectProperty ; rdfs:domain usf:ValidationResult ; rdfs:range usf:ADRRecord .
+usf:establishesSemanticTruth a owl:ObjectProperty .
+usf:directlyActivatesContract a owl:ObjectProperty .
+usf:directlyAdmitsEvidence a owl:ObjectProperty .
+usf:directlyEstablishesProof a owl:ObjectProperty .
+
+########################################################################
 # Abstract roots
 ########################################################################
 
