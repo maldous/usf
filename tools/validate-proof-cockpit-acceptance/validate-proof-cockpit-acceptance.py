@@ -165,6 +165,8 @@ EVIDENCE_ONLY_PREFIXES = (
     "artifacts/proof-cockpit/",
     "evidence/proof-evidence/proof-cockpit/",
     "v2/",  # transitional graph-authority workspace; excluded from the proof-cockpit acceptance basis
+    "graph/",  # v2 semantic-authority sources (host-side; same exclusion rationale as v2/)
+    "census/",  # v2 census outputs (host-side; same exclusion rationale as v2/)
 )
 SOURCE_TREE_HASH_ALGORITHM = "sha256-git-ls-tree-non-proof-evidence-v1"
 

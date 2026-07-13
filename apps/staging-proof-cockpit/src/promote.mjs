@@ -31,6 +31,8 @@ const SOURCE_TREE_HASH_EXCLUDED_PREFIXES = Object.freeze([
   "artifacts/proof-cockpit/",
   "evidence/proof-evidence/proof-cockpit/",
   "v2/",
+  "graph/",
+  "census/",
 ]);
 
 function parseArgs(argv) {
