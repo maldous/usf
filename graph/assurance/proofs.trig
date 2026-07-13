@@ -1031,3 +1031,57 @@
         usf:inEnvironment env:hermetic ;
         usf:usesProviderMode pmode:hermeticmock .
 }
+
+<urn:usf:graph:proofs> {
+ <urn:usf:proofobligation:compilersemantics>
+   usf:obligationFor <urn:usf:semanticcontract:compilersemanticenforcement> ;
+   usf:obligationEffect <urn:usf:obligationeffect:blocking> ;
+   usf:usesAssuranceCell <urn:usf:assurancecell:behaviourhermetichermetic> ;
+   usf:requiresRung <urn:usf:proofrung:behaviour> ;
+   usf:derivedFrom <urn:usf:semanticcontract:compilersemanticenforcement> .
+ <urn:usf:proofobligation:bootstrappacketsemantics>
+   usf:obligationFor <urn:usf:semanticcontract:bootstrappacket> ;
+   usf:obligationEffect <urn:usf:obligationeffect:blocking> ;
+   usf:usesAssuranceCell <urn:usf:assurancecell:behaviourhermetichermetic> ;
+   usf:requiresRung <urn:usf:proofrung:behaviour> ;
+   usf:derivedFrom <urn:usf:semanticcontract:bootstrappacket> .
+ <urn:usf:evidencerequirement:compilersemanticvalidation>
+   usf:obligationFor <urn:usf:semanticcontract:compilersemanticenforcement> ;
+   usf:obligationEffect <urn:usf:obligationeffect:blocking> ;
+   usf:usesAssuranceCell <urn:usf:assurancecell:behaviourhermetichermetic> ;
+   usf:derivedFrom <urn:usf:proofobligation:compilersemantics> ;
+   usf:requiresEnvironmentClass <urn:usf:environmentclass:hermetic> ;
+   usf:requiresEvidenceStage <urn:usf:evidencestage:emitted>, <urn:usf:evidencestage:collected>, <urn:usf:evidencestage:normalised>, <urn:usf:evidencestage:ingested>, <urn:usf:evidencestage:signed>, <urn:usf:evidencestage:integrityverified> .
+ <urn:usf:evidencerequirement:bootstrappacketvalidation>
+   usf:obligationFor <urn:usf:semanticcontract:bootstrappacket> ;
+   usf:obligationEffect <urn:usf:obligationeffect:blocking> ;
+   usf:usesAssuranceCell <urn:usf:assurancecell:behaviourhermetichermetic> ;
+   usf:derivedFrom <urn:usf:proofobligation:bootstrappacketsemantics> ;
+   usf:requiresEnvironmentClass <urn:usf:environmentclass:hermetic> ;
+   usf:requiresEvidenceStage <urn:usf:evidencestage:emitted>, <urn:usf:evidencestage:collected>, <urn:usf:evidencestage:normalised>, <urn:usf:evidencestage:ingested>, <urn:usf:evidencestage:signed>, <urn:usf:evidencestage:integrityverified> .
+}
+
+<urn:usf:graph:proofs> {
+ <urn:usf:proofalgorithm:deterministiclifecyclegate> usf:canonicalName "deterministiclifecyclegate" .
+ <urn:usf:proofalgorithmversion:deterministiclifecyclegateone> usf:canonicalName "deterministiclifecyclegateone" .
+ <urn:usf:proofinvalidationcondition:evidenceinvalidated> usf:canonicalName "evidenceinvalidated" .
+ <urn:usf:proofinvalidationcondition:evidencestale> usf:canonicalName "evidencestale" .
+ <urn:usf:proofinvalidationcondition:authoritydigestchanged> usf:canonicalName "authoritydigestchanged" .
+ <urn:usf:proofobligation:compilersemantics> usf:canonicalName "compilersemantics" .
+ <urn:usf:proofobligation:bootstrappacketsemantics> usf:canonicalName "bootstrappacketsemantics" .
+ <urn:usf:evidencerequirement:compilersemanticvalidation> usf:canonicalName "compilersemanticvalidation" ; usf:requiresProviderMode <urn:usf:providermode:hermeticmock> ; usf:requiresEnvironmentClass <urn:usf:environmentclass:hermetic> ; usf:requiresEvidenceKind <urn:usf:evidencekind:validationevidence> ; usf:requiresFreshness <urn:usf:freshness:fresh> .
+ <urn:usf:evidencerequirement:bootstrappacketvalidation> usf:canonicalName "bootstrappacketvalidation" ; usf:requiresProviderMode <urn:usf:providermode:hermeticmock> ; usf:requiresEnvironmentClass <urn:usf:environmentclass:hermetic> ; usf:requiresEvidenceKind <urn:usf:evidencekind:validationevidence> ; usf:requiresFreshness <urn:usf:freshness:fresh> .
+}
+
+@prefix usf: <urn:usf:ontology:> .
+<urn:usf:graph:proofs> {
+ <urn:usf:proofalgorithm:deterministiclifecyclegate> a usf:ProofAlgorithm .
+ <urn:usf:proofalgorithmversion:deterministiclifecyclegateone> a usf:ProofAlgorithmVersion .
+ <urn:usf:proofinvalidationcondition:evidenceinvalidated> a usf:ProofInvalidationCondition .
+ <urn:usf:proofinvalidationcondition:evidencestale> a usf:ProofInvalidationCondition .
+ <urn:usf:proofinvalidationcondition:authoritydigestchanged> a usf:ProofInvalidationCondition .
+ <urn:usf:proofobligation:compilersemantics> a usf:ProofObligation ; usf:requiresEvidence <urn:usf:evidencerequirement:compilersemanticvalidation> .
+ <urn:usf:evidencerequirement:compilersemanticvalidation> a usf:EvidenceRequirement .
+ <urn:usf:proofobligation:bootstrappacketsemantics> a usf:ProofObligation ; usf:requiresEvidence <urn:usf:evidencerequirement:bootstrappacketvalidation> .
+ <urn:usf:evidencerequirement:bootstrappacketvalidation> a usf:EvidenceRequirement .
+}

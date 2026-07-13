@@ -5,6 +5,13 @@
 @prefix env: <urn:usf:environment:> .
 @prefix fresh: <urn:usf:freshness:> .
 @prefix sc: <urn:usf:semanticcontract:> .
+@prefix admission: <urn:usf:evidenceadmissionstate:> .
+@prefix freshnessstate: <urn:usf:evidencefreshnessstate:> .
+@prefix integritystate: <urn:usf:evidenceintegritystate:> .
+@prefix contractstate: <urn:usf:contractactivationstate:> .
+@prefix decisionstate: <urn:usf:decisionstate:> .
+@prefix proofstate: <urn:usf:proofresultstate:> .
+@prefix confidence: <urn:usf:proofconfidencestate:> .
 
 <urn:usf:graph:evidence> {
     evr:evidencenormalisedauthenticationsliceprooflineage a usf:EvidenceResult ;
@@ -87,4 +94,33 @@
         usf:hasFreshness fresh:stale ;
         usf:inEnvironment env:localdev ;
         usf:usesProviderMode pmode:hermeticmock .
+}
+
+<urn:usf:graph:evidence> {
+ admission:pending usf:canonicalName "pending" . admission:admitted usf:canonicalName "admitted" . admission:rejected usf:canonicalName "rejected" . admission:invalidated usf:canonicalName "invalidated" .
+ freshnessstate:fresh usf:canonicalName "fresh" . freshnessstate:stale usf:canonicalName "stale" . freshnessstate:unknown usf:canonicalName "unknown" .
+ integritystate:valid usf:canonicalName "valid" . integritystate:invalid usf:canonicalName "invalid" . integritystate:unknown usf:canonicalName "unknown" .
+ proofstate:successful usf:canonicalName "successful" . proofstate:failed usf:canonicalName "failed" . proofstate:invalidated usf:canonicalName "invalidated" . proofstate:unknown usf:canonicalName "unknown" .
+ confidence:warranted usf:canonicalName "warranted" . confidence:reduced usf:canonicalName "reduced" . confidence:withdrawn usf:canonicalName "withdrawn" . confidence:unknown usf:canonicalName "unknown" .
+ contractstate:draft usf:canonicalName "draft" . contractstate:proofblocked usf:canonicalName "proofblocked" . contractstate:eligible usf:canonicalName "eligible" . contractstate:active usf:canonicalName "active" . contractstate:suspended usf:canonicalName "suspended" . contractstate:superseded usf:canonicalName "superseded" . contractstate:retired usf:canonicalName "retired" .
+ decisionstate:proposed usf:canonicalName "proposed" . decisionstate:accepted usf:canonicalName "accepted" . decisionstate:reopened usf:canonicalName "reopened" . decisionstate:superseded usf:canonicalName "superseded" . decisionstate:rejected usf:canonicalName "rejected" .
+}
+
+@prefix usf: <urn:usf:ontology:> .
+@prefix admission: <urn:usf:evidenceadmissionstate:> .
+@prefix freshnessstate: <urn:usf:evidencefreshnessstate:> .
+@prefix integritystate: <urn:usf:evidenceintegritystate:> .
+@prefix contractstate: <urn:usf:contractactivationstate:> .
+@prefix decisionstate: <urn:usf:decisionstate:> .
+@prefix proofstate: <urn:usf:proofresultstate:> .
+@prefix confidence: <urn:usf:proofconfidencestate:> .
+
+<urn:usf:graph:evidence> {
+ admission:pending a usf:EvidenceAdmissionState . admission:admitted a usf:EvidenceAdmissionState . admission:rejected a usf:EvidenceAdmissionState . admission:invalidated a usf:EvidenceAdmissionState .
+ freshnessstate:fresh a usf:EvidenceFreshnessState . freshnessstate:stale a usf:EvidenceFreshnessState . freshnessstate:unknown a usf:EvidenceFreshnessState .
+ integritystate:valid a usf:EvidenceIntegrityState . integritystate:invalid a usf:EvidenceIntegrityState . integritystate:unknown a usf:EvidenceIntegrityState .
+ proofstate:successful a usf:ProofResultState . proofstate:failed a usf:ProofResultState . proofstate:invalidated a usf:ProofResultState . proofstate:unknown a usf:ProofResultState .
+ confidence:warranted a usf:ProofConfidenceState . confidence:reduced a usf:ProofConfidenceState . confidence:withdrawn a usf:ProofConfidenceState . confidence:unknown a usf:ProofConfidenceState .
+ contractstate:draft a usf:ContractActivationState . contractstate:proofblocked a usf:ContractActivationState . contractstate:eligible a usf:ContractActivationState . contractstate:active a usf:ContractActivationState . contractstate:suspended a usf:ContractActivationState . contractstate:superseded a usf:ContractActivationState . contractstate:retired a usf:ContractActivationState .
+ decisionstate:proposed a usf:DecisionState . decisionstate:accepted a usf:DecisionState . decisionstate:reopened a usf:DecisionState . decisionstate:superseded a usf:DecisionState . decisionstate:rejected a usf:DecisionState .
 }
