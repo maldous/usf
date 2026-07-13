@@ -4522,8 +4522,11 @@ AUTHORIZED_IMPLEMENTATION_ROOTS = {
 
 
 def _is_implementation_path(path):
-    if path.startswith("v2/"):
-        return False  # transitional graph-authority workspace; not foundation implementation source
+    if path.startswith(("v2/", "graph/", "census/")):
+        # transitional graph-authority workspace (v2/) and its host-side
+        # semantic-authority sources (graph/, census/); not foundation
+        # implementation source until promoted
+        return False
     return bool(IMPLEMENTATION_PATH_RE.search(path))
 
 

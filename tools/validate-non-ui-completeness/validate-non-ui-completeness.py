@@ -60,6 +60,8 @@ SOURCE_TREE_ANCHOR_EXCLUDED_PREFIXES = (
     "artifacts/",
     "evidence/",
     "v2/",  # transitional graph-authority workspace; not foundation source until promoted
+    "graph/",  # v2 semantic-authority sources (host-side; same exclusion rationale as v2/)
+    "census/",  # v2 census outputs (host-side; same exclusion rationale as v2/)
 )
 
 ALLOWED_DISPOSITIONS = {
