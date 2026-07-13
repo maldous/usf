@@ -1,0 +1,22 @@
+{
+  "qaRun": "qa-run-2026-07-13T02-57-39-820Z",
+  "qaRunVersion": "proof-cockpit-machine-qa-evidence-v1",
+  "sourceGitSha": "1a83bd6796db4525de94f4e3876421a9f5c5eab3",
+  "deploymentSha": "1a83bd6796db4525de94f4e3876421a9f5c5eab3",
+  "environment": "local-machine-qa",
+  "baseUrl": "http://127.0.0.1:10341",
+  "startedAt": "2026-07-13T02:57:39.820Z",
+  "completedAt": "2026-07-13T03:00:28.905Z",
+  "actor": "machine-qa",
+  "executor": "codex-playwright-machine-qa",
+  "toolVersions": {
+    "node": "v24.16.0",
+    "playwrightCore": "package-lock-from-pnpm"
+  },
+  "repositoryState": "M docs/architecture/non-ui-completeness-assurance-case.json\n M docs/architecture/non-ui-completeness-closure-gate.json\n M docs/architecture/non-ui-completeness-gap-register.json\n M docs/architecture/non-ui-source-lineage-inventory.json\n M docs/architecture/operator-admin-surface-completeness-matrix.json\n M docs/architecture/route-port-adapter-provider-completeness-matrix.json\n M docs/architecture/service-completeness-matrix.json\n M docs/architecture/test-proof-disposition-ledger.json\n M docs/architecture/ui-derived-foundation-behaviour-rewrite-ledger.json\n M v2/usf/census/artifacts.jsonl\n M v2/usf/census/audit.json\n M v2/usf/census/closure.json\n M v2/usf/census/coverage.jsonl\n M v2/usf/census/dependencies.jsonl\n M v2/usf/census/inventories.jsonl\n M v2/usf/census/mappings.jsonl\n M v2/usf/census/missing-entirely.jsonl\n M v2/usf/census/parser-results/manifest.json\n M v2/usf/census/parser-results/repository-output.jsonl.gz\n M v2/usf/census/parser-results/v2-compiler-implementation.jsonl.gz\n M v2/usf/census/parser-results/v2-support-provisioning.jsonl.gz\n M v2/usf/census/relationships.jsonl\n M v2/usf/census/replacement-groups.jsonl\n M v2/usf/census/repository-universe.jsonl\n M v2/usf/census/summary.json\n M v2/usf/census/universes.json\n M v2/usf/census/v2-compiler-universe.jsonl\n M v2/usf/census/v2-graph-universe.jsonl\n M v2/usf/census/v2-support-universe.jsonl\n M v2/usf/census/workpackages.json\n M v2/usf/graph/derived/repository-structure.trig\n M v2/usf/graph/derived/source-dispositions.trig\n M v2/usf/graph/observed/source-artefacts.trig",
+  "branch": "agent/semantic-authority-remediation",
+  "pullRequest": "pending-usf-293",
+  "linearIssue": "USF-293",
+  "selectedRerunMode": "full",
+  "schemaMigrationStatus": "current-v1-no-migration-required"
+}

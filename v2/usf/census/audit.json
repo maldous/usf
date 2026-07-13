@@ -3,9 +3,9 @@
   "checks": [
     {
       "facts": {
-        "recordCount": 3249,
+        "recordCount": 3250,
         "shardCount": 4,
-        "uncompressedBytes": 75786664
+        "uncompressedBytes": 75826656
       },
       "findings": [],
       "id": "parser-evidence-storage",
@@ -13,7 +13,7 @@
     },
     {
       "facts": {
-        "memberCount": 3249,
+        "memberCount": 3250,
         "universeCount": 4
       },
       "findings": [],
@@ -22,8 +22,8 @@
     },
     {
       "facts": {
-        "inventoryCount": 2651,
-        "parserCount": 3249,
+        "inventoryCount": 2652,
+        "parserCount": 3250,
         "relationshipCount": 19761
       },
       "findings": [],
@@ -32,7 +32,7 @@
     },
     {
       "facts": {
-        "ownerCount": 3249
+        "ownerCount": 3250
       },
       "findings": [],
       "id": "family-ownership",
@@ -40,8 +40,8 @@
     },
     {
       "facts": {
-        "coverageCount": 3249,
-        "mappingCount": 3249
+        "coverageCount": 3250,
+        "mappingCount": 3250
       },
       "findings": [],
       "id": "mappings-coverage",
@@ -50,7 +50,7 @@
     {
       "facts": {
         "canonicalArtifactCount": 68,
-        "replacementGroupCount": 3249,
+        "replacementGroupCount": 3250,
         "semanticLayerArtifactOwnerCount": 0
       },
       "findings": [],
@@ -59,8 +59,8 @@
     },
     {
       "facts": {
-        "acceptedDispositionCount": 3249,
-        "artifactCount": 3249,
+        "acceptedDispositionCount": 3250,
+        "artifactCount": 3250,
         "canonicalArtifactCount": 68,
         "missingDispositionCount": 0
       },
@@ -70,12 +70,12 @@
     },
     {
       "facts": {
-        "acceptedDispositionCount": 3249,
-        "artifactCount": 3249,
-        "dispositionCount": 3249,
+        "acceptedDispositionCount": 3250,
+        "artifactCount": 3250,
+        "dispositionCount": 3250,
         "findingDistribution": {},
-        "noOutputDispositionCount": 3181,
-        "observationCount": 3249,
+        "noOutputDispositionCount": 3182,
+        "observationCount": 3250,
         "observationSetDigestCount": 1,
         "outputPlanDispositionCount": 68,
         "rejectedDispositionCount": 0
@@ -136,7 +136,7 @@
     },
     {
       "facts": {
-        "canonicalDigest": "820e9b615fd54ee191faf38e8fd9d56155b16fd720f26980f41ec03e75da718a",
+        "canonicalDigest": "7ce04bf0232fdff6c16cd9a0e780854b9e4853c0a6a91d9dead55792afa7eafe",
         "outputCount": 13
       },
       "findings": [],
@@ -145,8 +145,8 @@
     },
     {
       "facts": {
-        "afterCount": 3249,
-        "beforeCount": 3249
+        "afterCount": 3250,
+        "beforeCount": 3250
       },
       "findings": [],
       "id": "mutation-boundary",

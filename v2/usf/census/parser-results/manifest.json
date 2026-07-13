@@ -1,8 +1,8 @@
 {
   "aggregate": {
-    "recordCount": 3249,
-    "uncompressedBytes": 75787383,
-    "uncompressedSha256": "f750df6f8dd44c53eef80f692bba3112564f7d104a4a78d57f12541df719c1b4"
+    "recordCount": 3250,
+    "uncompressedBytes": 75826656,
+    "uncompressedSha256": "b58e867abb6f0bde9c82e459461b792fbf3225a0a1b94fff5645ac3fe4fd0b6b"
   },
   "encoding": "gzip-jsonl",
   "formatVersion": 1,
@@ -12,25 +12,25 @@
   ],
   "shards": [
     {
-      "compressedBytes": 2484232,
-      "compressedSha256": "1679fdd6b2e1ead4186e45802927cc75712ba58661b9bfd2d23bc5c8b61250af",
+      "compressedBytes": 2484326,
+      "compressedSha256": "913fd2306f6d33b9a23389faaf20ae1cb7091094aa9c0ccd3219c0cb84e9b937",
       "firstPath": ".github/workflows/proof-anchor.yml",
       "lastPath": "vitest.config.ts",
       "path": "parser-results/repository-output.jsonl.gz",
       "recordCount": 3088,
-      "uncompressedBytes": 50798588,
-      "uncompressedSha256": "17d5f219954824e3877adf1ea8f67b80bda005614d663c21c07df4683079324f",
+      "uncompressedBytes": 50799177,
+      "uncompressedSha256": "9f7f10dcd06d031ebe11edf3aea334859a1d72d329ef979d8fdc5c1c6856cac2",
       "universe": "repository-output"
     },
     {
-      "compressedBytes": 50028,
-      "compressedSha256": "3ca7924b00aac862fa68d34d12eb14c3c2e8c6ded5cc171cacef5e0264cf7ef7",
+      "compressedBytes": 50010,
+      "compressedSha256": "d7fc3828ec7dd1c74fb6cbe76fc7aaef92c8ab77a76f1897a327ba3062f4c140",
       "firstPath": "v2/usf/compiler/package-lock.json",
       "lastPath": "v2/usf/compiler/test/generation-output.test.js",
       "path": "parser-results/v2-compiler-implementation.jsonl.gz",
       "recordCount": 24,
-      "uncompressedBytes": 767699,
-      "uncompressedSha256": "07304cef2a0185b32f7ef1a53cfc940a860efd776d24a43344be401f251c6616",
+      "uncompressedBytes": 767493,
+      "uncompressedSha256": "c2ac0b626c821e2f230f7b9944d71733fec82ebe60deb4cee9c52948ed7ad3d9",
       "universe": "v2-compiler-implementation"
     },
     {
@@ -45,14 +45,14 @@
       "universe": "v2-graph-authority"
     },
     {
-      "compressedBytes": 7683,
-      "compressedSha256": "8a2fc10cbef83681e6f6987b11eb8c6f0550052503a0d5f82817d2f62e832ca7",
+      "compressedBytes": 9759,
+      "compressedSha256": "eb5083377e00639552e393bb53220d0495fecc51f74928f062afa199b8901936",
       "firstPath": "v2/.gitignore",
       "lastPath": "v2/usf/tools/stardog/.gitkeep",
       "path": "parser-results/v2-support-provisioning.jsonl.gz",
-      "recordCount": 22,
-      "uncompressedBytes": 104597,
-      "uncompressedSha256": "f4f13df087832a66d5dd80cb57bbf42b541a7af36894d60fe30367f636f9bdbb",
+      "recordCount": 23,
+      "uncompressedBytes": 143487,
+      "uncompressedSha256": "5c2bb9641eaec09727c6bc3ef023a515bc6d17130be782637d362d8fbce30c38",
       "universe": "v2-support-provisioning"
     }
   ]
