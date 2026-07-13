@@ -13,6 +13,10 @@ NODE_ARCHIVE="/opt/node-v${NODE_VERSION}-linux-x64.tar.xz"
 NODE_URL="https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz"
 VENV_DIR="/usf/.venv"
 PY_DEPS=("rdflib==7.6.0" "pyshacl==0.40.0" "pyyaml==6.0.3")
+# Agent CLIs, pinned for repeatable installs (same policy as Node/Java above).
+# npm verifies registry-signed integrity checksums for exact-version installs.
+CLAUDE_CODE_PKG="@anthropic-ai/claude-code@2.1.207"
+CODEX_PKG="@openai/codex@0.144.2"
 
 log(){ printf '\n== %s ==\n' "$*"; }
 have(){ command -v "$1" >/dev/null 2>&1; }
@@ -73,8 +77,64 @@ log "Frozen compiler dependencies"
 (cd /usf/compiler && npm ci --ignore-scripts)
 (cd /usf/compiler && node -e 'import("stardog").then(() => console.log("official Stardog SDK import: OK"))')
 
+log "Pinned agent CLIs (claude, codex)"
+want_claude="${CLAUDE_CODE_PKG##*@}"
+want_codex="${CODEX_PKG##*@}"
+have_cli(){ [ -x "${NODE_DIR}/bin/$1" ] && "${NODE_DIR}/bin/$1" --version 2>/dev/null | grep -qF "$2"; }
+if ! have_cli claude "${want_claude}"; then
+  ensure_dns
+  npm install -g --no-fund --no-audit "${CLAUDE_CODE_PKG}"
+fi
+if ! have_cli codex "${want_codex}"; then
+  ensure_dns
+  npm install -g --no-fund --no-audit "${CODEX_PKG}"
+fi
+ln -sf "${NODE_DIR}/bin/claude" /usr/local/bin/claude
+ln -sf "${NODE_DIR}/bin/codex" /usr/local/bin/codex
+claude --version
+codex --version
+
+log "Agent shell, git and MCP wiring (token-free; credentials live in /usf/.env)"
+cat > /root/.bashrc <<'EOF'
+# USF chroot shell environment: load token-free profile.d wiring, which sources
+# /usf/.env (git-ignored credentials). Makes STARDOG_*, GITHUB_PERSONAL_ACCESS_TOKEN,
+# LINEAR_API_KEY and OPENAI_API_KEY available to claude/codex and the MCP servers.
+for f in /etc/profile.d/*.sh; do [ -r "$f" ] && . "$f"; done
+cd /usf 2>/dev/null || true
+EOF
+cat > /root/.bash_profile <<'EOF'
+[ -r ~/.bashrc ] && . ~/.bashrc
+EOF
+[ -f /root/.gitconfig ] || cat > /root/.gitconfig <<'EOF'
+[user]
+	name = Matthew Aldous
+	email = matthew.aldous@gmail.com
+[safe]
+	directory = *
+[init]
+	defaultBranch = main
+[pull]
+	rebase = false
+EOF
+# Pre-trust /usf and its project .mcp.json servers for headless agent launches.
+[ -f /root/.claude.json ] || cat > /root/.claude.json <<'EOF'
+{
+  "hasCompletedOnboarding": true,
+  "projects": {
+    "/usf": {
+      "hasTrustDialogAccepted": true,
+      "hasCompletedProjectOnboarding": true,
+      "enabledMcpjsonServers": ["usf", "github", "linear"]
+    }
+  }
+}
+EOF
+echo "shell/git/mcp wiring present"
+
 log "readiness"
 [ -x /usr/local/bin/node ] || { echo "MISSING node" >&2; exit 1; }
 [ -x "${VENV_DIR}/bin/python" ] || { echo "MISSING venv" >&2; exit 1; }
 [ -d /usf/compiler/node_modules/stardog ] || { echo "MISSING official Stardog SDK" >&2; exit 1; }
+[ -x /usr/local/bin/claude ] || { echo "MISSING claude CLI" >&2; exit 1; }
+[ -x /usr/local/bin/codex ] || { echo "MISSING codex CLI" >&2; exit 1; }
 echo "USF chroot bootstrap complete"
