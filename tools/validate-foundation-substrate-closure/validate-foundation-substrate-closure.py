@@ -142,6 +142,10 @@ def tracked_file_texts(data: dict[str, Any]) -> list[tuple[str, str]]:
             texts.append((rel_path, overrides[rel_path]))
             continue
         path = ROOT / rel_path
+        if not path.is_file():
+            # gitlink (submodule) entries appear in ls-files but are not files;
+            # in CI checkouts without submodules the path may not exist at all.
+            continue
         try:
             texts.append((rel_path, path.read_text(encoding="utf-8")))
         except UnicodeDecodeError:
