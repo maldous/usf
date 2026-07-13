@@ -173,7 +173,15 @@ async function main() {
     return verificationConforms(report) ? 0 : 1;
   }
 
-  process.stderr.write('usage: cli.js <check|plan|snapshot-observed|snapshot-derived|generate|verify-output|compile|verify|verify-fixtures|drift-live|attest-live|verify-live-attestation>\n');
+  if (command === 'mcp') {
+    // Read-only Stardog MCP server on stdio. It owns stdout for JSON-RPC, so it
+    // must not go through emit(); it returns when stdin closes.
+    const { runMcpServer } = await import('./mcp.js');
+    await runMcpServer();
+    return 0;
+  }
+
+  process.stderr.write('usage: cli.js <check|plan|snapshot-observed|snapshot-derived|generate|verify-output|compile|verify|verify-fixtures|drift-live|attest-live|verify-live-attestation|mcp>\n');
   return 2;
 }
 

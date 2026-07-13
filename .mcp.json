@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "usf": {
+      "command": "node",
+      "args": ["v2/usf/compiler/src/mcp.js"],
+      "env": {
+        "STARDOG_SERVER": "${STARDOG_SERVER:-}",
+        "STARDOG_DATABASE": "${STARDOG_DATABASE:-}",
+        "STARDOG_TOKEN": "${STARDOG_TOKEN:-}",
+        "STARDOG_USERNAME": "${STARDOG_USERNAME:-}",
+        "STARDOG_PASSWORD": "${STARDOG_PASSWORD:-}"
+      }
+    }
+  }
+}

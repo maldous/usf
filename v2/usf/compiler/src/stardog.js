@@ -121,6 +121,13 @@ export function createClient(config) {
       return bindings(res);
     },
 
+    // Read-only ASK outside any transaction.
+    async ask(sparql) {
+      const res = await query.execute(conn, database, sparql, SPARQL_JSON);
+      ok(res, 'ask');
+      return Boolean(res.body && res.body.boolean);
+    },
+
     // Read-only graph export through SPARQL CONSTRUCT. N-Quads is used by the
     // external attestation path so RDF Dataset Canonicalization can make blank
     // node identifiers irrelevant before hashing.
