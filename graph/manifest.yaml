@@ -158,6 +158,10 @@ shapeGraphs:
     graph: "urn:usf:graph:shapes"
     loadOrder: 35
     validationOrder: 6
+  - file: shapes/lifecycle.ttl
+    graph: "urn:usf:graph:shapes"
+    loadOrder: 35
+    validationOrder: 6
   - file: shapes/realisation.ttl
     graph: "urn:usf:graph:shapes"
     loadOrder: 35
@@ -213,6 +217,8 @@ rules:
     output: "urn:usf:graph:derived:readiness"
     kind: derivation
   - file: rules/integrity.rq
+    kind: integrity
+  - file: rules/lifecycle.rq
     kind: integrity
 derivedGraphs:
   - file: derived/repository-structure.trig
