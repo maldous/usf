@@ -10,10 +10,10 @@
     "../warning-inventory.md",
     "README.md",
     "manifest.json",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-13T13-06-30-626Z/external-review-bundle/external-review-report.md",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-13T13-06-30-626Z/proof-cockpit-machine-qa-run.json",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-13T13-06-30-626Z/service-evidence-manifest.json",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-13T13-06-30-626Z/proof-cockpit-screenshot-manifest.json"
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-13T13-25-19-461Z/external-review-bundle/external-review-report.md",
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-13T13-25-19-461Z/proof-cockpit-machine-qa-run.json",
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-13T13-25-19-461Z/service-evidence-manifest.json",
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-13T13-25-19-461Z/proof-cockpit-screenshot-manifest.json"
   ],
   "generatedReportsAreAuthority": false,
   "finalAcceptanceAutomatic": false,
@@ -31,10 +31,10 @@
     "no-usf-290-completion"
   ],
   "latestMachineRun": {
-    "runId": "qa-run-2026-07-13T13-06-30-667Z",
-    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-13T13-06-30-626Z",
-    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-13T13-06-30-626Z/proof-cockpit-machine-qa-run.json",
-    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-13T13-06-30-626Z/external-review-bundle",
+    "runId": "qa-run-2026-07-13T13-25-19-501Z",
+    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-13T13-25-19-461Z",
+    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-13T13-25-19-461Z/proof-cockpit-machine-qa-run.json",
+    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-13T13-25-19-461Z/external-review-bundle",
     "passCount": 1282,
     "warnCount": 0,
     "failCount": 0,
@@ -42,17 +42,19 @@
     "screenshotCount": 94,
     "serviceEvidenceCount": 40,
     "evidenceRecordCount": 1190,
-    "sourceSha": "97176177d4930fa90b77b12c5fa8de5e7a29f6a3",
-    "deploymentSha": "97176177d4930fa90b77b12c5fa8de5e7a29f6a3",
+    "sourceSha": "9603fe6fa7c2d23c29f6e6db927e144c74797879",
+    "deploymentSha": "9603fe6fa7c2d23c29f6e6db927e144c74797879",
     "authenticatedServiceUiCaptureCount": 6,
     "authPostureMismatchCount": 7,
     "serviceTargetObservationCount": 40,
-    "sourceTreeHash": "cb1ab9fe4d68ad27c4c08f4b612e1430da6bd6bf93637c961f09df1463b48377",
+    "sourceTreeHash": "a05d10388cea48f920ab7154fdafe54e8ef9ffd65899e86063e5404fc5b82334",
     "sourceTreeHashAlgorithm": "sha256-git-ls-tree-non-proof-evidence-v1",
     "sourceTreeHashExcludedPrefixes": [
       "artifacts/proof-cockpit/",
       "evidence/proof-evidence/proof-cockpit/",
-      "v2/"
+      "v2/",
+      "graph/",
+      "census/"
     ]
   },
   "warningResolution": {
