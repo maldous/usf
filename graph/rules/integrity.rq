@@ -43,7 +43,7 @@ SELECT DISTINCT ?violation ?subject WHERE {
       ?subject a ?dc .
     }
     VALUES ?dc { usf:Readiness usf:Coverage usf:DerivedSurface usf:ContractSurface
-                 usf:ProofObligation usf:TestObligation usf:EvidenceRequirement }
+                 usf:TestObligation }
     FILTER(!STRSTARTS(STR(?g), "urn:usf:graph:derived"))
     BIND("directauthoredreadiness" AS ?violation)
   } UNION {

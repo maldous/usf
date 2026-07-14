@@ -2314,3 +2314,92 @@ usf:RiskAcceptance usf:termUsageState <urn:usf:termusagestate:reservedfuturescop
     usf:termUsageRationale "Reserved for the assurance operations lifecycle; no control operating effectiveness activity is claimed yet." .
 usf:Workspace usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ;
     usf:termUsageRationale "Reserved for the clean room generation and release lifecycle; instances are produced by compiler generation runs, not authored in the semantic graph." .
+usf:termUsageOwningContract a owl:AnnotationProperty ; rdfs:label "term usage owning contract" .
+usf:termUsageLifecycleStage a owl:AnnotationProperty ; rdfs:label "term usage lifecycle stage" .
+usf:termUsageRationale a owl:AnnotationProperty ; rdfs:label "term usage rationale" .
+usf:Validator a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Validator" ; rdfs:comment "A validator evaluates semantic or structural constraints and may produce evidence but is never semantic authority." .
+usf:Feature a owl:Class ; rdfs:subClassOf usf:Entity ; rdfs:label "Feature" ; rdfs:comment "A contract-warranted capability of a candidate realisation; source code cannot establish it." .
+
+<urn:usf:termusagestate:usedbysemanticquery> a usf:TermUsageState ;
+    usf:canonicalName "usedbysemanticquery" .
+
+# These terms are used in embedded SHACL or integrity SPARQL. Their use is not
+# visible as an RDF predicate/object binding to the unused-term integrity scan.
+usf:applicableToObligation usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:authorisedByDecision usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:authorisedSourcePath usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:confidenceBasis usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:evaluatedAt usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:evaluatedByValidator usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:evidenceSetDigest usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:hasAdmissionState usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:hasConfidenceState usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:hasFreshnessState usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:hasIntegrityState usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:hasInvalidationCondition usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:hasProofResultState usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:proofExecutionEnvironment usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:proofResultForObligation usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:reliesOnProofResult usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:usesAdmittedEvidence usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:usesAlgorithmVersion usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:usesProofAlgorithm usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+usf:withinValidityScope usf:termUsageState <urn:usf:termusagestate:usedbysemanticquery> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-proof-contract-enforcement" ; usf:termUsageRationale "USED: referenced by lifecycle SHACL or integrity SPARQL; no ordinary authority instance is required solely to make embedded-query use visible." .
+
+# Ticket/report shortcut vocabulary intentionally has no conforming authority
+# instance. It exists so negative fixtures and validators can name the forbidden
+# inversion without granting it semantic force.
+usf:Report usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ; usf:intentionallyStandalone true ; usf:decisionRationale "INTENTIONALLY_STANDALONE: zero conforming instances are required; the term exists only to express and reject authority inversions in deterministic fixtures." ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "inversion-rejection" .
+usf:Ticket usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ; usf:intentionallyStandalone true ; usf:decisionRationale "INTENTIONALLY_STANDALONE: zero conforming instances are required; the term exists only to express and reject authority inversions in deterministic fixtures." ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "inversion-rejection" .
+usf:directlyActivatesContract usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ; usf:intentionallyStandalone true ; usf:decisionRationale "INTENTIONALLY_STANDALONE: zero conforming instances are required; the term exists only to express and reject authority inversions in deterministic fixtures." ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "inversion-rejection" .
+usf:directlyAdmitsEvidence usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ; usf:intentionallyStandalone true ; usf:decisionRationale "INTENTIONALLY_STANDALONE: zero conforming instances are required; the term exists only to express and reject authority inversions in deterministic fixtures." ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "inversion-rejection" .
+usf:directlyEstablishesProof usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ; usf:intentionallyStandalone true ; usf:decisionRationale "INTENTIONALLY_STANDALONE: zero conforming instances are required; the term exists only to express and reject authority inversions in deterministic fixtures." ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "inversion-rejection" .
+usf:establishesSemanticTruth usf:termUsageState <urn:usf:termusagestate:zeroinstancebydesign> ; usf:intentionallyStandalone true ; usf:decisionRationale "INTENTIONALLY_STANDALONE: zero conforming instances are required; the term exists only to express and reject authority inversions in deterministic fixtures." ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "inversion-rejection" .
+
+# The remaining lifecycle relations are required by the complete model but are
+# not instantiated until admitted evidence, proof evaluation, validation,
+# decision, supersession, or contract activation occurs. Each property's
+# declared domain and range identify its intended subject/object classes; the
+# property itself is the expected predicate. The owning compiler semantic
+# enforcement contract remains proof-blocked, so absence of operational
+# instances is required rather than accidental.
+usf:DecisionSupersession usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "decision-supersession" ; usf:termUsageRationale "REQUIRED_BUT_NOT_YET_INSTANTIATED: rdf:type is the expected predicate and this class is the intended subject class; no instance exists because no lifecycle decision has been superseded." .
+usf:EvidenceSupersession usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "evidence-supersession" ; usf:termUsageRationale "REQUIRED_BUT_NOT_YET_INSTANTIATED: rdf:type is the expected predicate and this class is the intended subject class; no admitted evidence has been superseded." .
+usf:RepresentationDecision usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> ; usf:termUsageOwningContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:termUsageLifecycleStage "realisation-decision" ; usf:termUsageRationale "REQUIRED_BUT_NOT_YET_INSTANTIATED: rdf:type is the expected predicate and this class is the intended subject class; no representation contract is active." .
+usf:admissionDecidedByValidator usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:admissionForEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:byteSize usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:collectedAt usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:collectedInEnvironment usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:concernsSemanticSubject usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:considersOption usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:contentDigest usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:contractConstraint usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:decisionState usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:evaluatesObligation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:executesValidation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:governsNamedGraph usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:hasFreshnessPolicy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:invalidatesEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:invalidatesProofResult usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:isSupersededByEvidence usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:mediaType usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:producesProofResult usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:producesValidationResult usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:proofNonclaim usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:recordsDecision usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:reducesConfidenceOf usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:reopensADR usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:requiredValidation usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:requiresADR usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:storageLocator usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:supersedesDecision usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:supersedesProofResult usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:supportsClaim usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:suspendsContract usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:uncertaintyStatement usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:validUntil usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:validationEnvironment usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:validationForContract usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:warrantsFeature usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
+usf:wasProducedBy usf:termUsageState <urn:usf:termusagestate:reservedfuturescope> .
