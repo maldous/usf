@@ -1139,16 +1139,16 @@
       usf:hasProofResultState <urn:usf:proofresultstate:successful> ;
       usf:proofResultForObligation <urn:usf:proofobligation:localsemanticvalidationtoolchain> ;
       usf:usesAdmittedEvidence <urn:usf:evidenceresult:rdf4jjenasemanticparity> ;
-      usf:evidenceSetDigest "sha256:202daa1602b37677a518317c65bf25e0e1d41d8514cbebf56cd0e28e5d0162bb" ;
+      usf:evidenceSetDigest "sha256:115c2c8f57f02107563e23044df2234b235c1bece255282a2433981782394c6c" ;
       usf:usesProofAlgorithm <urn:usf:proofalgorithm:crossenginelocalvalidationgate> ;
       usf:usesAlgorithmVersion <urn:usf:proofalgorithmversion:crossenginelocalvalidationgateone> ;
       usf:evaluatedByValidator <urn:usf:validator:rdf4jjenacrossengine> ;
       usf:proofExecutionEnvironment <urn:usf:environment:localdev> ;
       usf:hasConfidenceState <urn:usf:proofconfidencestate:warranted> ;
       usf:confidenceBasis <urn:usf:evidenceresult:rdf4jjenasemanticparity> ;
-      usf:uncertaintyStatement "RDF4J requires Java 25; five indexes add about sixty percent disk; global integrity remains approximately seventy-five seconds; ShaclSail Bulk may exceed two GiB RSS." ;
+      usf:uncertaintyStatement "RDF4J requires Java 25; five indexes add about sixty percent disk; global integrity remains approximately seventy-five seconds; ShaclSail Bulk may exceed two GiB RSS; bounded read-only Stardog validation of the unpublished candidate shapes returned nonconformance and its diagnostic report exceeded one hundred eighty seconds, so live publication remains unproven." ;
       usf:proofNonclaim <urn:usf:nonclaim:localenginenotsemanticauthority>, <urn:usf:nonclaim:nochrootjavaruntime>, <urn:usf:nonclaim:nolivepublicationfromlocalevidencealone> ;
-      usf:evaluatedAt "2026-07-14T06:46:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      usf:evaluatedAt "2026-07-14T07:37:44Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       usf:hasInvalidationCondition <urn:usf:proofinvalidationcondition:evidenceinvalidated>, <urn:usf:proofinvalidationcondition:evidencestale>, <urn:usf:proofinvalidationcondition:authoritydigestchanged> ;
       usf:warrantsFeature <urn:usf:feature:indexedlocalrdfvalidation>, <urn:usf:feature:independentengineparity> .
 }

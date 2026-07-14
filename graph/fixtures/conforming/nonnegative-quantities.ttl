@@ -5,10 +5,10 @@
 
 <urn:usf:fixture:nonnegativequantityrun> a usf:CensusObservationRun ;
     usf:observationSetDigest "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ;
-    usf:observedRequiredPrerequisiteDependencyCount "0"^^xsd:nonNegativeInteger ;
-    usf:observedResolvedPrerequisiteDependencyCount "1"^^xsd:nonNegativeInteger ;
-    usf:observedSatisfiedPrerequisiteDependencyCount "1"^^xsd:nonNegativeInteger ;
-    usf:observedActiveBlockingDependencyCount "0"^^xsd:nonNegativeInteger ;
+    usf:observedRequiredPrerequisiteDependencyCount "0"^^xsd:integer ;
+    usf:observedResolvedPrerequisiteDependencyCount "1"^^xsd:integer ;
+    usf:observedSatisfiedPrerequisiteDependencyCount "1"^^xsd:integer ;
+    usf:observedActiveBlockingDependencyCount "0"^^xsd:integer ;
     usf:hasCensusObservationInput <urn:usf:fixture:nonnegativequantityinput> ;
     usf:hasCensusParserShardObservation <urn:usf:fixture:nonnegativequantityparser> .
 

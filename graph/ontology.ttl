@@ -1922,10 +1922,10 @@ usf:observedSourceRelationshipCount a owl:DatatypeProperty, owl:FunctionalProper
 usf:observedWorkPackageCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
 usf:observedWorkPackageDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
 usf:observedRetainedDependencyLineageCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
-usf:observedRequiredPrerequisiteDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
-usf:observedResolvedPrerequisiteDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
-usf:observedSatisfiedPrerequisiteDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
-usf:observedActiveBlockingDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:nonNegativeInteger .
+usf:observedRequiredPrerequisiteDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:integer .
+usf:observedResolvedPrerequisiteDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:integer .
+usf:observedSatisfiedPrerequisiteDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:integer .
+usf:observedActiveBlockingDependencyCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range xsd:integer .
 usf:hasCensusObservationInput a owl:ObjectProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range usf:CensusObservationInput .
 usf:hasCensusParserShardObservation a owl:ObjectProperty ; rdfs:domain usf:CensusObservationRun ; rdfs:range usf:CensusParserShardObservation .
 usf:observedInputPath a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:CensusObservationInput ; rdfs:range xsd:string .
@@ -1985,12 +1985,12 @@ usf:observedDependencySatisfactionStatus a owl:ObjectProperty, owl:FunctionalPro
 usf:dependencySatisfactionBasisKind a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range usf:DependencySatisfactionBasisKind .
 usf:satisfactionBasisRelationshipObservation a owl:ObjectProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range usf:SourceRelationshipObservation .
 usf:satisfactionBasisRecordDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:string .
-usf:satisfactionBasisExactEvidenceHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
-usf:satisfactionBasisCurrentRelationshipHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
-usf:satisfactionBasisStructurallyProvenRelationshipHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
-usf:satisfactionBasisDirectionMatchedRelationshipHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
-usf:satisfactionBasisCurrentPrerequisiteArtifactHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
-usf:satisfactionBasisCurrentPrerequisiteArtifactCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:nonNegativeInteger .
+usf:satisfactionBasisExactEvidenceHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:integer .
+usf:satisfactionBasisCurrentRelationshipHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:integer .
+usf:satisfactionBasisStructurallyProvenRelationshipHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:integer .
+usf:satisfactionBasisDirectionMatchedRelationshipHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:integer .
+usf:satisfactionBasisCurrentPrerequisiteArtifactHashCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:integer .
+usf:satisfactionBasisCurrentPrerequisiteArtifactCount a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:integer .
 usf:satisfactionBasisSourceEndpointExists a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:boolean .
 usf:satisfactionBasisPrerequisiteEndpointExists a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:boolean .
 usf:satisfactionBasisEdgeSurvivedTransitiveReduction a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:WorkPackageDependencySatisfactionBasisObservation ; rdfs:range xsd:boolean .
@@ -2004,7 +2004,7 @@ usf:dependencyLineageRecordDigest a owl:DatatypeProperty, owl:FunctionalProperty
 usf:successorDependencySource a owl:ObjectProperty ; rdfs:domain usf:WorkPackageDependencyLineageObservation ; rdfs:range usf:WorkPackageObservation .
 usf:successorDependencyPrerequisite a owl:ObjectProperty ; rdfs:domain usf:WorkPackageDependencyLineageObservation ; rdfs:range usf:WorkPackageObservation .
 
-usf:requiredRelationshipEvidenceMinimum a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range xsd:nonNegativeInteger .
+usf:requiredRelationshipEvidenceMinimum a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencyResolutionPolicy ; rdfs:range xsd:integer .
 usf:allowsDependencySatisfactionStatus a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range usf:DependencySatisfactionStatus .
 usf:allowsDependencySatisfactionBasisKind a owl:ObjectProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range usf:DependencySatisfactionBasisKind .
 usf:requiresResolvedRetainedDependency a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:RepositoryDependencySatisfactionPolicy ; rdfs:range xsd:boolean .
