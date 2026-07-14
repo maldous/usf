@@ -46,6 +46,11 @@ usf:soleSemanticAuthority a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:
 usf:validatedInStardog a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range xsd:boolean .
 usf:authorityVerificationState a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range xsd:string .
 usf:governsNamedGraph a owl:ObjectProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range usf:NamedGraph .
+usf:defaultReasoningSchemaGraph a owl:ObjectProperty ;
+    rdfs:domain usf:SemanticAuthority ;
+    rdfs:range usf:NamedGraph ;
+    rdfs:label "default reasoning schema graph" ;
+    rdfs:comment "Identifies exactly the registered named graphs whose OWL/RDFS axioms form Stardog's default reasoning schema. This is narrower than the repository definition-graph class and excludes controlled-value, authority-configuration, registry, shape, authored, observed and derived graphs." .
 usf:concernsSemanticSubject a owl:ObjectProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:Entity .
 usf:supportsClaim a owl:ObjectProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:Claim .
 usf:contentDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range xsd:string .
@@ -89,11 +94,21 @@ usf:activationReason a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domai
 usf:mandatoryProofObligation a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:ProofObligation .
 usf:reliesOnProofResult a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:ProofResult .
 usf:warrantsFeature a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:Feature .
-usf:contractConstraint a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:Constraint .
+usf:contractConstraint a owl:DatatypeProperty ; rdfs:domain usf:SemanticContract ; rdfs:range xsd:string .
 usf:permittedRealisationType a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range owl:Class .
 usf:requiredValidation a owl:ObjectProperty ; rdfs:domain usf:SemanticContract ; rdfs:range usf:ValidationObligation .
 usf:authorisedByDecision a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:Realisation ; rdfs:range usf:RealisationDecision .
 usf:authorisedSourcePath a owl:DatatypeProperty ; rdfs:domain usf:Realisation ; rdfs:range xsd:string .
+usf:authorisesSourcePath a owl:DatatypeProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range xsd:string .
+usf:authorisesRepository a owl:DatatypeProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range xsd:string .
+usf:authorisesRealisationType a owl:ObjectProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range owl:Class .
+usf:allowsRealisationPredecessor a owl:ObjectProperty ; rdfs:domain usf:RealisationState ; rdfs:range usf:RealisationState .
+usf:allowsRealisationSuccessor a owl:ObjectProperty ; rdfs:domain usf:RealisationState ; rdfs:range usf:RealisationState .
+usf:requiresContractActivationState a owl:ObjectProperty ; rdfs:domain usf:RealisationState ; rdfs:range usf:ContractActivationState .
+usf:requiresDecisionState a owl:ObjectProperty ; rdfs:domain usf:RealisationState ; rdfs:range usf:DecisionState .
+usf:requiresRealisationType a owl:ObjectProperty ; rdfs:domain usf:RealisationState ; rdfs:range owl:Class .
+usf:requiresAuthorisedSourcePath a owl:DatatypeProperty ; rdfs:domain usf:RealisationState ; rdfs:range xsd:boolean .
+usf:requiresExistingImplementation a owl:DatatypeProperty ; rdfs:domain usf:RealisationState ; rdfs:range xsd:boolean .
 usf:decisionState a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range usf:DecisionState .
 usf:considersOption a owl:ObjectProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range usf:RealisationOption .
 usf:requiresADR a owl:ObjectProperty ; rdfs:domain usf:RealisationDecision ; rdfs:range usf:ADRRequirement .

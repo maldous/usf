@@ -18,10 +18,10 @@ shp:RealisationShape a sh:NodeShape ;
     sh:property [ sh:path usf:realisationState ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:RealisationState ;
         sh:message "realisationstate: realisation must declare one state" ] ;
     sh:sparql [ sh:prefixes usf:prefixes ;
-        sh:message "realisationrealiser: a realisation claiming realisation must name an implementation, service, adapter or binding; contract-only, deferred, not-claimed and deprecated states are exempt" ;
+        sh:message "realisationrealiser: a realisation claiming completed realisation must name an implementation, service, adapter or binding; contract-only, implementable, deferred, not-claimed and deprecated states are exempt" ;
         sh:select """SELECT $this WHERE {
           $this usf:realisationState ?state .
-          FILTER(?state NOT IN (<urn:usf:realisationstate:contractonly>, <urn:usf:realisationstate:deferred>,
+          FILTER(?state NOT IN (<urn:usf:realisationstate:contractonly>, <urn:usf:realisationstate:implementable>, <urn:usf:realisationstate:deferred>,
                                 <urn:usf:realisationstate:notclaimed>, <urn:usf:realisationstate:deprecated>))
           FILTER NOT EXISTS { $this usf:realisingImplementation ?implementation }
           FILTER NOT EXISTS { $this usf:viaService ?service }

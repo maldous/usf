@@ -251,9 +251,20 @@ bst:unavailable a usf:BindingState ; usf:canonicalName "unavailable" .
 bst:deferred    a usf:BindingState ; usf:canonicalName "deferred" .
 
 ########################################################################
-# RealisationState (closed, 7)
+# RealisationState (closed, 8)
 ########################################################################
 rst:contractonly    a usf:RealisationState ; usf:canonicalName "contractonly" .
+rst:implementable   a usf:RealisationState ;
+    usf:canonicalName "implementable" ;
+    rdfs:label "Implementable" ;
+    rdfs:comment "The active, successfully proven contract, accepted decision, authorised implementation type and authorised repository path permit implementation to begin. This state does not claim that implementation or validation has occurred." ;
+    usf:allowsRealisationPredecessor rst:contractonly ;
+    usf:allowsRealisationSuccessor rst:internal, rst:routerealised, rst:operatortooling, rst:deferred, rst:deprecated ;
+    usf:requiresContractActivationState <urn:usf:contractactivationstate:active> ;
+    usf:requiresDecisionState <urn:usf:decisionstate:accepted> ;
+    usf:requiresRealisationType usf:Implementation ;
+    usf:requiresAuthorisedSourcePath true ;
+    usf:requiresExistingImplementation false .
 rst:routerealised   a usf:RealisationState ; usf:canonicalName "routerealised" .
 rst:operatortooling a usf:RealisationState ; usf:canonicalName "operatortooling" .
 rst:deferred        a usf:RealisationState ; usf:canonicalName "deferred" .

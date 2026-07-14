@@ -98,13 +98,9 @@ I have read the current USF agent directive and foundational governance artefact
 - spec/vocabularies/vocabulary-catalog.json
 - spec/registries/schema-registry.json
 
-I understand the USF authority order:
-1. USF semantic definitions
-2. USF ADRs
-3. USF validator rules
-4. Runtime proof evidence
-5. USF source implementation
-6. Generated reports
+I understand that validated semantic state in Stardog is the sole USF semantic authority.
+I understand the distinct lifecycle roles of model, evidence, proof, contract, realisation, and validation.
+I understand that ADRs record rationale, toolchains realise contracts, code is a candidate realisation, reports project outcomes, and tickets track work; none independently establish semantic truth.
 
 I understand that USF is self-defined and claims no external repository as its authority.
 I understand that generated reports are lowest authority.
@@ -116,24 +112,24 @@ For read-only orientation, substantial read is acceptable. The agent MAY give a 
 
 For any modifying task, the agent MUST perform a full disk read and JSON parse as mandatory.
 
-## Authority Order
+## Semantic Authority and Lifecycle Roles
 
-Agents MUST apply this authority order:
+Validated semantic state in Stardog is the sole USF semantic authority. Stardog's storage technology alone does not establish truth: the state MUST conform to the live model, constraints, evidence admission rules, proof obligations, and contract lifecycle.
 
-1. USF semantic definitions
-2. USF ADRs
-3. USF validator rules
-4. Runtime proof evidence
-5. USF source implementation
-6. Generated reports
+The lifecycle roles are distinct:
 
-A lower-authority artefact MUST NOT override a higher-authority artefact.
+* **Model** defines semantic truth.
+* **Evidence** is an admitted observation or produced fact satisfying an evidence requirement.
+* **Proof** deterministically evaluates an exact admitted evidence set against a proof obligation.
+* **Contract** defines features and constraints warranted by successful proof.
+* **ADR** records historical rationale for a material decision and is never semantic authority.
+* **Toolchain** is a selected mechanism for satisfying an active contract.
+* **Code** is a candidate realisation.
+* **Validation** is execution that produces evidence about a realisation.
+* **Report** is a projection of evidence and results.
+* **Ticket** is a work-tracking projection.
 
-Generated reports MUST NOT be treated as canonical.
-
-Passing proof MUST NOT define intended behaviour by itself.
-
-Source implementation MUST NOT invent new semantics unless the semantic definitions, ADRs, validators, and proof expectations are updated where applicable.
+ADRs, validators, runtime results, source code, reports, reviews, documentation, and tickets MUST NOT independently establish or retrospectively override semantic truth. Passing proof warrants a contract; it does not invent intended behaviour. Source implementation MUST NOT invent semantics.
 
 USF is self-defined; no external repository is USF authority.
 
@@ -827,14 +823,7 @@ USF distinguishes **agent execution precedence** (what an agent obeys while carr
 3. this `AGENTS.md` (the agent process directive)
 4. domain-specific standards within their own domain (naming, schema-authoring, git-practices), only when consistent with higher-authority artefacts
 
-**USF semantic authority** (what the platform *is* — the authority order this directive serves):
-
-1. USF semantic definitions
-2. USF ADRs
-3. USF validator rules
-4. runtime proof evidence
-5. USF source implementation
-6. generated reports
+**USF semantic authority** (what the platform *is*): validated semantic state in Stardog, governed by the live model and its evidence, proof, contract, realisation, and validation constraints. ADRs, validators, runtime results, source, reports, reviews, documentation, and tickets have the distinct roles defined above and are not alternative authority levels.
 
 An explicit user instruction defines **task scope**; it does **not** silently override USF constitutional or safety constraints. If a user instruction conflicts with the constitutional layer (Charter, Authority Model) or a non-negotiable safety rule, the agent MUST stop and report the conflict — unless the user explicitly invokes a constitutional amendment process (a deliberate, recorded decision to change the constitutional layer).
 

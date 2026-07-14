@@ -99,19 +99,10 @@ shp:SourceArtefactDispositionShape a sh:NodeShape ;
   sh:property [ sh:path usf:assignedToArtefactPlan ; sh:maxCount 1 ; sh:class usf:ArtefactPlan ] ;
   sh:property [ sh:path usf:observationSetDigest ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
   sh:property [ sh:path usf:decisionRationale ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ] ;
-  sh:sparql [ sh:prefixes usf:prefixes ; sh:message "dispositionobservation: disposition must use the source artefact current observation" ;
-    sh:select """SELECT $this WHERE {
-      $this usf:dispositionOfSourceArtefact ?source ; usf:decidedAgainstObservation ?observation .
-      FILTER NOT EXISTS { ?source usf:hasCurrentSourceObservation ?observation }
-    }""" ] ;
   sh:sparql [ sh:prefixes usf:prefixes ; sh:message "dispositionplan: canonicaloutput requires exactly one plan IRI; nooutput forbids every plan" ;
     sh:select """SELECT $this WHERE {
       $this usf:hasDispositionOutputMode ?mode .
       { FILTER(?mode = <urn:usf:dispositionoutputmode:canonicaloutput>) FILTER NOT EXISTS { $this usf:assignedToArtefactPlan ?plan } }
-      UNION
-      { FILTER(?mode = <urn:usf:dispositionoutputmode:canonicaloutput>)
-        $this usf:assignedToArtefactPlan ?left, ?right . FILTER(?left != ?right)
-      }
       UNION
       { FILTER(?mode = <urn:usf:dispositionoutputmode:nooutput>) FILTER EXISTS { $this usf:assignedToArtefactPlan ?plan } }
     }""" ] ;
@@ -120,3 +111,19 @@ shp:SourceArtefactDispositionShape a sh:NodeShape ;
       $this usf:hasDispositionKind ?kind ; usf:hasDispositionDecisionState ?state .
       FILTER((?kind = <urn:usf:dispositionkind:reviewrequired>) != (?state = <urn:usf:dispositiondecisionstate:reviewrequired>))
     }""" ] .
+
+shp:SourceArtefactDispositionCurrentObservationShape a sh:NodeShape ;
+  usf:canonicalName "sourceartefactdispositioncurrentobservationshape" ;
+  sh:targetNode <urn:usf:ontology> ;
+  sh:sparql [
+    sh:prefixes usf:prefixes ;
+    sh:message "dispositionobservation: disposition must use the source artefact current observation" ;
+    sh:select """SELECT $this WHERE {
+      FILTER EXISTS {
+        ?disposition a usf:SourceArtefactDisposition ;
+          usf:dispositionOfSourceArtefact ?source ;
+          usf:decidedAgainstObservation ?observation .
+        FILTER NOT EXISTS { ?source usf:hasCurrentSourceObservation ?observation }
+      }
+    }""" ;
+  ] .

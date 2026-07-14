@@ -1,5 +1,6 @@
 @prefix usf: <urn:usf:ontology:> .
 @prefix gcl: <urn:usf:graphclass:> .
+@prefix ng:  <urn:usf:namedgraph:> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
@@ -7,6 +8,7 @@
     usf:canonicalName "validatedsemanticstate" ;
     usf:soleSemanticAuthority true ;
     usf:validatedInStardog true ;
+    usf:defaultReasoningSchemaGraph ng:ontology , ng:taxonomy ;
     usf:authorityVerificationState "validator-and-shacl-conformant" .
 
 # Graph authority model. Each graph class declares what it may do; the mayConstrain /
