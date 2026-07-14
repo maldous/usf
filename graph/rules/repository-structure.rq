@@ -20,9 +20,7 @@ WHERE {
   FILTER(STRLEN(?runDigest) = 64 && STRLEN(?parserDigest) = 64)
   BIND(IRI(REPLACE(STR(?workPackageObservation), "workpackageobservation:", "repositoryworkpackage:")) AS ?workPackage)
 }
-
 #---NEXT---#
-
 PREFIX usf: <urn:usf:ontology:>
 PREFIX direction: <urn:usf:repositorydependencydirection:>
 PREFIX resolution: <urn:usf:workpackagedependencyresolutionstatus:>
@@ -41,54 +39,122 @@ CONSTRUCT {
     usf:supportedBySourceRelationshipObservation ?relationship .
 }
 WHERE {
-  ?policy a usf:RepositoryDependencyResolutionPolicy ;
-    usf:allowsWorkPackageDependencyType ?kind ; usf:allowsWorkPackageDependencyStatus ?status ;
-    usf:allowsRepositoryDependencyDirection direction:sourcerequiresprerequisite ;
-    usf:allowsWorkPackageDependencyResolutionStatus resolution:resolvedretained ;
-    usf:allowsSourceRelationshipType ?relationshipKind ;
-    usf:requiresRegisteredObservationRun true ; usf:requiresExactEvidenceEndpointOwnership true .
-  ?candidate a usf:WorkPackageDependencyObservation ;
-    usf:workPackageDependencySource ?sourceObservation ; usf:workPackageDependencyPrerequisite ?prerequisiteObservation ;
-    usf:workPackageDependencyType ?kind ; usf:workPackageDependencyStatus ?status ;
-    usf:workPackageDependencyResolutionStatus resolution:resolvedretained ;
-    usf:supportedBySourceRelationshipObservation ?relationship ; usf:observedInCensusRun ?run .
-  ?run a usf:CensusObservationRun ; usf:observationSetDigest ?runDigest ; usf:hasCensusParserShardObservation ?parserProvenance .
-  ?parserProvenance a usf:CensusParserShardObservation ; usf:observedCompressedContentDigest ?parserDigest .
-  ?relationship a usf:SourceRelationshipObservation ; usf:sourceRelationshipType ?relationshipKind ;
-    usf:sourceRelationshipSource ?sourceArtefact ; usf:sourceRelationshipTarget ?targetObservation ;
-    usf:sourceRelationshipResolved true ; usf:observedInCensusRun ?run .
-  ?targetObservation a usf:SourceRelationshipTargetObservation ; usf:resolvesToSourceArtefact ?targetArtefact .
-  ?sourceObservation usf:observedOwnedSourceArtefact ?sourceArtefact ; usf:observedInCensusRun ?run .
-  ?prerequisiteObservation usf:observedOwnedSourceArtefact ?targetArtefact ; usf:observedInCensusRun ?run .
-  FILTER(?sourceObservation != ?prerequisiteObservation && STRLEN(?runDigest) = 64 && STRLEN(?parserDigest) = 64)
-  FILTER NOT EXISTS {
-    ?candidate usf:supportedBySourceRelationshipObservation ?invalidRelationship .
-    FILTER NOT EXISTS {
-      ?invalidRelationship a usf:SourceRelationshipObservation ; usf:sourceRelationshipType ?invalidRelationshipKind ;
-        usf:sourceRelationshipSource ?invalidSourceArtefact ; usf:sourceRelationshipTarget ?invalidTargetObservation ;
-        usf:sourceRelationshipResolved true ; usf:observedInCensusRun ?run .
-      ?policy usf:allowsSourceRelationshipType ?invalidRelationshipKind .
-      ?invalidTargetObservation a usf:SourceRelationshipTargetObservation ; usf:resolvesToSourceArtefact ?invalidTargetArtefact ; usf:observedInCensusRun ?run .
-      ?sourceObservation usf:observedOwnedSourceArtefact ?invalidSourceArtefact .
-      ?prerequisiteObservation usf:observedOwnedSourceArtefact ?invalidTargetArtefact .
+  {
+    SELECT DISTINCT ?candidate ?sourceObservation ?prerequisiteObservation ?kind ?status ?run ?policy
+    WHERE {
+      ?candidate a usf:WorkPackageDependencyObservation ;
+        usf:workPackageDependencySource ?sourceObservation ;
+        usf:workPackageDependencyPrerequisite ?prerequisiteObservation ;
+        usf:workPackageDependencyType ?kind ;
+        usf:workPackageDependencyStatus ?status ;
+        usf:workPackageDependencyResolutionStatus resolution:resolvedretained ;
+        usf:observedInCensusRun ?run .
+      ?policy a usf:RepositoryDependencyResolutionPolicy ;
+        usf:allowsWorkPackageDependencyType ?kind ;
+        usf:allowsWorkPackageDependencyStatus ?status ;
+        usf:allowsRepositoryDependencyDirection direction:sourcerequiresprerequisite ;
+        usf:allowsWorkPackageDependencyResolutionStatus resolution:resolvedretained ;
+        usf:requiresRegisteredObservationRun true ;
+        usf:requiresExactEvidenceEndpointOwnership true .
+      FILTER(?sourceObservation != ?prerequisiteObservation)
+      FILTER EXISTS {
+        ?run a usf:CensusObservationRun ; usf:observationSetDigest ?runDigest .
+        FILTER(STRLEN(?runDigest) = 64)
+      }
+      FILTER EXISTS {
+        ?run usf:hasCensusParserShardObservation ?parser .
+        ?parser a usf:CensusParserShardObservation ;
+          usf:observedCompressedContentDigest ?parserDigest .
+        FILTER(STRLEN(?parserDigest) = 64)
+      }
     }
   }
-  FILTER NOT EXISTS {
-    ?candidate usf:workPackageDependencyEvidenceDigest ?evidenceDigest .
-    FILTER NOT EXISTS { ?candidate usf:supportedBySourceRelationshipObservation ?evidenceRelationship . ?evidenceRelationship usf:relationshipEvidenceDigest ?evidenceDigest }
+  {
+    SELECT ?candidate (COUNT(DISTINCT ?allRelationship) AS ?allRelationshipCount)
+    WHERE {
+      ?candidate a usf:WorkPackageDependencyObservation ;
+        usf:supportedBySourceRelationshipObservation ?allRelationship .
+    }
+    GROUP BY ?candidate
   }
-  FILTER NOT EXISTS {
-    ?candidate usf:supportedBySourceRelationshipObservation ?evidenceRelationship . ?evidenceRelationship usf:relationshipEvidenceDigest ?evidenceDigest .
-    FILTER NOT EXISTS { ?candidate usf:workPackageDependencyEvidenceDigest ?evidenceDigest }
+  {
+    SELECT ?candidate ?sourceObservation ?prerequisiteObservation ?run ?policy
+           (COUNT(DISTINCT ?validRelationship) AS ?validRelationshipCount)
+    WHERE {
+      ?candidate a usf:WorkPackageDependencyObservation ;
+        usf:workPackageDependencySource ?sourceObservation ;
+        usf:workPackageDependencyPrerequisite ?prerequisiteObservation ;
+        usf:supportedBySourceRelationshipObservation ?validRelationship ;
+        usf:observedInCensusRun ?run .
+      ?validRelationship a usf:SourceRelationshipObservation ;
+        usf:sourceRelationshipType ?validRelationshipKind ;
+        usf:sourceRelationshipSource ?validSourceArtefact ;
+        usf:sourceRelationshipTarget ?validTargetObservation ;
+        usf:sourceRelationshipResolved true ;
+        usf:observedInCensusRun ?run .
+      ?policy a usf:RepositoryDependencyResolutionPolicy ;
+        usf:allowsSourceRelationshipType ?validRelationshipKind .
+      ?validTargetObservation a usf:SourceRelationshipTargetObservation ;
+        usf:resolvesToSourceArtefact ?validTargetArtefact ;
+        usf:observedInCensusRun ?run .
+      ?sourceObservation usf:observedOwnedSourceArtefact ?validSourceArtefact .
+      ?prerequisiteObservation usf:observedOwnedSourceArtefact ?validTargetArtefact .
+    }
+    GROUP BY ?candidate ?sourceObservation ?prerequisiteObservation ?run ?policy
   }
+  {
+    SELECT ?candidate (COUNT(DISTINCT ?candidateDigest) AS ?candidateDigestCount)
+    WHERE {
+      ?candidate a usf:WorkPackageDependencyObservation .
+      OPTIONAL { ?candidate usf:workPackageDependencyEvidenceDigest ?candidateDigest }
+    }
+    GROUP BY ?candidate
+  }
+  {
+    SELECT ?candidate (COUNT(DISTINCT ?relationshipDigest) AS ?relationshipDigestCount)
+    WHERE {
+      ?candidate a usf:WorkPackageDependencyObservation ;
+        usf:supportedBySourceRelationshipObservation ?digestRelationship .
+      OPTIONAL { ?digestRelationship usf:relationshipEvidenceDigest ?relationshipDigest }
+    }
+    GROUP BY ?candidate
+  }
+  {
+    SELECT ?candidate (COUNT(DISTINCT ?sharedDigest) AS ?sharedDigestCount)
+    WHERE {
+      ?candidate a usf:WorkPackageDependencyObservation .
+      OPTIONAL {
+        ?candidate usf:workPackageDependencyEvidenceDigest ?sharedDigest ;
+          usf:supportedBySourceRelationshipObservation ?sharedRelationship .
+        ?sharedRelationship usf:relationshipEvidenceDigest ?sharedDigest .
+      }
+    }
+    GROUP BY ?candidate
+  }
+  FILTER(
+    ?allRelationshipCount = ?validRelationshipCount &&
+    ?candidateDigestCount = ?relationshipDigestCount &&
+    ?candidateDigestCount = ?sharedDigestCount
+  )
+  ?candidate usf:supportedBySourceRelationshipObservation ?relationship .
+  ?relationship a usf:SourceRelationshipObservation ;
+    usf:sourceRelationshipType ?relationshipKind ;
+    usf:sourceRelationshipSource ?sourceArtefact ;
+    usf:sourceRelationshipTarget ?targetObservation ;
+    usf:sourceRelationshipResolved true ;
+    usf:observedInCensusRun ?run .
+  ?policy usf:allowsSourceRelationshipType ?relationshipKind .
+  ?targetObservation a usf:SourceRelationshipTargetObservation ;
+    usf:resolvesToSourceArtefact ?targetArtefact ;
+    usf:observedInCensusRun ?run .
+  ?sourceObservation usf:observedOwnedSourceArtefact ?sourceArtefact .
+  ?prerequisiteObservation usf:observedOwnedSourceArtefact ?targetArtefact .
   BIND(IRI(REPLACE(STR(?sourceObservation), "workpackageobservation:", "repositoryworkpackage:")) AS ?resolvedSource)
   BIND(IRI(REPLACE(STR(?prerequisiteObservation), "workpackageobservation:", "repositoryworkpackage:")) AS ?resolvedPrerequisite)
   BIND(IRI(REPLACE(STR(?candidate), "workpackagedependencyobservation:", "resolvedworkpackagedependency:")) AS ?dependency)
   BIND(STRAFTER(STR(?candidate), "workpackagedependencyobservation:") AS ?canonicalName)
 }
-
 #---NEXT---#
-
 PREFIX usf: <urn:usf:ontology:>
 PREFIX depstatus: <urn:usf:workpackagedependencystatus:>
 PREFIX resolution: <urn:usf:workpackagedependencyresolutionstatus:>
@@ -181,9 +247,7 @@ WHERE {
   BIND(IRI(REPLACE(STR(?prerequisiteObservation), "workpackageobservation:", "repositoryworkpackage:")) AS ?expectedPrerequisite)
   FILTER(?resolvedSource = ?expectedSource && ?resolvedPrerequisite = ?expectedPrerequisite)
 }
-
 #---NEXT---#
-
 PREFIX usf: <urn:usf:ontology:>
 PREFIX depstatus: <urn:usf:workpackagedependencystatus:>
 PREFIX resolution: <urn:usf:workpackagedependencyresolutionstatus:>
@@ -211,9 +275,7 @@ WHERE {
   BIND(STRAFTER(STR(?dependency), "resolvedworkpackagedependency:") AS ?suffix)
   BIND(CONCAT("b", SUBSTR(?suffix, 2)) AS ?blockerName)
 }
-
 #---NEXT---#
-
 PREFIX usf: <urn:usf:ontology:>
 
 CONSTRUCT {
