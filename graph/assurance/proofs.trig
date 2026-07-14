@@ -1085,3 +1085,70 @@
  <urn:usf:proofobligation:bootstrappacketsemantics> a usf:ProofObligation ; usf:requiresEvidence <urn:usf:evidencerequirement:bootstrappacketvalidation> .
  <urn:usf:evidencerequirement:bootstrappacketvalidation> a usf:EvidenceRequirement .
 }
+@prefix usf: <urn:usf:ontology:> .
+
+<urn:usf:graph:proofs> {
+  <urn:usf:proofalgorithm:crossenginelocalvalidationgate> a usf:ProofAlgorithm ;
+      usf:canonicalName "crossenginelocalvalidationgate" .
+  <urn:usf:proofalgorithmversion:crossenginelocalvalidationgateone> a usf:ProofAlgorithmVersion ;
+      usf:canonicalName "crossenginelocalvalidationgateone" .
+
+  <urn:usf:proofobligation:localsemanticvalidationtoolchain> a usf:ProofObligation ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:obligationFor <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
+      usf:obligationEffect <urn:usf:obligationeffect:blocking> ;
+      usf:usesAssuranceCell <urn:usf:assurancecell:behaviourhermetichermetic> ;
+      usf:requiresRung <urn:usf:proofrung:behaviour> ;
+      usf:derivedFrom <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
+      usf:requiresEvidence <urn:usf:evidencerequirement:localsemanticvalidationtoolchain> .
+
+  <urn:usf:evidencerequirement:localsemanticvalidationtoolchain> a usf:EvidenceRequirement ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:obligationFor <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
+      usf:obligationEffect <urn:usf:obligationeffect:blocking> ;
+      usf:usesAssuranceCell <urn:usf:assurancecell:behaviourhermetichermetic> ;
+      usf:derivedFrom <urn:usf:proofobligation:localsemanticvalidationtoolchain> ;
+      usf:requiresEvidenceKind <urn:usf:evidencekind:validationevidence> ;
+      usf:requiresFreshness <urn:usf:freshness:fresh> ;
+      usf:requiresProviderMode <urn:usf:providermode:hermeticmock> ;
+      usf:requiresEnvironmentClass <urn:usf:environmentclass:hermetic> ;
+      usf:requiresEvidenceStage <urn:usf:evidencestage:emitted>, <urn:usf:evidencestage:collected>, <urn:usf:evidencestage:normalised>, <urn:usf:evidencestage:ingested>, <urn:usf:evidencestage:signed>, <urn:usf:evidencestage:integrityverified> .
+
+  <urn:usf:proof:localsemanticvalidationtoolchain> a usf:Proof ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:atRung <urn:usf:proofrung:behaviour> ;
+      usf:usesProviderMode <urn:usf:providermode:hermeticmock> ;
+      usf:inEnvironment <urn:usf:environment:localdev> ;
+      usf:exercises <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
+      usf:provesSubject <urn:usf:semanticcontract:localsemanticvalidationtoolchain> .
+
+  <urn:usf:proofevaluation:localsemanticvalidationtoolchain> a usf:ProofEvaluation ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:evaluatesObligation <urn:usf:proofobligation:localsemanticvalidationtoolchain> ;
+      usf:producesProofResult <urn:usf:proofresult:localsemanticvalidationtoolchain> .
+
+  <urn:usf:proofresult:localsemanticvalidationtoolchain> a usf:ProofResult ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:resultState <urn:usf:resultstate:passed> ;
+      usf:resultForProof <urn:usf:proof:localsemanticvalidationtoolchain> ;
+      usf:claimedRung <urn:usf:proofrung:behaviour> ;
+      usf:observedRung <urn:usf:proofrung:behaviour> ;
+      usf:hasFreshness <urn:usf:freshness:fresh> ;
+      usf:usesProviderMode <urn:usf:providermode:hermeticmock> ;
+      usf:inEnvironment <urn:usf:environment:localdev> ;
+      usf:hasProofResultState <urn:usf:proofresultstate:successful> ;
+      usf:proofResultForObligation <urn:usf:proofobligation:localsemanticvalidationtoolchain> ;
+      usf:usesAdmittedEvidence <urn:usf:evidenceresult:rdf4jjenasemanticparity> ;
+      usf:evidenceSetDigest "sha256:202daa1602b37677a518317c65bf25e0e1d41d8514cbebf56cd0e28e5d0162bb" ;
+      usf:usesProofAlgorithm <urn:usf:proofalgorithm:crossenginelocalvalidationgate> ;
+      usf:usesAlgorithmVersion <urn:usf:proofalgorithmversion:crossenginelocalvalidationgateone> ;
+      usf:evaluatedByValidator <urn:usf:validator:rdf4jjenacrossengine> ;
+      usf:proofExecutionEnvironment <urn:usf:environment:localdev> ;
+      usf:hasConfidenceState <urn:usf:proofconfidencestate:warranted> ;
+      usf:confidenceBasis <urn:usf:evidenceresult:rdf4jjenasemanticparity> ;
+      usf:uncertaintyStatement "RDF4J requires Java 25; five indexes add about sixty percent disk; global integrity remains approximately seventy-five seconds; ShaclSail Bulk may exceed two GiB RSS." ;
+      usf:proofNonclaim <urn:usf:nonclaim:localenginenotsemanticauthority>, <urn:usf:nonclaim:nochrootjavaruntime>, <urn:usf:nonclaim:nolivepublicationfromlocalevidencealone> ;
+      usf:evaluatedAt "2026-07-14T06:46:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      usf:hasInvalidationCondition <urn:usf:proofinvalidationcondition:evidenceinvalidated>, <urn:usf:proofinvalidationcondition:evidencestale>, <urn:usf:proofinvalidationcondition:authoritydigestchanged> ;
+      usf:warrantsFeature <urn:usf:feature:indexedlocalrdfvalidation>, <urn:usf:feature:independentengineparity> .
+}

@@ -124,3 +124,46 @@
  contractstate:draft a usf:ContractActivationState . contractstate:proofblocked a usf:ContractActivationState . contractstate:eligible a usf:ContractActivationState . contractstate:active a usf:ContractActivationState . contractstate:suspended a usf:ContractActivationState . contractstate:superseded a usf:ContractActivationState . contractstate:retired a usf:ContractActivationState .
  decisionstate:proposed a usf:DecisionState . decisionstate:accepted a usf:DecisionState . decisionstate:reopened a usf:DecisionState . decisionstate:superseded a usf:DecisionState . decisionstate:rejected a usf:DecisionState .
 }
+@prefix usf: <urn:usf:ontology:> .
+@prefix admission: <urn:usf:evidenceadmissionstate:> .
+@prefix freshnessstate: <urn:usf:evidencefreshnessstate:> .
+@prefix integritystate: <urn:usf:evidenceintegritystate:> .
+
+<urn:usf:graph:evidence> {
+  <urn:usf:evidencefreshnesspolicy:localvalidationthirtydays> a usf:EvidenceRetentionPolicy ;
+      usf:canonicalName "localvalidationthirtydays" .
+
+  <urn:usf:validator:rdf4jjenacrossengine> a usf:Validator ;
+      usf:canonicalName "rdf4jjenacrossengine" .
+
+  <urn:usf:evidenceresult:rdf4jjenasemanticparity> a usf:EvidenceResult, usf:ValidationEvidence ;
+      usf:canonicalName "rdf4jjenasemanticparity" ;
+      usf:evidenceKind <urn:usf:evidencekind:validationevidence> ;
+      usf:usesProviderMode <urn:usf:providermode:hermeticmock> ;
+      usf:inEnvironment <urn:usf:environment:localdev> ;
+      usf:hasFreshness <urn:usf:freshness:fresh> ;
+      usf:evidenceForContract <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
+      usf:evidenceFor <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
+      usf:evidenceFromProofResult <urn:usf:proofresult:localsemanticvalidationtoolchain> ;
+      usf:concernsSemanticSubject <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
+      usf:supportsClaim <urn:usf:claim:crossenginesemanticparity> ;
+      usf:contentDigest "sha256:202daa1602b37677a518317c65bf25e0e1d41d8514cbebf56cd0e28e5d0162bb" ;
+      usf:mediaType "application/vnd.usf.validation-evidence-manifest+text" ;
+      usf:byteSize "33783"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> ;
+      usf:storageLocator "sha256:202daa1602b37677a518317c65bf25e0e1d41d8514cbebf56cd0e28e5d0162bb" ;
+      usf:wasProducedBy <urn:usf:validator:rdf4jjenacrossengine> ;
+      usf:collectedInEnvironment <urn:usf:environment:localdev> ;
+      usf:collectedAt "2026-07-14T06:45:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      usf:validUntil "2026-08-13T06:45:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      usf:hasFreshnessPolicy <urn:usf:evidencefreshnesspolicy:localvalidationthirtydays> ;
+      usf:hasAdmissionState admission:admitted ;
+      usf:hasFreshnessState freshnessstate:fresh ;
+      usf:hasIntegrityState integritystate:valid ;
+      usf:applicableToObligation <urn:usf:proofobligation:localsemanticvalidationtoolchain> ;
+      usf:withinValidityScope true .
+
+  <urn:usf:evidenceadmission:rdf4jjenasemanticparity> a usf:EvidenceAdmission ;
+      usf:canonicalName "rdf4jjenasemanticparity" ;
+      usf:admissionForEvidence <urn:usf:evidenceresult:rdf4jjenasemanticparity> ;
+      usf:admissionDecidedByValidator <urn:usf:validator:rdf4jjenacrossengine> .
+}
