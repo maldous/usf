@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
 
 const root = resolve(import.meta.dirname, "../..");
+const submodulePolicyAvailable = existsSync(resolve(root, "v2/usf/AGENTS.md"));
 const accepted = `Semantics establish truth.      (Model)
     Truth demands evidence.         (Evidence)
     Evidence warrants proof.        (Proof)
@@ -22,7 +23,7 @@ function text(path) {
 }
 const normalized = (value) => value.split("\n").map((line) => line.trimStart()).join("\n");
 
-test("the canonical agent policy contains one accepted and one rejected lifecycle", () => {
+test("the canonical agent policy contains one accepted and one rejected lifecycle", { skip: !submodulePolicyAvailable }, () => {
   const files = ["AGENTS.md", "CLAUDE.md", "CODEX.md", "v2/usf/AGENTS.md", "v2/usf/CLAUDE.md", "v2/usf/CODEX.md"];
   const corpus = files.map((path) => [path, text(path)]);
   const acceptedPattern = /Semantics establish truth\.[ \t]+\(Model\)\nTruth demands evidence\.[ \t]+\(Evidence\)\nEvidence warrants proof\.[ \t]+\(Proof\)\nProof specifies features\.[ \t]+\(Contract\)\nFeatures shape code\.[ \t]+\(Toolchain\)\nCode fulfils requirements\.[ \t]+\(Validation\)/g;
@@ -37,7 +38,8 @@ test("the canonical agent policy contains one accepted and one rejected lifecycl
 });
 
 test("agent policy separates lifecycle roles and rejects the legacy hierarchy", () => {
-  const policies = [text("AGENTS.md"), text("v2/usf/AGENTS.md")];
+  const policies = [text("AGENTS.md")];
+  if (submodulePolicyAvailable) policies.push(text("v2/usf/AGENTS.md"));
   for (const body of policies) {
     assert.match(body, /validated semantic state in Stardog is the sole USF semantic authority/i);
     assert.doesNotMatch(body, /semantic definitions\s*>\s*ADRs\s*>\s*validators\s*>\s*runtime proof\s*>\s*source\s*>\s*generated reports/i);
