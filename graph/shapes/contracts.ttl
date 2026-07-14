@@ -37,8 +37,8 @@ shp:ContractFacetShape a sh:NodeShape ;
 
 shp:UIContractFacetClosureShape a sh:NodeShape ;
     usf:canonicalName "uicontractfacetclosureshape" ;
-    sh:target [ a sh:SPARQLTarget ; sh:prefixes usf:prefixes ;
-        sh:select "SELECT ?this WHERE { ?this a usf:ContractFacet ; usf:facetKind <urn:usf:facetkind:uisemantics> . }" ] ;
+    sh:target [ a sh:SPARQLTarget ;
+        sh:select "SELECT ?this WHERE { ?this a <urn:usf:ontology:ContractFacet> ; <urn:usf:ontology:facetKind> <urn:usf:facetkind:uisemantics> . }" ] ;
     sh:sparql [ sh:prefixes usf:prefixes ;
         sh:message "UI facet status must agree with exact capability exposure and UI semantic-model authority" ;
         sh:select """SELECT $this WHERE {
