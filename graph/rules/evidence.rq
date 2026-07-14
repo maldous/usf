@@ -6,6 +6,7 @@ PREFIX rs: <urn:usf:resultstate:>
 # Replacement rule 1: one exact fresh, signed, integrity-verified evidence
 # requirement per proof obligation, copying the complete assurance cell.
 CONSTRUCT {
+  ?po usf:requiresEvidence ?er .
   ?er a usf:EvidenceRequirement, usf:AssuranceObligation ; usf:canonicalName ?name ; usf:obligationFor ?subject ;
       usf:requiresEvidenceKind evk:runtimeproofevidence ;
       usf:requiresFreshness fresh:fresh ; usf:requiresProviderMode ?mode ;
