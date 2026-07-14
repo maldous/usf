@@ -5,10 +5,10 @@
 
 shp:CensusObservationRunShape a sh:NodeShape ; usf:canonicalName "censusobservationrunshape" ; sh:targetClass usf:CensusObservationRun ;
   sh:property [ sh:path usf:observationSetDigest ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
-  sh:property [ sh:path usf:observedRequiredPrerequisiteDependencyCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
-  sh:property [ sh:path usf:observedResolvedPrerequisiteDependencyCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
-  sh:property [ sh:path usf:observedSatisfiedPrerequisiteDependencyCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
-  sh:property [ sh:path usf:observedActiveBlockingDependencyCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ; sh:maxInclusive 0 ] ;
+  sh:property [ sh:path usf:observedRequiredPrerequisiteDependencyCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path usf:observedResolvedPrerequisiteDependencyCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path usf:observedSatisfiedPrerequisiteDependencyCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path usf:observedActiveBlockingDependencyCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:maxInclusive 0 ] ;
   sh:property [ sh:path usf:hasCensusObservationInput ; sh:minCount 1 ; sh:class usf:CensusObservationInput ] ;
   sh:property [ sh:path usf:hasCensusParserShardObservation ; sh:minCount 1 ; sh:class usf:CensusParserShardObservation ] .
 
@@ -103,12 +103,12 @@ shp:WorkPackageDependencySatisfactionBasisObservationShape a sh:NodeShape ; usf:
   sh:property [ sh:path usf:dependencySatisfactionBasisKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:DependencySatisfactionBasisKind ] ;
   sh:property [ sh:path usf:satisfactionBasisRelationshipObservation ; sh:minCount 1 ; sh:class usf:SourceRelationshipObservation ] ;
   sh:property [ sh:path usf:satisfactionBasisRecordDigest ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
-  sh:property [ sh:path usf:satisfactionBasisExactEvidenceHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ; sh:minInclusive 1 ] ;
-  sh:property [ sh:path usf:satisfactionBasisCurrentRelationshipHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
-  sh:property [ sh:path usf:satisfactionBasisStructurallyProvenRelationshipHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
-  sh:property [ sh:path usf:satisfactionBasisDirectionMatchedRelationshipHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
-  sh:property [ sh:path usf:satisfactionBasisCurrentPrerequisiteArtifactHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
-  sh:property [ sh:path usf:satisfactionBasisCurrentPrerequisiteArtifactCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ; sh:minInclusive 1 ] ;
+  sh:property [ sh:path usf:satisfactionBasisExactEvidenceHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 1 ] ;
+  sh:property [ sh:path usf:satisfactionBasisCurrentRelationshipHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path usf:satisfactionBasisStructurallyProvenRelationshipHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path usf:satisfactionBasisDirectionMatchedRelationshipHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path usf:satisfactionBasisCurrentPrerequisiteArtifactHashCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path usf:satisfactionBasisCurrentPrerequisiteArtifactCount ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 1 ] ;
   sh:property [ sh:path usf:satisfactionBasisSourceEndpointExists ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue true ] ;
   sh:property [ sh:path usf:satisfactionBasisPrerequisiteEndpointExists ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue true ] ;
   sh:property [ sh:path usf:satisfactionBasisEdgeSurvivedTransitiveReduction ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue true ] ;
@@ -122,7 +122,7 @@ shp:WorkPackageDependencyLineageObservationShape a sh:NodeShape ; usf:canonicalN
   sh:property [ sh:path usf:observedInCensusRun ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:CensusObservationRun ] .
 
 shp:RepositoryDependencyResolutionPolicyShape a sh:NodeShape ; usf:canonicalName "repositorydependencyresolutionpolicyshape" ; sh:targetClass usf:RepositoryDependencyResolutionPolicy ;
-  sh:property [ sh:path usf:requiredRelationshipEvidenceMinimum ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ; sh:minInclusive 1 ] ;
+  sh:property [ sh:path usf:requiredRelationshipEvidenceMinimum ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 1 ] ;
   sh:property [ sh:path usf:allowsWorkPackageDependencyType ; sh:minCount 1 ; sh:class usf:WorkPackageDependencyType ] ;
   sh:property [ sh:path usf:allowsWorkPackageDependencyStatus ; sh:minCount 1 ; sh:class usf:WorkPackageDependencyStatus ] ;
   sh:property [ sh:path usf:allowsSourceRelationshipType ; sh:minCount 1 ; sh:class usf:SourceRelationshipType ] ;

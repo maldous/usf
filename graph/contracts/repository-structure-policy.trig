@@ -5,7 +5,7 @@
 <urn:usf:graph:repositorystructurepolicy> {
   policy:validatedrepositoryobservation a usf:RepositoryDependencyResolutionPolicy ;
     usf:canonicalName "validatedrepositoryobservation" ;
-    usf:requiredRelationshipEvidenceMinimum "1"^^xsd:nonNegativeInteger ;
+    usf:requiredRelationshipEvidenceMinimum "1"^^xsd:integer ;
     usf:allowsWorkPackageDependencyType <urn:usf:workpackagedependencytype:canonicalartifactinput> ;
     usf:allowsWorkPackageDependencyStatus <urn:usf:workpackagedependencystatus:requiredprerequisite> ;
     usf:allowsSourceRelationshipType
