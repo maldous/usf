@@ -87,14 +87,17 @@ shp:WorkPackageDependencyObservationShape a sh:NodeShape ; usf:canonicalName "wo
   sh:property [ sh:path usf:observedInCensusRun ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:CensusObservationRun ] .
 
 shp:RequiredPrerequisiteDependencySatisfactionObservationShape a sh:NodeShape ; usf:canonicalName "requiredprerequisitedependencysatisfactionobservationshape" ;
-  sh:target [ a sh:SPARQLTarget ; sh:select """
-    SELECT ?this WHERE {
-      ?this a <urn:usf:ontology:WorkPackageDependencyObservation> ;
-        <urn:usf:ontology:workPackageDependencyStatus> <urn:usf:workpackagedependencystatus:requiredprerequisite> .
-    }
-  """ ] ;
-  sh:property [ sh:path usf:workPackageDependencySatisfactionSeed ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:DependencySatisfactionStatus ] ;
-  sh:property [ sh:path usf:hasWorkPackageDependencySatisfactionBasis ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:WorkPackageDependencySatisfactionBasisObservation ] .
+  sh:targetClass usf:WorkPackageDependencyObservation ;
+  sh:or (
+    [ sh:not [ sh:property [
+      sh:path usf:workPackageDependencyStatus ;
+      sh:hasValue <urn:usf:workpackagedependencystatus:requiredprerequisite>
+    ] ] ]
+    [
+      sh:property [ sh:path usf:workPackageDependencySatisfactionSeed ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:DependencySatisfactionStatus ] ;
+      sh:property [ sh:path usf:hasWorkPackageDependencySatisfactionBasis ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:WorkPackageDependencySatisfactionBasisObservation ]
+    ]
+  ) .
 
 shp:WorkPackageDependencySatisfactionBasisObservationShape a sh:NodeShape ; usf:canonicalName "workpackagedependencysatisfactionbasisobservationshape" ; sh:targetClass usf:WorkPackageDependencySatisfactionBasisObservation ;
   sh:property [ sh:path usf:canonicalName ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^s[0-9a-f]{64}$" ] ;
@@ -157,15 +160,18 @@ shp:RepositoryDependencyShape a sh:NodeShape ; usf:canonicalName "repositorydepe
   sh:property [ sh:path usf:supportedBySourceRelationshipObservation ; sh:minCount 1 ; sh:class usf:SourceRelationshipObservation ] .
 
 shp:SatisfiedRequiredPrerequisiteResolvedWorkPackageDependencyShape a sh:NodeShape ; usf:canonicalName "satisfiedrequiredprerequisiteresolvedworkpackagedependencyshape" ;
-  sh:target [ a sh:SPARQLTarget ; sh:select """
-    SELECT ?this WHERE {
-      ?this a <urn:usf:ontology:ResolvedWorkPackageDependency> ;
-        <urn:usf:ontology:resolvedDependencyStatus> <urn:usf:workpackagedependencystatus:requiredprerequisite> .
-    }
-  """ ] ;
-  sh:property [ sh:path usf:dependencySatisfactionStatus ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue <urn:usf:dependencysatisfactionstatus:satisfied> ] ;
-  sh:property [ sh:path usf:derivedFromDependencySatisfactionBasis ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:WorkPackageDependencySatisfactionBasisObservation ] ;
-  sh:property [ sh:path usf:promotedByDependencySatisfactionPolicy ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:RepositoryDependencySatisfactionPolicy ] .
+  sh:targetClass usf:ResolvedWorkPackageDependency ;
+  sh:or (
+    [ sh:not [ sh:property [
+      sh:path usf:resolvedDependencyStatus ;
+      sh:hasValue <urn:usf:workpackagedependencystatus:requiredprerequisite>
+    ] ] ]
+    [
+      sh:property [ sh:path usf:dependencySatisfactionStatus ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue <urn:usf:dependencysatisfactionstatus:satisfied> ] ;
+      sh:property [ sh:path usf:derivedFromDependencySatisfactionBasis ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:WorkPackageDependencySatisfactionBasisObservation ] ;
+      sh:property [ sh:path usf:promotedByDependencySatisfactionPolicy ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:RepositoryDependencySatisfactionPolicy ]
+    ]
+  ) .
 
 shp:ActiveRepositoryDependencyBlockerShape a sh:NodeShape ; usf:canonicalName "activerepositorydependencyblockershape" ; sh:targetClass usf:ActiveRepositoryDependencyBlocker ;
   sh:property [ sh:path usf:canonicalName ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^b[0-9a-f]{64}$" ] ;

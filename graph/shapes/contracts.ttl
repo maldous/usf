@@ -37,11 +37,11 @@ shp:ContractFacetShape a sh:NodeShape ;
 
 shp:UIContractFacetClosureShape a sh:NodeShape ;
     usf:canonicalName "uicontractfacetclosureshape" ;
-    sh:target [ a sh:SPARQLTarget ;
-        sh:select "SELECT ?this WHERE { ?this a <urn:usf:ontology:ContractFacet> ; <urn:usf:ontology:facetKind> <urn:usf:facetkind:uisemantics> . }" ] ;
+    sh:targetClass usf:ContractFacet ;
     sh:sparql [ sh:prefixes usf:prefixes ;
         sh:message "UI facet status must agree with exact capability exposure and UI semantic-model authority" ;
         sh:select """SELECT $this WHERE {
+          $this <urn:usf:ontology:facetKind> <urn:usf:facetkind:uisemantics> .
           ?contract usf:declaresFacet $this . ?capability usf:hasContract ?contract ; usf:uiExposure ?exposure .
           $this usf:facetStatus ?status .
           BIND(EXISTS { ?capability usf:hasUISemanticModel ?model } AS ?hasModel)
@@ -52,9 +52,14 @@ shp:UIContractFacetClosureShape a sh:NodeShape ;
     sh:sparql [ sh:prefixes usf:prefixes ;
         sh:message "Every closed UI facet contract must preserve explicit product and acceptance nonclaims" ;
         sh:select """SELECT $this WHERE {
-          ?contract usf:declaresFacet $this .
-          VALUES ?required { <urn:usf:nonclaim:nohumanacceptance> <urn:usf:nonclaim:nouiproductparity> <urn:usf:nonclaim:noaccessibilitycompliance> <urn:usf:nonclaim:nolaunchi18n> }
-          FILTER NOT EXISTS { ?contract usf:disclaims ?required }
+          $this <urn:usf:ontology:facetKind> <urn:usf:facetkind:uisemantics> .
+          ?contract <urn:usf:ontology:declaresFacet> $this .
+          FILTER(
+            NOT EXISTS { ?contract <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nohumanacceptance> } ||
+            NOT EXISTS { ?contract <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nouiproductparity> } ||
+            NOT EXISTS { ?contract <urn:usf:ontology:disclaims> <urn:usf:nonclaim:noaccessibilitycompliance> } ||
+            NOT EXISTS { ?contract <urn:usf:ontology:disclaims> <urn:usf:nonclaim:nolaunchi18n> }
+          )
         }""" ] .
 
 shp:SourceSemanticBindingShape a sh:NodeShape ;
