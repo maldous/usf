@@ -2593,6 +2593,9 @@
       usf:canonicalName "localvalidationtoolchain" ;
       usf:decisionState <urn:usf:decisionstate:accepted> ;
       usf:considersOption <urn:usf:realisationoption:rdf4jnativestoreshaclsail>, <urn:usf:realisationoption:jenatdbjenashacl>, <urn:usf:realisationoption:dualenginelocalvalidation>, <urn:usf:realisationoption:hostsidefullcorpusvalidation>, <urn:usf:realisationoption:chrootfullcorpusvalidation>, <urn:usf:realisationoption:splithostchrootvalidation> ;
+      usf:authorisesRepository "maldous/usf" ;
+      usf:authorisesSourcePath "census/local-semantic-validation" ;
+      usf:authorisesRealisationType usf:Implementation ;
       usf:requiresADR <urn:usf:adrrequirement:localvalidationtoolchain> .
   <urn:usf:adrrecord:localvalidationtoolchain> a usf:ADRRecord ;
       usf:canonicalName "localvalidationtoolchain" ;
@@ -2614,12 +2617,23 @@
       usf:contractConstraint "Outputs must be deterministic, digest-bound, independently compared and fail closed on divergence, timeout, insufficient disk or memory, dependency drift, cleanup failure or baseline mismatch." ;
       usf:contractConstraint "Host limits: five NativeStore indexes may use at most 256 MiB persistent temporary disk, 2304 MiB peak RSS, 180 seconds per global query and 600 seconds per complete run." ;
       usf:contractConstraint "Temporary NativeStore data and Maven caches remain outside tracked source and must be removed after execution; generated evidence manifests are content-addressed and admitted separately." ;
-      usf:contractConstraint "Full-corpus Java execution is host-side. The minimal chroot receives only bounded validation results and must not contain Java, NativeStore databases or broad Maven caches." .
+      usf:contractConstraint "Full-corpus Java execution is host-side. The minimal chroot receives only bounded validation results and must not contain Java, NativeStore databases or broad Maven caches." ;
+      usf:contractConstraint "Runtime: host OpenJDK 25; RDF4J 6.0.0 is the primary indexed and SHACL engine; Apache Jena 6.1.0 is the independent parity engine; RDFLib is limited to parsing compatibility, canonical comparison, small fixtures and diagnostics." ;
+      usf:contractConstraint "Dependency strategy: a pinned Maven launcher, exact dependency versions, a digest-bound dependency lock and checksum verification; dependency caches remain outside tracked source and drift fails closed." ;
+      usf:contractConstraint "Repository ownership: maldous/usf owns the host implementation at census/local-semantic-validation; maldous/usf-graph receives no Java runtime or NativeStore and may consume only a bounded digest-verified result projection." ;
+      usf:contractConstraint "Proof-mode evidence is a bounded deterministic JSON result manifest and a separate bounded execution envelope. Raw logs remain external and temporary; admitted evidence is content-addressed and subject to the local-validation thirty-day freshness policy." .
 
   <urn:usf:realisation:localsemanticvalidationtoolchaincontractonly> a usf:Realisation ;
       usf:canonicalName "localsemanticvalidationtoolchaincontractonly" ;
       usf:realisesContract <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
       usf:realisationState <urn:usf:realisationstate:contractonly> ;
+      usf:authorisedByDecision <urn:usf:realisationdecision:localvalidationtoolchain> ;
+      usf:authorisedSourcePath "census/local-semantic-validation" .
+
+  <urn:usf:realisation:localsemanticvalidationtoolchain> a usf:Realisation ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:realisesContract <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
+      usf:realisationState <urn:usf:realisationstate:implementable> ;
       usf:authorisedByDecision <urn:usf:realisationdecision:localvalidationtoolchain> ;
       usf:authorisedSourcePath "census/local-semantic-validation" .
 }
