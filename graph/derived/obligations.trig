@@ -75,6 +75,14 @@ GRAPH <urn:usf:graph:derived:obligations> {
   <urn:usf:proofobligation:p0cdf9ee7773b2984ccbacda38f6c88aee9c58a4792b686c7bf465571733fcf69> <urn:usf:ontology:requiredByGate> <urn:usf:readinessgate:ui> .
   <urn:usf:proofobligation:p0cdf9ee7773b2984ccbacda38f6c88aee9c58a4792b686c7bf465571733fcf69> <urn:usf:ontology:requiresRung> <urn:usf:proofrung:contract> .
   <urn:usf:proofobligation:p0cdf9ee7773b2984ccbacda38f6c88aee9c58a4792b686c7bf465571733fcf69> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:contracthermetichermetic> .
+  <urn:usf:proofobligation:p10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
+  <urn:usf:proofobligation:p10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:ProofObligation> .
+  <urn:usf:proofobligation:p10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:canonicalName> "p10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b" .
+  <urn:usf:proofobligation:p10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:derivedFrom> <urn:usf:semanticcontract:compilersemanticenforcement> .
+  <urn:usf:proofobligation:p10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:obligationEffect> <urn:usf:obligationeffect:blocking> .
+  <urn:usf:proofobligation:p10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:obligationFor> <urn:usf:semanticcontract:compilersemanticenforcement> .
+  <urn:usf:proofobligation:p10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:requiresRung> <urn:usf:proofrung:behaviour> .
+  <urn:usf:proofobligation:p10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
   <urn:usf:proofobligation:p14383dcadafb8a07b8e28ffb5ef05729512eaa352424d72c862e502a06128b2f> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
   <urn:usf:proofobligation:p14383dcadafb8a07b8e28ffb5ef05729512eaa352424d72c862e502a06128b2f> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:ProofObligation> .
   <urn:usf:proofobligation:p14383dcadafb8a07b8e28ffb5ef05729512eaa352424d72c862e502a06128b2f> <urn:usf:ontology:canonicalName> "p14383dcadafb8a07b8e28ffb5ef05729512eaa352424d72c862e502a06128b2f" .
@@ -955,6 +963,14 @@ GRAPH <urn:usf:graph:derived:obligations> {
   <urn:usf:proofobligation:pe39d5db9b078dedf4361439cc78387cf4d4a1cb8fb52eabbe8a128de441bef5f> <urn:usf:ontology:obligationFor> <urn:usf:semanticcontract:universalservicefoundationscopeandprinciples> .
   <urn:usf:proofobligation:pe39d5db9b078dedf4361439cc78387cf4d4a1cb8fb52eabbe8a128de441bef5f> <urn:usf:ontology:requiresRung> <urn:usf:proofrung:behaviour> .
   <urn:usf:proofobligation:pe39d5db9b078dedf4361439cc78387cf4d4a1cb8fb52eabbe8a128de441bef5f> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
+  <urn:usf:proofobligation:pea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
+  <urn:usf:proofobligation:pea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:ProofObligation> .
+  <urn:usf:proofobligation:pea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:canonicalName> "pea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e" .
+  <urn:usf:proofobligation:pea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:derivedFrom> <urn:usf:semanticcontract:localsemanticvalidationtoolchain> .
+  <urn:usf:proofobligation:pea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:obligationEffect> <urn:usf:obligationeffect:blocking> .
+  <urn:usf:proofobligation:pea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:obligationFor> <urn:usf:semanticcontract:localsemanticvalidationtoolchain> .
+  <urn:usf:proofobligation:pea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:requiresRung> <urn:usf:proofrung:behaviour> .
+  <urn:usf:proofobligation:pea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
   <urn:usf:proofobligation:pef604cd75bf3f300cb720c3e768008cc74af492a44ec18810e31a487f668d9d9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
   <urn:usf:proofobligation:pef604cd75bf3f300cb720c3e768008cc74af492a44ec18810e31a487f668d9d9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:ProofObligation> .
   <urn:usf:proofobligation:pef604cd75bf3f300cb720c3e768008cc74af492a44ec18810e31a487f668d9d9> <urn:usf:ontology:canonicalName> "pef604cd75bf3f300cb720c3e768008cc74af492a44ec18810e31a487f668d9d9" .
@@ -989,6 +1005,14 @@ GRAPH <urn:usf:graph:derived:obligations> {
   <urn:usf:proofobligation:pf6aecc75ca3a066314325e5631f8cd9f779b1cfd0798be73e4bb0000f909fb19> <urn:usf:ontology:requiredByGate> <urn:usf:readinessgate:artefact> .
   <urn:usf:proofobligation:pf6aecc75ca3a066314325e5631f8cd9f779b1cfd0798be73e4bb0000f909fb19> <urn:usf:ontology:requiresRung> <urn:usf:proofrung:behaviour> .
   <urn:usf:proofobligation:pf6aecc75ca3a066314325e5631f8cd9f779b1cfd0798be73e4bb0000f909fb19> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
+  <urn:usf:proofobligation:pfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
+  <urn:usf:proofobligation:pfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:ProofObligation> .
+  <urn:usf:proofobligation:pfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:canonicalName> "pfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978" .
+  <urn:usf:proofobligation:pfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:derivedFrom> <urn:usf:semanticcontract:bootstrappacket> .
+  <urn:usf:proofobligation:pfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:obligationEffect> <urn:usf:obligationeffect:blocking> .
+  <urn:usf:proofobligation:pfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:obligationFor> <urn:usf:semanticcontract:bootstrappacket> .
+  <urn:usf:proofobligation:pfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:requiresRung> <urn:usf:proofrung:behaviour> .
+  <urn:usf:proofobligation:pfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
   <urn:usf:testobligation:t02f49c60401f1e862a4bbde6a8abbc47dd3d178d9ca888adffe13b0310c71804> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
   <urn:usf:testobligation:t02f49c60401f1e862a4bbde6a8abbc47dd3d178d9ca888adffe13b0310c71804> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:TestObligation> .
   <urn:usf:testobligation:t02f49c60401f1e862a4bbde6a8abbc47dd3d178d9ca888adffe13b0310c71804> <urn:usf:ontology:canonicalName> "t02f49c60401f1e862a4bbde6a8abbc47dd3d178d9ca888adffe13b0310c71804" .
@@ -1056,6 +1080,13 @@ GRAPH <urn:usf:graph:derived:obligations> {
   <urn:usf:testobligation:t0cdf9ee7773b2984ccbacda38f6c88aee9c58a4792b686c7bf465571733fcf69> <urn:usf:ontology:obligationFor> <urn:usf:gatecriterion:uiprimitives> .
   <urn:usf:testobligation:t0cdf9ee7773b2984ccbacda38f6c88aee9c58a4792b686c7bf465571733fcf69> <urn:usf:ontology:requiredByGate> <urn:usf:readinessgate:ui> .
   <urn:usf:testobligation:t0cdf9ee7773b2984ccbacda38f6c88aee9c58a4792b686c7bf465571733fcf69> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:contracthermetichermetic> .
+  <urn:usf:testobligation:t10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
+  <urn:usf:testobligation:t10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:TestObligation> .
+  <urn:usf:testobligation:t10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:canonicalName> "t10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b" .
+  <urn:usf:testobligation:t10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:derivedFrom> <urn:usf:semanticcontract:compilersemanticenforcement> .
+  <urn:usf:testobligation:t10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:obligationEffect> <urn:usf:obligationeffect:blocking> .
+  <urn:usf:testobligation:t10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:obligationFor> <urn:usf:semanticcontract:compilersemanticenforcement> .
+  <urn:usf:testobligation:t10cc239b81b3890d5714e8996d369bd08394965220eae7c34aa7c3ccbfc2467b> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
   <urn:usf:testobligation:t14383dcadafb8a07b8e28ffb5ef05729512eaa352424d72c862e502a06128b2f> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
   <urn:usf:testobligation:t14383dcadafb8a07b8e28ffb5ef05729512eaa352424d72c862e502a06128b2f> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:TestObligation> .
   <urn:usf:testobligation:t14383dcadafb8a07b8e28ffb5ef05729512eaa352424d72c862e502a06128b2f> <urn:usf:ontology:canonicalName> "t14383dcadafb8a07b8e28ffb5ef05729512eaa352424d72c862e502a06128b2f" .
@@ -1830,6 +1861,13 @@ GRAPH <urn:usf:graph:derived:obligations> {
   <urn:usf:testobligation:te39d5db9b078dedf4361439cc78387cf4d4a1cb8fb52eabbe8a128de441bef5f> <urn:usf:ontology:obligationEffect> <urn:usf:obligationeffect:blocking> .
   <urn:usf:testobligation:te39d5db9b078dedf4361439cc78387cf4d4a1cb8fb52eabbe8a128de441bef5f> <urn:usf:ontology:obligationFor> <urn:usf:semanticcontract:universalservicefoundationscopeandprinciples> .
   <urn:usf:testobligation:te39d5db9b078dedf4361439cc78387cf4d4a1cb8fb52eabbe8a128de441bef5f> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
+  <urn:usf:testobligation:tea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
+  <urn:usf:testobligation:tea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:TestObligation> .
+  <urn:usf:testobligation:tea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:canonicalName> "tea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e" .
+  <urn:usf:testobligation:tea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:derivedFrom> <urn:usf:semanticcontract:localsemanticvalidationtoolchain> .
+  <urn:usf:testobligation:tea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:obligationEffect> <urn:usf:obligationeffect:blocking> .
+  <urn:usf:testobligation:tea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:obligationFor> <urn:usf:semanticcontract:localsemanticvalidationtoolchain> .
+  <urn:usf:testobligation:tea75b3d7a00546bc0f33f9c6f9f831a70fc6fc9eb291f53fffeb5c20e515a75e> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
   <urn:usf:testobligation:tef604cd75bf3f300cb720c3e768008cc74af492a44ec18810e31a487f668d9d9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
   <urn:usf:testobligation:tef604cd75bf3f300cb720c3e768008cc74af492a44ec18810e31a487f668d9d9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:TestObligation> .
   <urn:usf:testobligation:tef604cd75bf3f300cb720c3e768008cc74af492a44ec18810e31a487f668d9d9> <urn:usf:ontology:canonicalName> "tef604cd75bf3f300cb720c3e768008cc74af492a44ec18810e31a487f668d9d9" .
@@ -1860,4 +1898,11 @@ GRAPH <urn:usf:graph:derived:obligations> {
   <urn:usf:testobligation:tf6aecc75ca3a066314325e5631f8cd9f779b1cfd0798be73e4bb0000f909fb19> <urn:usf:ontology:obligationFor> <urn:usf:gatecriterion:artefactintegrity> .
   <urn:usf:testobligation:tf6aecc75ca3a066314325e5631f8cd9f779b1cfd0798be73e4bb0000f909fb19> <urn:usf:ontology:requiredByGate> <urn:usf:readinessgate:artefact> .
   <urn:usf:testobligation:tf6aecc75ca3a066314325e5631f8cd9f779b1cfd0798be73e4bb0000f909fb19> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
+  <urn:usf:testobligation:tfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:AssuranceObligation> .
+  <urn:usf:testobligation:tfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:usf:ontology:TestObligation> .
+  <urn:usf:testobligation:tfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:canonicalName> "tfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978" .
+  <urn:usf:testobligation:tfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:derivedFrom> <urn:usf:semanticcontract:bootstrappacket> .
+  <urn:usf:testobligation:tfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:obligationEffect> <urn:usf:obligationeffect:blocking> .
+  <urn:usf:testobligation:tfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:obligationFor> <urn:usf:semanticcontract:bootstrappacket> .
+  <urn:usf:testobligation:tfe4063321882c4c97f6c8d64ac09f2750b9237fca833fb353ac4ad1124512978> <urn:usf:ontology:usesAssuranceCell> <urn:usf:assurancecell:behaviourhermetichermetic> .
 }

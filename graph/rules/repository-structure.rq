@@ -97,8 +97,10 @@ WHERE {
       ?validTargetObservation a usf:SourceRelationshipTargetObservation ;
         usf:resolvesToSourceArtefact ?validTargetArtefact ;
         usf:observedInCensusRun ?run .
-      ?sourceObservation usf:observedOwnedSourceArtefact ?validSourceArtefact .
-      ?prerequisiteObservation usf:observedOwnedSourceArtefact ?validTargetArtefact .
+      ?sourceObservation usf:observedOwnedSourceArtefact ?validSourceArtefact ;
+        usf:observedInCensusRun ?run .
+      ?prerequisiteObservation usf:observedOwnedSourceArtefact ?validTargetArtefact ;
+        usf:observedInCensusRun ?run .
     }
     GROUP BY ?candidate ?sourceObservation ?prerequisiteObservation ?run ?policy
   }
@@ -147,8 +149,10 @@ WHERE {
   ?targetObservation a usf:SourceRelationshipTargetObservation ;
     usf:resolvesToSourceArtefact ?targetArtefact ;
     usf:observedInCensusRun ?run .
-  ?sourceObservation usf:observedOwnedSourceArtefact ?sourceArtefact .
-  ?prerequisiteObservation usf:observedOwnedSourceArtefact ?targetArtefact .
+  ?sourceObservation usf:observedOwnedSourceArtefact ?sourceArtefact ;
+    usf:observedInCensusRun ?run .
+  ?prerequisiteObservation usf:observedOwnedSourceArtefact ?targetArtefact ;
+    usf:observedInCensusRun ?run .
   BIND(IRI(REPLACE(STR(?sourceObservation), "workpackageobservation:", "repositoryworkpackage:")) AS ?resolvedSource)
   BIND(IRI(REPLACE(STR(?prerequisiteObservation), "workpackageobservation:", "repositoryworkpackage:")) AS ?resolvedPrerequisite)
   BIND(IRI(REPLACE(STR(?candidate), "workpackagedependencyobservation:", "resolvedworkpackagedependency:")) AS ?dependency)
