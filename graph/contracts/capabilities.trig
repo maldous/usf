@@ -2548,8 +2548,8 @@
 @prefix usf: <urn:usf:ontology:> .
 @prefix contractstate: <urn:usf:contractactivationstate:> .
 <urn:usf:graph:capabilities> {
- <urn:usf:semanticcontract:compilersemanticenforcement> a usf:SemanticContract ; usf:canonicalName "compilersemanticenforcement" ; usf:hasActivationState contractstate:proofblocked ; usf:activationReason "Awaiting admitted validation evidence and successful proof evaluation." ; usf:mandatoryProofObligation <urn:usf:proofobligation:compilersemantics> ; usf:permittedRealisationType usf:Implementation ; usf:asserts <urn:usf:claim:semanticfirstlifecycle> ; usf:disclaims <urn:usf:nonclaim:bootstrapexceptionisimplementationauthority> .
- <urn:usf:semanticcontract:bootstrappacket> a usf:SemanticContract ; usf:canonicalName "bootstrappacket" ; usf:hasActivationState contractstate:proofblocked ; usf:activationReason "Awaiting admitted packet validation evidence and successful proof evaluation." ; usf:mandatoryProofObligation <urn:usf:proofobligation:bootstrappacketsemantics> ; usf:permittedRealisationType usf:Implementation ; usf:asserts <urn:usf:claim:semanticfirstlifecycle> ; usf:disclaims <urn:usf:nonclaim:bootstrapexceptionisimplementationauthority> .
+ <urn:usf:semanticcontract:compilersemanticenforcement> a usf:SemanticContract ; usf:canonicalName "compilersemanticenforcement" ; usf:semanticLifecycleState <urn:usf:semanticlifecyclestate:planned> ; usf:hasActivationState contractstate:proofblocked ; usf:activationReason "Awaiting admitted validation evidence and successful proof evaluation." ; usf:mandatoryProofObligation <urn:usf:proofobligation:compilersemantics> ; usf:permittedRealisationType usf:Implementation ; usf:asserts <urn:usf:claim:semanticfirstlifecycle> ; usf:disclaims <urn:usf:nonclaim:bootstrapexceptionisimplementationauthority> .
+ <urn:usf:semanticcontract:bootstrappacket> a usf:SemanticContract ; usf:canonicalName "bootstrappacket" ; usf:semanticLifecycleState <urn:usf:semanticlifecyclestate:planned> ; usf:hasActivationState contractstate:proofblocked ; usf:activationReason "Awaiting admitted packet validation evidence and successful proof evaluation." ; usf:mandatoryProofObligation <urn:usf:proofobligation:bootstrappacketsemantics> ; usf:permittedRealisationType usf:Implementation ; usf:asserts <urn:usf:claim:semanticfirstlifecycle> ; usf:disclaims <urn:usf:nonclaim:bootstrapexceptionisimplementationauthority> .
  <urn:usf:claim:semanticfirstlifecycle> a usf:Claim ; usf:canonicalName "semanticfirstlifecycle" .
  <urn:usf:nonclaim:bootstrapexceptionisimplementationauthority> a usf:NonClaim ; usf:canonicalName "bootstrapexceptionisimplementationauthority" .
  <urn:usf:realisation:compilersemanticenforcementcontractonly> a usf:Realisation ; usf:realisesContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:realisationState <urn:usf:realisationstate:contractonly> .
@@ -2603,6 +2603,7 @@
 
   <urn:usf:semanticcontract:localsemanticvalidationtoolchain> a usf:SemanticContract ;
       usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:semanticLifecycleState <urn:usf:semanticlifecyclestate:active> ;
       usf:hasActivationState <urn:usf:contractactivationstate:active> ;
       usf:activationReason "Cross-engine deterministic derivation, complete SHACL conformance, zero integrity findings and bounded host resource evidence satisfy the mandatory proof obligation." ;
       usf:mandatoryProofObligation <urn:usf:proofobligation:localsemanticvalidationtoolchain> ;
