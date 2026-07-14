@@ -46,6 +46,11 @@ usf:soleSemanticAuthority a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:
 usf:validatedInStardog a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range xsd:boolean .
 usf:authorityVerificationState a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range xsd:string .
 usf:governsNamedGraph a owl:ObjectProperty ; rdfs:domain usf:SemanticAuthority ; rdfs:range usf:NamedGraph .
+usf:defaultReasoningSchemaGraph a owl:ObjectProperty ;
+    rdfs:domain usf:SemanticAuthority ;
+    rdfs:range usf:NamedGraph ;
+    rdfs:label "default reasoning schema graph" ;
+    rdfs:comment "Identifies exactly the registered named graphs whose OWL/RDFS axioms form Stardog's default reasoning schema. This is narrower than the repository definition-graph class and excludes controlled-value, authority-configuration, registry, shape, authored, observed and derived graphs." .
 usf:concernsSemanticSubject a owl:ObjectProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:Entity .
 usf:supportsClaim a owl:ObjectProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range usf:Claim .
 usf:contentDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EvidenceResult ; rdfs:range xsd:string .

@@ -95,6 +95,35 @@ shp:ProviderModeShape a sh:NodeShape ;
     sh:property [ sh:path usf:canonicalName ; sh:minCount 1 ] .
 
 ########################################################################
+# Default Stardog reasoning schema - the TBox subset is intentionally
+# narrower than the repository's broader definition-graph classification.
+########################################################################
+
+shp:SemanticAuthorityReasoningSchemaShape a sh:NodeShape ;
+    usf:canonicalName "semanticauthorityreasoningschemashape" ;
+    sh:targetClass usf:SemanticAuthority ;
+    sh:property [
+        sh:path usf:defaultReasoningSchemaGraph ;
+        sh:minCount 2 ; sh:maxCount 2 ;
+        sh:nodeKind sh:IRI ;
+        sh:in (
+            <urn:usf:namedgraph:ontology>
+            <urn:usf:namedgraph:taxonomy>
+        ) ;
+        sh:message "reasoningschemagraphs: default reasoning schema contains exactly the ontology and taxonomy named graphs" ;
+    ] ;
+    sh:property [
+        sh:path usf:defaultReasoningSchemaGraph ;
+        sh:hasValue <urn:usf:namedgraph:ontology> ;
+        sh:message "reasoningschemagraphs: ontology graph is required" ;
+    ] ;
+    sh:property [
+        sh:path usf:defaultReasoningSchemaGraph ;
+        sh:hasValue <urn:usf:namedgraph:taxonomy> ;
+        sh:message "reasoningschemagraphs: taxonomy graph is required" ;
+    ] .
+
+########################################################################
 # SemanticContract facet completeness — every contract must declare all ten
 # mandatory facet kinds; missing any is a defect.
 ########################################################################
