@@ -10,10 +10,9 @@ Stardog model, repository semantic definitions, validator rules, admitted
 evidence, or proof results. Git records the report as change-history evidence;
 the report remains a lowest-authority projection.
 
-The root-level placement is a user-directed review-handoff exception. The
-governed long-term report location remains subject to the repository evidence
-and generated-report path contract. External reviewers must not treat this file
-path as a new canonical report-path rule.
+The report is stored in the existing generated-report path family so it remains
+outside product-source freshness anchors. External reviewers must not treat the
+file path or the generated report as semantic authority.
 
 ## Executive result
 
