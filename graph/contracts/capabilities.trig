@@ -2555,3 +2555,71 @@
  <urn:usf:realisation:compilersemanticenforcementcontractonly> a usf:Realisation ; usf:realisesContract <urn:usf:semanticcontract:compilersemanticenforcement> ; usf:realisationState <urn:usf:realisationstate:contractonly> .
  <urn:usf:realisation:bootstrappacketcontractonly> a usf:Realisation ; usf:realisesContract <urn:usf:semanticcontract:bootstrappacket> ; usf:realisationState <urn:usf:realisationstate:contractonly> .
 }
+@prefix usf: <urn:usf:ontology:> .
+
+<urn:usf:graph:capabilities> {
+  <urn:usf:claim:crossenginesemanticparity> a usf:Claim ; usf:canonicalName "crossenginesemanticparity" .
+  <urn:usf:claim:hostlocalvalidationboundary> a usf:Claim ; usf:canonicalName "hostlocalvalidationboundary" .
+  <urn:usf:nonclaim:localenginenotsemanticauthority> a usf:NonClaim ; usf:canonicalName "localenginenotsemanticauthority" .
+  <urn:usf:nonclaim:nochrootjavaruntime> a usf:NonClaim ; usf:canonicalName "nochrootjavaruntime" .
+  <urn:usf:nonclaim:nolivepublicationfromlocalevidencealone> a usf:NonClaim ; usf:canonicalName "nolivepublicationfromlocalevidencealone" .
+
+  <urn:usf:feature:indexedlocalrdfvalidation> a usf:Feature ; usf:canonicalName "indexedlocalrdfvalidation" .
+  <urn:usf:feature:independentengineparity> a usf:Feature ; usf:canonicalName "independentengineparity" .
+
+  <urn:usf:validationobligation:localsemanticvalidationtoolchain> a usf:ValidationObligation ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:validationForContract <urn:usf:semanticcontract:localsemanticvalidationtoolchain> .
+  <urn:usf:validationenvironment:hostlocalvalidation> a usf:ValidationEnvironment ;
+      usf:canonicalName "hostlocalvalidation" ;
+      usf:hasEnvironmentClass <urn:usf:environmentclass:hermetic> .
+
+  <urn:usf:realisationoption:rdf4jnativestoreshaclsail> a usf:RealisationOption ;
+      usf:canonicalName "rdf4jnativestoreshaclsail" .
+  <urn:usf:realisationoption:jenatdbjenashacl> a usf:RealisationOption ;
+      usf:canonicalName "jenatdbjenashacl" .
+  <urn:usf:realisationoption:dualenginelocalvalidation> a usf:RealisationOption ;
+      usf:canonicalName "dualenginelocalvalidation" .
+  <urn:usf:realisationoption:hostsidefullcorpusvalidation> a usf:RealisationOption ;
+      usf:canonicalName "hostsidefullcorpusvalidation" .
+  <urn:usf:realisationoption:chrootfullcorpusvalidation> a usf:RealisationOption ;
+      usf:canonicalName "chrootfullcorpusvalidation" .
+  <urn:usf:realisationoption:splithostchrootvalidation> a usf:RealisationOption ;
+      usf:canonicalName "splithostchrootvalidation" .
+
+  <urn:usf:adrrequirement:localvalidationtoolchain> a usf:ADRRequirement ;
+      usf:canonicalName "localvalidationtoolchain" .
+  <urn:usf:realisationdecision:localvalidationtoolchain> a usf:RealisationDecision ;
+      usf:canonicalName "localvalidationtoolchain" ;
+      usf:decisionState <urn:usf:decisionstate:accepted> ;
+      usf:considersOption <urn:usf:realisationoption:rdf4jnativestoreshaclsail>, <urn:usf:realisationoption:jenatdbjenashacl>, <urn:usf:realisationoption:dualenginelocalvalidation>, <urn:usf:realisationoption:hostsidefullcorpusvalidation>, <urn:usf:realisationoption:chrootfullcorpusvalidation>, <urn:usf:realisationoption:splithostchrootvalidation> ;
+      usf:requiresADR <urn:usf:adrrequirement:localvalidationtoolchain> .
+  <urn:usf:adrrecord:localvalidationtoolchain> a usf:ADRRecord ;
+      usf:canonicalName "localvalidationtoolchain" ;
+      usf:recordsDecision <urn:usf:realisationdecision:localvalidationtoolchain> .
+
+  <urn:usf:semanticcontract:localsemanticvalidationtoolchain> a usf:SemanticContract ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:hasActivationState <urn:usf:contractactivationstate:active> ;
+      usf:activationReason "Cross-engine deterministic derivation, complete SHACL conformance, zero integrity findings and bounded host resource evidence satisfy the mandatory proof obligation." ;
+      usf:mandatoryProofObligation <urn:usf:proofobligation:localsemanticvalidationtoolchain> ;
+      usf:reliesOnProofResult <urn:usf:proofresult:localsemanticvalidationtoolchain> ;
+      usf:asserts <urn:usf:claim:crossenginesemanticparity>, <urn:usf:claim:hostlocalvalidationboundary> ;
+      usf:disclaims <urn:usf:nonclaim:localenginenotsemanticauthority>, <urn:usf:nonclaim:nochrootjavaruntime>, <urn:usf:nonclaim:nolivepublicationfromlocalevidencealone> ;
+      usf:permittedRealisationType usf:Implementation ;
+      usf:requiredValidation <urn:usf:validationobligation:localsemanticvalidationtoolchain> ;
+      usf:contractConstraint "Purpose: deterministic indexed local derivation and SHACL validation producing admissible evidence, never semantic authority." ;
+      usf:contractConstraint "Permitted engines: RDF4J NativeStore with ShaclSail as primary candidate and Jena TDB2 with Jena SHACL as mandatory independent parity engine." ;
+      usf:contractConstraint "Formats: Turtle, TriG and N-Quads with named-graph preservation; SPARQL SELECT, ASK, CONSTRUCT and DESCRIBE; portable SHACL Core and SHACL-SPARQL." ;
+      usf:contractConstraint "Outputs must be deterministic, digest-bound, independently compared and fail closed on divergence, timeout, insufficient disk or memory, dependency drift, cleanup failure or baseline mismatch." ;
+      usf:contractConstraint "Host limits: five NativeStore indexes may use at most 256 MiB persistent temporary disk, 2304 MiB peak RSS, 180 seconds per global query and 600 seconds per complete run." ;
+      usf:contractConstraint "Temporary NativeStore data and Maven caches remain outside tracked source and must be removed after execution; generated evidence manifests are content-addressed and admitted separately." ;
+      usf:contractConstraint "Full-corpus Java execution is host-side. The minimal chroot receives only bounded validation results and must not contain Java, NativeStore databases or broad Maven caches." .
+
+  <urn:usf:realisation:localsemanticvalidationtoolchaincontractonly> a usf:Realisation ;
+      usf:canonicalName "localsemanticvalidationtoolchaincontractonly" ;
+      usf:realisesContract <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
+      usf:realisationState <urn:usf:realisationstate:contractonly> ;
+      usf:authorisedByDecision <urn:usf:realisationdecision:localvalidationtoolchain> ;
+      usf:authorisedSourcePath "census/local-semantic-validation" .
+}
