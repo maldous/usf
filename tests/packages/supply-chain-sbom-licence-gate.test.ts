@@ -185,9 +185,10 @@ function readJson<T>(path: string): T {
 }
 
 function listPackageJsonFiles(dir = ".", prefix = ""): string[] {
-  // v2 is outside the pnpm workspace governance boundary: its packages are
-  // npm-managed with their own pinned lockfiles and are censused separately.
-  const skip = new Set([".git", ".claude", "node_modules", "v2"]);
+  // v2 and census are outside the pnpm workspace governance boundary: their
+  // packages are npm-managed with their own pinned lockfiles and are censused
+  // separately.
+  const skip = new Set([".git", ".claude", "census", "node_modules", "v2"]);
   const files: string[] = [];
   let entries: Dirent[];
   try {
