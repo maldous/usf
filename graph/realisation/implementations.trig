@@ -133,4 +133,7 @@
         usf:canonicalName "foundationui" ;
         usf:intentionallyStandalone true ;
         usf:decisionRationale "Design system surface reserved for the renderer contracts; runtime consumption is deferred." .
+    impl:localsemanticvalidationtoolchain a usf:Implementation ;
+        usf:canonicalName "localsemanticvalidationtoolchain" ;
+        usf:implementsContract <urn:usf:semanticcontract:localsemanticvalidationtoolchain> .
 }

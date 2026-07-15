@@ -2634,7 +2634,8 @@
   <urn:usf:realisation:localsemanticvalidationtoolchain> a usf:Realisation ;
       usf:canonicalName "localsemanticvalidationtoolchain" ;
       usf:realisesContract <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
-      usf:realisationState <urn:usf:realisationstate:implementable> ;
+      usf:realisingImplementation <urn:usf:implementation:localsemanticvalidationtoolchain> ;
+      usf:realisationState <urn:usf:realisationstate:internal> ;
       usf:authorisedByDecision <urn:usf:realisationdecision:localvalidationtoolchain> ;
       usf:authorisedSourcePath "census/local-semantic-validation" .
 }
