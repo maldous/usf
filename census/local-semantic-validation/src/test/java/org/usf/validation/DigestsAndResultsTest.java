@@ -13,6 +13,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -91,6 +92,19 @@ class DigestsAndResultsTest {
         ObjectMapper mapper = BoundedResult.jsonMapper();
         assertThat(Digests.sha256(mapper.writeValueAsBytes(firstStable)))
                 .isEqualTo(Digests.sha256(mapper.writeValueAsBytes(secondStable)));
+    }
+
+    @Test
+    void stableEvidenceDigestExcludesBenchmarkMeasurements() throws Exception {
+        var firstStable = new LinkedHashMap<String, Object>(Map.of("acceptance", "pass"));
+        var secondStable = new LinkedHashMap<String, Object>(Map.of("acceptance", "pass"));
+        ProofRunner.ProofResult first = ProofRunner.finishEvidence(firstStable, Instant.EPOCH,
+                10, 20, 30, List.of(), Map.of("rdf4j", Map.of("deriveMillis", 1)));
+        ProofRunner.ProofResult second = ProofRunner.finishEvidence(secondStable, Instant.EPOCH,
+                999, 888, 777, List.of(), Map.of("rdf4j", Map.of("deriveMillis", 9999)));
+        assertThat(first.evidence().get("stableEvidenceDigest"))
+                .isEqualTo(second.evidence().get("stableEvidenceDigest"));
+        assertThat(first.evidence().get("engines")).isNotEqualTo(second.evidence().get("engines"));
     }
 
     @Test
