@@ -75,7 +75,7 @@ public final class ProofRunner {
         Failures.require(authorityAtStart.equals(authorityAtEnd), "AUTHORITY_DIGEST_CHANGED",
                 "Authority digest changed during engine comparison");
         return finishEvidence(stable, started, elapsedMillis, peakRssBytes, maxStoreBytes,
-                List.of("Comparison runs both engines once and does not claim complete proof."));
+                List.of("Comparison runs both engines once and does not claim complete proof."), Map.of());
     }
 
     static ProfilePlan profilePlan(String profile) {
@@ -122,11 +122,9 @@ public final class ProofRunner {
                 "lifecycleIntegrityConforms", true,
                 "integrityViolationCounts", rdf4j.integrityViolationCounts,
                 "contaminationCount", rdf4j.contaminationCount));
-        if (includeBenchmarkMeasurements) {
-            stable.put("engines", Map.of("rdf4j", rdf4j.evidenceView()));
-        }
         return finishEvidence(stable, started, elapsedMillis, peakRssBytes, rdf4j.storeBytes,
-                List.of("Fast profile is primary-engine development feedback and is not independent proof."));
+                List.of("Fast profile is primary-engine development feedback and is not independent proof."),
+                includeBenchmarkMeasurements ? Map.of("rdf4j", rdf4j.evidenceView()) : Map.of());
     }
 
     private static ProofResult runProof(Path repositoryRoot, GraphManifest manifest, Instant started,
@@ -188,11 +186,11 @@ public final class ProofRunner {
                 "integrityViolationCounts", first.integrityViolationCounts,
                 "contaminationCount", first.contaminationCount,
                 "incremental", stableIncremental(first.incremental)));
-        if (includeBenchmarkMeasurements) {
-            stable.put("engines", Map.of("rdf4j", first.evidenceView(), "jena", jena.evidenceView()));
-        }
         return finishEvidence(stable, started, elapsedMillis, peakRssBytes, maxStoreBytes,
-                List.of("The primary RDF4J engine evaluates global and lifecycle integrity; Jena independently evaluates derivation and SHACL parity."));
+                List.of("The primary RDF4J engine evaluates global and lifecycle integrity; Jena independently evaluates derivation and SHACL parity."),
+                includeBenchmarkMeasurements
+                        ? Map.of("rdf4j", first.evidenceView(), "jena", jena.evidenceView())
+                        : Map.of());
     }
 
     private static LinkedHashMap<String, Object> commonStableEvidence(Path repositoryRoot, GraphManifest manifest,
@@ -257,12 +255,16 @@ public final class ProofRunner {
                 "parallelValidation", result.parallelValidation());
     }
 
-    private static ProofResult finishEvidence(LinkedHashMap<String, Object> stable, Instant started,
-                                              long elapsedMillis, long peakRssBytes, long storeBytes,
-                                              List<String> limitations) throws IOException {
+    static ProofResult finishEvidence(LinkedHashMap<String, Object> stable, Instant started,
+                                      long elapsedMillis, long peakRssBytes, long storeBytes,
+                                      List<String> limitations,
+                                      Map<String, Object> executionMeasurements) throws IOException {
         ObjectMapper mapper = BoundedResult.jsonMapper();
         stable.put("stableEvidenceDigest", "sha256:" + Digests.sha256(mapper.writeValueAsBytes(stable)));
         LinkedHashMap<String, Object> evidence = new LinkedHashMap<>(stable);
+        if (!executionMeasurements.isEmpty()) {
+            evidence.put("engines", executionMeasurements);
+        }
         evidence.put("resources", Map.of(
                 "temporaryPersistentBytes", storeBytes,
                 "peakRssBytes", peakRssBytes,
