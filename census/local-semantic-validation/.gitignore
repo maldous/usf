@@ -1,0 +1,6 @@
+/target/
+/.work/
+/.mvn-cache/
+/*.log
+/*.tmp
+/*.result.json

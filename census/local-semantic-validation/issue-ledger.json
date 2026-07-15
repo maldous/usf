@@ -1,0 +1,429 @@
+{
+  "schemaVersion": 1,
+  "objective": "USF Phase One permanent local semantic-validation toolchain realisation",
+  "authorityDigest": "c017bb46d7dbce674d3eff93ed3d6db4b0876b0003a22bff03480d726ac79cce",
+  "authorityDigestAlgorithm": "sha256-graph-count-inventory-v1",
+  "semanticContract": "urn:usf:semanticcontract:localsemanticvalidationtoolchain",
+  "realisation": "urn:usf:realisation:localsemanticvalidationtoolchain",
+  "issues": [
+    {
+      "identifier": "USF-LSV-001",
+      "category": "missing realisation authorization",
+      "evidence": [
+        "The active contract and accepted decision authorise an Implementation in maldous/usf at census/local-semantic-validation.",
+        "The live realisation state was urn:usf:realisationstate:implementable before source materialisation."
+      ],
+      "rootCause": "The semantic contract and implementation authorisation preceded permanent source materialisation.",
+      "semanticResources": [
+        "urn:usf:semanticcontract:localsemanticvalidationtoolchain",
+        "urn:usf:realisation:localsemanticvalidationtoolchain",
+        "urn:usf:realisationdecision:localvalidationtoolchain"
+      ],
+      "implementationResources": [
+        "census/local-semantic-validation"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Materialise and validate the permanent host-side package at the exact authorised path.",
+      "authorizationRequired": "Satisfied by the accepted live realisation decision.",
+      "resolutionPerformed": "The permanent package was implemented at the authorised path in a dedicated branch and worktree.",
+      "validationPerformed": [
+        "Repository identity and source-path checks pass in preflight.",
+        "The implementation contains no runtime source outside the authorised path."
+      ],
+      "residualUncertainty": "Final evidence admission and realisation-state advancement remain tracked separately.",
+      "status": "resolved"
+    },
+    {
+      "identifier": "USF-LSV-002",
+      "category": "runtime/JDK",
+      "evidence": [
+        "The host system default Java is 21.0.11 while OpenJDK 25.0.3 is installed at /usr/lib/jvm/java-25-openjdk-amd64.",
+        "The active contract requires host OpenJDK feature 25."
+      ],
+      "rootCause": "The host alternatives default predates the toolchain contract.",
+      "semanticResources": [
+        "urn:usf:semanticcontract:localsemanticvalidationtoolchain"
+      ],
+      "implementationResources": [
+        "census/local-semantic-validation/mvnw",
+        "census/local-semantic-validation/run",
+        "census/local-semantic-validation/src/main/java/org/usf/validation/Preflight.java"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Select and require host Java feature 25 without changing the system default.",
+      "authorizationRequired": "Required by the active contract.",
+      "resolutionPerformed": "Both launchers select the host Java 25 installation and preflight rejects every other feature version.",
+      "validationPerformed": [
+        "Automated exact-version acceptance and rejection tests pass.",
+        "Maven Enforcer requires Java 25 and Maven 3.9.11."
+      ],
+      "residualUncertainty": "None within the supported host layout.",
+      "status": "resolved"
+    },
+    {
+      "identifier": "USF-LSV-003",
+      "category": "host/chroot boundary",
+      "evidence": [
+        "The chroot previously contained a manually installed Temurin 21 JRE, tarball, alternatives entry and profile shim.",
+        "No removed executable or archive was owned by a chroot package.",
+        "The contract disclaims a chroot Java runtime and permits only bounded digest-verified result consumption."
+      ],
+      "rootCause": "Residual manually provisioned Java artifacts and a tracked profile shim remained from an older bootstrap method.",
+      "semanticResources": [
+        "urn:usf:nonclaim:nochrootjavaruntime",
+        "urn:usf:claim:hostlocalvalidationboundary"
+      ],
+      "implementationResources": [
+        "v2/opt/jdk-21.0.11+10-jre",
+        "v2/opt/temurin21.tar.gz",
+        "v2/etc/alternatives/java",
+        "v2/etc/profile.d/java.sh"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Remove only verified manual Java artifacts, delete the obsolete tracked shim, and enforce a type-aware boundary scan.",
+      "authorizationRequired": "Required by the active host/chroot contract and no-runtime nonclaim.",
+      "resolutionPerformed": "The manual runtime, archive and alternatives entry were removed; the obsolete shim is deleted; preflight scans for runtimes, caches, stores, corpora and raw result artifacts.",
+      "validationPerformed": [
+        "No java or javac executable remains in the chroot.",
+        "No Maven or Gradle cache, NativeStore data, complete graph/census corpus, or raw validation output was found.",
+        "Host preflight with --chroot-root /home/user/src/usf/v2 passes."
+      ],
+      "residualUncertainty": "Support-only java-common and ca-certificates-java packages remain but provide no runtime executable.",
+      "status": "resolved"
+    },
+    {
+      "identifier": "USF-LSV-004",
+      "category": "build reproducibility",
+      "evidence": [
+        "No permanent project-scoped build launcher existed before this package.",
+        "The contract requires a pinned Maven launcher, dependency lock, checksum evidence and normal offline validation."
+      ],
+      "rootCause": "The semantic contract was established before a durable build definition existed.",
+      "semanticResources": [
+        "urn:usf:semanticcontract:localsemanticvalidationtoolchain"
+      ],
+      "implementationResources": [
+        "census/local-semantic-validation/pom.xml",
+        "census/local-semantic-validation/mvnw",
+        "census/local-semantic-validation/.mvn/wrapper/maven-wrapper.properties",
+        "census/local-semantic-validation/dependencies.lock.json"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": true,
+      "proposedResolution": "Pin Maven, plugins and dependencies; regenerate and compare the runtime lock on every build; prove two clean offline builds are identical.",
+      "authorizationRequired": "Specified by the active contract.",
+      "resolutionPerformed": "Maven 3.9.11, its distribution checksum, exact plugin versions, convergence enforcement, reproducible timestamps and a SHA-256 runtime inventory are implemented.",
+      "validationPerformed": [
+        "Offline unit and integration tests pass with 55 tests.",
+        "The dependency-lock mismatch planted test passes."
+      ],
+      "residualUncertainty": "Final post-commit two-build byte comparison is pending.",
+      "status": "in-progress"
+    },
+    {
+      "identifier": "USF-LSV-005",
+      "category": "dependency compatibility",
+      "evidence": [
+        "The live contract selects RDF4J 6.0.0 and Jena 6.1.0.",
+        "Jackson 2.20.1, Thrift 0.22.0 and AssertJ 3.27.6 were flagged by the initial generated-SBOM scan.",
+        "Thrift 0.24.0 fails Jena TDB2 writes because TReadAppendFileTransport does not implement the new getConfiguration contract."
+      ],
+      "rootCause": "Selected engines bring transitive libraries whose newest releases are not uniformly binary-compatible with Jena 6.1.0.",
+      "semanticResources": [
+        "urn:usf:semanticcontract:localsemanticvalidationtoolchain",
+        "urn:usf:realisationdecision:localvalidationtoolchain"
+      ],
+      "implementationResources": [
+        "census/local-semantic-validation/pom.xml",
+        "census/local-semantic-validation/dependencies.lock.json"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Keep the semantically selected engines, use current patched compatible dependencies, and test both engines through real store writes.",
+      "authorizationRequired": "No engine decision change; compatible transitive remediation is an implementation correction.",
+      "resolutionPerformed": "Jackson is pinned to final 2.22.1, AssertJ to 3.27.7, and Thrift to patched compatible 0.23.0; the incompatible 0.24.0 candidate was rejected.",
+      "validationPerformed": [
+        "Maven dependency convergence passes.",
+        "RDF4J NativeStore and Jena TDB2 named-graph integration tests pass on the converged classpath.",
+        "The runtime lock records 117 artifacts with SHA-256 and byte size."
+      ],
+      "residualUncertainty": "Future Jena releases may permit Thrift 0.24.0 and require a separately tested lock refresh.",
+      "status": "resolved"
+    },
+    {
+      "identifier": "USF-LSV-006",
+      "category": "security or credential handling",
+      "evidence": [
+        "OSV Scanner 2.3.8 reports GHSA-5jmj-h7xm-6q6v against Jackson Databind 2.22.1 twice, once per POM and SBOM input.",
+        "The official reviewed advisory explicitly lists 2.22.0 as affected and 2.22.1 as the fixed 2.22-line release.",
+        "The OSV record uses open-ended introduced ranges despite its explicit affected-version list ending at 2.22.0."
+      ],
+      "rootCause": "The scanner consumes a malformed open-ended ecosystem range and does not honor the advisory's fixed release for the legacy Maven coordinate.",
+      "semanticResources": [],
+      "implementationResources": [
+        "census/local-semantic-validation/pom.xml",
+        "target/dependency-inventory.json",
+        "target/osv-result.json"
+      ],
+      "severity": "medium",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Retain the raw scan, verify the selected release against the reviewed primary advisory, and do not suppress or rewrite the scanner output.",
+      "authorizationRequired": "No semantic change required.",
+      "resolutionPerformed": "The latest final Jackson 2.22.1 remains pinned with the reviewed advisory recorded as the false-positive resolution basis.",
+      "validationPerformed": [
+        "The generated CycloneDX 1.6 inventory has 117 components and zero components without license data.",
+        "No selected version is in the advisory's explicit affected-version list."
+      ],
+      "residualUncertainty": "OSV Scanner 2.3.8 continues to exit nonzero until its advisory range data or matching behavior is corrected upstream.",
+      "status": "resolved-with-upstream-residual"
+    },
+    {
+      "identifier": "USF-LSV-007",
+      "category": "Git/worktree hygiene",
+      "evidence": [
+        "Local main includes the test-harness-boundaries commit and is one commit ahead of origin/main.",
+        "The implementation is isolated on agent/local-semantic-validation.",
+        "The graph submodule gitlink is unchanged at ad71453f and existing worktrees and stashes were preserved."
+      ],
+      "rootCause": "The prior user-authorised harness commit was backed up to its branch but not yet integrated into origin/main.",
+      "semanticResources": [],
+      "implementationResources": [
+        "parent main",
+        "agent/test-harness-boundaries",
+        "agent/local-semantic-validation"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": true,
+      "proposedResolution": "Commit the package, prove it from committed state, integrate by fast-forward, push main and verify all relevant worktrees.",
+      "authorizationRequired": "The user explicitly authorised commit, push, PR and merge as appropriate.",
+      "resolutionPerformed": "Dedicated implementation worktree created; no stash, destructive reset, branch deletion or submodule mutation performed.",
+      "validationPerformed": [
+        "Parent/submodule remotes, branches, worktrees, stashes and statuses were audited."
+      ],
+      "residualUncertainty": "Commit, integration and origin synchronization remain pending.",
+      "status": "in-progress"
+    },
+    {
+      "identifier": "USF-LSV-008",
+      "category": "SHACL portability",
+      "evidence": [
+        "Earlier bounded Stardog evaluation of unpublished candidate shapes was nonconforming and its diagnostic exceeded 180 seconds.",
+        "The Phase One contract requires full RDF4J and Jena SHACL conformance and normalized agreement."
+      ],
+      "rootCause": "Portable current-corpus conformance had not been reproduced by permanent dual-engine source.",
+      "semanticResources": [
+        "urn:usf:proofresult:localsemanticvalidationtoolchain",
+        "urn:usf:validationobligation:localsemanticvalidationtoolchain"
+      ],
+      "implementationResources": [
+        "graph/shapes.ttl",
+        "graph/shapes",
+        "census/local-semantic-validation/src/main/java/org/usf/validation/ShaclReports.java"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": true,
+      "proposedResolution": "Run full manifest-scoped validation in both selected engines and compare normalized findings without blank-node identity.",
+      "authorizationRequired": "Implementation is authorised; no shape weakening or semantic correction is authorised by this issue.",
+      "resolutionPerformed": "Standalone RDF4J and Jena validators plus normalized finding comparison are implemented.",
+      "validationPerformed": [
+        "Normalized cross-engine blank-node and intentional-disagreement tests pass."
+      ],
+      "residualUncertainty": "Final committed full-corpus proof runs remain pending.",
+      "status": "in-progress"
+    },
+    {
+      "identifier": "USF-LSV-009",
+      "category": "named-graph preservation",
+      "evidence": [
+        "Arbitrary filesystem discovery could load unregistered or derived source into a clean baseline.",
+        "The contract requires manifest-only input and exact graph identity."
+      ],
+      "rootCause": "No permanent manifest-enforcing loader existed.",
+      "semanticResources": [
+        "urn:usf:semanticcontract:localsemanticvalidationtoolchain"
+      ],
+      "implementationResources": [
+        "graph/manifest.yaml",
+        "census/local-semantic-validation/src/main/java/org/usf/validation/GraphManifest.java"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Make the governed manifest the sole input inventory and reject unknown, missing, duplicate, wrong-role or default-graph input.",
+      "authorizationRequired": "Required by the active contract.",
+      "resolutionPerformed": "Both loaders consume only exact manifest entries and validate graph roles, input baselines and runtime graph sets.",
+      "validationPerformed": [
+        "Named-graph preservation, unknown TriG graph, clean baseline, missing graph, duplicate mapping and manifest-order tests pass."
+      ],
+      "residualUncertainty": "None for the current manifest schema.",
+      "status": "resolved"
+    },
+    {
+      "identifier": "USF-LSV-010",
+      "category": "canonicalization",
+      "evidence": [
+        "The local digest must compare outputs deterministically without claiming to be the Stardog authority digest.",
+        "Derived blank nodes would make the selected tuple algorithm ambiguous."
+      ],
+      "rootCause": "No replaceable canonical graph-comparison boundary existed.",
+      "semanticResources": [
+        "urn:usf:nonclaim:localenginenotsemanticauthority"
+      ],
+      "implementationResources": [
+        "census/local-semantic-validation/src/main/java/org/usf/validation/GraphCanonicalizer.java",
+        "census/local-semantic-validation/src/main/java/org/usf/validation/Digests.java"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Use a named replaceable algorithm that includes exact graph IRIs, sorted length-prefixed terms and rejects derived blank nodes.",
+      "authorizationRequired": "Within the accepted deterministic comparison contract.",
+      "resolutionPerformed": "usf-sorted-term-tuples-v1 is implemented behind GraphCanonicalizer and explicitly disclaimed as semantic authority.",
+      "validationPerformed": [
+        "RDF4J/Jena digest parity, graph-identity sensitivity, ordering stability and blank-node rejection tests pass."
+      ],
+      "residualUncertainty": "A future RDFC-1.0 adapter may replace this comparison algorithm without changing engine APIs.",
+      "status": "resolved"
+    },
+    {
+      "identifier": "USF-LSV-011",
+      "category": "deterministic output",
+      "evidence": [
+        "Per-family summaries alone could conceal nondeterministic or reordered query blocks.",
+        "The bounded result must distinguish stable evidence from variable execution measurements."
+      ],
+      "rootCause": "The earlier diagnostic evidence did not provide a permanent block-level chained trace and bounded self-digesting manifest.",
+      "semanticResources": [
+        "urn:usf:proofobligation:localsemanticvalidationtoolchain"
+      ],
+      "implementationResources": [
+        "census/local-semantic-validation/src/main/java/org/usf/validation/DerivationStep.java",
+        "census/local-semantic-validation/src/main/java/org/usf/validation/BoundedResult.java",
+        "census/local-semantic-validation/src/main/java/org/usf/validation/ProofRunner.java"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": true,
+      "proposedResolution": "Chain every block's input state, rule digest and canonical output; compare two clean RDF4J runs and Jena; separate stable and variable evidence.",
+      "authorizationRequired": "Required by the proof obligation.",
+      "resolutionPerformed": "Sixteen manifest-ordered block steps, cross-block duplicate rejection, stableEvidenceDigest and resultDigest are implemented.",
+      "validationPerformed": [
+        "Bounded self-digest and intentional mismatch tests pass.",
+        "A pre-commit full-corpus trial produced identical RDF4J and Jena trace identities."
+      ],
+      "residualUncertainty": "Two final clean committed proof executions remain pending.",
+      "status": "in-progress"
+    },
+    {
+      "identifier": "USF-LSV-012",
+      "category": "cleanup",
+      "evidence": [
+        "Caller-selected work paths could otherwise permit unsafe deletion or leave stores after failure and interruption.",
+        "Concurrent proof runs could exceed resource bounds or corrupt shared intent."
+      ],
+      "rootCause": "No permanent ownership marker, process lock or lifecycle cleanup mechanism existed.",
+      "semanticResources": [
+        "urn:usf:semanticcontract:localsemanticvalidationtoolchain"
+      ],
+      "implementationResources": [
+        "census/local-semantic-validation/src/main/java/org/usf/validation/ManagedWorkspace.java",
+        "census/local-semantic-validation/src/main/java/org/usf/validation/RunLock.java"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Require a contract-bound owner marker, safe root, process-wide lock, shutdown hook and post-delete verification.",
+      "authorizationRequired": "Required by the contract cleanup and concurrency gates.",
+      "resolutionPerformed": "Unique external workspaces, owner-only deletion, shutdown cleanup and process locking are implemented.",
+      "validationPerformed": [
+        "Successful, failed and interrupted cleanup tests pass.",
+        "Unowned-path, repository-path, symlink and concurrent-run refusal tests pass.",
+        "No generated database or cache is tracked by Git."
+      ],
+      "residualUncertainty": "Final full-proof cleanup measurements remain pending.",
+      "status": "resolved"
+    },
+    {
+      "identifier": "USF-LSV-013",
+      "category": "performance",
+      "evidence": [
+        "An early fast-profile implementation included proof-only engine measurements and risked overstating its assurance scope.",
+        "The historical evaluated index profile is spoc,posc,cosp,ospc,psoc; an early implementation used an unproven cspo variant."
+      ],
+      "rootCause": "Benchmark fields and an index spelling were carried into the implementation before final profile-boundary reconciliation.",
+      "semanticResources": [
+        "urn:usf:semanticcontract:localsemanticvalidationtoolchain",
+        "urn:usf:proofresult:localsemanticvalidationtoolchain"
+      ],
+      "implementationResources": [
+        "census/local-semantic-validation/src/main/java/org/usf/validation/ProofRunner.java",
+        "census/local-semantic-validation/src/main/java/org/usf/validation/Rdf4jEngine.java",
+        "census/local-semantic-validation/toolchain.json"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": true,
+      "proposedResolution": "Keep fast profile primary-only and non-proving, keep benchmark acceptance identical, and use the evaluated five-index profile.",
+      "authorizationRequired": "Required by the live profile and resource constraints.",
+      "resolutionPerformed": "Fast omits Jena/global/incremental/independent proof; measurements are emitted only by benchmark; the evaluated cosp profile is restored.",
+      "validationPerformed": [
+        "Fast-profile boundary tests pass.",
+        "A pre-commit fast run completed under the live time, RSS, disk and output bounds."
+      ],
+      "residualUncertainty": "Final proof and benchmark resource measurements remain pending.",
+      "status": "in-progress"
+    },
+    {
+      "identifier": "USF-LSV-014",
+      "category": "evidence admission",
+      "evidence": [
+        "A proof can begin with the expected authority digest and finish after authority changes unless it rechecks the live snapshot.",
+        "Tests and generated manifests do not establish semantic truth without admission and proof evaluation."
+      ],
+      "rootCause": "Permanent source and a boundary-stable authority snapshot did not previously exist.",
+      "semanticResources": [
+        "urn:usf:evidencerequirement:localsemanticvalidationtoolchain",
+        "urn:usf:proofobligation:localsemanticvalidationtoolchain",
+        "urn:usf:evidenceresult:rdf4jjenasemanticparity"
+      ],
+      "implementationResources": [
+        "census/local-semantic-validation/src/main/java/org/usf/validation/AuthoritySnapshot.java",
+        "census/local-semantic-validation/src/main/java/org/usf/validation/ProofRunner.java"
+      ],
+      "severity": "blocking",
+      "blocksPhaseOne": true,
+      "proposedResolution": "Read a coordinator-projected digest at both proof boundaries, admit the committed bounded result, evaluate proof, then advance only the authorised realisation.",
+      "authorizationRequired": "Only the coordinator may publish through the authoritative compiler and mutate Stardog.",
+      "resolutionPerformed": "Plain-digest and bounded-JSON authority snapshots plus start/end comparison are implemented and tested.",
+      "validationPerformed": [
+        "Snapshot parsing, expected-digest and boundary-change rejection tests pass."
+      ],
+      "residualUncertainty": "Final evidence envelope admission, proof evaluation and realisation-state advancement remain pending.",
+      "status": "in-progress"
+    },
+    {
+      "identifier": "USF-LSV-015",
+      "category": "unrelated future work",
+      "evidence": [
+        "v2/usf/SETUP.md and v2/usf/README.md contain older prose about a Java-backed Stardog CLI.",
+        "The current chroot bootstrap uses the JavaScript SDK and does not install Java or the Stardog CLI."
+      ],
+      "rootCause": "Graph-repository documentation was not revised when chroot provisioning changed.",
+      "semanticResources": [
+        "urn:usf:nonclaim:nochrootjavaruntime"
+      ],
+      "implementationResources": [
+        "v2/usf/SETUP.md",
+        "v2/usf/README.md"
+      ],
+      "severity": "low",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Correct the owning graph-repository documentation in a separately authorised bounded change.",
+      "authorizationRequired": "Modification of maldous/usf-graph documentation is outside the authorised parent source path for this realisation.",
+      "resolutionPerformed": "No submodule mutation or gitlink update was made.",
+      "validationPerformed": [
+        "Current bootstrap source and chroot runtime were inspected to distinguish documentation drift from executable behavior."
+      ],
+      "residualUncertainty": "The stale prose remains until separately authorised.",
+      "status": "deferred"
+    }
+  ]
+}
