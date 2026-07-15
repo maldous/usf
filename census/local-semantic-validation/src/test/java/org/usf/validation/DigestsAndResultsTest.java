@@ -80,6 +80,20 @@ class DigestsAndResultsTest {
     }
 
     @Test
+    void stableIncrementalEvidenceExcludesVariableElapsedTime() throws Exception {
+        var first = new Rdf4jEngine.IncrementalResult(true, true, true, true, true,
+                "bounded-family", "SERIALIZABLE", true, false, 10);
+        var second = new Rdf4jEngine.IncrementalResult(true, true, true, true, true,
+                "bounded-family", "SERIALIZABLE", true, false, 9999);
+        Map<String, Object> firstStable = ProofRunner.stableIncremental(first);
+        Map<String, Object> secondStable = ProofRunner.stableIncremental(second);
+        assertThat(firstStable).isEqualTo(secondStable).doesNotContainKey("elapsedMillis");
+        ObjectMapper mapper = BoundedResult.jsonMapper();
+        assertThat(Digests.sha256(mapper.writeValueAsBytes(firstStable)))
+                .isEqualTo(Digests.sha256(mapper.writeValueAsBytes(secondStable)));
+    }
+
+    @Test
     void oversizedResultFailsClosed() {
         assertThatThrownBy(() -> BoundedResult.encode("prove", "pass", Map.of("value", "x".repeat(9000))))
                 .isInstanceOf(IllegalStateException.class).hasMessageContaining("exceeds");
