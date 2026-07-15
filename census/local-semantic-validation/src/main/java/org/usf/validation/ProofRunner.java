@@ -187,7 +187,7 @@ public final class ProofRunner {
                 "globalIntegrityConforms", first.integrityConforms,
                 "integrityViolationCounts", first.integrityViolationCounts,
                 "contaminationCount", first.contaminationCount,
-                "incremental", first.incremental));
+                "incremental", stableIncremental(first.incremental)));
         if (includeBenchmarkMeasurements) {
             stable.put("engines", Map.of("rdf4j", first.evidenceView(), "jena", jena.evidenceView()));
         }
@@ -242,6 +242,19 @@ public final class ProofRunner {
                 "urn:usf:nonclaim:nochrootjavaruntime",
                 "urn:usf:nonclaim:nolivepublicationfromlocalevidencealone"));
         return evidence;
+    }
+
+    static Map<String, Object> stableIncremental(Rdf4jEngine.IncrementalResult result) {
+        return Map.of(
+                "conformingCommitted", result.conformingCommitted(),
+                "defectRejected", result.defectRejected(),
+                "shapeChangeCommitted", result.shapeChangeCommitted(),
+                "boundedDataCommitted", result.boundedDataCommitted(),
+                "rollbackClean", result.rollbackClean(),
+                "affectedShapeFamily", result.affectedShapeFamily(),
+                "isolationLevel", result.isolationLevel(),
+                "cacheSelectNodes", result.cacheSelectNodes(),
+                "parallelValidation", result.parallelValidation());
     }
 
     private static ProofResult finishEvidence(LinkedHashMap<String, Object> stable, Instant started,

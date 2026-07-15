@@ -291,9 +291,10 @@
       "category": "deterministic output",
       "evidence": [
         "Per-family summaries alone could conceal nondeterministic or reordered query blocks.",
-        "The bounded result must distinguish stable evidence from variable execution measurements."
+        "The bounded result must distinguish stable evidence from variable execution measurements.",
+        "The first two committed proof executions returned identical graph and trace results but different stableEvidenceDigest values because incremental elapsedMillis was included in the stable validation object."
       ],
-      "rootCause": "The earlier diagnostic evidence did not provide a permanent block-level chained trace and bounded self-digesting manifest.",
+      "rootCause": "The earlier diagnostic evidence did not provide a permanent block-level chained trace and bounded self-digesting manifest, and the initial implementation serialized a variable incremental timing into its stable portion.",
       "semanticResources": [
         "urn:usf:proofobligation:localsemanticvalidationtoolchain"
       ],
@@ -306,12 +307,13 @@
       "blocksPhaseOne": true,
       "proposedResolution": "Chain every block's input state, rule digest and canonical output; compare two clean RDF4J runs and Jena; separate stable and variable evidence.",
       "authorizationRequired": "Required by the proof obligation.",
-      "resolutionPerformed": "Sixteen manifest-ordered block steps, cross-block duplicate rejection, stableEvidenceDigest and resultDigest are implemented.",
+      "resolutionPerformed": "Sixteen manifest-ordered block steps, cross-block duplicate rejection, stableEvidenceDigest and resultDigest are implemented; incremental acceptance facts are now projected separately from elapsed time.",
       "validationPerformed": [
         "Bounded self-digest and intentional mismatch tests pass.",
-        "A pre-commit full-corpus trial produced identical RDF4J and Jena trace identities."
+        "A pre-commit full-corpus trial produced identical RDF4J and Jena trace identities.",
+        "A planted regression test proves stable incremental serialization is identical across different elapsedMillis values."
       ],
-      "residualUncertainty": "Two final clean committed proof executions remain pending.",
+      "residualUncertainty": "Two replacement clean proof executions from the corrected commit remain pending.",
       "status": "in-progress"
     },
     {
