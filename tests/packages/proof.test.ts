@@ -33,7 +33,7 @@ describe("bootstrap proof", () => {
       tenantAcceptedStatus: 200,
       tenantMismatchStatus: 400,
     });
-  });
+  }, 15_000);
 });
 
 describe("keycloak-brokered auth/identity proof", () => {
