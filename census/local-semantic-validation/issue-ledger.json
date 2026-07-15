@@ -187,7 +187,7 @@
       "category": "Git/worktree hygiene",
       "evidence": [
         "Local main includes the test-harness-boundaries commit and is one commit ahead of origin/main.",
-        "The implementation is isolated on agent/local-semantic-validation.",
+        "The implementation is isolated on agent/local-semantic-validation and its committed source is pushed to origin with draft PR 368 open.",
         "The graph submodule gitlink is unchanged at ad71453f and existing worktrees and stashes were preserved."
       ],
       "rootCause": "The prior user-authorised harness commit was backed up to its branch but not yet integrated into origin/main.",
@@ -201,11 +201,12 @@
       "blocksPhaseOne": true,
       "proposedResolution": "Commit the package, prove it from committed state, integrate by fast-forward, push main and verify all relevant worktrees.",
       "authorizationRequired": "The user explicitly authorised commit, push, PR and merge as appropriate.",
-      "resolutionPerformed": "Dedicated implementation worktree created; no stash, destructive reset, branch deletion or submodule mutation performed.",
+      "resolutionPerformed": "Dedicated implementation worktree created and all implementation plus semantic-record commits pushed; no stash, destructive reset, branch deletion or submodule mutation performed.",
       "validationPerformed": [
-        "Parent/submodule remotes, branches, worktrees, stashes and statuses were audited."
+        "Parent/submodule remotes, branches, worktrees, stashes and statuses were audited.",
+        "origin/agent/test-harness-boundaries contains 5e77db7f and origin/agent/local-semantic-validation contains the committed Phase One source."
       ],
-      "residualUncertainty": "Commit, integration and origin synchronization remain pending.",
+      "residualUncertainty": "PR merge and final origin/main synchronization remain pending.",
       "status": "in-progress"
     },
     {
@@ -400,15 +401,19 @@
         "census/local-semantic-validation/src/main/java/org/usf/validation/ProofRunner.java"
       ],
       "severity": "blocking",
-      "blocksPhaseOne": true,
+      "blocksPhaseOne": false,
       "proposedResolution": "Read a coordinator-projected digest at both proof boundaries, admit the committed bounded result, evaluate proof, then advance only the authorised realisation.",
       "authorizationRequired": "Only the coordinator may publish through the authoritative compiler and mutate Stardog.",
-      "resolutionPerformed": "Plain-digest and bounded-JSON authority snapshots plus start/end comparison are implemented and tested.",
+      "resolutionPerformed": "Plain-digest and bounded-JSON authority snapshots plus start/end comparison are implemented and tested; the final bounded result was admitted through the transactional compiler, its proof was evaluated successfully, and only the authorised realisation advanced from implementable to internal.",
       "validationPerformed": [
-        "Snapshot parsing, expected-digest and boundary-change rejection tests pass."
+        "Snapshot parsing, expected-digest and boundary-change rejection tests pass.",
+        "The compiler transaction loaded 34 authored graphs and one observed graph, derived all seven graph families and committed with zero contamination.",
+        "Read-only compiler verification reported 43 registered graphs, 579549 triples, SHACL conformance, integrity conformance and zero contamination.",
+        "A targeted live query confirmed the validation execution and passed result, admitted fresh integrity-valid evidence digest sha256:0b48ede84d50013714fd4a12aa224751442fa8d18a0e0f591c929a5f1349bcf8, successful proof evidence-set digest sha256:009dc21754b3c189e1878e263e1e99d65c875555daffc604f7ad2b4b2e406ff9, implementation identity and internal realisation state.",
+        "The compiler and bootstrap contracts remain planned and proof-blocked."
       ],
-      "residualUncertainty": "Final evidence envelope admission, proof evaluation and realisation-state advancement remain pending.",
-      "status": "in-progress"
+      "residualUncertainty": "None for Phase One; future authority changes remain an explicit proof invalidation condition.",
+      "status": "resolved"
     },
     {
       "identifier": "USF-LSV-015",
@@ -434,6 +439,38 @@
         "Current bootstrap source and chroot runtime were inspected to distinguish documentation drift from executable behavior."
       ],
       "residualUncertainty": "The stale prose remains until separately authorised.",
+      "status": "deferred"
+    },
+    {
+      "identifier": "USF-LSV-016",
+      "category": "semantic-model gap",
+      "evidence": [
+        "The live ontology defines validation execution with executesValidation, producesValidationResult and validationEnvironment.",
+        "The read-only bootstrap projection still queries executesValidationObligation, resultOfValidationExecution, validationResultState and validationExecutionEnvironment, so it omits otherwise valid validation execution and result instances.",
+        "Direct bounded usf_query verification returns the newly admitted validation execution and result through the live ontology predicates."
+      ],
+      "rootCause": "The bootstrap projection query predates the currently authored validation lifecycle predicate names.",
+      "semanticResources": [
+        "urn:usf:ontology:ValidationExecution",
+        "urn:usf:ontology:ValidationResult",
+        "urn:usf:ontology:executesValidation",
+        "urn:usf:ontology:producesValidationResult",
+        "urn:usf:ontology:validationEnvironment",
+        "urn:usf:ontology:entersEvidenceLifecycleAs"
+      ],
+      "implementationResources": [
+        "v2/usf/compiler/src/bootstrap.js"
+      ],
+      "severity": "low",
+      "blocksPhaseOne": false,
+      "proposedResolution": "Align the bootstrap validation-execution and validation-result queries with the live ontology under a separately authorised compiler-contract change.",
+      "authorizationRequired": "A maldous/usf-graph compiler change and its own proof are outside the authorised parent implementation path and Phase One non-goals.",
+      "resolutionPerformed": "No submodule or compiler mutation was made; final validation lifecycle state was verified with a bounded direct authority query.",
+      "validationPerformed": [
+        "The targeted live query returned exactly one passed result linked to the admitted validation evidence.",
+        "The compiler and bootstrap semantic contracts were verified unchanged as planned and proof-blocked."
+      ],
+      "residualUncertainty": "Until separately corrected, bootstrap packets may report validation-result-unavailable even when direct live queries prove the current lifecycle instances.",
       "status": "deferred"
     }
   ]
