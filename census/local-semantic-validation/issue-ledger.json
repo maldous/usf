@@ -31,7 +31,7 @@
         "Repository identity and source-path checks pass in preflight.",
         "The implementation contains no runtime source outside the authorised path."
       ],
-      "residualUncertainty": "Final evidence admission and realisation-state advancement remain tracked separately.",
+      "residualUncertainty": "None; evidence admission and realisation-state advancement are tracked by USF-LSV-014.",
       "status": "resolved"
     },
     {
@@ -112,16 +112,18 @@
         "census/local-semantic-validation/dependencies.lock.json"
       ],
       "severity": "blocking",
-      "blocksPhaseOne": true,
+      "blocksPhaseOne": false,
       "proposedResolution": "Pin Maven, plugins and dependencies; regenerate and compare the runtime lock on every build; prove two clean offline builds are identical.",
       "authorizationRequired": "Specified by the active contract.",
-      "resolutionPerformed": "Maven 3.9.11, its distribution checksum, exact plugin versions, convergence enforcement, reproducible timestamps and a SHA-256 runtime inventory are implemented.",
+      "resolutionPerformed": "Maven 3.9.11, its distribution checksum, exact plugin versions, convergence enforcement, reproducible timestamps and a SHA-256 runtime inventory are implemented; two final clean offline builds were byte-identical.",
       "validationPerformed": [
-        "Offline unit and integration tests pass with 55 tests.",
-        "The dependency-lock mismatch planted test passes."
+        "Offline unit and integration tests pass with 57 tests.",
+        "The dependency-lock mismatch planted test passes.",
+        "Two clean offline builds produced normal JAR SHA-256 7e36a64c638c8d1effb99b3e0396bafdaa812ccb83c58bac6217292c9f35996d and shaded JAR SHA-256 27eb66315abb1c528c8ea87f95920d93423d95fc02d189f0a6c8b5161f8248b0 both times.",
+        "The dependency inventory contains 117 exact runtime artifacts with digest a11146e94917d8ee41d27f95eff13544c1c39facf19f665bd8b0215fb50b9459."
       ],
-      "residualUncertainty": "Final post-commit two-build byte comparison is pending.",
-      "status": "in-progress"
+      "residualUncertainty": "None for the committed source and resolved dependency set.",
+      "status": "resolved"
     },
     {
       "identifier": "USF-LSV-005",
@@ -224,15 +226,16 @@
         "census/local-semantic-validation/src/main/java/org/usf/validation/ShaclReports.java"
       ],
       "severity": "blocking",
-      "blocksPhaseOne": true,
+      "blocksPhaseOne": false,
       "proposedResolution": "Run full manifest-scoped validation in both selected engines and compare normalized findings without blank-node identity.",
       "authorizationRequired": "Implementation is authorised; no shape weakening or semantic correction is authorised by this issue.",
-      "resolutionPerformed": "Standalone RDF4J and Jena validators plus normalized finding comparison are implemented.",
+      "resolutionPerformed": "Standalone RDF4J and Jena validators plus normalized finding comparison are implemented and passed twice from final committed source.",
       "validationPerformed": [
-        "Normalized cross-engine blank-node and intentional-disagreement tests pass."
+        "Normalized cross-engine blank-node and intentional-disagreement tests pass.",
+        "Both final proof runs reported RDF4J and Jena conformance, zero findings and normalized report parity."
       ],
-      "residualUncertainty": "Final committed full-corpus proof runs remain pending.",
-      "status": "in-progress"
+      "residualUncertainty": "None for the current portable shape set.",
+      "status": "resolved"
     },
     {
       "identifier": "USF-LSV-009",
@@ -305,7 +308,7 @@
         "census/local-semantic-validation/src/main/java/org/usf/validation/ProofRunner.java"
       ],
       "severity": "blocking",
-      "blocksPhaseOne": true,
+      "blocksPhaseOne": false,
       "proposedResolution": "Chain every block's input state, rule digest and canonical output; compare two clean RDF4J runs and Jena; separate stable and variable evidence.",
       "authorizationRequired": "Required by the proof obligation.",
       "resolutionPerformed": "Sixteen manifest-ordered block steps, cross-block duplicate rejection, stableEvidenceDigest and resultDigest are implemented; incremental acceptance facts and benchmark execution measurements are now projected outside stable evidence.",
@@ -313,10 +316,12 @@
         "Bounded self-digest and intentional mismatch tests pass.",
         "A pre-commit full-corpus trial produced identical RDF4J and Jena trace identities.",
         "A planted regression test proves stable incremental serialization is identical across different elapsedMillis values.",
-        "A planted regression test proves stableEvidenceDigest is identical across different resource and engine benchmark measurements."
+        "A planted regression test proves stableEvidenceDigest is identical across different resource and engine benchmark measurements.",
+        "Two clean final proof executions from commit 9a20a2b6a6f8050685fa43da031fddd931ce5e21 produced the identical stable evidence digest sha256:009dc21754b3c189e1878e263e1e99d65c875555daffc604f7ad2b4b2e406ff9, identical 16-step trace digest and identical seven graph counts and digests.",
+        "Final fast and proof benchmark runs leave the proof stable digest unchanged."
       ],
-      "residualUncertainty": "Two replacement clean proof executions and benchmark validation from the final corrected commit remain pending.",
-      "status": "in-progress"
+      "residualUncertainty": "None for the current input, rules, shapes, canonicalizer and dependency lock.",
+      "status": "resolved"
     },
     {
       "identifier": "USF-LSV-012",
@@ -343,7 +348,7 @@
         "Unowned-path, repository-path, symlink and concurrent-run refusal tests pass.",
         "No generated database or cache is tracked by Git."
       ],
-      "residualUncertainty": "Final full-proof cleanup measurements remain pending.",
+      "residualUncertainty": "None; both final full-proof runs verified cleanup and left no tool-owned store.",
       "status": "resolved"
     },
     {
@@ -364,16 +369,18 @@
         "census/local-semantic-validation/toolchain.json"
       ],
       "severity": "blocking",
-      "blocksPhaseOne": true,
+      "blocksPhaseOne": false,
       "proposedResolution": "Keep fast profile primary-only and non-proving, keep benchmark acceptance identical, and use the evaluated five-index profile.",
       "authorizationRequired": "Required by the live profile and resource constraints.",
-      "resolutionPerformed": "Fast omits Jena/global/incremental/independent proof; measurements are emitted only by benchmark; the evaluated cosp profile is restored.",
+      "resolutionPerformed": "Fast omits Jena/global/incremental/independent proof; measurements are emitted only by benchmark; the evaluated cosp profile is restored; final benchmark and proof runs passed every live resource limit.",
       "validationPerformed": [
         "Fast-profile boundary tests pass.",
-        "A pre-commit fast run completed under the live time, RSS, disk and output bounds."
+        "The final fast benchmark completed in 30030 ms with 682098688 peak RSS bytes and 173596672 temporary store bytes.",
+        "The final proof benchmark completed in 141274 ms with 1165840384 peak RSS bytes and 262492160 temporary store bytes.",
+        "The two admitted final proof candidates completed in 143135 ms and 142506 ms; both remained below 600000 ms, 2415919104 peak RSS bytes and 268435456 temporary store bytes."
       ],
-      "residualUncertainty": "Final proof and benchmark resource measurements remain pending.",
-      "status": "in-progress"
+      "residualUncertainty": "Future corpus growth must re-prove the same fixed bounds.",
+      "status": "resolved"
     },
     {
       "identifier": "USF-LSV-014",

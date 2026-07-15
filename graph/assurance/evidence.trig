@@ -136,6 +136,17 @@
   <urn:usf:validator:rdf4jjenacrossengine> a usf:Validator ;
       usf:canonicalName "rdf4jjenacrossengine" .
 
+  <urn:usf:validationexecution:localsemanticvalidationtoolchain> a usf:ValidationExecution ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:executesValidation <urn:usf:validationobligation:localsemanticvalidationtoolchain> ;
+      usf:producesValidationResult <urn:usf:validationresult:localsemanticvalidationtoolchain> ;
+      usf:validationEnvironment <urn:usf:validationenvironment:hostlocalvalidation> .
+
+  <urn:usf:validationresult:localsemanticvalidationtoolchain> a usf:ValidationResult ;
+      usf:canonicalName "localsemanticvalidationtoolchain" ;
+      usf:resultState <urn:usf:resultstate:passed> ;
+      usf:entersEvidenceLifecycleAs <urn:usf:evidenceresult:rdf4jjenasemanticparity> .
+
   <urn:usf:evidenceresult:rdf4jjenasemanticparity> a usf:EvidenceResult, usf:ValidationEvidence ;
       usf:canonicalName "rdf4jjenasemanticparity" ;
       usf:evidenceKind <urn:usf:evidencekind:validationevidence> ;
@@ -146,15 +157,15 @@
       usf:evidenceFor <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
       usf:evidenceFromProofResult <urn:usf:proofresult:localsemanticvalidationtoolchain> ;
       usf:concernsSemanticSubject <urn:usf:semanticcontract:localsemanticvalidationtoolchain> ;
-      usf:supportsClaim <urn:usf:claim:crossenginesemanticparity> ;
-      usf:contentDigest "sha256:115c2c8f57f02107563e23044df2234b235c1bece255282a2433981782394c6c" ;
-      usf:mediaType "application/vnd.usf.validation-evidence-manifest+text" ;
-      usf:byteSize "1352"^^<http://www.w3.org/2001/XMLSchema#integer> ;
-      usf:storageLocator "sha256:115c2c8f57f02107563e23044df2234b235c1bece255282a2433981782394c6c" ;
+      usf:supportsClaim <urn:usf:claim:crossenginesemanticparity>, <urn:usf:claim:hostlocalvalidationboundary> ;
+      usf:contentDigest "sha256:0b48ede84d50013714fd4a12aa224751442fa8d18a0e0f591c929a5f1349bcf8" ;
+      usf:mediaType "application/vnd.usf.validation-evidence-manifest+json" ;
+      usf:byteSize "7622"^^<http://www.w3.org/2001/XMLSchema#integer> ;
+      usf:storageLocator "sha256:0b48ede84d50013714fd4a12aa224751442fa8d18a0e0f591c929a5f1349bcf8" ;
       usf:wasProducedBy <urn:usf:validator:rdf4jjenacrossengine> ;
       usf:collectedInEnvironment <urn:usf:environment:localdev> ;
-      usf:collectedAt "2026-07-14T07:37:44Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
-      usf:validUntil "2026-08-13T07:37:44Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      usf:collectedAt "2026-07-15T05:44:00.954037171Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      usf:validUntil "2026-08-14T05:44:00.954037171Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       usf:hasFreshnessPolicy <urn:usf:evidencefreshnesspolicy:localvalidationthirtydays> ;
       usf:hasAdmissionState admission:admitted ;
       usf:hasFreshnessState freshnessstate:fresh ;
