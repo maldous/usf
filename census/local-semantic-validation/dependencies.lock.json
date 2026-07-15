@@ -1,0 +1,474 @@
+{
+  "artifacts" : [ {
+    "byteSize" : 792420,
+    "repositoryPath" : "at/yawk/lz4/lz4-java/1.10.4/lz4-java-1.10.4.jar",
+    "sha256" : "cfc173bd3c7c34751ae2100fc084787ebd1ff1f3f5e494c5787b0c2c382cbfbe"
+  }, {
+    "byteSize" : 47251,
+    "repositoryPath" : "com/aayushatharva/brotli4j/brotli4j/1.23.0/brotli4j-1.23.0.jar",
+    "sha256" : "5fcf13ad78d07319cc507465dcf61cbc3efee9f45c9ae1c42a9902414696bc0b"
+  }, {
+    "byteSize" : 440402,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-linux-aarch64/1.23.0/native-linux-aarch64-1.23.0.jar",
+    "sha256" : "900c73dac7330ebe966071c770d2d4357c4de3f9417262ed4408dc08f2b573b6"
+  }, {
+    "byteSize" : 391296,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-linux-armv7/1.23.0/native-linux-armv7-1.23.0.jar",
+    "sha256" : "7f5f472962f33317ed810b34c8fe7d0b66dc64e637e1c5947d4df17f55098e5c"
+  }, {
+    "byteSize" : 466515,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-linux-ppc64le/1.23.0/native-linux-ppc64le-1.23.0.jar",
+    "sha256" : "544ee0cffdb11f28526f2559b97a425bec4cbc393f5a90ee12cc3ff82571dcfa"
+  }, {
+    "byteSize" : 475150,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-linux-riscv64/1.23.0/native-linux-riscv64-1.23.0.jar",
+    "sha256" : "bda3a3bcfde019f636d54ddcab9fc575fae560489b323e969a6458bd44c123cd"
+  }, {
+    "byteSize" : 433819,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-linux-s390x/1.23.0/native-linux-s390x-1.23.0.jar",
+    "sha256" : "1db63bfba6a367be7008574f5373f2c6a85c98ab498547b15084d98c4bb66ea9"
+  }, {
+    "byteSize" : 443633,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-linux-x86_64/1.23.0/native-linux-x86_64-1.23.0.jar",
+    "sha256" : "c504e243961c4229d8e486ca8f87b757ad9a033dda471061c0134c050ddcaa7c"
+  }, {
+    "byteSize" : 414873,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-osx-aarch64/1.23.0/native-osx-aarch64-1.23.0.jar",
+    "sha256" : "be3bc53688dbaff26d9d554301837de2bfa9ec09090b64d1ebf1fb6b23c28e61"
+  }, {
+    "byteSize" : 430873,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-osx-x86_64/1.23.0/native-osx-x86_64-1.23.0.jar",
+    "sha256" : "392774ced607a625ac316b5efeb7065d300e722fe03d8963ab0ffb2fdd40e982"
+  }, {
+    "byteSize" : 370834,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-windows-aarch64/1.23.0/native-windows-aarch64-1.23.0.jar",
+    "sha256" : "47220a8cbaa2c10131618cee9e454bfe570a2add7f72227110cac966db0bcfbb"
+  }, {
+    "byteSize" : 364725,
+    "repositoryPath" : "com/aayushatharva/brotli4j/native-windows-x86_64/1.23.0/native-windows-x86_64-1.23.0.jar",
+    "sha256" : "8f770f6d6c29caade53fc9fc7d848338a09471b080096ed7d5ce851e31cb9504"
+  }, {
+    "byteSize" : 3367,
+    "repositoryPath" : "com/aayushatharva/brotli4j/service/1.23.0/service-1.23.0.jar",
+    "sha256" : "7f298d44dbb7688419f0179ee1dfa0e4436633272b05d38a5faf3a2b8d08697b"
+  }, {
+    "byteSize" : 8422,
+    "repositoryPath" : "com/apicatalog/titanium-jcs/1.1.1/titanium-jcs-1.1.1.jar",
+    "sha256" : "2e10d36721b19957ef414555b79507364a31554d282b5e41a54b0108cec8939a"
+  }, {
+    "byteSize" : 300764,
+    "repositoryPath" : "com/apicatalog/titanium-json-ld/1.7.0/titanium-json-ld-1.7.0.jar",
+    "sha256" : "739918b6618da79d99bd39bcf4f9d16cbcb2147a44b686ca8bdb9e4fed2ed231"
+  }, {
+    "byteSize" : 5291,
+    "repositoryPath" : "com/apicatalog/titanium-rdf-api/1.0.0/titanium-rdf-api-1.0.0.jar",
+    "sha256" : "1c414428e51cc08f3147f154d955860422e491c4856d2613bb63797a0450b161"
+  }, {
+    "byteSize" : 18954,
+    "repositoryPath" : "com/apicatalog/titanium-rdf-n-quads/1.0.2/titanium-rdf-n-quads-1.0.2.jar",
+    "sha256" : "325ba3413deb96b7cf7f8c64cd6ed23035e3f8133a7ebb401cd6b763dff889c6"
+  }, {
+    "byteSize" : 84211,
+    "repositoryPath" : "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar",
+    "sha256" : "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0"
+  }, {
+    "byteSize" : 594171,
+    "repositoryPath" : "com/fasterxml/jackson/core/jackson-core/2.22.1/jackson-core-2.22.1.jar",
+    "sha256" : "941ff029bcdb93e83d209ce516c1a7fb8bbac07d0a2fa122f5bf194b2cd7b4f4"
+  }, {
+    "byteSize" : 1706404,
+    "repositoryPath" : "com/fasterxml/jackson/core/jackson-databind/2.22.1/jackson-databind-2.22.1.jar",
+    "sha256" : "7dcd7e53bec1f56c7ad278bd1ca0840bebcc595d61ce44d6a8439abb75b965b2"
+  }, {
+    "byteSize" : 60605,
+    "repositoryPath" : "com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.22.1/jackson-dataformat-yaml-2.22.1.jar",
+    "sha256" : "cc3a0e540791a9a1cbcd7584767b84572ffda0b72823856558f47dea69ae8ed1"
+  }, {
+    "byteSize" : 164973,
+    "repositoryPath" : "com/github/andrewoma/dexx/collection/0.7/collection-0.7.jar",
+    "sha256" : "e50cbc8379325ee17e8127eed7eb88fb70b94ba16e5e3d97e12401a1fc248fb8"
+  }, {
+    "byteSize" : 1020615,
+    "repositoryPath" : "com/github/ben-manes/caffeine/caffeine/3.2.3/caffeine-3.2.3.jar",
+    "sha256" : "ca70c90a5d1ce1511880ce9c93d4ad22108f61111d3daf91eb52762b571bd179"
+  }, {
+    "byteSize" : 3336943,
+    "repositoryPath" : "com/github/jsonld-java/jsonld-java/0.13.6/jsonld-java-0.13.6.jar",
+    "sha256" : "ac158c23504fa76dc1a5f43436df2cb34b4b435b79b38c9b941d1c75e2efbe90"
+  }, {
+    "byteSize" : 7569993,
+    "repositoryPath" : "com/github/luben/zstd-jni/1.5.7-11/zstd-jni-1.5.7-11.jar",
+    "sha256" : "e45c18832293934924e4f2f1dd97ee2083a74def46caeeea1346cf817a37cea4"
+  }, {
+    "byteSize" : 289901,
+    "repositoryPath" : "com/google/code/gson/gson/2.13.2/gson-2.13.2.jar",
+    "sha256" : "dd0ce1b55a3ed2080cb70f9c655850cda86c206862310009dcb5e5c95265a5e0"
+  }, {
+    "byteSize" : 20389,
+    "repositoryPath" : "com/google/errorprone/error_prone_annotations/2.41.0/error_prone_annotations-2.41.0.jar",
+    "sha256" : "a56e782b5b50811ac204073a355a21d915a2107fce13ec711331ad036f660fcc"
+  }, {
+    "byteSize" : 10763,
+    "repositoryPath" : "com/google/guava/failureaccess/1.0.3/failureaccess-1.0.3.jar",
+    "sha256" : "cbfc3906b19b8f55dd7cfd6dfe0aa4532e834250d7f080bd8d211a3e246b59cb"
+  }, {
+    "byteSize" : 3064793,
+    "repositoryPath" : "com/google/guava/guava/33.6.0-jre/guava-33.6.0-jre.jar",
+    "sha256" : "dc573e1fca4fd5454f4a5fd3d7da2df03002876a4175bafc14a95980dd7713b3"
+  }, {
+    "byteSize" : 2199,
+    "repositoryPath" : "com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+    "sha256" : "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99"
+  }, {
+    "byteSize" : 1862727,
+    "repositoryPath" : "com/google/protobuf/protobuf-java/4.34.1/protobuf-java-4.34.1.jar",
+    "sha256" : "ae0459030b54a6f3058ad349aa01fc2edcbb2d4a84b73699675bbd125df2e96d"
+  }, {
+    "byteSize" : 420480,
+    "repositoryPath" : "commons-codec/commons-codec/1.22.0/commons-codec-1.22.0.jar",
+    "sha256" : "d164fe79f262c32d9b18a0b5b2d317d1c27653d5e98fd2b998c24bf901c72ce4"
+  }, {
+    "byteSize" : 609182,
+    "repositoryPath" : "commons-io/commons-io/2.22.0/commons-io-2.22.0.jar",
+    "sha256" : "2b9a7b1f726fb86216dbd2c8321eabe0221dbd5b1be81c18e1cb53811b104758"
+  }, {
+    "byteSize" : 316789,
+    "repositoryPath" : "no/hasmac/hasmac-json-ld/0.10.2/hasmac-json-ld-0.10.2.jar",
+    "sha256" : "8f348e8de3f1a3c9ea94bf43f02f170925644a095cc3395ca0f4dfd9c3abbef3"
+  }, {
+    "byteSize" : 898652,
+    "repositoryPath" : "org/apache/commons/commons-collections4/4.5.0/commons-collections4-4.5.0.jar",
+    "sha256" : "00f93263c267be201b8ae521b44a7137271b16688435340bf629db1bac0a5845"
+  }, {
+    "byteSize" : 1117221,
+    "repositoryPath" : "org/apache/commons/commons-compress/1.28.0/commons-compress-1.28.0.jar",
+    "sha256" : "e1522945218456f3649a39bc4afd70ce4bd466221519dba7d378f2141a4642ca"
+  }, {
+    "byteSize" : 60964,
+    "repositoryPath" : "org/apache/commons/commons-csv/1.14.1/commons-csv-1.14.1.jar",
+    "sha256" : "32be0e1e76673092f5d12cb790bd2acb6c2ab04c4ea6efc69ea5ee17911c24fe"
+  }, {
+    "byteSize" : 713862,
+    "repositoryPath" : "org/apache/commons/commons-lang3/3.20.0/commons-lang3-3.20.0.jar",
+    "sha256" : "69e5c9fa35da7a51a5fd2099dfe56a2d8d32cf233e2f6d770e796146440263f4"
+  }, {
+    "byteSize" : 2213560,
+    "repositoryPath" : "org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar",
+    "sha256" : "1e56d7b058d28b65abd256b8458e3885b674c1d588fa43cd7d1cbb9c7ef2b308"
+  }, {
+    "byteSize" : 264873,
+    "repositoryPath" : "org/apache/commons/commons-text/1.15.0/commons-text-1.15.0.jar",
+    "sha256" : "58d2da30f058512a1e7f914e39241deca4dff5c27a085b4ed2faa9e7208067f6"
+  }, {
+    "byteSize" : 1072765,
+    "repositoryPath" : "org/apache/datasketches/datasketches-java/9.0.0/datasketches-java-9.0.0.jar",
+    "sha256" : "da5ad11655341a90e6464bca40e5995e24441d446d6706ffe0d152251e2dff2d"
+  }, {
+    "byteSize" : 1056212,
+    "repositoryPath" : "org/apache/httpcomponents/client5/httpclient5/5.6.2/httpclient5-5.6.2.jar",
+    "sha256" : "f3bf571b04dffe005ff29b965b9e3a88846aac6e63f24eae38a86d1979ea49a3"
+  }, {
+    "byteSize" : 263675,
+    "repositoryPath" : "org/apache/httpcomponents/core5/httpcore5-h2/5.4.3/httpcore5-h2-5.4.3.jar",
+    "sha256" : "c7db7026b8e2dea39132b04a6069f6671e2858309b20a146ec5c7dd6ed73a0b6"
+  }, {
+    "byteSize" : 955121,
+    "repositoryPath" : "org/apache/httpcomponents/core5/httpcore5/5.4.3/httpcore5-5.4.3.jar",
+    "sha256" : "18bfbbabb478dfb67f31aeaf428c387f3c3df654582e1309f708ee1f3086830a"
+  }, {
+    "byteSize" : 4223356,
+    "repositoryPath" : "org/apache/jena/jena-arq/6.1.0/jena-arq-6.1.0.jar",
+    "sha256" : "bc0fac2551db4b8616c861aab5b3bb5c7a3897e4516e8990bbab234a5a8f904c"
+  }, {
+    "byteSize" : 263310,
+    "repositoryPath" : "org/apache/jena/jena-base/6.1.0/jena-base-6.1.0.jar",
+    "sha256" : "e5bf4dfd42ccd5e0ab731d4f6e405ad7273866fbb73fb2665be6045f52e94d15"
+  }, {
+    "byteSize" : 1685719,
+    "repositoryPath" : "org/apache/jena/jena-core/6.1.0/jena-core-6.1.0.jar",
+    "sha256" : "53378ad0a542d4ea467b79ecc1224ab7d2d28b2336772d351251778e692312b4"
+  }, {
+    "byteSize" : 139097,
+    "repositoryPath" : "org/apache/jena/jena-dboe-base/6.1.0/jena-dboe-base-6.1.0.jar",
+    "sha256" : "43346e73901683577cf1accb609a2bf1bfa17d6f7545439ef8601ddb698ca06b"
+  }, {
+    "byteSize" : 17405,
+    "repositoryPath" : "org/apache/jena/jena-dboe-index/6.1.0/jena-dboe-index-6.1.0.jar",
+    "sha256" : "d8bcc5fb7e157e918033c463e1d4e758c8ba98f9b2804d2453d40981034ab646"
+  }, {
+    "byteSize" : 37998,
+    "repositoryPath" : "org/apache/jena/jena-dboe-storage/6.1.0/jena-dboe-storage-6.1.0.jar",
+    "sha256" : "fa85d7728509e19196fc4d0d1e51f501b78fa07f2e8badedc43f3415bac1f1ff"
+  }, {
+    "byteSize" : 101919,
+    "repositoryPath" : "org/apache/jena/jena-dboe-trans-data/6.1.0/jena-dboe-trans-data-6.1.0.jar",
+    "sha256" : "424c2cc6320c74109f24bee4c9bc3111ec9949e601e909e20957d0b146960e83"
+  }, {
+    "byteSize" : 85406,
+    "repositoryPath" : "org/apache/jena/jena-dboe-transaction/6.1.0/jena-dboe-transaction-6.1.0.jar",
+    "sha256" : "ecc36d0f024a777a5c3c9339d5883a61c0eb85a6daa90f6dfa67439c4e6d5a62"
+  }, {
+    "byteSize" : 86469,
+    "repositoryPath" : "org/apache/jena/jena-iri3986/6.1.0/jena-iri3986-6.1.0.jar",
+    "sha256" : "8aa4be44c8715807608b2594feb2f03ddb59070998a8e5c2fe298b9cbeca6903"
+  }, {
+    "byteSize" : 34116,
+    "repositoryPath" : "org/apache/jena/jena-langtag/6.1.0/jena-langtag-6.1.0.jar",
+    "sha256" : "165f4167c7857cacf3358010c9b70670f8b16d314b3123dbf84132c9f6b5cb90"
+  }, {
+    "byteSize" : 377833,
+    "repositoryPath" : "org/apache/jena/jena-shacl/6.1.0/jena-shacl-6.1.0.jar",
+    "sha256" : "d03e61141624b45ea601c4bf10dc65f9b17c9637cbf534425e88edecb74c2f9b"
+  }, {
+    "byteSize" : 325333,
+    "repositoryPath" : "org/apache/jena/jena-tdb2/6.1.0/jena-tdb2-6.1.0.jar",
+    "sha256" : "61624aeea711b91e5a9841612423309c2bea5fae82038c450ef2f54d5f3cd263"
+  }, {
+    "byteSize" : 369881,
+    "repositoryPath" : "org/apache/thrift/libthrift/0.23.0/libthrift-0.23.0.jar",
+    "sha256" : "8b41b67a5ff13c371ab18b6d34506121dcecf11372829f7d50115cfb1bf72d42"
+  }, {
+    "byteSize" : 1413775,
+    "repositoryPath" : "org/eclipse/collections/eclipse-collections-api/10.4.0/eclipse-collections-api-10.4.0.jar",
+    "sha256" : "29f93ff3d246f0bcdd5b7e5029c3bd8d2cb7752f5b83b5a701545a0499693491"
+  }, {
+    "byteSize" : 41663,
+    "repositoryPath" : "org/eclipse/collections/eclipse-collections-forkjoin/10.4.0/eclipse-collections-forkjoin-10.4.0.jar",
+    "sha256" : "668c8d9b7cd8bda7abcf1ecdc0c96b83340b49566d8279e1c8adafaecc4fbc28"
+  }, {
+    "byteSize" : 10330135,
+    "repositoryPath" : "org/eclipse/collections/eclipse-collections/10.4.0/eclipse-collections-10.4.0.jar",
+    "sha256" : "55d69834e1d2ab4712bcbb2093f18d7cc796f70ee366680491dad63d22a6b584"
+  }, {
+    "byteSize" : 10639,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-collection-factory-api/6.0.0/rdf4j-collection-factory-api-6.0.0.jar",
+    "sha256" : "4aa63aab93242a2b5c2dccb3446c6b437ef9bd1b407b577f0719eed509ce1cab"
+  }, {
+    "byteSize" : 32637,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-collection-factory-mapdb3/6.0.0/rdf4j-collection-factory-mapdb3-6.0.0.jar",
+    "sha256" : "97ce1ec63fed7619e795826f96a2954238d0ed3f77261943cfd759ca85675704"
+  }, {
+    "byteSize" : 3236,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-common-annotation/6.0.0/rdf4j-common-annotation-6.0.0.jar",
+    "sha256" : "69e86f96cd72262dc2f90008113e8211620670e7f296e7c603d5eeb3f695bcac"
+  }, {
+    "byteSize" : 4296,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-common-exception/6.0.0/rdf4j-common-exception-6.0.0.jar",
+    "sha256" : "43513eb77f016d641baae7b875ce9fd4b099ee699e02568578c66f39e59291e2"
+  }, {
+    "byteSize" : 44560,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-common-io/6.0.0/rdf4j-common-io-6.0.0.jar",
+    "sha256" : "0c1d953f17cc4c8b730f30973d01b288d5c166cbcff570b8b4beac1d81311c7e"
+  }, {
+    "byteSize" : 50761,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-common-iterator/6.0.0/rdf4j-common-iterator-6.0.0.jar",
+    "sha256" : "319fd33c7e477e35934858ed950af17dd5b19ceb761b883898404c01952d666e"
+  }, {
+    "byteSize" : 4479,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-common-order/6.0.0/rdf4j-common-order-6.0.0.jar",
+    "sha256" : "2d13a3cd8223214cf5288ff0d9dfeea6eb24b4a9e34fa34dcd27805780bad59e"
+  }, {
+    "byteSize" : 4686,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-common-text/6.0.0/rdf4j-common-text-6.0.0.jar",
+    "sha256" : "bd2550adbc88419fe1e33123cfa9641c07b4170e5502ceaafd7a212d941babbb"
+  }, {
+    "byteSize" : 11007,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-common-transaction/6.0.0/rdf4j-common-transaction-6.0.0.jar",
+    "sha256" : "2b0e43a0690065ca31616ca76ba3f90d1ace9834aced9373e12a0a40d3337c1e"
+  }, {
+    "byteSize" : 21365,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-common-xml/6.0.0/rdf4j-common-xml-6.0.0.jar",
+    "sha256" : "20977187da764e5e6189408476226b2b0cfb10a5fa4129da9464df57efe72770"
+  }, {
+    "byteSize" : 13253,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-http-client-apache5/6.0.0/rdf4j-http-client-apache5-6.0.0.jar",
+    "sha256" : "0c644c6583e1286348cdfad8d401dde2829755048f2a4029d4b27a6386d7b37f"
+  }, {
+    "byteSize" : 25667,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-http-client-api/6.0.0/rdf4j-http-client-api-6.0.0.jar",
+    "sha256" : "9e532d4e3e5cc93017ea1834dec9406233c3d3b1e188d1263cd9080265302df1"
+  }, {
+    "byteSize" : 10970,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-http-client-jdk/6.0.0/rdf4j-http-client-jdk-6.0.0.jar",
+    "sha256" : "165959ec12a6350dff419592390b7d5ecb95f783e7843b515eae32ab7b72c4a4"
+  }, {
+    "byteSize" : 91731,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-http-client/6.0.0/rdf4j-http-client-6.0.0.jar",
+    "sha256" : "5b2a26a1790860ef34f9ea895200c90460863b61626f57600d488d7bfe76ed73"
+  }, {
+    "byteSize" : 34675,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-http-protocol/6.0.0/rdf4j-http-protocol-6.0.0.jar",
+    "sha256" : "aa6659c2f7ccd21ef145dd399df14f1ea32bd805cee4fc62ac384d656ff913dc"
+  }, {
+    "byteSize" : 64508,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-model-api/6.0.0/rdf4j-model-api-6.0.0.jar",
+    "sha256" : "fe3e3341b23ba2a462bc2a25d415b7d6b29d1feb055ce10ddb32906b0543be76"
+  }, {
+    "byteSize" : 104281,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-model-vocabulary/6.0.0/rdf4j-model-vocabulary-6.0.0.jar",
+    "sha256" : "e74c99c614dd69eac65de7bd6327329b097909e2a6596b8948126a3696cf61bf"
+  }, {
+    "byteSize" : 193480,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-model/6.0.0/rdf4j-model-6.0.0.jar",
+    "sha256" : "fabdc989162c6dbb2aa8ea15342f97ecc1697d25c85d06c8175770d84c7c001f"
+  }, {
+    "byteSize" : 94352,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-query/6.0.0/rdf4j-query-6.0.0.jar",
+    "sha256" : "bed94ace5759a5b971cd19736d545dfc5c4c0b47053e3640a2c1092a09ea1725"
+  }, {
+    "byteSize" : 1018964,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-queryalgebra-evaluation/6.0.0/rdf4j-queryalgebra-evaluation-6.0.0.jar",
+    "sha256" : "cadedbde2f296a46a7d995ae430e8103d98b0c06139949b4be3e31a90db110f8"
+  }, {
+    "byteSize" : 231210,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-queryalgebra-model/6.0.0/rdf4j-queryalgebra-model-6.0.0.jar",
+    "sha256" : "affd0a67ed91d85115eeb71bee35f6c777bc09fa750bb0c7e09d7a3f02269b60"
+  }, {
+    "byteSize" : 25557,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-queryparser-api/6.0.0/rdf4j-queryparser-api-6.0.0.jar",
+    "sha256" : "cad220c90cad0b2e718703600df7bf06c499218eb00f4811b56102a3b6fa5d65"
+  }, {
+    "byteSize" : 355881,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-queryparser-sparql/6.0.0/rdf4j-queryparser-sparql-6.0.0.jar",
+    "sha256" : "88a39ec0cd50e3de522f8179f0eacdf2f9aef1115569874a4900193039d23c5c"
+  }, {
+    "byteSize" : 357270,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-queryrender/6.0.0/rdf4j-queryrender-6.0.0.jar",
+    "sha256" : "69c70801d65b7f7e3c1dad5561790add22cb6949451f091dc43447c3b6dbced7"
+  }, {
+    "byteSize" : 36744,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-queryresultio-api/6.0.0/rdf4j-queryresultio-api-6.0.0.jar",
+    "sha256" : "889359e30cd6d4da98e64eec4511269c524e942dd91236d0f2703bb57564cce8"
+  }, {
+    "byteSize" : 16613,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-queryresultio-binary/6.0.0/rdf4j-queryresultio-binary-6.0.0.jar",
+    "sha256" : "e56cfdbe267733195f97a1571df1e955c8582594d10aa40ace8b008e03f20632"
+  }, {
+    "byteSize" : 28941,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-queryresultio-sparqlxml/6.0.0/rdf4j-queryresultio-sparqlxml-6.0.0.jar",
+    "sha256" : "606bee88dac4318459abda67734a86c3e5c790799e05bb8bd74282604a42458c"
+  }, {
+    "byteSize" : 81289,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-repository-api/6.0.0/rdf4j-repository-api-6.0.0.jar",
+    "sha256" : "541e026d620b6fb0ef319db4f8a1b90b1cdb5f0a8bd7005759e99f29f9aa1a9d"
+  }, {
+    "byteSize" : 61188,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-repository-sail/6.0.0/rdf4j-repository-sail-6.0.0.jar",
+    "sha256" : "36e3f253660d245a8cb190d160eccd9f646238ce91a4e2ae7893e7ac0b3453e7"
+  }, {
+    "byteSize" : 64448,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-repository-sparql/6.0.0/rdf4j-repository-sparql-6.0.0.jar",
+    "sha256" : "2cd4f7efaf7c0a6957d1bba5d05b087aefd1b75548b55e0e99b58fc1eeca3a92"
+  }, {
+    "byteSize" : 113153,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-rio-api/6.0.0/rdf4j-rio-api-6.0.0.jar",
+    "sha256" : "f2d7faa3330b6517cc773fe5c212670a76db8329dc94d1dbabb9f5c12086a9de"
+  }, {
+    "byteSize" : 9409,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-rio-datatypes/6.0.0/rdf4j-rio-datatypes-6.0.0.jar",
+    "sha256" : "0938455e155a1fbd5f333627c5a35cc43221ec32e86785c5b9ed1ad386bde812"
+  }, {
+    "byteSize" : 5588,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-rio-languages/6.0.0/rdf4j-rio-languages-6.0.0.jar",
+    "sha256" : "686ca9ebed3c59b9f1e0ea72d4f18970aa05897771c33484bd49587ab63837d0"
+  }, {
+    "byteSize" : 7224,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-rio-nquads/6.0.0/rdf4j-rio-nquads-6.0.0.jar",
+    "sha256" : "3a5afdc1bb0fd100bd8aad9d4832e17bf69bdcf6b89fa530655bd1a82809dc65"
+  }, {
+    "byteSize" : 15880,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-rio-ntriples/6.0.0/rdf4j-rio-ntriples-6.0.0.jar",
+    "sha256" : "2147d6be9b369475940619e073a97d6b343d39edb0261e9f00894e29c6af9362"
+  }, {
+    "byteSize" : 9394,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-rio-trig/6.0.0/rdf4j-rio-trig-6.0.0.jar",
+    "sha256" : "1602b689ceff1f93456dd262d759819e96a4dc9ad497171a63ecd020d823a7fe"
+  }, {
+    "byteSize" : 37588,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-rio-turtle/6.0.0/rdf4j-rio-turtle-6.0.0.jar",
+    "sha256" : "8574da3338e71bbbe79dcdb98534d972ae7139649b47b8394d8e5e5d031280ec"
+  }, {
+    "byteSize" : 129816,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-sail-api/6.0.0/rdf4j-sail-api-6.0.0.jar",
+    "sha256" : "b4b278f70c14702aea534ac6b27a6017c8d6738e21d5c75e324580fe5a2eaa2f"
+  }, {
+    "byteSize" : 106351,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-sail-base/6.0.0/rdf4j-sail-base-6.0.0.jar",
+    "sha256" : "6f2f2c2a6b6d83fb2470959a62809452e9e4052877645659d59a90390f874cae"
+  }, {
+    "byteSize" : 56144,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-sail-inferencer/6.0.0/rdf4j-sail-inferencer-6.0.0.jar",
+    "sha256" : "3f403edc7aa511f482a69ae6bdb722ba26abb961fb200ea8c7eee4b987fce3f5"
+  }, {
+    "byteSize" : 92999,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-sail-memory/6.0.0/rdf4j-sail-memory-6.0.0.jar",
+    "sha256" : "1f83c186db2857b4ae7da76826d8b52fbce36e2bd3c79ed5e2cb7b3744648bad"
+  }, {
+    "byteSize" : 8331,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-sail-model/6.0.0/rdf4j-sail-model-6.0.0.jar",
+    "sha256" : "48c682cd802b98adf725222ef3c745abde23402f79ee2d21514d6a8d57c8dd1c"
+  }, {
+    "byteSize" : 258268,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-sail-nativerdf/6.0.0/rdf4j-sail-nativerdf-6.0.0.jar",
+    "sha256" : "1959fae9d4195b7973cdd9fd1e0b354a1dabad8d0f934735427e9880b65feb4d"
+  }, {
+    "byteSize" : 763875,
+    "repositoryPath" : "org/eclipse/rdf4j/rdf4j-shacl/6.0.0/rdf4j-shacl-6.0.0.jar",
+    "sha256" : "474dd3a12e2b064d2bd4f213d9e83ce257163628f8f5f9c97c20e4b1beb2cb61"
+  }, {
+    "byteSize" : 143846,
+    "repositoryPath" : "org/glassfish/jakarta.json/2.0.1/jakarta.json-2.0.1.jar",
+    "sha256" : "52539b39498b86ca9910b0eacc608a8c78de8db3842caa84bc87169372202cc0"
+  }, {
+    "byteSize" : 31170,
+    "repositoryPath" : "org/jetbrains/annotations/26.0.2/annotations-26.0.2.jar",
+    "sha256" : "2037be378980d3ba9333e97955f3b2cde392aa124d04ca73ce2eee6657199297"
+  }, {
+    "byteSize" : 1718956,
+    "repositoryPath" : "org/jetbrains/kotlin/kotlin-stdlib/1.9.25/kotlin-stdlib-1.9.25.jar",
+    "sha256" : "f9cdcdbff1f5de85380ae526977e683726c2aa42db1ed6e6e50ae89e496e95fd"
+  }, {
+    "byteSize" : 3819,
+    "repositoryPath" : "org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar",
+    "sha256" : "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
+  }, {
+    "byteSize" : 119259,
+    "repositoryPath" : "org/mapdb/elsa/3.0.0-M5/elsa-3.0.0-M5.jar",
+    "sha256" : "c84f01440b506ae1ce69ee4f69d887ce2009b9e86b696be1c50774ca1f2b359a"
+  }, {
+    "byteSize" : 667431,
+    "repositoryPath" : "org/mapdb/mapdb/3.1.0/mapdb-3.1.0.jar",
+    "sha256" : "fc9c8193e3f49467593e3d5ac2b2e2394d11747212c04bf3da4c66f3ba7c93f0"
+  }, {
+    "byteSize" : 474903,
+    "repositoryPath" : "org/roaringbitmap/RoaringBitmap/1.6.14/RoaringBitmap-1.6.14.jar",
+    "sha256" : "78ae7a6261b5b03f53b8db991047d06959cfadbd0b08af54bd95dda40af9acba"
+  }, {
+    "byteSize" : 18423,
+    "repositoryPath" : "org/slf4j/jcl-over-slf4j/2.0.17/jcl-over-slf4j-2.0.17.jar",
+    "sha256" : "affd06771589ebfe454bb11315a4f466ecaa135b95f3e7939534cf1d2fd7064c"
+  }, {
+    "byteSize" : 69908,
+    "repositoryPath" : "org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar",
+    "sha256" : "7b751d952061954d5abfed7181c1f645d336091b679891591d63329c622eb832"
+  }, {
+    "byteSize" : 15716,
+    "repositoryPath" : "org/slf4j/slf4j-simple/2.0.17/slf4j-simple-2.0.17.jar",
+    "sha256" : "ddfea59ac074c6d3e24ac2c38622d2d963895e17f70b38ed4bdae4d780be6964"
+  }, {
+    "byteSize" : 340015,
+    "repositoryPath" : "org/yaml/snakeyaml/2.5/snakeyaml-2.5.jar",
+    "sha256" : "e6682acf1ace77508ef13649cbf4f8d09d2cf5457bdb61d25ffb6ac0233d78dd"
+  }, {
+    "byteSize" : 604593,
+    "repositoryPath" : "tools/jackson/core/jackson-core/3.2.0/jackson-core-3.2.0.jar",
+    "sha256" : "5e353ce53c6901105dfcbf183e3220c17072e334e552b818a4bb1b99decea596"
+  }, {
+    "byteSize" : 1967936,
+    "repositoryPath" : "tools/jackson/core/jackson-databind/3.2.0/jackson-databind-3.2.0.jar",
+    "sha256" : "3ef94a3dddeafc247c50230fad0315981b2ce4ae6e91cfb4368a86f328904e4f"
+  } ],
+  "generatedBy" : "org.usf.validation.DependencyLockMain",
+  "lockDigest" : "sha256:c2c4283b3731501304d72b561e991a47390486862e0df85e79424d55d2518946",
+  "schemaVersion" : 1
+}

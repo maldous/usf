@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly PACKAGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly REPOSITORY_ROOT="$(cd "${PACKAGE_ROOT}/../.." && pwd)"
+readonly JAVA_HOME=/usr/lib/jvm/java-25-openjdk-amd64
+readonly JAR="${PACKAGE_ROOT}/target/local-semantic-validation-1.0.0-all.jar"
+
+if [[ ! -x "${JAVA_HOME}/bin/java" ]]; then
+  printf 'OpenJDK 25 is required at %s\n' "${JAVA_HOME}" >&2
+  exit 64
+fi
+
+if [[ ! -f "${JAR}" ]] || find "${PACKAGE_ROOT}/src/main" "${PACKAGE_ROOT}/pom.xml" \
+    "${PACKAGE_ROOT}/toolchain.json" -type f -newer "${JAR}" -print -quit | grep -q .; then
+  "${PACKAGE_ROOT}/mvnw" -q -o -DskipTests package
+fi
+
+command_name="${1:-}"
+if [[ "${command_name}" == "prove" || "${command_name}" == "benchmark" || "${command_name}" == "compare" ]]; then
+  exec timeout --signal=TERM 600s "${JAVA_HOME}/bin/java" -Xms256m -Xmx1536m \
+    -Dfile.encoding=UTF-8 -Duser.language=en -Duser.country= \
+    -Duser.timezone=UTC \
+    -Dorg.slf4j.simpleLogger.defaultLogLevel=warn \
+    -jar "${JAR}" "$@" --repo "${REPOSITORY_ROOT}"
+fi
+
+exec "${JAVA_HOME}/bin/java" -Xms128m -Xmx1536m \
+  -Dfile.encoding=UTF-8 -Duser.language=en -Duser.country= \
+  -Duser.timezone=UTC \
+  -Dorg.slf4j.simpleLogger.defaultLogLevel=warn \
+  -jar "${JAR}" "$@" --repo "${REPOSITORY_ROOT}"

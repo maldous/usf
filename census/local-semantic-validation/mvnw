@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly MAVEN_VERSION=3.9.11
+readonly MAVEN_SHA256=4b7195b6a4f5c81af4c0212677a32ee8143643401bc6e1e8412e6b06ea82beac
+readonly MAVEN_URL="https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${MAVEN_VERSION}/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
+readonly JAVA25_HOME=/usr/lib/jvm/java-25-openjdk-amd64
+readonly WRAPPER_HOME="${HOME}/.m2/wrapper/dists/apache-maven-${MAVEN_VERSION}"
+readonly ARCHIVE="${WRAPPER_HOME}/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
+readonly MAVEN_HOME="${WRAPPER_HOME}/apache-maven-${MAVEN_VERSION}"
+
+if [[ ! -x "${JAVA25_HOME}/bin/java" ]]; then
+  printf 'OpenJDK 25 is required at %s\n' "${JAVA25_HOME}" >&2
+  exit 64
+fi
+
+java_feature="$(${JAVA25_HOME}/bin/java -XshowSettings:properties -version 2>&1 | sed -n 's/^[[:space:]]*java.specification.version = //p')"
+if [[ "${java_feature}" != "25" ]]; then
+  printf 'OpenJDK feature 25 is required; found %s\n' "${java_feature}" >&2
+  exit 64
+fi
+
+if [[ ! -x "${MAVEN_HOME}/bin/mvn" ]]; then
+  mkdir -p "${WRAPPER_HOME}"
+  temporary_archive="${ARCHIVE}.tmp.$$"
+  curl --fail --location --proto '=https' --tlsv1.2 --output "${temporary_archive}" "${MAVEN_URL}"
+  actual_sha256="$(sha256sum "${temporary_archive}" | cut -d ' ' -f 1)"
+  if [[ "${actual_sha256}" != "${MAVEN_SHA256}" ]]; then
+    rm -f "${temporary_archive}"
+    printf 'Maven distribution digest mismatch: expected %s, observed %s\n' "${MAVEN_SHA256}" "${actual_sha256}" >&2
+    exit 65
+  fi
+  mv "${temporary_archive}" "${ARCHIVE}"
+  tar -xzf "${ARCHIVE}" -C "${WRAPPER_HOME}"
+fi
+
+export JAVA_HOME="${JAVA25_HOME}"
+export PATH="${JAVA_HOME}/bin:${PATH}"
+export MAVEN_OPTS="${MAVEN_OPTS:-} -Dfile.encoding=UTF-8 -Duser.language=en -Duser.country= -Duser.timezone=UTC"
+exec "${MAVEN_HOME}/bin/mvn" "$@"

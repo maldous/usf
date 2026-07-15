@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "semanticContract": "urn:usf:semanticcontract:localsemanticvalidationtoolchain",
+  "authorityDigest": "c017bb46d7dbce674d3eff93ed3d6db4b0876b0003a22bff03480d726ac79cce",
+  "authorityDigestAlgorithm": "sha256-graph-count-inventory-v1",
+  "repository": "maldous/usf",
+  "authorisedPath": "census/local-semantic-validation",
+  "javaFeature": 25,
+  "mavenVersion": "3.9.11",
+  "rdf4jVersion": "6.0.0",
+  "jenaVersion": "6.1.0",
+  "nativeStoreIndexes": "spoc,posc,cosp,ospc,psoc",
+  "canonicalization": {
+    "algorithm": "usf-sorted-term-tuples-v1",
+    "implementationVersion": "1.0.0",
+    "blankNodeHandling": "reject-derived-blank-nodes",
+    "graphIdentityHandling": "include-exact-named-graph-iri",
+    "serializationNormalization": "sorted-length-prefixed-rdf-terms-utf8",
+    "digestAlgorithm": "sha256"
+  },
+  "limits": {
+    "temporaryPersistentBytes": 268435456,
+    "peakRssBytes": 2415919104,
+    "globalQuerySeconds": 180,
+    "proofSeconds": 600,
+    "boundedResultBytes": 8192
+  },
+  "manifestPath": "graph/manifest.yaml",
+  "derivationFamilies": [
+    "repositorystructure",
+    "sourcedispositions",
+    "obligations",
+    "evidence",
+    "surfaces",
+    "coverage",
+    "readiness"
+  ]
+}
