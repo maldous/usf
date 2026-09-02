@@ -17,7 +17,7 @@
     <rdf4j.version>6.0.0</rdf4j.version>
     <jena.version>6.1.0</jena.version>
     <jackson.version>2.22.1</jackson.version>
-    <libthrift.version>0.23.0</libthrift.version>
+    <libthrift.version>0.24.0</libthrift.version>
     <junit.version>5.13.4</junit.version>
     <slf4j.version>2.0.17</slf4j.version>
     <dependency.lock.skip>false</dependency.lock.skip>
